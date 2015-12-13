@@ -15,7 +15,7 @@ public class GridHolderEditor : Editor
 		DrawDefaultInspector ();
 		
 		if (GUI.changed) {
-			controller.RecreateGrid (8, Color.blue);
+			controller.RecreateGrid ();
 		}
 
 		serializedObject.ApplyModifiedProperties ();

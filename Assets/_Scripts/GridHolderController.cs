@@ -6,15 +6,17 @@ using System.Collections;
 [ExecuteInEditMode]
 public class GridHolderController : MonoBehaviour
 {
+	public int gridSize = 10;
 	public GameObject tilePrefab;
+	public Material material;
 
-	public void RecreateGrid (int gridSize, Color color)
+	public void RecreateGrid ()
 	{
 		Utils.DestroyChildren (transform);
-		CreateChildren (gridSize, color);
+		CreateChildren ();
 	}
 
-	void CreateChildren (int gridSize, Color color)
+	void CreateChildren ()
 	{
 		Vector3 pos = Vector3.zero;
 		for (int x = 0; x < gridSize; x++) {
@@ -27,7 +29,7 @@ public class GridHolderController : MonoBehaviour
 				string row = "" + (z + 1);
 				clone.name += " " + col + row;
 
-				clone.transform.GetChild (0).GetComponent<MeshRenderer> ().material.color = color;
+				clone.transform.GetChild (0).GetComponent<MeshRenderer> ().material = material;
 //				clone.transform.GetChild (1).GetComponent<TextMesh> ().text = col + row;
 			}
 		}
