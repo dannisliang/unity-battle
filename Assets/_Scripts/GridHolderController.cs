@@ -27,8 +27,8 @@ public class GridHolderController : MonoBehaviour
 				string row = "" + (z + 1);
 				clone.name += " " + col + row;
 
-				clone.transform.GetChild (0).GetComponent<TextMesh> ().text = col + row;
-				clone.transform.GetChild (1).GetComponent<MeshRenderer> ().material.color = color;
+				clone.transform.GetChild (0).GetComponent<MeshRenderer> ().material.color = color;
+//				clone.transform.GetChild (1).GetComponent<TextMesh> ().text = col + row;
 			}
 		}
 	}

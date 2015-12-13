@@ -8,8 +8,8 @@ public class PlayerController : NetworkBehaviour
 	public int gridSize = 10;
 	public GameObject gridPrefab;
 
-	Color color1 = new Color (1f, .3f, 0f, .15f);
-	Color color2 = new Color (.3f, .8f, .3f, .15f);
+	Color color1 = new Color (1f, .3f, 0f, .3f);
+	Color color2 = new Color (.3f, .8f, .3f, .3f);
 
 	void Start ()
 	{	
