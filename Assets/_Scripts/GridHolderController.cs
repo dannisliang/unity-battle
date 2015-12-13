@@ -2,11 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-
-[ExecuteInEditMode]
 public class GridHolderController : MonoBehaviour
 {
-	public int gridSize = 10;
 	public GameObject tilePrefab;
 	public Material material;
 
@@ -19,10 +16,10 @@ public class GridHolderController : MonoBehaviour
 	void CreateChildren ()
 	{
 		Vector3 pos = Vector3.zero;
-		for (int x = 0; x < gridSize; x++) {
-			for (int z = 0; z < gridSize; z++) {
-				pos.x = (x - gridSize / 2f) + .5f;
-				pos.z = (gridSize - 1 - z) + .5f;
+		for (int x = 0; x < Utils.GRID_SIZE; x++) {
+			for (int z = 0; z < Utils.GRID_SIZE; z++) {
+				pos.x = (x - Utils.GRID_SIZE / 2f) + .5f;
+				pos.z = (Utils.GRID_SIZE - 1 - z) + .5f;
 				GameObject clone = Instantiate (tilePrefab, pos, Quaternion.identity) as GameObject;
 				clone.transform.SetParent (transform, false);
 				string col = "" + (char)(65 + x);

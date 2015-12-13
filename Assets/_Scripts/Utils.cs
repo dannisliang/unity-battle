@@ -4,6 +4,8 @@ using System.Collections;
 public class Utils : MonoBehaviour
 {
 
+	public static int GRID_SIZE = 10;
+
 	public static void DestroyChildren (Transform transform)
 	{
 		for (int i = transform.childCount - 1; i >= 0; i--) {

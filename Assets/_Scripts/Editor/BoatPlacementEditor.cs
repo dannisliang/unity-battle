@@ -2,20 +2,20 @@
 using UnityEditor;
 using System.Collections;
 
-[CustomEditor (typeof(GridHolderController))]
+[CustomEditor (typeof(BoatPlacementController))]
 [CanEditMultipleObjects]
-public class GridHolderEditor : Editor
+public class BoatPlacementEditor : Editor
 {
 
 	public override void OnInspectorGUI ()
 	{
-		GridHolderController controller = (GridHolderController)target;
+		BoatPlacementController controller = (BoatPlacementController)target;
 
-		GUILayout.Button ("RECREATE GRID");
+		GUILayout.Button ("RECREATE BOATS");
 		DrawDefaultInspector ();
-		
+
 		if (GUI.changed) {
-			controller.RecreateGrid ();
+			controller.RecreateBoats ();
 		}
 
 		serializedObject.ApplyModifiedProperties ();
