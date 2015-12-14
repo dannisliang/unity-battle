@@ -79,10 +79,10 @@ public class BoatPlacementController : MonoBehaviour
 	{
 		boats = new Boat[boatSizes.Length];
 		Utils.DestroyChildren (transform);
-		CreateChildren ();
+		CreateBoats ();
 	}
 
-	void CreateChildren ()
+	void CreateBoats ()
 	{
 		Vector3 pos = Vector3.zero;
 		Vector3 scale = Vector3.one;
@@ -115,7 +115,7 @@ public class BoatPlacementController : MonoBehaviour
 			clone.transform.SetParent (transform, false);
 			clone.transform.localPosition = pos;
 			clone.transform.localScale = scale;
-			clone.name += " " + size;
+			clone.name += " (" + size + " units)";
 		}
 	}
 

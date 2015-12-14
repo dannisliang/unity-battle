@@ -10,10 +10,10 @@ public class GridHolderController : MonoBehaviour
 	public void RecreateGrid ()
 	{
 		Utils.DestroyChildren (transform);
-		CreateChildren ();
+		CreateGrid ();
 	}
 
-	void CreateChildren ()
+	void CreateGrid ()
 	{
 		Vector3 pos = Vector3.zero;
 		for (int x = 0; x < Utils.GRID_SIZE; x++) {
