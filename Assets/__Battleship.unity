@@ -14673,6 +14673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926035df29bc84402a19c8b071729118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boatPlacementController: {fileID: 1601558864}
 --- !u!4 &854977909
 Transform:
   m_ObjectHideFlags: 0
