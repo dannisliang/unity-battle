@@ -27,6 +27,7 @@ GameObject:
   - 4: {fileID: 458598}
   - 65: {fileID: 6555950}
   - 54: {fileID: 5484722}
+  - 114: {fileID: 11484564}
   m_Layer: 8
   m_Name: Tile Theirs
   m_TagString: Untagged
@@ -174,7 +175,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 0.1, z: 1}
-  m_Center: {x: 0, y: 0.05, z: 1}
+  m_Center: {x: 0, y: -0.05, z: 0}
 --- !u!102 &10258572
 TextMesh:
   serializedVersion: 3
@@ -196,6 +197,17 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
+--- !u!114 &11484564
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54bc7e99e6fec4d109fbf7e4a9a18948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -238,6 +250,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

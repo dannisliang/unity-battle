@@ -4,72 +4,8 @@ using System.Collections;
 
 public class BoatPlacementController : MonoBehaviour
 {
+
 	static int[] boatSizes = { 5, 4, 3, 2, 2, 1 };
-	public class Boat
-	{
-		public bool horizontal;
-		public Coord[] coords;
-
-		public Boat (int size)
-		{
-			horizontal = Random.value > .5f;
-			int u = Random.Range (0, Utils.GRID_SIZE - size + 1);
-			int v = Random.Range (0, Utils.GRID_SIZE);
-
-			//Debug.Log ("u=" + u + " v=" + v);
-			coords = MakeCoordinates (u, v, size, horizontal);
-		}
-
-		public float GetX ()
-		{
-			return (coords [0].x + coords [coords.Length - 1].x) / 2f;
-		}
-
-		public float GetZ ()
-		{
-			return (coords [0].z + coords [coords.Length - 1].z) / 2f;
-		}
-
-		public override string ToString ()
-		{
-			return (horizontal ? "Horizontal" : "Vertical") + "Boat(" + coords [0] + "," + coords [1] + ")";
-		}
-
-	}
-
-	public class Coord
-	{
-		public int x;
-		public int z;
-
-		public Coord (int x, int z)
-		{
-			this.x = x;
-			this.z = z;
-		}
-
-		public override bool Equals (System.Object obj)
-		{
-			if (obj == null) {
-				return false;
-			}
-			Coord other = (Coord)obj;
-			return other.x == x && other.z == z;
-		}
-
-		public override int GetHashCode ()
-		{
-			return x * 31 + z;
-		}
-
-		public override string ToString ()
-		{
-			return "" + ((char)(x + 65)) + (z + 1);
-		}
-	}
-
-	static int[] boatSizes = { 5, 4, 3, 3, 2 };
->>>>>>> 28ace24... generated ships don't collide
 
 	public GameObject boatPrefab;
 
@@ -94,8 +30,8 @@ public class BoatPlacementController : MonoBehaviour
 				Boat boat = new Boat (size);
 
 				conflict = false;
-				for (int j = 0; j < boat.coords.Length && !conflict; j++) {
-					Coord c = boat.coords [j];
+				for (int j = 0; j < boat.positions.Length && !conflict; j++) {
+					Position c = boat.positions [j];
 					if (IsHit (c)) {
 						conflict = true;
 					}
@@ -119,28 +55,19 @@ public class BoatPlacementController : MonoBehaviour
 		}
 	}
 
-	bool IsHit (Coord coord)
+	bool IsHit (Position position)
 	{
 		for (int i = 0; i < boats.Length; i++) {
 			if (boats [i] == null) {
 				continue;
 			}
-			for (int j = 0; j < boats [i].coords.Length; j++) {
-				if (coord.Equals (boats [i].coords [j])) {
+			for (int j = 0; j < boats [i].positions.Length; j++) {
+				if (position.Equals (boats [i].positions [j])) {
 					return true;
 				}
 			}
 		}
 		return false;
-	}
-
-	static Coord[] MakeCoordinates (int u, int v, int size, bool horizontal)
-	{
-		Coord[] locations = new Coord[size];
-		for (int i = 0; i < size; i++) {
-			locations [i] = new Coord (horizontal ? u + i : v, horizontal ? v : u + i);
-		}
-		return locations;
 	}
 
 }

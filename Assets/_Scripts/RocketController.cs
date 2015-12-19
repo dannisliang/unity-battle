@@ -16,9 +16,13 @@ public class RocketController : MonoBehaviour
 		GetComponent<Rigidbody> ().velocity = direction.normalized * velocity;
 	}
 
-	void OnCollisionEnter (Collision collision)
+	void OnTriggerEnter (Collider other)
 	{
-		Debug.Log (collision.gameObject.name);
+		TileController tileController = other.gameObject.GetComponent<TileController> ();
+		if (tileController == null) {
+			return;
+		}
+		Debug.Log ("Hit " + tileController.GetPosition ());
 	}
 
 }
