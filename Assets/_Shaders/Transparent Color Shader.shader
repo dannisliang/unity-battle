@@ -2,7 +2,6 @@
 
     Properties {
         _Color("Color", color) = (1, 1, 1, 1)
-        _Intensity("Intensity", float) = 1
     }
 
     SubShader {
@@ -53,55 +52,22 @@
             #pragma fragment frag
             #pragma target 3.0
 
-            // appdata_base: vertex consists of position, normal and one texture coordinate.
-            // appdata_tan: vertex consists of position, tangent, normal and one texture coordinate.
-            // appdata_full: vertex consists of position, tangent, normal, four texture coordinates and color.
-
-            #include "UnityCG.cginc"
-
-            uniform float4 _Color;
-            uniform float _Intensity;
+            fixed4 _Color;
 
 
-            // POSITION is the vertex position, typically a float4.
-            // NORMAL is the vertex normal, typically a float3.
-            // TEXCOORD0 is the first UV coordinate, typically a float2..float4.
-            // TEXCOORD1 .. TEXCOORD3 are the 2nd..4th UV coordinates.
-            // TANGENT is the tangent vector (used for normal mapping), typically a float4.
-            // COLOR is the per-vertex color, typically a float4.
-
-            struct vertexInput {
-                // float4 texcoord0 : TEXCOORD0;
-                float4 vertex : POSITION;
-                // float4 normal : NORMAL;
-            };
-
-            struct v2f {
-                // float4 texcoord0 : TEXCOORD0;
-                // float2 uv : TEXCOORD0;
-                float4 pos : SV_POSITION;
-                // fixed4 color : COLOR;
-                // float4 normal : NORMAL;
-            };
-
-            v2f vert(vertexInput i) {
-                v2f o;
-                // o.normal.xyz = i.normal * -1;
-                // o.texcoord0 = i.texcoord0;
-                o.pos = mul(UNITY_MATRIX_MVP, i.vertex);
-                return o;
+            float4 vert(float4 vertex : POSITION) : SV_POSITION {
+                return mul(UNITY_MATRIX_MVP, vertex);
             }
 
-            fixed4 frag(v2f i) : SV_Target {
-                fixed4 texcol = _Color;
-                texcol.a *= _Intensity;
-                return texcol;
+            // pixel shader; no inputs needed
+            fixed4 frag() : SV_Target {
+                return  _Color;
             }
 
             ENDCG
         }
     }
 
-    // FallBack "Diffuse"
+    // FallBack "Unlit/Color"
 
 }
