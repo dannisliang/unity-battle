@@ -27,7 +27,7 @@ GameObject:
   - 4: {fileID: 458598}
   - 65: {fileID: 6555950}
   - 54: {fileID: 5484722}
-  - 114: {fileID: 11484564}
+  - 114: {fileID: 11465392}
   m_Layer: 8
   m_Name: Tile Theirs
   m_TagString: Untagged
@@ -197,7 +197,7 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &11484564
+--- !u!114 &11465392
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
