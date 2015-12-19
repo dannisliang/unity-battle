@@ -24,7 +24,7 @@ public class PlayerController : NetworkBehaviour
 
 	void Update ()
 	{	
-		if (Input.GetButton ("Fire1")) {
+		if (Input.GetKey (KeyCode.R)) {
 			gameController.StartNewGame ();
 		}
 
@@ -34,7 +34,9 @@ public class PlayerController : NetworkBehaviour
 		if (Physics.Raycast (ray, out hit, 100f, layerMaskTileTheirs)) {
 			SetCurrentTileController (hit.collider.GetComponent<TileController> ());
 			reticle.transform.position = hit.point - Camera.main.transform.forward * .1f;
-			FireAt (hit.collider.transform);
+			if (Input.GetButtonUp ("Fire1")) {
+				FireAt (hit.collider.transform);
+			}
 		} else {
 			SetCurrentTileController (null);
 		}
@@ -59,8 +61,6 @@ public class PlayerController : NetworkBehaviour
 
 	void FireAt (Transform targetTransform)
 	{
-		if (Time.frameCount % 120 != 0)
-			return;
 		GameObject rocket = Instantiate (rocketPrefab);
 		rocket.transform.SetParent (transform, false);
 		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform);
