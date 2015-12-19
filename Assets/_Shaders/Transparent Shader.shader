@@ -3,7 +3,6 @@
     Properties {
         _MainTex("MainTex (A)", 2D) = "white" {}
         _Color("Color", color) = (1, 1, 1, 1)
-        _Intensity("Intensity", float) = 1
     }
 
     SubShader {
@@ -18,7 +17,7 @@
         Pass {
             // Cull Back
 
-            // ZTest On
+            ZTest Off
 
             ZWrite Off
 
@@ -63,7 +62,6 @@
             uniform sampler2D _MainTex;
             uniform float4 _MainTex_ST;
             uniform float4 _Color;
-            uniform float _Intensity;
 
 
             // POSITION is the vertex position, typically a float4.
@@ -99,7 +97,6 @@
             fixed4 frag(v2f i) : SV_Target {
                 fixed4 texcol = tex2D(_MainTex, i.uv);
                 texcol *= _Color;
-                texcol.a *= _Intensity;
                 return texcol;
             }
 
@@ -107,6 +104,6 @@
         }
     }
 
-    // FallBack "Diffuse"
+    // FallBack "Unlit/Color"
 
 }
