@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-	
-[RequireComponent(typeof(Text))]
+
+[RequireComponent (typeof(Text))]
 public class FpsCounterController : MonoBehaviour
 {
 	static string FPS_FORMAT = "{0:0.} fps";
@@ -11,7 +11,7 @@ public class FpsCounterController : MonoBehaviour
 	private Text text;
 	private float fps = 60;
 	private Color color = new Color (0f, 0f, 0f);
-		
+
 	void Awake ()
 	{
 #if _DEBUG || UNITY_EDITOR || DEVELOPMENT_BUILD  
@@ -21,7 +21,7 @@ public class FpsCounterController : MonoBehaviour
 		Destroy (gameObject);
 #endif		
 	}
-		
+
 	void Update ()
 	{
 		if (Time.deltaTime != 0) {
