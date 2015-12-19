@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 
 public class Utils : MonoBehaviour
 {
 
+	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
 
 	public static void DestroyChildren (Transform transform)
@@ -17,4 +19,15 @@ public class Utils : MonoBehaviour
 			}
 		}
 	}
+
+	public static void IgnoreCurrentFire1 ()
+	{
+		ignoreCurrentFire1FrameCount = Time.frameCount;
+	}
+
+	public static bool DidFire ()
+	{
+		return Input.GetButtonUp ("Fire1") && ignoreCurrentFire1FrameCount != Time.frameCount;
+	}
+
 }

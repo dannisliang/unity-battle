@@ -34,7 +34,7 @@ public class PlayerController : NetworkBehaviour
 		if (Physics.Raycast (ray, out hit, 100f, layerMaskTileTheirs)) {
 			SetCurrentTileController (hit.collider.GetComponent<TileController> ());
 			reticle.transform.position = hit.point - Camera.main.transform.forward * .1f;
-			if (Input.GetButtonUp ("Fire1")) {
+			if (Utils.DidFire ()) {
 				FireAt (hit.collider.transform);
 			}
 		} else {
