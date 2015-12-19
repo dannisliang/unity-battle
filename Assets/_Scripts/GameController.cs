@@ -9,4 +9,5 @@ public class GameController : MonoBehaviour
 	{
 		boatPlacementController.RecreateBoats ();
 	}
+
 }

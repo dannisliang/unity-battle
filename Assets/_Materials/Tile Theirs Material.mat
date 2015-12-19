@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Their Tile Material
+  m_Name: Tile Theirs Material
   m_Shader: {fileID: 4800000, guid: 42c8b2eb784ee45ac8aac1a5599f9d39, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 5

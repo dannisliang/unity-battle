@@ -40,6 +40,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b605987a1b074c69a2ec49c0fa83b91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reticlePrefab: {fileID: 160058, guid: 18f6e4d3eadfe41d490747898a9231cc, type: 2}
+  rocketPrefab: {fileID: 157702, guid: d97bea38486164912a79a4721bf06782, type: 2}
 --- !u!114 &11471264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -87,6 +89,14 @@ Prefab:
       propertyPath: gridPrefab
       value: 
       objectReference: {fileID: 130936, guid: 23d94dd1f1d3e4b2bb3aa39e6be8393b, type: 2}
+    - target: {fileID: 0}
+      propertyPath: reticlePrefab
+      value: 
+      objectReference: {fileID: 160058, guid: 18f6e4d3eadfe41d490747898a9231cc, type: 2}
+    - target: {fileID: 0}
+      propertyPath: rocketPrefab
+      value: 
+      objectReference: {fileID: 157702, guid: d97bea38486164912a79a4721bf06782, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 107562}
