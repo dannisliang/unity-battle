@@ -16,4 +16,9 @@ public class TileController : MonoBehaviour
 		gameObject.name += " " + position;
 	}
 
+	public void Highlight (bool highlight)
+	{
+		transform.GetChild (1).gameObject.SetActive (highlight);
+	}
+
 }

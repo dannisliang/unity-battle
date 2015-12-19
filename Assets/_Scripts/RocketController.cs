@@ -22,7 +22,7 @@ public class RocketController : MonoBehaviour
 		if (tileController == null) {
 			return;
 		}
-		Debug.Log ("Hit " + tileController.GetPosition ());
+		Destroy (gameObject);
 	}
 
 }

@@ -10,6 +10,7 @@ public class PlayerController : NetworkBehaviour
 	GameController gameController;
 	GameObject reticle;
 	LayerMask layerMaskTileTheirs;
+	TileController currentTileController;
 
 	void Start ()
 	{
@@ -31,9 +32,29 @@ public class PlayerController : NetworkBehaviour
 		Debug.DrawRay (Camera.main.transform.position, Camera.main.transform.forward * 100f);
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 100f, layerMaskTileTheirs)) {
+			SetCurrentTileController (hit.collider.GetComponent<TileController> ());
 			reticle.transform.position = hit.point - Camera.main.transform.forward * .1f;
 			FireAt (hit.collider.transform);
+		} else {
+			SetCurrentTileController (null);
 		}
+	}
+
+	void SetCurrentTileController (TileController tileController)
+	{
+		if (tileController == currentTileController) {
+			return;
+		}
+		
+		if (currentTileController != null) {
+			currentTileController.Highlight (false);
+		}
+
+		if (tileController != null) {
+			tileController.Highlight (true);
+		}
+
+		currentTileController = tileController;
 	}
 
 	void FireAt (Transform targetTransform)
