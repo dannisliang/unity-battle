@@ -3,8 +3,14 @@ using System.Collections;
 
 public class RocketController : MonoBehaviour
 {
+	ParticleSystem flameParticleSystem;
 	Transform targetTransform;
-	float velocity = 4f;
+	float velocity = 1.5f;
+
+	void Awake ()
+	{
+		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
+	}
 
 	public void Launch (Transform origin, Transform targetTransform)
 	{
@@ -22,7 +28,10 @@ public class RocketController : MonoBehaviour
 		if (tileController == null) {
 			return;
 		}
-		Destroy (gameObject);
+		GameController.instance.PlayPlop ();
+		flameParticleSystem.Stop ();
+		transform.GetChild (0).gameObject.SetActive (false);
+		Destroy (gameObject, flameParticleSystem.duration);
 	}
 
 }

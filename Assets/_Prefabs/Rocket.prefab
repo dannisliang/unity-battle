@@ -62,7 +62,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 482640}
-  - 135: {fileID: 13561062}
+  - 136: {fileID: 13640874}
   - 54: {fileID: 5418416}
   - 82: {fileID: 8292114}
   - 114: {fileID: 11411408}
@@ -82,7 +82,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 492968}
   - 33: {fileID: 3341912}
-  - 136: {fileID: 13685318}
   - 23: {fileID: 2333952}
   m_Layer: 0
   m_Name: Rocket Body
@@ -93,7 +92,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &171782
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -114,12 +113,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 171782}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000016292068}
+  m_LocalPosition: {x: 0, y: 0, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 492968}
-  m_RootOrder: 3
+  m_Father: {fileID: 482640}
+  m_RootOrder: 1
 --- !u!4 &434468
 Transform:
   m_ObjectHideFlags: 1
@@ -155,6 +154,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 492968}
+  - {fileID: 429526}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &487584
@@ -182,7 +182,6 @@ Transform:
   - {fileID: 487584}
   - {fileID: 434468}
   - {fileID: 457080}
-  - {fileID: 429526}
   m_Father: {fileID: 482640}
   m_RootOrder: 0
 --- !u!23 &2311152
@@ -441,18 +440,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a04f1d26ea684fa78d913eb290db513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!135 &13561062
-SphereCollider:
+--- !u!136 &13640874
+CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157702}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.075
+  m_Height: 0.7
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.15}
 --- !u!136 &13653338
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -462,19 +462,6 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &13685318
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 161758}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
