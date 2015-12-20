@@ -20,14 +20,17 @@ public class GridPlacementController : MonoBehaviour
 	void CreateGrid ()
 	{
 		Vector3 pos = Vector3.zero;
+		Vector3 scale = Vector2.one / (float)Utils.GRID_SIZE;
 		for (int x = 0; x < Utils.GRID_SIZE; x++) {
 			for (int z = 0; z < Utils.GRID_SIZE; z++) {
 				Position position = new Position (x, z);
-				pos.x = (x - Utils.GRID_SIZE / 2f) + .5f;
-				pos.z = (Utils.GRID_SIZE - 1 - z) + .5f;
+				pos.x = x / (float)Utils.GRID_SIZE - .5f + .5f / (float)Utils.GRID_SIZE;
+				pos.y = z / (float)Utils.GRID_SIZE - .5f + .5f / (float)Utils.GRID_SIZE;
 
-				GameObject clone = Instantiate (tilePrefab, pos, Quaternion.identity) as GameObject;
+				GameObject clone = Instantiate (tilePrefab) as GameObject;
 				clone.transform.SetParent (transform, false);
+				clone.transform.localPosition = pos;
+				clone.transform.localScale = scale;
 
 				TileController tileController = clone.GetComponent<TileController> ();
 				tileController.SetPosition (position);
