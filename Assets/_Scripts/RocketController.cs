@@ -9,7 +9,7 @@ public class RocketController : MonoBehaviour
 
 	void Awake ()
 	{
-		GameController.instance.SetReticleActive (false);
+		GameController.instance.SetIsFiring (true);
 		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
 	}
 
@@ -25,7 +25,7 @@ public class RocketController : MonoBehaviour
 
 	void OnDestroy ()
 	{
-		GameController.instance.SetReticleActive (true);
+		GameController.instance.SetIsFiring (false);
 	}
 
 	void OnTriggerEnter (Collider other)

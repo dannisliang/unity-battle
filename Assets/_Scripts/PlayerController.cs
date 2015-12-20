@@ -28,7 +28,7 @@ public class PlayerController : NetworkBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 100f, layerMaskTileTheirs)) {
 			SetCurrentTileController (hit.collider.GetComponent<TileController> ());
-			if (Utils.DidFire ()) {
+			if (!GameController.instance.IsFiring () && Utils.DidFire ()) {
 				FireAt (hit.collider.transform);
 			}
 		} else {

@@ -5,11 +5,12 @@ using System.Collections;
 public class GameController : MonoBehaviour
 {
 	public static GameController instance;
-	public GameObject reticle;
 
+	public GameObject reticle;
 	public BoatPlacementController boatPlacementController;
 	public AudioClip plop;
 
+	bool firing;
 	AudioSource source;
 
 	void Awake ()
@@ -32,9 +33,15 @@ public class GameController : MonoBehaviour
 		source.PlayOneShot (plop);
 	}
 
-	public void SetReticleActive (bool active)
+	public bool IsFiring ()
 	{
-		reticle.SetActive (active);
+		return firing;
+	}
+
+	public void SetIsFiring (bool firing)
+	{
+		this.firing = firing;
+		reticle.SetActive (!firing);
 	}
 
 }
