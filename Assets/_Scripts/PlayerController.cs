@@ -8,7 +8,6 @@ public class PlayerController : NetworkBehaviour
 	public GameObject rocketPrefab;
 
 	LayerMask layerMaskTileTheirs;
-	TileController currentTileController;
 
 	void Start ()
 	{
@@ -27,30 +26,10 @@ public class PlayerController : NetworkBehaviour
 #endif
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 100f, layerMaskTileTheirs)) {
-			SetCurrentTileController (hit.collider.GetComponent<TileController> ());
 			if (!GameController.instance.IsFiring () && Utils.DidFire ()) {
 				FireAt (hit.collider.transform);
 			}
-		} else {
-			SetCurrentTileController (null);
 		}
-	}
-
-	void SetCurrentTileController (TileController tileController)
-	{
-		if (tileController == currentTileController) {
-			return;
-		}
-		
-		if (currentTileController != null) {
-			currentTileController.Highlight (false);
-		}
-
-		if (tileController != null) {
-			tileController.Highlight (true);
-		}
-
-		currentTileController = tileController;
 	}
 
 	void FireAt (Transform targetTransform)

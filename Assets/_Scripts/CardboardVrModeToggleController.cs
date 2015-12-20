@@ -2,23 +2,13 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class CardboardVrModeToggleController : MonoBehaviour,IPointerClickHandler//, IPointerEnterHandler,IPointerExitHandler
+public class CardboardVrModeToggleController : MonoBehaviour,IPointerClickHandler
 {
 
 	void Awake ()
 	{
 		Cardboard.SDK.TapIsTrigger = false;
 	}
-
-	//	public void OnPointerEnter (PointerEventData eventData)
-	//	{
-	//		Debug.Log ("OnPointerEnter");
-	//	}
-	//
-	//	public void OnPointerExit (PointerEventData eventData)
-	//	{
-	//		Debug.Log ("OnPointerExit");
-	//	}
 
 	public void OnPointerClick (PointerEventData eventData)
 	{

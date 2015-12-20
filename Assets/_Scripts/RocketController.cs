@@ -4,7 +4,7 @@ using System.Collections;
 public class RocketController : MonoBehaviour
 {
 	ParticleSystem flameParticleSystem;
-	Transform targetTransform;
+	//	Transform targetTransform;
 	float velocity = 1.5f;
 
 	void Awake ()
@@ -15,7 +15,7 @@ public class RocketController : MonoBehaviour
 
 	public void Launch (Transform origin, Transform targetTransform)
 	{
-		this.targetTransform = targetTransform;
+//		this.targetTransform = targetTransform;
 		transform.position = origin.position;
 		transform.rotation = origin.rotation;
 
