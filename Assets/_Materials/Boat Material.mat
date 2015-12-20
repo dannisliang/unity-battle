@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Boat Material
-  m_Shader: {fileID: 4800000, guid: 0c9e086384b64461b9a11a6e9d91a28c, type: 3}
+  m_Shader: {fileID: 4800000, guid: 430b7749ad88246c8990a365afac313c, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 5
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 3001
   stringTagMap:
     RenderType: Transparent
   m_SavedProperties:
