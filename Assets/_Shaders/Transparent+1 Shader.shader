@@ -1,4 +1,4 @@
-﻿Shader "Custom/Transparent After Shader" {
+﻿Shader "Custom/Transparent+1 Shader" {
 
     Properties {
         _MainTex("MainTex (A)", 2D) = "white" {}
