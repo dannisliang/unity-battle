@@ -24,6 +24,11 @@ public class Boat
 		positions = MakeBoatPositions (u, v, size, horizontal);
 	}
 
+	public int Size ()
+	{
+		return positions.Length;
+	}
+
 	public float GetX ()
 	{
 		return (positions [0].x + positions [positions.Length - 1].x) / 2f;

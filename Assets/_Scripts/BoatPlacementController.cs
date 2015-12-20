@@ -20,8 +20,6 @@ public class BoatPlacementController : MonoBehaviour
 
 	void CreateBoats ()
 	{
-		Vector3 pos = Vector3.zero;
-		Vector3 scale = Vector3.one;
 		for (int i = 0; i < boatSizes.Length; i++) {
 			int size = boatSizes [i];
 
@@ -40,18 +38,12 @@ public class BoatPlacementController : MonoBehaviour
 					boats [i] = boat;
 				}
 			}
-
-			pos.x = boats [i].GetX () - .5f * Utils.GRID_SIZE + .5f;
-			pos.z = Utils.GRID_SIZE - .5f - boats [i].GetZ ();
-
-			scale.x = boats [i].horizontal ? size : 1f;
-			scale.z = boats [i].horizontal ? 1f : size;
-
+				
 			GameObject clone = Instantiate (boatPrefab) as GameObject;
 			clone.transform.SetParent (transform, false);
-			clone.transform.localPosition = pos;
-			clone.transform.localScale = scale;
-			clone.name += " (" + size + " units)";
+
+			BoatController boatController = clone.GetComponent<BoatController> ();
+			boatController.Configure (boats [i]);
 		}
 	}
 
