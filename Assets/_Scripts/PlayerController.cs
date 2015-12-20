@@ -7,21 +7,18 @@ public class PlayerController : NetworkBehaviour
 	public GameObject reticlePrefab;
 	public GameObject rocketPrefab;
 
-	GameController gameController;
 	LayerMask layerMaskTileTheirs;
 	TileController currentTileController;
 
 	void Start ()
 	{
-		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
-
 		layerMaskTileTheirs = LayerMask.GetMask ("Tile Theirs");
 	}
 
 	void Update ()
 	{	
 		if (Input.GetKey (KeyCode.R)) {
-			gameController.StartNewGame ();
+			GameController.instance.StartNewGame ();
 		}
 
 		Ray ray = new Ray (Camera.main.transform.position, Camera.main.transform.forward);

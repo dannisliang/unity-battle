@@ -5,6 +5,7 @@ using System.Collections;
 public class GameController : MonoBehaviour
 {
 	public static GameController instance;
+	public GameObject reticle;
 
 	public BoatPlacementController boatPlacementController;
 	public AudioClip plop;
