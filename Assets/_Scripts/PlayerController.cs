@@ -25,7 +25,9 @@ public class PlayerController : NetworkBehaviour
 		}
 
 		Ray ray = new Ray (Camera.main.transform.position, Camera.main.transform.forward);
-		Debug.DrawRay (Camera.main.transform.position, Camera.main.transform.forward * 100f);
+#if UNITY_EDITOR
+		Debug.DrawRay (Camera.main.transform.position, Camera.main.transform.forward * 13f);
+#endif
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 100f, layerMaskTileTheirs)) {
 			SetCurrentTileController (hit.collider.GetComponent<TileController> ());

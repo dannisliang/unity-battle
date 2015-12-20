@@ -31,7 +31,7 @@ public class RocketController : MonoBehaviour
 		GameController.instance.PlayPlop ();
 		flameParticleSystem.Stop ();
 		transform.GetChild (0).gameObject.SetActive (false);
-		Destroy (gameObject, flameParticleSystem.duration);
+		Destroy (gameObject, 5f);
 	}
 
 }
