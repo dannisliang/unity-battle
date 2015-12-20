@@ -9,6 +9,7 @@ public class RocketController : MonoBehaviour
 
 	void Awake ()
 	{
+		GameController.instance.SetReticleActive (false);
 		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
 	}
 
@@ -22,6 +23,11 @@ public class RocketController : MonoBehaviour
 		GetComponent<Rigidbody> ().velocity = direction.normalized * velocity;
 	}
 
+	void OnDestroy ()
+	{
+		GameController.instance.SetReticleActive (true);
+	}
+
 	void OnTriggerEnter (Collider other)
 	{
 		TileController tileController = other.gameObject.GetComponent<TileController> ();
@@ -31,7 +37,7 @@ public class RocketController : MonoBehaviour
 		GameController.instance.PlayPlop ();
 		flameParticleSystem.Stop ();
 		transform.GetChild (0).gameObject.SetActive (false);
-		Destroy (gameObject, 5f);
+		Destroy (gameObject, flameParticleSystem.duration);
 	}
 
 }

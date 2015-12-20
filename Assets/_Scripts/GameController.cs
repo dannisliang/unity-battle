@@ -32,4 +32,9 @@ public class GameController : MonoBehaviour
 		source.PlayOneShot (plop);
 	}
 
+	public void SetReticleActive (bool active)
+	{
+		reticle.SetActive (active);
+	}
+
 }
