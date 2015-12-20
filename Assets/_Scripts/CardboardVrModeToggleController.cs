@@ -5,6 +5,11 @@ using System.Collections;
 public class CardboardVrModeToggleController : MonoBehaviour,IPointerClickHandler//, IPointerEnterHandler,IPointerExitHandler
 {
 
+	void Awake ()
+	{
+		Cardboard.SDK.TapIsTrigger = false;
+	}
+
 	//	public void OnPointerEnter (PointerEventData eventData)
 	//	{
 	//		Debug.Log ("OnPointerEnter");
