@@ -1,4 +1,4 @@
-﻿Shader "Custom/Transparent Font Shader" {
+﻿Shader "Custom/Transparent+0 Font Shader" {
 
 	Properties {
 		_MainTex ("Font Texture", 2D) = "white" {}

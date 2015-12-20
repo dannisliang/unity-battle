@@ -1,4 +1,4 @@
-﻿Shader "Custom/Transparent Shader" {
+﻿Shader "Custom/Transparent-1 Shader" {
 
     Properties {
         _MainTex("MainTex (A)", 2D) = "white" {}
@@ -8,7 +8,7 @@
     SubShader {
 
         Tags {
-            "Queue" = "Transparent"
+            "Queue" = "Transparent-1"
             "RenderType" = "Transparent"
             "IgnoreProjector" = "true"
             "PreviewType" = "Plane"
