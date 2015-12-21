@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3354524}
   - 65: {fileID: 6563214}
   - 23: {fileID: 2311152}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rocket Fin 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ GameObject:
   - 33: {fileID: 3378746}
   - 65: {fileID: 6592540}
   - 23: {fileID: 2350374}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rocket Fin 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   - 33: {fileID: 3367448}
   - 136: {fileID: 13653338}
   - 23: {fileID: 2357444}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rocket Cone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   - 54: {fileID: 5418416}
   - 82: {fileID: 8292114}
   - 114: {fileID: 11411408}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   - 4: {fileID: 492968}
   - 33: {fileID: 3341912}
   - 23: {fileID: 2333952}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rocket Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - 4: {fileID: 429526}
   - 198: {fileID: 19867270}
   - 199: {fileID: 19962158}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rocket Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,14 +217,14 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 161758}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 0
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 1
@@ -2034,6 +2034,26 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: VelocityModule.enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_UseLightProbes
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_ReflectionProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

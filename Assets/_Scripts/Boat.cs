@@ -31,12 +31,12 @@ public class Boat
 
 	public float GetX ()
 	{
-		return (positions [0].x + positions [positions.Length - 1].x) / 2f;
+		return positions [0].x;
 	}
 
 	public float GetZ ()
 	{
-		return (positions [0].z + positions [positions.Length - 1].z) / 2f;
+		return positions [0].z;
 	}
 
 	public override string ToString ()

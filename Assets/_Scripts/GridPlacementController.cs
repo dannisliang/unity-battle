@@ -6,6 +6,8 @@ public class GridPlacementController : MonoBehaviour
 {
 	public GameObject tilePrefab;
 
+	float tileColliderHeight = .2f;
+
 	public void Awake ()
 	{
 		RecreateGrid ();
@@ -19,13 +21,13 @@ public class GridPlacementController : MonoBehaviour
 
 	void CreateGrid ()
 	{
-		Vector3 pos = Vector3.zero;
-		Vector3 scale = Vector2.one / (float)Utils.GRID_SIZE;
+		Vector3 pos = new Vector3 (0f, 0f, .5f * tileColliderHeight);
+		Vector3 scale = new Vector3 (1f, 1f, tileColliderHeight);
 		for (int x = 0; x < Utils.GRID_SIZE; x++) {
 			for (int z = 0; z < Utils.GRID_SIZE; z++) {
 				Position position = new Position (x, z);
-				pos.x = x / (float)Utils.GRID_SIZE - .5f + .5f / (float)Utils.GRID_SIZE;
-				pos.y = z / (float)Utils.GRID_SIZE - .5f + .5f / (float)Utils.GRID_SIZE;
+				pos.x = x + .5f;
+				pos.y = Utils.GRID_SIZE - z + .5f;
 
 				GameObject clone = Instantiate (tilePrefab) as GameObject;
 				clone.transform.SetParent (transform, false);
