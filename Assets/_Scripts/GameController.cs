@@ -5,6 +5,8 @@ using System.Collections;
 public class GameController : MonoBehaviour
 {
 	public static GameController instance;
+	public static LayerInfo layerTileTheirs;
+	public static LayerInfo layerBoatTheirs;
 
 	public GameObject reticle;
 	public BoatPlacementController boatPlacementController;
@@ -20,6 +22,8 @@ public class GameController : MonoBehaviour
 			return;
 		}
 		instance = this;
+		layerTileTheirs = new LayerInfo ("Tile Theirs");
+		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
 	}
 

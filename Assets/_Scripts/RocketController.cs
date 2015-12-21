@@ -30,14 +30,19 @@ public class RocketController : MonoBehaviour
 
 	void OnTriggerEnter (Collider other)
 	{
-		TileController tileController = other.gameObject.GetComponent<TileController> ();
-		if (tileController == null) {
+		if (other.gameObject.layer == GameController.layerTileTheirs.layer) {
+			//TileController tileController = other.gameObject.GetComponent<TileController> ();
+			GameController.instance.PlayPlop ();
+			flameParticleSystem.Stop ();
+			transform.GetChild (0).gameObject.SetActive (false);
+			Destroy (gameObject, flameParticleSystem.duration);
 			return;
 		}
-		GameController.instance.PlayPlop ();
-		flameParticleSystem.Stop ();
-		transform.GetChild (0).gameObject.SetActive (false);
-		Destroy (gameObject, flameParticleSystem.duration);
+
+		if (other.gameObject.layer == GameController.layerBoatTheirs.layer) {
+			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
+			Debug.Log ("HIT " + boatController.boat);
+		}
 	}
 
 }
