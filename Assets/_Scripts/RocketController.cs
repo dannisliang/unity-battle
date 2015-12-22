@@ -13,6 +13,13 @@ public class RocketController : MonoBehaviour
 		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
 	}
 
+	void Update ()
+	{
+		if (Input.GetButtonUp ("Fire1")) {
+			Time.timeScale = 10f;
+		}
+	}
+
 	public void Launch (Transform origin, Transform targetTransform)
 	{
 //		this.targetTransform = targetTransform;
@@ -30,6 +37,7 @@ public class RocketController : MonoBehaviour
 
 	void OnTriggerEnter (Collider other)
 	{
+		Time.timeScale = 1f;
 		if (other.gameObject.layer == GameController.layerTileTheirs.layer) {
 			//TileController tileController = other.gameObject.GetComponent<TileController> ();
 			GameController.instance.PlayPlop ();
