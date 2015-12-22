@@ -30,16 +30,6 @@ public class Boat
 		return positions.Length;
 	}
 
-	public float GetX ()
-	{
-		return positions [0].x;
-	}
-
-	public float GetZ ()
-	{
-		return positions [0].z;
-	}
-
 	public Position GetPosition (int index)
 	{
 		return positions [index];

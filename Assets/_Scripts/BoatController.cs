@@ -24,7 +24,7 @@ public class BoatController : MonoBehaviour
 		name += " (" + boat.Size () + " units) " + boatSuffix;
 		float len = (float)boat.Size ();
 
-		transform.localPosition = new Vector3 (boat.GetX (), Utils.GRID_SIZE - 1 - boat.GetZ (), 0f);
+		transform.localPosition = new Vector3 (boat.GetPosition (0).x, Utils.GRID_SIZE - 1 - boat.GetPosition (0).z, 0f);
 		Transform meshChild = transform.GetChild (0);
 		meshChild.name += boatSuffix;
 		meshChild.localPosition = new Vector3 (boat.horizontal ? boat.Size () / 2f : .5f, boat.horizontal ? .5f : 1f - len / 2f, .5f * boatHeight);
