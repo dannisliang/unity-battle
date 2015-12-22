@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Boat Theirs Material
-  m_Shader: {fileID: 4800000, guid: 42c8b2eb784ee45ac8aac1a5599f9d39, type: 3}
+  m_Name: Rocket Material
+  m_Shader: {fileID: 4800000, guid: 34915239eaf1d4537a77c83f88d9d95b, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 5
   m_CustomRenderQueue: 2999
@@ -79,6 +79,13 @@ Material:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SpecGlossMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
@@ -144,4 +151,8 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: 0.096856, g: 0.04000866, b: 0.14705884, a: 0.278}
+        second: {r: 0.5955882, g: 0.5955882, b: 0.5955882, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: 0.2, g: 0.2, b: 0.2, a: 1}
