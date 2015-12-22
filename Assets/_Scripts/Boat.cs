@@ -3,8 +3,9 @@
 [System.Serializable]
 public class Boat
 {
-	public bool horizontal;
-	public Position[] positions;
+	public bool horizontal{ get; private set; }
+
+	public Position[] positions{ get; private set; }
 
 	static Position[] MakeBoatPositions (int u, int v, int size, bool horizontal)
 	{

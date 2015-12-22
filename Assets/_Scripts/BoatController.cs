@@ -6,7 +6,7 @@ public class BoatController : MonoBehaviour
 	float boatHeight = .2f;
 
 	[HideInInspector]
-	public Boat boat;
+	public Boat boat{ get; private set; }
 
 	public void Hit (Position position)
 	{
