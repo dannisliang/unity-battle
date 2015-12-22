@@ -40,6 +40,11 @@ public class Boat
 		return positions [0].z;
 	}
 
+	public Position GetPosition (int index)
+	{
+		return positions [index];
+	}
+
 	public override string ToString ()
 	{
 		return (horizontal ? "Horizontal" : "Vertical") + "Boat(" + positions [0] + "," + positions [1] + ")";

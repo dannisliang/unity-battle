@@ -8,13 +8,13 @@ public class BoatController : MonoBehaviour
 	[HideInInspector]
 	public Boat boat;
 
-	public void Hit ()
+	public void Hit (Position position)
 	{
 		//		meshChild.GetComponent<MeshRenderer> ().material.color = Color.red;
 
 		GameObject boatHitMarker = Instantiate (GameController.instance.boatHitPrefab);
 		boatHitMarker.transform.SetParent (GameController.instance.gridTheirs.transform, false);
-		boatHitMarker.transform.localPosition = new Vector3 (boat.GetX (), Utils.GRID_SIZE - 1 - boat.GetZ (), 0f);
+		boatHitMarker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.z, 0f);
 	}
 
 	public void Configure (Boat boat)
@@ -35,6 +35,8 @@ public class BoatController : MonoBehaviour
 			child.name = name + " Collider " + boat.positions [i];
 			child.transform.SetParent (transform, false);
 			child.layer = gameObject.layer;
+			PositionMakerController positionMakerController = child.AddComponent<PositionMakerController> ();
+			positionMakerController.position = boat.GetPosition (i);
 
 			BoxCollider collider = child.AddComponent<BoxCollider> ();
 			collider.isTrigger = true;
