@@ -42,6 +42,7 @@ public class RocketController : MonoBehaviour
 		if (other.gameObject.layer == GameController.layerBoatTheirs.layer) {
 			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
 			Debug.Log ("HIT " + boatController.boat);
+			boatController.Hit ();
 		}
 	}
 

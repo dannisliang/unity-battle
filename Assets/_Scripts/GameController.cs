@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
 	public static LayerInfo layerTileTheirs;
 	public static LayerInfo layerBoatTheirs;
 
+	public GameObject boatHitPrefab;
+	public GameObject gridTheirs;
 	public GameObject reticle;
 	public BoatPlacementController boatPlacementController;
 	public AudioClip plop;

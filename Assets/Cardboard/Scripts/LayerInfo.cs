@@ -2,7 +2,7 @@
 using UnityEngine.Assertions;
 
 [System.Serializable]
-public class LayerInfo : MonoBehaviour
+public class LayerInfo
 {
 	public string layerName;
 	public int layer;

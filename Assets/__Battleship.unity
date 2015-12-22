@@ -6292,12 +6292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926035df29bc84402a19c8b071729118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMaskTileTheirs:
-    serializedVersion: 2
-    m_Bits: 512
-  layerMaskBoatTheirs:
-    serializedVersion: 2
-    m_Bits: 2048
+  boatHitPrefab: {fileID: 101766, guid: eeb0ce773684e49f5adf381f6ba475a5, type: 2}
+  gridTheirs: {fileID: 32654577}
   reticle: {fileID: 2056223767}
   boatPlacementController: {fileID: 1601558864}
   plop: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}

@@ -27,7 +27,7 @@ public class GridPlacementController : MonoBehaviour
 			for (int z = 0; z < Utils.GRID_SIZE; z++) {
 				Position position = new Position (x, z);
 				pos.x = x + .5f;
-				pos.y = Utils.GRID_SIZE - z + .5f;
+				pos.y = Utils.GRID_SIZE - z - .5f;
 
 				GameObject clone = Instantiate (tilePrefab) as GameObject;
 				clone.transform.SetParent (transform, false);
