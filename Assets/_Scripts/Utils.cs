@@ -2,6 +2,10 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class Utils : MonoBehaviour
 {
 
@@ -15,7 +19,11 @@ public class Utils : MonoBehaviour
 			if (Application.isPlaying) {
 				Destroy (t.gameObject);
 			} else {
-				DestroyImmediate (t.gameObject);
+//				DestroyImmediate (t.gameObject);
+#if UNITY_EDITOR
+				Undo.DestroyObjectImmediate (t.gameObject);
+#else
+#endif
 			}
 		}
 	}

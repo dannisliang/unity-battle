@@ -2,6 +2,10 @@
 using UnityEngine.UI;
 using System.Collections;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class GridPlacementController : MonoBehaviour
 {
 	public GameObject tilePrefab;
@@ -36,6 +40,10 @@ public class GridPlacementController : MonoBehaviour
 
 				TileController tileController = clone.GetComponent<TileController> ();
 				tileController.SetPosition (position);
+
+#if UNITY_EDITOR
+				Undo.RegisterCreatedObjectUndo (clone, "Create " + clone);
+#endif
 			}
 		}
 	}

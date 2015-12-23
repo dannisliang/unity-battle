@@ -2,6 +2,10 @@
 using UnityEngine.UI;
 using System.Collections;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class BoatPlacementController : MonoBehaviour
 {
 
@@ -44,6 +48,10 @@ public class BoatPlacementController : MonoBehaviour
 
 			BoatController boatController = clone.GetComponent<BoatController> ();
 			boatController.Configure (boats [i]);
+
+#if UNITY_EDITOR
+			Undo.RegisterCreatedObjectUndo (clone, "Create " + boats [i]);
+#endif
 		}
 	}
 

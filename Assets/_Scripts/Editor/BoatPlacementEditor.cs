@@ -16,10 +16,9 @@ public class BoatPlacementEditor : Editor
 		DrawDefaultInspector ();
 
 		if (GUI.changed) {
+			Undo.SetCurrentGroupName ("Recreate " + controller.name);
 			controller.RecreateBoats ();
-//			EditorUtility.SetDirty (controller.gameObject);
-  			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
-//			Debug.Log ("SetDirty");
+			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
 		}
 
 		serializedObject.ApplyModifiedProperties ();

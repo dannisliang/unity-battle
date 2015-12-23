@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using System.Collections;
 
 [CustomEditor (typeof(GridPlacementController))]
@@ -15,7 +16,9 @@ public class GridHolderEditor : Editor
 		DrawDefaultInspector ();
 		
 		if (GUI.changed) {
+			Undo.SetCurrentGroupName ("Recreate " + controller.name);
 			controller.RecreateGrid ();
+			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
 		}
 
 		serializedObject.ApplyModifiedProperties ();
