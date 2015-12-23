@@ -8,15 +8,6 @@ public class BoatController : MonoBehaviour
 	[HideInInspector]
 	public Boat boat{ get; private set; }
 
-	public void Hit (Position position)
-	{
-		//		meshChild.GetComponent<MeshRenderer> ().material.color = Color.red;
-
-		GameObject boatHitMarker = Instantiate (GameController.instance.boatHitPrefab);
-		boatHitMarker.transform.SetParent (GameController.instance.gridTheirs.transform, false);
-		boatHitMarker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, 0f);
-	}
-
 	public void Configure (Boat boat)
 	{
 		this.boat = boat;

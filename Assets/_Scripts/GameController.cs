@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
 	public static LayerInfo layerBoatTheirs;
 
 	public GameObject boatHitPrefab;
+	public GameObject boatMissPrefab;
 	public GameObject gridTheirs;
 	public GameObject reticle;
 	public BoatPlacementController boatPlacementController;
@@ -48,6 +49,13 @@ public class GameController : MonoBehaviour
 	{
 		this.firing = firing;
 		reticle.SetActive (!firing);
+	}
+
+	public void PlaceMarker (Position position, bool hit)
+	{
+		GameObject marker = Instantiate (hit ? boatHitPrefab : boatMissPrefab);
+		marker.transform.SetParent (gridTheirs.transform, false);
+		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, 0f);
 	}
 
 }

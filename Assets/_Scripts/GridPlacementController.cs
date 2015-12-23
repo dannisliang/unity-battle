@@ -38,8 +38,8 @@ public class GridPlacementController : MonoBehaviour
 				clone.transform.localPosition = pos;
 				clone.transform.localScale = scale;
 
-				TileController tileController = clone.GetComponent<TileController> ();
-				tileController.SetPosition (position);
+				PositionMakerController markerController = clone.GetComponent<PositionMakerController> ();
+				markerController.position = position;
 
 #if UNITY_EDITOR
 				Undo.RegisterCreatedObjectUndo (clone, "Create " + clone);

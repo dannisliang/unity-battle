@@ -37,22 +37,35 @@ public class RocketController : MonoBehaviour
 
 	void OnTriggerEnter (Collider other)
 	{
+		// prevent additional collisions
+		GetComponent<Collider> ().enabled = false;
+
+		// restore time scale
 		Time.timeScale = 1f;
 		if (other.gameObject.layer == GameController.layerTileTheirs.layer) {
-			//TileController tileController = other.gameObject.GetComponent<TileController> ();
+			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
+//			TileController tileController = other.gameObject.GetComponent<TileController> ();
 			GameController.instance.PlayPlop ();
-			flameParticleSystem.Stop ();
-			transform.GetChild (0).gameObject.SetActive (false);
-			Destroy (gameObject, flameParticleSystem.duration);
-			return;
-		}
-
-		if (other.gameObject.layer == GameController.layerBoatTheirs.layer) {
+			GameController.instance.PlaceMarker (positionMakerController.position, false);
+		} else if (other.gameObject.layer == GameController.layerBoatTheirs.layer) {
 			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
 			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
 			Debug.Log ("HIT " + positionMakerController.position);
-			boatController.Hit (positionMakerController.position);
+//			boatController.Hit (positionMakerController.position);
+			GameController.instance.PlaceMarker (positionMakerController.position, true);
+		} else {
+			Debug.LogError ("Unexpected collision with " + other);
 		}
+
+		FizzleOut ();
+	}
+
+	void FizzleOut ()
+	{
+		flameParticleSystem.Stop ();
+		//disable mesh
+		transform.GetChild (0).gameObject.SetActive (false);
+		Destroy (gameObject, flameParticleSystem.duration);
 	}
 
 }
