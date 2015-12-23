@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using System.Collections;
 
 [CustomEditor (typeof(BoatPlacementController))]
@@ -16,6 +17,9 @@ public class BoatPlacementEditor : Editor
 
 		if (GUI.changed) {
 			controller.RecreateBoats ();
+//			EditorUtility.SetDirty (controller.gameObject);
+  			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
+//			Debug.Log ("SetDirty");
 		}
 
 		serializedObject.ApplyModifiedProperties ();
