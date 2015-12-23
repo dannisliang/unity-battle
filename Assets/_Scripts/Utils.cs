@@ -11,6 +11,16 @@ public class Utils : MonoBehaviour
 
 	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
+	public static HideFlags NO_SAVE_NO_EDIT_HIDE_FLAGS = HideFlags.DontSave | HideFlags.NotEditable;
+
+	public static void SetNoSaveNoEditHideFlags (Transform parent)
+	{
+		parent.gameObject.name = "[NO SAVE] " + parent.gameObject.name;
+		parent.gameObject.hideFlags = NO_SAVE_NO_EDIT_HIDE_FLAGS;
+		foreach (Transform t in parent.transform) {
+			SetNoSaveNoEditHideFlags (t);
+		}
+	}
 
 	public static void DestroyChildren (Transform transform)
 	{

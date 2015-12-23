@@ -41,6 +41,7 @@ public class GridPlacementController : MonoBehaviour
 				PositionMakerController markerController = clone.GetComponent<PositionMakerController> ();
 				markerController.position = position;
 
+				Utils.SetNoSaveNoEditHideFlags (clone.transform);
 #if UNITY_EDITOR
 				Undo.RegisterCreatedObjectUndo (clone, "Create " + clone);
 #endif

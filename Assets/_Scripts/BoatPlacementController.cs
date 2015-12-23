@@ -49,6 +49,7 @@ public class BoatPlacementController : MonoBehaviour
 			BoatController boatController = clone.GetComponent<BoatController> ();
 			boatController.Configure (boats [i]);
 
+			Utils.SetNoSaveNoEditHideFlags (clone.transform);
 #if UNITY_EDITOR
 			Undo.RegisterCreatedObjectUndo (clone, "Create " + boats [i]);
 #endif
