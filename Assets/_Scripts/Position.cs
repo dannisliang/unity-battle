@@ -4,12 +4,12 @@
 public class Position
 {
 	public int x;
-	public int z;
+	public int y;
 
-	public Position (int x, int z)
+	public Position (int x, int y)
 	{
 		this.x = x;
-		this.z = z;
+		this.y = y;
 	}
 
 	public override bool Equals (System.Object obj)
@@ -18,16 +18,16 @@ public class Position
 			return false;
 		}
 		Position other = (Position)obj;
-		return other.x == x && other.z == z;
+		return other.x == x && other.y == y;
 	}
 
 	public override int GetHashCode ()
 	{
-		return x * 31 + z;
+		return x * 31 + y;
 	}
 
 	public override string ToString ()
 	{
-		return "" + ((char)(x + 65)) + (z + 1);
+		return "" + ((char)(x + 65)) + (y + 1);
 	}
 }
