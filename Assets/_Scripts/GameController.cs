@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SocialPlatforms;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 [RequireComponent (typeof(AudioSource))]
 public class GameController : MonoBehaviour
@@ -28,6 +31,33 @@ public class GameController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
+	}
+
+	void Start ()
+	{
+		// https://github.com/playgameservices/play-games-plugin-for-unity
+		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
+		                                      // enables saving game progress.
+			.EnableSavedGames ()
+		                                      // registers a callback to handle game invitations received while the game is not running.
+		                                      //.WithInvitationDelegate(<callback method>)
+		                                      // registers a callback for turn based match notifications received while the
+		                                      // game is not running.
+		                                      //.WithMatchDelegate(<callback method>)
+		.Build ();
+
+		PlayGamesPlatform.InitializeInstance (config);
+		// recommended for debugging:
+		PlayGamesPlatform.DebugLogEnabled = true;
+		// Activate the Google Play Games platform
+		PlayGamesPlatform.Activate ();
+
+
+		// authenticate user:
+		Social.localUser.Authenticate ((bool success) => {
+			// handle success or failure
+			Debug.Log ("Authenticate --> " + success);
+		});
 	}
 
 	public void StartNewGame ()
