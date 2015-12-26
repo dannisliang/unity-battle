@@ -15,6 +15,11 @@ public class BoatPlacementController : MonoBehaviour
 
 	Boat[] boats;
 
+	void Awake ()
+	{
+		RecreateBoats ();
+	}
+
 	public void RecreateBoats ()
 	{
 		boats = new Boat[boatSizes.Length];
