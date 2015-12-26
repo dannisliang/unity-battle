@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
 		// https://github.com/playgameservices/play-games-plugin-for-unity
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
 		                                      // enables saving game progress.
-			.EnableSavedGames ()
+		                                      //.EnableSavedGames ()
 		                                      // registers a callback to handle game invitations received while the game is not running.
 		                                      //.WithInvitationDelegate(<callback method>)
 		                                      // registers a callback for turn based match notifications received while the
@@ -50,12 +50,14 @@ public class GameController : MonoBehaviour
 		PlayGamesPlatform.InitializeInstance (config);
 		// recommended for debugging:
 		PlayGamesPlatform.DebugLogEnabled = true;
+
+
 		// Activate the Google Play Games platform
-		PlayGamesPlatform.Activate ();
+		//PlayGamesPlatform.Activate ();
 
 
 		// authenticate user:
-		Social.localUser.Authenticate ((bool success) => {
+		PlayGamesPlatform.Instance.localUser.Authenticate ((bool success) => {
 			// handle success or failure
 			Debug.Log ("Authenticate --> " + success);
 		});
