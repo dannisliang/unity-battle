@@ -52,7 +52,7 @@ public class RocketController : MonoBehaviour
 		Time.timeScale = 1f;
 		this.other = other;
 
-		Invoke ("Explode", .5f * flameParticleSystem.duration);
+		Invoke ("Explode", .3f * flameParticleSystem.duration);
 		FizzleOut (flameParticleSystem.duration);
 	}
 
