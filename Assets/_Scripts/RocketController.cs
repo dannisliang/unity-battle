@@ -9,6 +9,7 @@ public class RocketController : MonoBehaviour
 	//	Transform targetTransform;
 	float velocity = 1.5f;
 	float[] fizzleOutTimes;
+	Collider other;
 
 	void Awake ()
 	{
@@ -49,22 +50,29 @@ public class RocketController : MonoBehaviour
 
 		// restore time scale
 		Time.timeScale = 1f;
+		this.other = other;
+
+		Invoke ("Explode", .5f * flameParticleSystem.duration);
+		FizzleOut (flameParticleSystem.duration);
+	}
+
+	void Explode ()
+	{
 		if (other.gameObject.layer == GameController.layerTileTheirs.layer) {
 			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
-//			TileController tileController = other.gameObject.GetComponent<TileController> ();
-			GameController.instance.PlayPlop ();
+			//			TileController tileController = other.gameObject.GetComponent<TileController> ();
+			GameController.instance.PlayWaterPlop ();
 			GameController.instance.PlaceMarker (positionMakerController.position, false);
 		} else if (other.gameObject.layer == GameController.layerBoatTheirs.layer) {
 			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
-//			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
+			//			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
 			Debug.Log ("HIT " + positionMakerController.position);
-//			boatController.Hit (positionMakerController.position);
+			//			boatController.Hit (positionMakerController.position);
+			GameController.instance.PlayShipExplosionAfter (1f);
 			GameController.instance.PlaceMarker (positionMakerController.position, true);
 		} else {
 			Debug.LogError ("Unexpected collision with " + other);
 		}
-
-		FizzleOut (flameParticleSystem.duration);
 	}
 
 	void FizzleOut (float duration)

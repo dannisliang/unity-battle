@@ -421,7 +421,8 @@ MonoBehaviour:
   gridTheirs: {fileID: 32654577}
   reticle: {fileID: 2056223767}
   boatPlacementController: {fileID: 1601558864}
-  plop: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
+  waterPlopClip: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
+  shipExplosionClip: {fileID: 8300000, guid: 0d0c9adbbf0c94ed883eb926017aeabf, type: 3}
 --- !u!4 &854977909
 Transform:
   m_ObjectHideFlags: 0

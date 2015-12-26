@@ -16,7 +16,8 @@ public class GameController : MonoBehaviour
 	public GameObject gridTheirs;
 	public GameObject reticle;
 	public BoatPlacementController boatPlacementController;
-	public AudioClip plop;
+	public AudioClip waterPlopClip;
+	public AudioClip shipExplosionClip;
 
 	bool firing;
 	AudioSource source;
@@ -65,9 +66,19 @@ public class GameController : MonoBehaviour
 		boatPlacementController.RecreateBoats ();
 	}
 
-	public void PlayPlop ()
+	public void PlayWaterPlop ()
 	{
-		source.PlayOneShot (plop);
+		source.PlayOneShot (waterPlopClip);
+	}
+
+	public void PlayShipExplosionAfter (float delay)
+	{
+		Invoke ("PlayShipExplosion", delay);
+	}
+
+	public void PlayShipExplosion ()
+	{
+		source.PlayOneShot (shipExplosionClip);
 	}
 
 	public bool IsFiring ()
