@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using GooglePlayGames.BasicApi.Multiplayer;
 
 [RequireComponent (typeof(AudioSource))]
 public class GameController : MonoBehaviour
@@ -48,19 +49,29 @@ public class GameController : MonoBehaviour
 		.Build ();
 
 		PlayGamesPlatform.InitializeInstance (config);
+
 		// recommended for debugging:
-		PlayGamesPlatform.DebugLogEnabled = true;
+//		PlayGamesPlatform.DebugLogEnabled = true;
 
 
 		// Activate the Google Play Games platform
-		//PlayGamesPlatform.Activate ();
+		PlayGamesPlatform.Activate ();
 
 
 		// authenticate user:
 		Social.localUser.Authenticate ((bool success) => {
 			// handle success or failure
 			Debug.Log ("Authenticate --> " + success);
+			if (success) {
+				QuickGame ();
+			}
 		});
+	}
+
+	void QuickGame ()
+	{
+		MyRealTimeMultiplayerListener listener = new MyRealTimeMultiplayerListener ();
+		PlayGamesPlatform.Instance.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: listener);
 	}
 
 	public void StartNewGame ()
