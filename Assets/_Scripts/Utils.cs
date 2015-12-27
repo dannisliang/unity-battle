@@ -8,7 +8,7 @@ using UnityEditor;
 
 public class Utils : MonoBehaviour
 {
-	public static int ignoreCurrentFire1FrameCount;
+	//	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
 	public static HideFlags NO_SAVE_NO_EDIT_HIDE_FLAGS = HideFlags.DontSave | HideFlags.NotEditable;
 
@@ -37,14 +37,14 @@ public class Utils : MonoBehaviour
 		}
 	}
 
-	public static void IgnoreCurrentFire1 ()
-	{
-		ignoreCurrentFire1FrameCount = Time.frameCount;
-	}
+	//	public static void IgnoreCurrentFire1 ()
+	//	{
+	//		ignoreCurrentFire1FrameCount = Time.frameCount;
+	//	}
 
 	public static bool DidFire ()
 	{
-		return Input.GetButtonUp ("Fire1") && ignoreCurrentFire1FrameCount != Time.frameCount;
+		return Input.GetButtonUp ("Fire1"); // && ignoreCurrentFire1FrameCount != Time.frameCount;
 	}
 
 }
