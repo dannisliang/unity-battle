@@ -86,7 +86,7 @@ public class GameController : MonoBehaviour
 		});
 	}
 
-	void CreateMultiplayerRoom ()
+	public void CreateMultiplayerRoom ()
 	{
 		Debug.logger.Log ("Creating multiplayer room …");
 		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: multiplayerListener);
@@ -107,7 +107,7 @@ public class GameController : MonoBehaviour
 	public void EndGame ()
 	{
 		boatPlacementController.DestroyBoats ();
-		CreateMultiplayerRoom ();
+		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 	}
 
 	public void PlayWaterPlop ()

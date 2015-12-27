@@ -42,6 +42,7 @@ public class MyRealTimeMultiplayerListener : GooglePlayGames.BasicApi.Multiplaye
 	public void OnLeftRoom ()
 	{
 		Debug.Log ("OnLeftRoom()");
+		GameController.instance.CreateMultiplayerRoom ();
 	}
 
 	/// <summary>
