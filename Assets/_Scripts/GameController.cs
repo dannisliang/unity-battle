@@ -33,10 +33,27 @@ public class GameController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
+
+		InitNearby ();
+	}
+
+	void InitNearby ()
+	{
+		Debug.Log ("Initializing nearby connections …");
+		PlayGamesPlatform.InitializeNearby ((client) => {
+			Debug.Log ("Nearby connections initialized: client=" + client);
+		});
 	}
 
 	void Start ()
 	{
+		InitPlayGamesPlatform ();
+	}
+
+	void InitPlayGamesPlatform ()
+	{
+		Debug.Log ("Initializing PlayGamesPlatform …");
+
 		// https://github.com/playgameservices/play-games-plugin-for-unity
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
 		                                      // enables saving game progress.
@@ -54,22 +71,23 @@ public class GameController : MonoBehaviour
 //		PlayGamesPlatform.DebugLogEnabled = true;
 
 
-		// Activate the Google Play Games platform
+		Debug.Log ("Activating PlayGamesPlatform …");
 		PlayGamesPlatform.Activate ();
 
 
 		// authenticate user:
 		Social.localUser.Authenticate ((bool success) => {
 			// handle success or failure
-			Debug.Log ("Authenticate --> " + success);
+			Debug.Log ("Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
 			if (success) {
-				QuickGame ();
+				CreateGame ();
 			}
 		});
 	}
 
-	void QuickGame ()
+	void CreateGame ()
 	{
+		Debug.Log ("Creating game …");
 		MyRealTimeMultiplayerListener listener = new MyRealTimeMultiplayerListener ();
 		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: listener);
 	}
