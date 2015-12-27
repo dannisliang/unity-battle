@@ -9,17 +9,20 @@ public class UiTextLogController : MonoBehaviour
 
 	void Awake ()
 	{
+		//Application.stackTraceLogType = StackTraceLogType.ScriptOnly;
 		text = GetComponent<Text> ();
 		text.text = "";
 	}
 
 	void OnEnable ()
 	{
+		// TODO: Make thread safe and use logMessageReceivedThreaded
 		Application.logMessageReceived += HandleLog;
 	}
 
 	void OnDisable ()
 	{
+		// TODO: Make thread safe and use logMessageReceivedThreaded
 		Application.logMessageReceived -= HandleLog;
 	}
 
