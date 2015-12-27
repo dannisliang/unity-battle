@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
 
-		InitNearby ();
+//		InitNearby ();
 	}
 
 	void InitNearby ()
