@@ -18,7 +18,7 @@ public class NetworkManagerController : NetworkManager
 				networkPort = Int32.Parse (args [i + 1]);
 			}
 		}
-//		Debug.Log ("USING NETWORK: " + networkAddress + " " + networkPort);
+//		Utils.logger.Log ("USING NETWORK: " + networkAddress + " " + networkPort);
 
 		if (Application.isEditor) {
 			StartHost ();
@@ -33,52 +33,52 @@ public class NetworkManagerController : NetworkManager
 	void Update ()
 	{
 		if (Input.GetKeyUp (KeyCode.S)) {
-//			Debug.Log ("Calling StartServer");
+//			Utils.logger.Log ("Calling StartServer");
 			StartServer ();
 		}
 		if (Input.GetKeyUp (KeyCode.C)) {
-//			Debug.Log ("Calling StartClient");
+//			Utils.logger.Log ("Calling StartClient");
 			StartClient ();
 		}
 		if (Input.GetKeyUp (KeyCode.H)) {
-//			Debug.Log ("Calling StartHost");
+//			Utils.logger.Log ("Calling StartHost");
 			StartHost ();
 		}
 	}
 
 	public override void OnClientConnect (NetworkConnection conn)
 	{
-		Debug.Log ("OnClientConnect " + conn);
+		Utils.logger.Log ("OnClientConnect " + conn);
 		base.OnClientConnect (conn);
 	}
 
 	public override void OnClientError (NetworkConnection conn, int errorCode)
 	{
-		Debug.Log ("OnClientError " + conn + " / " + errorCode);
+		Utils.logger.Log ("OnClientError " + conn + " / " + errorCode);
 		base.OnClientError (conn, errorCode);
 	}
 
 	public override void OnClientNotReady (NetworkConnection conn)
 	{
-		Debug.Log ("OnClientNotReady " + conn);
+		Utils.logger.Log ("OnClientNotReady " + conn);
 		base.OnClientNotReady (conn);
 	}
 
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
-		Debug.Log ("OnClientSceneChanged " + conn);
+		Utils.logger.Log ("OnClientSceneChanged " + conn);
 		base.OnClientSceneChanged (conn);
 	}
 
 	public override void OnStopHost ()
 	{
-		Debug.Log ("OnStopHost");
+		Utils.logger.Log ("OnStopHost");
 		base.OnStopHost ();
 	}
 
 	public override void OnStopClient ()
 	{
-		Debug.Log ("OnStopClient");
+		Utils.logger.Log ("OnStopClient");
 		base.OnStopClient ();
 	}
 }

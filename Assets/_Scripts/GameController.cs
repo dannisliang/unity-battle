@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
@@ -19,6 +20,7 @@ public class GameController : MonoBehaviour
 	public BoatPlacementController boatPlacementController;
 	public AudioClip waterPlopClip;
 	public AudioClip shipExplosionClip;
+	public Text statusLogText;
 
 	bool firing;
 	AudioSource source;
@@ -30,6 +32,7 @@ public class GameController : MonoBehaviour
 			return;
 		}
 		instance = this;
+		InitLogger ();
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
@@ -37,11 +40,16 @@ public class GameController : MonoBehaviour
 		InitNearby ();
 	}
 
+	void InitLogger ()
+	{
+		Utils.logger = new Logger (new UiTextLogHandler (statusLogText));
+	}
+
 	void InitNearby ()
 	{
-		Debug.Log ("Initializing nearby connections …");
+		Utils.logger.Log ("Initializing nearby connections …");
 		PlayGamesPlatform.InitializeNearby ((client) => {
-			Debug.Log ("Nearby connections initialized: client=" + client);
+			Utils.logger.Log ("Nearby connections initialized: client=" + client);
 		});
 	}
 
@@ -52,7 +60,7 @@ public class GameController : MonoBehaviour
 
 	void InitPlayGamesPlatform ()
 	{
-		Debug.Log ("Initializing PlayGamesPlatform …");
+		Utils.logger.Log ("Initializing PlayGamesPlatform …");
 
 		// https://github.com/playgameservices/play-games-plugin-for-unity
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
@@ -71,14 +79,14 @@ public class GameController : MonoBehaviour
 //		PlayGamesPlatform.DebugLogEnabled = true;
 
 
-		Debug.Log ("Activating PlayGamesPlatform …");
+		Utils.logger.Log ("Activating PlayGamesPlatform …");
 		PlayGamesPlatform.Activate ();
 
 
 		// authenticate user:
 		Social.localUser.Authenticate ((bool success) => {
 			// handle success or failure
-			Debug.Log ("Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
+			Utils.logger.Log ("Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
 			if (success) {
 				CreateGame ();
 			}
@@ -87,7 +95,7 @@ public class GameController : MonoBehaviour
 
 	void CreateGame ()
 	{
-		Debug.Log ("Creating game …");
+		Utils.logger.Log ("Creating game …");
 		MyRealTimeMultiplayerListener listener = new MyRealTimeMultiplayerListener ();
 		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: listener);
 	}
