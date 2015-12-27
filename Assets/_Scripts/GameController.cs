@@ -53,8 +53,6 @@ public class GameController : MonoBehaviour
 
 	void InitPlayGamesPlatform ()
 	{
-		Debug.logger.Log ("Initializing PlayGamesPlatform …");
-
 		// https://github.com/playgameservices/play-games-plugin-for-unity
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
 		                                      // enables saving game progress.

@@ -61,7 +61,7 @@ public class MyRealTimeMultiplayerListener : GooglePlayGames.BasicApi.Multiplaye
 	/// <param name="participantIds">Participant identifiers.</param>
 	public void OnPeersConnected (string[] participantIds)
 	{
-		Debug.Log ("OnPeersConnected(" + participantIds + ")");
+		Debug.Log ("OnPeersConnected(" + string.Join (",", participantIds) + ")");
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public class MyRealTimeMultiplayerListener : GooglePlayGames.BasicApi.Multiplaye
 	/// <param name="participantIds">Participant identifiers.</param>
 	public void OnPeersDisconnected (string[] participantIds)
 	{
-		Debug.Log ("OnPeersDisconnected(" + participantIds + ")");
+		Debug.Log ("OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
 	}
 
 	/// <summary>
