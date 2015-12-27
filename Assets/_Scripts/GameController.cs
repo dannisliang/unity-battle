@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
 
 	bool firing;
 	AudioSource source;
+	MyRealTimeMultiplayerListener multiplayerListener;
 
 	void Awake ()
 	{
@@ -34,6 +35,7 @@ public class GameController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
+		multiplayerListener = new MyRealTimeMultiplayerListener ();
 
 //		InitNearby ();
 	}
@@ -79,21 +81,33 @@ public class GameController : MonoBehaviour
 			// handle success or failure
 			Debug.logger.Log ("Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
 			if (success) {
-				CreateGame ();
+				CreateMultiplayerRoom ();
 			}
 		});
 	}
 
-	void CreateGame ()
+	void CreateMultiplayerRoom ()
 	{
-		Debug.logger.Log ("Creating game …");
-		MyRealTimeMultiplayerListener listener = new MyRealTimeMultiplayerListener ();
-		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: listener);
+		Debug.logger.Log ("Creating multiplayer room …");
+		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: multiplayerListener);
+	}
+
+	public void OnRoomConnected (bool success)
+	{
+		if (success) {
+			StartNewGame ();
+		}
 	}
 
 	public void StartNewGame ()
 	{
 		boatPlacementController.RecreateBoats ();
+	}
+
+	public void EndGame ()
+	{
+		boatPlacementController.DestroyBoats ();
+		CreateMultiplayerRoom ();
 	}
 
 	public void PlayWaterPlop ()

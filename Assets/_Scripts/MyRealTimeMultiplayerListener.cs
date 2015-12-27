@@ -29,6 +29,7 @@ public class MyRealTimeMultiplayerListener : GooglePlayGames.BasicApi.Multiplaye
 	public void OnRoomConnected (bool success)
 	{
 		Debug.Log ("OnRoomConnected(" + success + ")");
+		GameController.instance.OnRoomConnected (success);
 	}
 
 	/// <summary>
@@ -71,6 +72,7 @@ public class MyRealTimeMultiplayerListener : GooglePlayGames.BasicApi.Multiplaye
 	public void OnPeersDisconnected (string[] participantIds)
 	{
 		Debug.Log ("OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
+		GameController.instance.EndGame ();
 	}
 
 	/// <summary>

@@ -17,14 +17,19 @@ public class BoatPlacementController : MonoBehaviour
 
 	void Awake ()
 	{
-		RecreateBoats ();
+//		RecreateBoats ();
 	}
 
 	public void RecreateBoats ()
 	{
 		boats = new Boat[boatSizes.Length];
-		Utils.DestroyChildren (transform);
+		DestroyBoats ();
 		CreateBoats ();
+	}
+
+	public void DestroyBoats ()
+	{
+		Utils.DestroyChildren (transform);
 	}
 
 	void CreateBoats ()
