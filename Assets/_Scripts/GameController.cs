@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour
 
 
 		// authenticate user:
-		PlayGamesPlatform.Instance.localUser.Authenticate ((bool success) => {
+		Social.localUser.Authenticate ((bool success) => {
 			// handle success or failure
 			Debug.Log ("Authenticate --> " + success);
 		});
