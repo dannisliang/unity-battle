@@ -9,10 +9,6 @@ public class PlayerController : NetworkBehaviour
 
 	void Update ()
 	{	
-		if (Input.GetKey (KeyCode.R)) {
-			GameController.instance.StartNewGame ();
-		}
-
 		Ray ray = new Ray (Camera.main.transform.position, Camera.main.transform.forward);
 #if UNITY_EDITOR
 		Debug.DrawRay (Camera.main.transform.position, Camera.main.transform.forward * 13f);
