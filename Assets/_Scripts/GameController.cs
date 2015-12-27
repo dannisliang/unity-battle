@@ -71,7 +71,7 @@ public class GameController : MonoBehaviour
 	void QuickGame ()
 	{
 		MyRealTimeMultiplayerListener listener = new MyRealTimeMultiplayerListener ();
-		PlayGamesPlatform.Instance.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: listener);
+		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: listener);
 	}
 
 	public void StartNewGame ()
