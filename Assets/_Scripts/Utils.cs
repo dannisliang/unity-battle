@@ -8,9 +8,6 @@ using UnityEditor;
 
 public class Utils : MonoBehaviour
 {
-	// initialized in GameController.Awake()
-	public static Logger logger;
-
 	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
 	public static HideFlags NO_SAVE_NO_EDIT_HIDE_FLAGS = HideFlags.DontSave | HideFlags.NotEditable;
@@ -49,11 +46,5 @@ public class Utils : MonoBehaviour
 	{
 		return Input.GetButtonUp ("Fire1") && ignoreCurrentFire1FrameCount != Time.frameCount;
 	}
-
-	public static void LogError (object message)
-	{
-		logger.LogError ("x123", message);
-	}
-
 
 }

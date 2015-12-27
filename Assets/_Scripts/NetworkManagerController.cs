@@ -18,7 +18,7 @@ public class NetworkManagerController : NetworkManager
 				networkPort = Int32.Parse (args [i + 1]);
 			}
 		}
-//		Utils.logger.Log ("USING NETWORK: " + networkAddress + " " + networkPort);
+//		Debug.logger.Log ("USING NETWORK: " + networkAddress + " " + networkPort);
 
 		if (Application.isEditor) {
 			StartHost ();
@@ -33,52 +33,52 @@ public class NetworkManagerController : NetworkManager
 	void Update ()
 	{
 		if (Input.GetKeyUp (KeyCode.S)) {
-//			Utils.logger.Log ("Calling StartServer");
+//			Debug.logger.Log ("Calling StartServer");
 			StartServer ();
 		}
 		if (Input.GetKeyUp (KeyCode.C)) {
-//			Utils.logger.Log ("Calling StartClient");
+//			Debug.logger.Log ("Calling StartClient");
 			StartClient ();
 		}
 		if (Input.GetKeyUp (KeyCode.H)) {
-//			Utils.logger.Log ("Calling StartHost");
+//			Debug.logger.Log ("Calling StartHost");
 			StartHost ();
 		}
 	}
 
 	public override void OnClientConnect (NetworkConnection conn)
 	{
-		Utils.logger.Log ("OnClientConnect " + conn);
+		Debug.logger.Log ("OnClientConnect " + conn);
 		base.OnClientConnect (conn);
 	}
 
 	public override void OnClientError (NetworkConnection conn, int errorCode)
 	{
-		Utils.logger.Log ("OnClientError " + conn + " / " + errorCode);
+		Debug.logger.Log ("OnClientError " + conn + " / " + errorCode);
 		base.OnClientError (conn, errorCode);
 	}
 
 	public override void OnClientNotReady (NetworkConnection conn)
 	{
-		Utils.logger.Log ("OnClientNotReady " + conn);
+		Debug.logger.Log ("OnClientNotReady " + conn);
 		base.OnClientNotReady (conn);
 	}
 
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
-		Utils.logger.Log ("OnClientSceneChanged " + conn);
+		Debug.logger.Log ("OnClientSceneChanged " + conn);
 		base.OnClientSceneChanged (conn);
 	}
 
 	public override void OnStopHost ()
 	{
-		Utils.logger.Log ("OnStopHost");
+		Debug.logger.Log ("OnStopHost");
 		base.OnStopHost ();
 	}
 
 	public override void OnStopClient ()
 	{
-		Utils.logger.Log ("OnStopClient");
+		Debug.logger.Log ("OnStopClient");
 		base.OnStopClient ();
 	}
 }

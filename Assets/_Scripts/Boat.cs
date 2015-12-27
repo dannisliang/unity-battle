@@ -22,7 +22,7 @@ public class Boat
 		int u = Random.Range (0, Utils.GRID_SIZE - size + 1);
 		int v = Random.Range (0, Utils.GRID_SIZE);
 
-		//Utils.logger.Log ("u=" + u + " v=" + v);
+		//Debug.logger.Log ("u=" + u + " v=" + v);
 		positions = MakeBoatPositions (u, v, size, horizontal);
 	}
 
