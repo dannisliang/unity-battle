@@ -13,11 +13,27 @@ public class SignOutController : MonoBehaviour
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
 			Debug.Log ("Clicked " + button.name);
-			if (PlayGamesPlatform.Instance.IsAuthenticated ()) {
-				Debug.Log ("SignOut() …");
-				PlayGamesPlatform.Instance.SignOut ();
+			if (IsIteractable ()) {
+				SignOut ();
 			}
 		});
+	}
+
+	void Update ()
+	{
+		button.interactable = IsIteractable ();
+	}
+
+
+	bool IsIteractable ()
+	{
+		return PlayGamesPlatform.Instance.IsAuthenticated ();
+	}
+
+	void SignOut ()
+	{
+		Debug.Log ("SignOut() …");
+		PlayGamesPlatform.Instance.SignOut ();
 	}
 
 }

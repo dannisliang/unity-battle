@@ -83,12 +83,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		PlayGamesPlatform.Activate ();
 	}
 
-	public void CreateMultiplayerRoom ()
-	{
-		Debug.logger.Log ("Creating multiplayer room …");
-		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
-	}
-
 	public void StartNewGame ()
 	{
 		boatPlacementController.RecreateBoats ();
@@ -157,7 +151,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnLeftRoom ()
 	{
 		Debug.Log ("OnLeftRoom()");
-		CreateMultiplayerRoom ();
 	}
 
 	// RealTimeMultiplayerListener

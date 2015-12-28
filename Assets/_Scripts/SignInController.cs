@@ -13,20 +13,27 @@ public class SignInController : MonoBehaviour
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
 			Debug.Log ("Clicked " + button.name);
-			if (!PlayGamesPlatform.Instance.IsAuthenticated ()) {
-				Debug.Log ("Authenticate() …");
-				Authenticate ();
+			if (IsIteractable ()) {
+				Authenticate (false);
 			}
 		});
 	}
 
-	void Authenticate ()
+	void Update ()
 	{
+		button.interactable = IsIteractable ();
+	}
+
+	bool IsIteractable ()
+	{
+		return !PlayGamesPlatform.Instance.IsAuthenticated ();
+	}
+
+	void Authenticate (bool silent)
+	{
+		Debug.Log ("Authenticate() …");
 		PlayGamesPlatform.Instance.Authenticate ((bool success) => {
 			Debug.logger.Log ("Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
-			if (success) {
-				GameController.instance.CreateMultiplayerRoom ();
-			}
-		});
+		}, silent);
 	}
 }
