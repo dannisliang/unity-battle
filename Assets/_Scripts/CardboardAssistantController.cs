@@ -11,7 +11,7 @@ public class CardboardAssistantController : MonoBehaviour
 		Cardboard.SDK.TapIsTrigger = false;
 		cardboardToggle.isOn = Cardboard.SDK.VRModeEnabled;
 #if UNITY_EDITOR
-//		Cardboard.SDK.StereoScreenScale = 2f;
+		Cardboard.SDK.StereoScreenScale = 2f;
 #endif
 	}
 
