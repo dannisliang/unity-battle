@@ -81,16 +81,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 		Debug.logger.Log ("Activating PlayGamesPlatform …");
 		PlayGamesPlatform.Activate ();
-
-
-		// authenticate user:
-		Social.localUser.Authenticate ((bool success) => {
-			// handle success or failure
-			Debug.logger.Log ("Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
-			if (success) {
-				CreateMultiplayerRoom ();
-			}
-		});
 	}
 
 	public void CreateMultiplayerRoom ()
