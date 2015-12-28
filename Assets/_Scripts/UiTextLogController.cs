@@ -16,21 +16,24 @@ public class UiTextLogController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		// TODO: Make thread safe and use logMessageReceivedThreaded
-		Application.logMessageReceived += HandleLog;
+		Application.logMessageReceivedThreaded += HandleLog;
 	}
 
 	void OnDisable ()
 	{
-		// TODO: Make thread safe and use logMessageReceivedThreaded
-		Application.logMessageReceived -= HandleLog;
+		Application.logMessageReceivedThreaded -= HandleLog;
 	}
 
 	void HandleLog (string msg, string stackTrace, LogType type)
 	{
-		text.text += "\n" + (type == LogType.Log ? "" : type + " ");
-		text.text += msg;
-		//text.text += stackTrace;
+		string t = "\n" + (type == LogType.Log ? "" : type + " ");
+		t += msg; 
+		t += stackTrace;
+		ThreadSafeAppend (t);
 	}
 
+	void ThreadSafeAppend (string msg)
+	{
+		text.text += msg;
+	}
 }
