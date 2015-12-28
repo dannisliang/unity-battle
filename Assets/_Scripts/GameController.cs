@@ -40,6 +40,14 @@ public class GameController : MonoBehaviour
 //		InitNearby ();
 	}
 
+	void OnApplicationPause (bool pause)
+	{
+		Debug.Log (Time.frameCount + " OnApplicationPause(" + pause + ")");
+		if (pause) {
+			EndGame ();
+		}
+	}
+
 	void InitNearby ()
 	{
 		Debug.logger.Log ("Initializing nearby connections …");
