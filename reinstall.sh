@@ -7,7 +7,7 @@ MANIFEST_PATH=Assets/Plugins/Android/AndroidManifest.xml
 activity=com.unity3d.player.UnityPlayerActivity
 root=$( dirname $0 )
 
-devices=$(adb devices | grep device\$ | cut -f1 | tr '\n' ' ')
+devices=$(adb devices | sort | grep device\$ | cut -f1 | tr '\n' ' ')
 
 # Determine Android package name
 pkg=$( grep bundleIdentifier ProjectSettings/ProjectSettings.asset | sed 's/ //g' | cut -d: -f2 )
@@ -39,38 +39,46 @@ echo "Using:"
 echo "- Package identifier: $pkg"
 echo "- APK filename      : $apk"
 echo "- Android Activity  : $activity"
-echo "- Device(s)         : $devices"
+for device in $devices
+do
+echo "- Device            : $device"
+done
 echo
 
 uninstall_pkg()
 {
   echo
-  echo "$ANDROID_SERIAL Uninstalling $1 …"
-  adb shell pm uninstall $1 || true
+  echo "$ANDROID_SERIAL Uninstalling $* …"
+  adb shell pm uninstall $* || true
 }
 
 install_pkg()
 {
   echo
-  echo "$ANDROID_SERIAL Installing $1 …"
-  adb install -r --user 0 $1
+  echo "$ANDROID_SERIAL adb install $* …"
+  adb install $*
 }
 
 # Begin actual un/re-install and launch
 pids=""
+device_num=0
 for serial in $devices
 do
+  export ANDROID_SERIAL=$serial
+  device_num=$(( $device_num + 1))
   (
-    export ANDROID_SERIAL=$serial
-    install_pkg $apk ||
+    adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null
+    user_count=$(( $( adb shell pm list users | grep UserInfo | wc -l ) ))
+    user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo{([0-9]+).*/\1/' )
+    install_pkg -r -g --user $user $apk ||
     (
       echo " and reinstalling on $serial …"
       uninstall_pkg $pkg \
-       && install_pkg $apk
+       && install_pkg --user $user $apk
     )
     echo
     echo "$ANDROID_SERIAL Launching $pkg/$activity …"
-    adb shell am start -n $pkg/$activity
+    adb shell am start --user $user -n $pkg/$activity
   ) &
   pids="$pids $!"
 done
