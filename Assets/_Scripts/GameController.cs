@@ -7,7 +7,7 @@ using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.Multiplayer;
 
 [RequireComponent (typeof(AudioSource))]
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 {
 	public static GameController instance;
 	public static LayerInfo layerTileTheirs;
@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
 
 	bool firing;
 	AudioSource source;
-	MyRealTimeMultiplayerListener multiplayerListener;
+	bool showingWaitingRoom;
 
 	void Awake ()
 	{
@@ -35,7 +35,6 @@ public class GameController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
-		multiplayerListener = new MyRealTimeMultiplayerListener ();
 
 //		InitNearby ();
 	}
@@ -97,14 +96,7 @@ public class GameController : MonoBehaviour
 	public void CreateMultiplayerRoom ()
 	{
 		Debug.logger.Log ("Creating multiplayer room …");
-		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: multiplayerListener);
-	}
-
-	public void OnRoomConnected (bool success)
-	{
-		if (success) {
-			StartNewGame ();
-		}
+		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
 	}
 
 	public void StartNewGame ()
@@ -149,6 +141,58 @@ public class GameController : MonoBehaviour
 		GameObject marker = Instantiate (hit ? boatHitPrefab : boatMissPrefab);
 		marker.transform.SetParent (gridTheirs.transform, false);
 		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, 0f);
+	}
+
+	// RealTimeMultiplayerListener
+	public void OnRoomSetupProgress (float percent)
+	{
+		Debug.Log ("OnRoomSetupProgress(" + percent + ")");
+		// show the default waiting room.
+		if (!showingWaitingRoom) {
+			showingWaitingRoom = true;
+			PlayGamesPlatform.Instance.RealTime.ShowWaitingRoomUI ();
+		}
+	}
+
+	// RealTimeMultiplayerListener
+	public void OnRoomConnected (bool success)
+	{
+		Debug.Log ("OnRoomConnected(" + success + ")");
+		if (success) {
+			StartNewGame ();
+		}
+	}
+
+	// RealTimeMultiplayerListener
+	public void OnLeftRoom ()
+	{
+		Debug.Log ("OnLeftRoom()");
+		CreateMultiplayerRoom ();
+	}
+
+	// RealTimeMultiplayerListener
+	public void OnParticipantLeft (Participant participant)
+	{
+		Debug.Log ("OnParticipantLeft(" + participant + ")");
+	}
+
+	// RealTimeMultiplayerListener
+	public void OnPeersConnected (string[] participantIds)
+	{
+		Debug.Log ("OnPeersConnected(" + string.Join (",", participantIds) + ")");
+	}
+
+	// RealTimeMultiplayerListener
+	public void OnPeersDisconnected (string[] participantIds)
+	{
+		Debug.Log ("OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
+		EndGame ();
+	}
+
+	// RealTimeMultiplayerListener
+	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
+	{
+		Debug.Log ("OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + data + ")");
 	}
 
 }
