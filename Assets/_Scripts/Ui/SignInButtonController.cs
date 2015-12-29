@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using GooglePlayGames;
 
-public class SignInController : MonoBehaviour
+public class SignInButtonController : MonoBehaviour
 {
 
 	Button button;

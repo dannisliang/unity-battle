@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log (Time.frameCount + " OnApplicationPause(" + pause + ")");
 		if (pause) {
-			EndGame ();
+			PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 		}
 	}
 
@@ -86,12 +86,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void StartNewGame ()
 	{
 		boatPlacementController.RecreateBoats ();
-	}
-
-	public void EndGame ()
-	{
-		boatPlacementController.DestroyBoats ();
-		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 	}
 
 	public void PlayWaterPlop ()
@@ -151,6 +145,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnLeftRoom ()
 	{
 		Debug.Log ("OnLeftRoom()");
+		boatPlacementController.DestroyBoats ();
 	}
 
 	// RealTimeMultiplayerListener
@@ -169,7 +164,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnPeersDisconnected (string[] participantIds)
 	{
 		Debug.Log ("OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
-		EndGame ();
+		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 	}
 
 	// RealTimeMultiplayerListener

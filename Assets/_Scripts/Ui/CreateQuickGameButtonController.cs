@@ -1,10 +1,9 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using GooglePlayGames;
 
-public class CreateQuickGameController : MonoBehaviour
+public class CreateQuickGameButtonController : MonoBehaviour
 {
 
 	Button button;
@@ -43,4 +42,3 @@ public class CreateQuickGameController : MonoBehaviour
 	}
 
 }
-

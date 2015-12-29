@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using GooglePlayGames;
 
-public class SignOutController : MonoBehaviour
+public class LeaveRoomButtonController : MonoBehaviour
 {
 
 	Button button;
@@ -14,7 +14,7 @@ public class SignOutController : MonoBehaviour
 		button.onClick.AddListener (delegate {
 			Debug.Log ("Clicked " + button.name);
 			if (IsIteractable ()) {
-				SignOut ();
+				LeaveRoom ();
 			}
 		});
 	}
@@ -24,16 +24,15 @@ public class SignOutController : MonoBehaviour
 		button.interactable = IsIteractable ();
 	}
 
-
 	bool IsIteractable ()
 	{
-		return PlayGamesPlatform.Instance.IsAuthenticated ();
+		return PlayGamesPlatform.Instance.IsAuthenticated () && PlayGamesPlatform.Instance.RealTime.IsRoomConnected ();
 	}
 
-	void SignOut ()
+	public void LeaveRoom ()
 	{
-		Debug.Log ("SignOut() …");
-		PlayGamesPlatform.Instance.SignOut ();
+		Debug.logger.Log ("Leaving room …");
+		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 	}
 
 }
