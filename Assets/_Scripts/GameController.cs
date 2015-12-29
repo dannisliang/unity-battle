@@ -145,6 +145,8 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		if (success) {
 			SceneManager.LoadScene (1);
+//			boatPlacementController.RecreateBoats ();
+			PlayGamesPlatform.Instance.RealTime.SendMessageToAll (true, new byte[] { 1, 2, 3 });
 		}
 	}
 
