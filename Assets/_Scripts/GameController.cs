@@ -116,7 +116,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public void SendOurBoatPositions ()
 	{
-		byte[] bytes = RealtimeBattleship.EncodeGrid (BattleshipController.instance.boatsOursPlacementController.grid);
+		byte[] bytes = RealtimeBattleship.Encode (BattleshipController.instance.boatsOursPlacementController.grid);
 		gamesPlatform.RealTime.SendMessageToAll (true, bytes);
 	}
 

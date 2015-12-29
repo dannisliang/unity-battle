@@ -10,12 +10,12 @@ public class RealtimeBattleship : MonoBehaviour
 	static byte MESSAGE_TYPE_GRID = (byte)'G';
 	static byte MESSAGE_TYPE_SHOT = (byte)'S';
 
-	public static byte[] EncodeGrid (Grid grid)
+	public static byte[] Encode (Grid grid)
 	{
 		return Encode (MESSAGE_TYPE_GRID, grid);
 	}
 
-	public static byte[] EncodeGrid (Position position)
+	public static byte[] Encode (Position position)
 	{
 		return Encode (MESSAGE_TYPE_SHOT, position);
 	}
