@@ -14,8 +14,8 @@ public class PlayerController : NetworkBehaviour
 		Debug.DrawRay (Camera.main.transform.position, Camera.main.transform.forward * 13f);
 #endif
 		RaycastHit hit;
-		if (Physics.Raycast (ray, out hit, 100f, GameController.layerTileTheirs.layerMask)) {
-			if (!GameController.instance.IsFiring () && Utils.DidFire ()) {
+		if (Physics.Raycast (ray, out hit, 100f, BattleshipController.layerTileTheirs.layerMask)) {
+			if (!BattleshipController.instance.IsFiring () && Utils.DidFire ()) {
 				FireAt (hit.collider.transform);
 			}
 		}

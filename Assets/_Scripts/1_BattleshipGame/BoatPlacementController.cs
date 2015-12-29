@@ -13,7 +13,7 @@ public class BoatPlacementController : MonoBehaviour
 
 	public GameObject boatPrefab;
 
-	Boat[] boats;
+	public Boat[] boats { get; private set; }
 
 	void Awake ()
 	{

@@ -13,7 +13,7 @@ public class RocketController : MonoBehaviour
 
 	void Awake ()
 	{
-		GameController.instance.SetIsFiring (true);
+		BattleshipController.instance.SetIsFiring (true);
 		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
 		source = GetComponent<AudioSource> ();
 	}
@@ -40,7 +40,7 @@ public class RocketController : MonoBehaviour
 
 	void OnDestroy ()
 	{
-		GameController.instance.SetIsFiring (false);
+		BattleshipController.instance.SetIsFiring (false);
 	}
 
 	void OnTriggerEnter (Collider other)
@@ -58,18 +58,18 @@ public class RocketController : MonoBehaviour
 
 	void Explode ()
 	{
-		if (other.gameObject.layer == GameController.layerTileTheirs.layer) {
+		if (other.gameObject.layer == BattleshipController.layerTileTheirs.layer) {
 			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
 			//			TileController tileController = other.gameObject.GetComponent<TileController> ();
-			GameController.instance.PlayWaterPlop ();
-			GameController.instance.PlaceMarker (positionMakerController.position, false);
-		} else if (other.gameObject.layer == GameController.layerBoatTheirs.layer) {
+			BattleshipController.instance.PlayWaterPlop ();
+			BattleshipController.instance.PlaceMarker (positionMakerController.position, false);
+		} else if (other.gameObject.layer == BattleshipController.layerBoatTheirs.layer) {
 			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
 			//			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
 			Debug.Log ("***HIT " + positionMakerController.position);
 			//			boatController.Hit (positionMakerController.position);
-			GameController.instance.PlayShipExplosionAfter (1f);
-			GameController.instance.PlaceMarker (positionMakerController.position, true);
+			BattleshipController.instance.PlayShipExplosionAfter (1f);
+			BattleshipController.instance.PlaceMarker (positionMakerController.position, true);
 		} else {
 			Debug.LogError ("Unexpected collision with " + other);
 		}

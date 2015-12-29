@@ -114,7 +114,7 @@ Transform:
   - {fileID: 1403814450}
   - {fileID: 600891559}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
 --- !u!1 &35986394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,13 +1096,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926035df29bc84402a19c8b071729118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boatHitPrefab: {fileID: 101766, guid: eeb0ce773684e49f5adf381f6ba475a5, type: 2}
-  boatMissPrefab: {fileID: 101766, guid: 656114f2302be40ea9196aef325ebbbf, type: 2}
-  gridTheirs: {fileID: 32654577}
-  reticle: {fileID: 2056223767}
-  boatPlacementController: {fileID: 1601558864}
-  waterPlopClip: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
-  shipExplosionClip: {fileID: 8300000, guid: 0d0c9adbbf0c94ed883eb926017aeabf, type: 3}
 --- !u!4 &854977909
 Transform:
   m_ObjectHideFlags: 0
@@ -1114,7 +1107,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
 --- !u!82 &854977910
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1314,12 +1307,58 @@ RectTransform:
   - {fileID: 1509291582}
   - {fileID: 1976120326}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 8, y: 8}
   m_SizeDelta: {x: 800, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &889480877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 889480879}
+  - 114: {fileID: 889480878}
+  m_Layer: 0
+  m_Name: Battleship Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &889480878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 889480877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60362956cd5d843009b0f688946ab848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reticle: {fileID: 2056223767}
+  boatHitPrefab: {fileID: 101766, guid: eeb0ce773684e49f5adf381f6ba475a5, type: 2}
+  boatMissPrefab: {fileID: 101766, guid: 656114f2302be40ea9196aef325ebbbf, type: 2}
+  gridTheirs: {fileID: 32654577}
+  boatsOursPlacementController: {fileID: 1601558864}
+  waterPlopClip: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
+  shipExplosionClip: {fileID: 8300000, guid: 0d0c9adbbf0c94ed883eb926017aeabf, type: 3}
+--- !u!4 &889480879
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 889480877}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
 --- !u!1 &1072113668
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1391,7 @@ RectTransform:
   m_Children:
   - {fileID: 35986395}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -8, y: 8}
@@ -1697,7 +1736,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!114 &1195234157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1770,6 +1809,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 160058, guid: 18f6e4d3eadfe41d490747898a9231cc, type: 2}
+      propertyPath: m_Name
+      value: Head Attached Reticle
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 18f6e4d3eadfe41d490747898a9231cc, type: 2}
   m_IsPrefabParent: 0
@@ -1812,7 +1855,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
 --- !u!1 &1342963367
 GameObject:
   m_ObjectHideFlags: 0
@@ -2235,7 +2278,7 @@ RectTransform:
   m_Children:
   - {fileID: 1541742078}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 6.2}
@@ -2358,7 +2401,7 @@ Transform:
   - {fileID: 821473049}
   - {fileID: 95398953}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
 --- !u!114 &1586100396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2454,7 +2497,7 @@ Transform:
   - {fileID: 1870285320}
   - {fileID: 1728805349}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
 --- !u!1 &1728805348
 GameObject:
   m_ObjectHideFlags: 0
@@ -2575,7 +2618,7 @@ Transform:
   - {fileID: 1601558863}
   - {fileID: 1453214367}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
 --- !u!4 &1870285320 stripped
 Transform:
   m_PrefabParentObject: {fileID: 477436, guid: 18f6e4d3eadfe41d490747898a9231cc, type: 2}
@@ -2751,7 +2794,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}

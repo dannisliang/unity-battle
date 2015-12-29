@@ -2,6 +2,9 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
@@ -11,18 +14,7 @@ using GooglePlayGames.BasicApi.Multiplayer;
 public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 {
 	public static GameController instance;
-	public static LayerInfo layerTileTheirs;
-	public static LayerInfo layerBoatTheirs;
 
-	public GameObject boatHitPrefab;
-	public GameObject boatMissPrefab;
-	public GameObject gridTheirs;
-	public GameObject reticle;
-	public BoatPlacementController boatPlacementController;
-	public AudioClip waterPlopClip;
-	public AudioClip shipExplosionClip;
-
-	bool firing;
 	AudioSource source;
 	//	bool showingWaitingRoom;
 
@@ -34,9 +26,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}
 		instance = this;
 		DontDestroyOnLoad (gameObject);
-		layerTileTheirs = new LayerInfo ("Tile Theirs");
-		layerBoatTheirs = new LayerInfo ("Boat Theirs");
-		source = GetComponent<AudioSource> ();
 
 		SceneManager.LoadScene ("__MainMenu");
 //		InitNearby ();
@@ -100,39 +89,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}, true);
 	}
 
-	public void PlayWaterPlop ()
-	{
-		source.PlayOneShot (waterPlopClip);
-	}
-
-	public void PlayShipExplosionAfter (float delay)
-	{
-		Invoke ("PlayShipExplosion", delay);
-	}
-
-	public void PlayShipExplosion ()
-	{
-		source.PlayOneShot (shipExplosionClip);
-	}
-
-	public bool IsFiring ()
-	{
-		return firing;
-	}
-
-	public void SetIsFiring (bool firing)
-	{
-		this.firing = firing;
-		reticle.SetActive (!firing);
-	}
-
-	public void PlaceMarker (Position position, bool hit)
-	{
-		GameObject marker = Instantiate (hit ? boatHitPrefab : boatMissPrefab);
-		marker.transform.SetParent (gridTheirs.transform, false);
-		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, 0f);
-	}
-
 	// RealTimeMultiplayerListener
 	public void OnRoomSetupProgress (float percent)
 	{
@@ -149,9 +105,19 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		if (success) {
-			SceneManager.LoadScene ("__BattleshipGame");
-//			boatPlacementController.RecreateBoats ();
-			PlayGamesPlatform.Instance.RealTime.SendMessageToAll (true, new byte[] { 1, 2, 3 });
+			SendOurBoatPositions ();
+		}
+	}
+
+	void SendOurBoatPositions ()
+	{
+		IFormatter formatter = new BinaryFormatter ();
+		using (MemoryStream stream = new MemoryStream ()) {
+//			formatter.Serialize (stream, new Boat (1));
+			BattleshipController.instance.boatsOursPlacementController.RecreateBoats ();
+			formatter.Serialize (stream, BattleshipController.instance.boatsOursPlacementController.boats);
+			byte[] bytes = stream.ToArray ();
+			//PlayGamesPlatform.Instance.RealTime.SendMessageToAll (true, bytes);
 		}
 	}
 

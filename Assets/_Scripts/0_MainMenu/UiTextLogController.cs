@@ -16,7 +16,7 @@ public class UiTextLogController : MonoBehaviour
 
 	void Awake ()
 	{
-		//Application.stackTraceLogType = StackTraceLogType.ScriptOnly;
+		Application.stackTraceLogType = StackTraceLogType.ScriptOnly;
 		text = GetComponent<Text> ();
 	}
 
