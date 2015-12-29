@@ -58,6 +58,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	void Start ()
 	{
 		InitPlayGamesPlatform ();
+		TrySilentAuth ();
 	}
 
 	void InitPlayGamesPlatform ()
@@ -81,6 +82,13 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 		Debug.logger.Log ("Activating PlayGamesPlatform …");
 		PlayGamesPlatform.Activate ();
+	}
+
+	void TrySilentAuth ()
+	{
+		PlayGamesPlatform.Instance.Authenticate ((bool success) => {
+			Debug.Log ("Silent auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
+		}, true);
 	}
 
 	public void StartNewGame ()
