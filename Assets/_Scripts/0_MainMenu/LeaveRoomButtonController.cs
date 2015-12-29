@@ -12,7 +12,7 @@ public class LeaveRoomButtonController : MonoBehaviour
 	{
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
-			Debug.Log ("Clicked " + button.name);
+			Debug.Log ("***Clicked " + button.name);
 			if (IsIteractable ()) {
 				LeaveRoom ();
 			}
@@ -31,7 +31,7 @@ public class LeaveRoomButtonController : MonoBehaviour
 
 	public void LeaveRoom ()
 	{
-		Debug.logger.Log ("Leaving room …");
+		Debug.Log ("***Leaving room …");
 		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 	}
 

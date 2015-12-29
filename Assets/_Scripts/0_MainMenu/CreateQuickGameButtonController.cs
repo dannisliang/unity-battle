@@ -12,7 +12,7 @@ public class CreateQuickGameButtonController : MonoBehaviour
 	{
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
-			Debug.Log ("Clicked " + button.name);
+			Debug.Log ("***Clicked " + button.name);
 			if (IsIteractable ()) {
 				CreateQuickGameRoom ();
 			}
@@ -31,13 +31,13 @@ public class CreateQuickGameButtonController : MonoBehaviour
 
 	public void CreateQuickGameRoom ()
 	{
-		Debug.logger.Log ("Creating quick game room …");
+		Debug.Log ("***Creating quick game room …");
 		PlayGamesPlatform.Instance.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: GameController.instance);
 	}
 
 	public void CreateWithInvitationScreenRoom ()
 	{
-		Debug.logger.Log ("Creating with invitation room …");
+		Debug.Log ("***Creating with invitation room …");
 		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: GameController.instance);
 	}
 

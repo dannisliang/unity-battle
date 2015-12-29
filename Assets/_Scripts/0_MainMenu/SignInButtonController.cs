@@ -12,7 +12,7 @@ public class SignInButtonController : MonoBehaviour
 	{
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
-			Debug.Log ("Clicked " + button.name);
+			Debug.Log ("***Clicked " + button.name);
 			if (IsIteractable ()) {
 				Authenticate (false);
 			}
@@ -31,9 +31,9 @@ public class SignInButtonController : MonoBehaviour
 
 	void Authenticate (bool silent)
 	{
-		Debug.Log ("Authenticate() …");
+		Debug.Log ("***Authenticate() …");
 		PlayGamesPlatform.Instance.Authenticate ((bool success) => {
-			Debug.logger.Log ("Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
+			Debug.Log ("***Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
 		}, silent);
 	}
 }

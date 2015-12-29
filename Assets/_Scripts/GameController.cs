@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SocialPlatforms;
@@ -28,10 +29,11 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	void Awake ()
 	{
 		if (instance != null && instance != this) {
-			Destroy (this);
+			Destroy (gameObject);
 			return;
 		}
 		instance = this;
+		DontDestroyOnLoad (gameObject);
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
@@ -41,17 +43,19 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	void OnApplicationPause (bool pause)
 	{
-		Debug.Log ("OnApplicationPause(" + pause + ") --> " + (pause ? "PAUSED" : "RESUMING"));
-		if (pause) {
-			PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
+		Debug.Log ("***OnApplicationPause(" + pause + ") --> " + (pause ? "PAUSED" : "RESUMING"));
+		Debug.Log ("***IsRoomConnected==" + PlayGamesPlatform.Instance.RealTime.IsRoomConnected () + "]");
+		if (!PlayGamesPlatform.Instance.RealTime.IsRoomConnected ()) {
+			Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
+			OnLeftRoom ();
 		}
 	}
 
 	void InitNearby ()
 	{
-		Debug.logger.Log ("Initializing nearby connections …");
+		Debug.Log ("***Initializing nearby connections …");
 		PlayGamesPlatform.InitializeNearby ((client) => {
-			Debug.logger.Log ("Nearby connections initialized: client=" + client);
+			Debug.Log ("***Nearby connections initialized: client=" + client);
 		});
 	}
 
@@ -80,20 +84,15 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 //		PlayGamesPlatform.DebugLogEnabled = true;
 
 
-		Debug.logger.Log ("Activating PlayGamesPlatform …");
+		Debug.Log ("***Activating PlayGamesPlatform …");
 		PlayGamesPlatform.Activate ();
 	}
 
 	void TrySilentAuth ()
 	{
 		PlayGamesPlatform.Instance.Authenticate ((bool success) => {
-			Debug.Log ("Silent auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
+			Debug.Log ("***Silent auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 		}, true);
-	}
-
-	public void StartNewGame ()
-	{
-		boatPlacementController.RecreateBoats ();
 	}
 
 	public void PlayWaterPlop ()
@@ -132,7 +131,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRoomSetupProgress (float percent)
 	{
-		Debug.Log ("OnRoomSetupProgress(" + percent + ")");
+		Debug.Log ("***OnRoomSetupProgress(" + percent + ")");
 		// show the default waiting room.
 //		if (!showingWaitingRoom) {
 //			showingWaitingRoom = true;
@@ -143,42 +142,43 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRoomConnected (bool success)
 	{
-		Debug.Log ("OnRoomConnected(" + success + ")");
+		Debug.Log ("***OnRoomConnected(" + success + ")");
 		if (success) {
-			StartNewGame ();
+			SceneManager.LoadScene (1);
 		}
 	}
 
 	// RealTimeMultiplayerListener
 	public void OnLeftRoom ()
 	{
-		Debug.Log ("OnLeftRoom()");
-		boatPlacementController.DestroyBoats ();
+		Debug.Log ("***OnLeftRoom()");
+		SceneManager.LoadScene (0);
+//		boatPlacementController.DestroyBoats ();
 	}
 
 	// RealTimeMultiplayerListener
 	public void OnParticipantLeft (Participant participant)
 	{
-		Debug.Log ("OnParticipantLeft(" + participant + ")");
+		Debug.Log ("***OnParticipantLeft(" + participant + ")");
 	}
 
 	// RealTimeMultiplayerListener
 	public void OnPeersConnected (string[] participantIds)
 	{
-		Debug.Log ("OnPeersConnected(" + string.Join (",", participantIds) + ")");
+		Debug.Log ("***OnPeersConnected(" + string.Join (",", participantIds) + ")");
 	}
 
 	// RealTimeMultiplayerListener
 	public void OnPeersDisconnected (string[] participantIds)
 	{
-		Debug.Log ("OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
+		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
 		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 	}
 
 	// RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
-		Debug.Log ("OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + data + ")");
+		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + data + ")");
 	}
 
 }

@@ -66,7 +66,7 @@ public class RocketController : MonoBehaviour
 		} else if (other.gameObject.layer == GameController.layerBoatTheirs.layer) {
 			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
 			//			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
-			Debug.logger.Log ("HIT " + positionMakerController.position);
+			Debug.Log ("***HIT " + positionMakerController.position);
 			//			boatController.Hit (positionMakerController.position);
 			GameController.instance.PlayShipExplosionAfter (1f);
 			GameController.instance.PlaceMarker (positionMakerController.position, true);

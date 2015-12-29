@@ -48,7 +48,7 @@ public class UiTextLogController : MonoBehaviour
 	void ThreadSafeAppend (string msg)
 	{
 		buf.AddLast (msg);
-		if (buf.Count > 10) {
+		if (buf.Count > MAX_ENTRIES) {
 			buf.RemoveFirst ();
 		}
 		string t = "";

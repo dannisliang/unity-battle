@@ -12,7 +12,7 @@ public class SignOutButtonController : MonoBehaviour
 	{
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
-			Debug.Log ("Clicked " + button.name);
+			Debug.Log ("***Clicked " + button.name);
 			if (IsIteractable ()) {
 				SignOut ();
 			}
@@ -32,7 +32,7 @@ public class SignOutButtonController : MonoBehaviour
 
 	void SignOut ()
 	{
-		Debug.Log ("SignOut() …");
+		Debug.Log ("***SignOut() …");
 		PlayGamesPlatform.Instance.SignOut ();
 	}
 
