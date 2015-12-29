@@ -44,6 +44,9 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	void OnApplicationPause (bool pause)
 	{
+		if (Time.frameCount <= 1) {
+			return;
+		}
 		bool IsAuthenticated = PlayGamesPlatform.Instance.IsAuthenticated ();
 		bool IsRoomConnected = IsAuthenticated && PlayGamesPlatform.Instance.RealTime.IsRoomConnected ();
 		Debug.Log ("***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + "]");
