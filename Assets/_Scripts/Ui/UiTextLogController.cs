@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UiTextLogController : MonoBehaviour
 {
 
+	LinkedList<string> buf;
 	Text text;
 
 	void Awake ()
@@ -12,6 +14,11 @@ public class UiTextLogController : MonoBehaviour
 		//Application.stackTraceLogType = StackTraceLogType.ScriptOnly;
 		text = GetComponent<Text> ();
 		text.text = "";
+		buf = new LinkedList<string> ();
+		buf.AddLast ("…");
+#if UNITY_EDITOR
+		Destroy (gameObject);
+#endif
 	}
 
 	void OnEnable ()
@@ -26,14 +33,22 @@ public class UiTextLogController : MonoBehaviour
 
 	void HandleLog (string msg, string stackTrace, LogType type)
 	{
-		string t = "\n" + (type == LogType.Log ? "" : type + " ");
+		string t = type == LogType.Log ? "" : type + " ";
 		t += msg; 
-		t += stackTrace;
+		//t += stackTrace;
 		ThreadSafeAppend (t);
 	}
 
 	void ThreadSafeAppend (string msg)
 	{
-		text.text += msg;
+		buf.AddLast (msg);
+		if (buf.Count > 10) {
+			buf.RemoveFirst ();
+		}
+		string t = "";
+		foreach (string m in buf) {
+			t += m + "\n";
+		}
+		text.text = t;
 	}
 }

@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	void OnApplicationPause (bool pause)
 	{
-		Debug.Log (Time.frameCount + " OnApplicationPause(" + pause + ")");
+		Debug.Log ("OnApplicationPause(" + pause + ") --> " + (pause ? "PAUSED" : "RESUMING"));
 		if (pause) {
 			PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
 		}
