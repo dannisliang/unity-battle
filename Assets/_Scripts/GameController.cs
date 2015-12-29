@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	bool firing;
 	AudioSource source;
-	bool showingWaitingRoom;
+	//	bool showingWaitingRoom;
 
 	void Awake ()
 	{
@@ -126,10 +126,10 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log ("OnRoomSetupProgress(" + percent + ")");
 		// show the default waiting room.
-		if (!showingWaitingRoom) {
-			showingWaitingRoom = true;
-			PlayGamesPlatform.Instance.RealTime.ShowWaitingRoomUI ();
-		}
+//		if (!showingWaitingRoom) {
+//			showingWaitingRoom = true;
+//			PlayGamesPlatform.Instance.RealTime.ShowWaitingRoomUI ();
+//		}
 	}
 
 	// RealTimeMultiplayerListener
