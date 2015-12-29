@@ -18,7 +18,6 @@ public class UiTextLogController : MonoBehaviour
 	{
 		//Application.stackTraceLogType = StackTraceLogType.ScriptOnly;
 		text = GetComponent<Text> ();
-		buf.Clear ();
 	}
 
 	void OnEnable ()

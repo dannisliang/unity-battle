@@ -38,13 +38,13 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
 
+		SceneManager.LoadScene ("__MainMenu");
 //		InitNearby ();
 	}
 
 	void OnApplicationPause (bool pause)
 	{
-		Debug.Log ("***OnApplicationPause(" + pause + ") --> " + (pause ? "PAUSED" : "RESUMING"));
-		Debug.Log ("***IsRoomConnected==" + PlayGamesPlatform.Instance.RealTime.IsRoomConnected () + "]");
+		Debug.Log ("***OnApplicationPause(" + pause + ") --> " + (pause ? "PAUSED" : "RESUMING") + " [IsRoomConnected==" + PlayGamesPlatform.Instance.RealTime.IsRoomConnected () + "]");
 		if (!PlayGamesPlatform.Instance.RealTime.IsRoomConnected ()) {
 			Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
 			OnLeftRoom ();
@@ -144,7 +144,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		if (success) {
-			SceneManager.LoadScene (1);
+			SceneManager.LoadScene ("__BattleshipGame");
 //			boatPlacementController.RecreateBoats ();
 			PlayGamesPlatform.Instance.RealTime.SendMessageToAll (true, new byte[] { 1, 2, 3 });
 		}
@@ -154,7 +154,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnLeftRoom ()
 	{
 		Debug.Log ("***OnLeftRoom()");
-		SceneManager.LoadScene (0);
+		SceneManager.LoadScene ("__MainMenu");
 //		boatPlacementController.DestroyBoats ();
 	}
 
