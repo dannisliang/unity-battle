@@ -13,6 +13,7 @@ public class BattleshipController : MonoBehaviour
 	public GameObject boatMissPrefab;
 	public GameObject gridTheirs;
 	public BoatPlacementController boatsOursPlacementController;
+	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip waterPlopClip;
 	public AudioClip shipExplosionClip;
 
@@ -29,6 +30,12 @@ public class BattleshipController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
+
+		if (GameController.gamesPlatform.RealTime.IsRoomConnected ()) {
+			boatsOursPlacementController.RecreateBoats ();
+			GameController.instance.SendOurBoatPositions ();
+		}
+
 	}
 
 	public void PlaceMarker (Position position, bool hit)

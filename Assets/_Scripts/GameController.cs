@@ -2,9 +2,6 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
@@ -104,7 +101,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		// show the default waiting room.
 //		if (!showingWaitingRoom) {
 //			showingWaitingRoom = true;
-//			gamesClient.RealTime.ShowWaitingRoomUI ();
+//			gamesPlatform.RealTime.ShowWaitingRoomUI ();
 //		}
 	}
 
@@ -113,20 +110,14 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		if (success) {
-			SendOurBoatPositions ();
+			SceneManager.LoadScene ("__BattleshipGame");
 		}
 	}
 
-	void SendOurBoatPositions ()
+	public void SendOurBoatPositions ()
 	{
-		IFormatter formatter = new BinaryFormatter ();
-		using (MemoryStream stream = new MemoryStream ()) {
-//			formatter.Serialize (stream, new Boat (1));
-			BattleshipController.instance.boatsOursPlacementController.RecreateBoats ();
-			formatter.Serialize (stream, BattleshipController.instance.boatsOursPlacementController.boats);
-			byte[] bytes = stream.ToArray ();
-			//gamesClient.RealTime.SendMessageToAll (true, bytes);
-		}
+		byte[] bytes = RealtimeBattleship.EncodeGrid (BattleshipController.instance.boatsOursPlacementController.grid);
+		gamesPlatform.RealTime.SendMessageToAll (true, bytes);
 	}
 
 	// RealTimeMultiplayerListener
@@ -160,6 +151,8 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + data + ")");
+		Grid grid = RealtimeBattleship.DecodeGrid (data);
+		BattleshipController.instance.boatsTheirsPlacementController.CreateGameObjects (grid);
 	}
 
 }

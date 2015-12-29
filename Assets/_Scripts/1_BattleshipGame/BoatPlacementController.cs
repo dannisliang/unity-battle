@@ -9,20 +9,20 @@ using UnityEditor;
 public class BoatPlacementController : MonoBehaviour
 {
 
-	static int[] boatSizes = { 5, 4, 3, 2, 2, 1 };
-
 	public GameObject boatPrefab;
 
-	public Boat[] boats { get; private set; }
-
-	void Awake ()
-	{
-//		RecreateBoats ();
-	}
+	public Grid grid { get; private set; }
 
 	public void RecreateBoats ()
 	{
-		boats = new Boat[boatSizes.Length];
+		Grid grid = new Grid ();
+		grid.RandomizeBoats ();
+		CreateGameObjects (grid);
+	}
+
+	public void CreateGameObjects (Grid grid)
+	{
+		this.grid = grid;
 		DestroyBoats ();
 		CreateBoats ();
 	}
@@ -34,51 +34,18 @@ public class BoatPlacementController : MonoBehaviour
 
 	void CreateBoats ()
 	{
-		for (int i = 0; i < boatSizes.Length; i++) {
-			int size = boatSizes [i];
-
-			bool conflict = true;
-			while (conflict) {
-				Boat boat = new Boat (size);
-
-				conflict = false;
-				for (int j = 0; j < boat.positions.Length && !conflict; j++) {
-					Position c = boat.positions [j];
-					if (IsHit (c)) {
-						conflict = true;
-					}
-				}
-				if (!conflict) {
-					boats [i] = boat;
-				}
-			}
-				
+		for (int i = 0; i < grid.boats.Length; i++) {
 			GameObject clone = Instantiate (boatPrefab) as GameObject;
 			clone.transform.SetParent (transform, false);
 
 			BoatController boatController = clone.GetComponent<BoatController> ();
-			boatController.Configure (boats [i]);
+			boatController.Configure (grid.boats [i]);
 
 			Utils.SetNoSaveNoEditHideFlags (clone.transform);
 #if UNITY_EDITOR
-			Undo.RegisterCreatedObjectUndo (clone, "Create " + boats [i]);
+			Undo.RegisterCreatedObjectUndo (clone, "Create " + grid.boats [i]);
 #endif
 		}
-	}
-
-	bool IsHit (Position position)
-	{
-		for (int i = 0; i < boats.Length; i++) {
-			if (boats [i] == null) {
-				continue;
-			}
-			for (int j = 0; j < boats [i].positions.Length; j++) {
-				if (position.Equals (boats [i].positions [j])) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 }

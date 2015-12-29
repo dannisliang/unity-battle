@@ -1345,6 +1345,7 @@ MonoBehaviour:
   boatMissPrefab: {fileID: 101766, guid: 656114f2302be40ea9196aef325ebbbf, type: 2}
   gridTheirs: {fileID: 32654577}
   boatsOursPlacementController: {fileID: 1601558864}
+  boatsTheirsPlacementController: {fileID: 1403814449}
   waterPlopClip: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
   shipExplosionClip: {fileID: 8300000, guid: 0d0c9adbbf0c94ed883eb926017aeabf, type: 3}
 --- !u!4 &889480879

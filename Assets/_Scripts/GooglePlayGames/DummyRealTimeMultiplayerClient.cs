@@ -55,7 +55,9 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
-		throw new System.NotImplementedException ();
+		Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + "," + data + ")");
+		// mirror back messages
+		GameController.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data, int offset, int length)
