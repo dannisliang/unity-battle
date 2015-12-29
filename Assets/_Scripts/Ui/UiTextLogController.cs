@@ -5,20 +5,20 @@ using System.Collections.Generic;
 
 public class UiTextLogController : MonoBehaviour
 {
+	#if UNITY_EDITOR
+	static int MAX_ENTRIES = 3;
+	#else
+	static int MAX_ENTRIES = 10;
+	#endif
 
-	LinkedList<string> buf;
+	LinkedList<string> buf = new LinkedList<string> ();
 	Text text;
 
 	void Awake ()
 	{
 		//Application.stackTraceLogType = StackTraceLogType.ScriptOnly;
 		text = GetComponent<Text> ();
-		text.text = "";
-		buf = new LinkedList<string> ();
-		buf.AddLast ("…");
-#if UNITY_EDITOR
-		Destroy (gameObject);
-#endif
+		buf.Clear ();
 	}
 
 	void OnEnable ()
@@ -29,6 +29,12 @@ public class UiTextLogController : MonoBehaviour
 	void OnDisable ()
 	{
 		Application.logMessageReceivedThreaded -= HandleLog;
+	}
+
+	public void ClearLog ()
+	{
+		buf.Clear ();
+		text.text = "";
 	}
 
 	void HandleLog (string msg, string stackTrace, LogType type)
