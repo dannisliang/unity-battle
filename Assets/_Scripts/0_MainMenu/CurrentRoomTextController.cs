@@ -15,7 +15,7 @@ public class CurrentRoomTextController : MonoBehaviour
 
 	void Update ()
 	{
-		text.text = PlayGamesPlatform.Instance.IsAuthenticated () && PlayGamesPlatform.Instance.RealTime.IsRoomConnected () ?
-			"Room with " + PlayGamesPlatform.Instance.RealTime.GetConnectedParticipants ().Count + " participants" : "(not in a room)";
+		text.text = GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected () ?
+			"Room with " + GameController.gamesPlatform.RealTime.GetConnectedParticipants ().Count + " participants" : "(not in a room)";
 	}
 }

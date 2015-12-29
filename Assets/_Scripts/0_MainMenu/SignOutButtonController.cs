@@ -24,16 +24,15 @@ public class SignOutButtonController : MonoBehaviour
 		button.interactable = IsIteractable ();
 	}
 
-
 	bool IsIteractable ()
 	{
-		return PlayGamesPlatform.Instance.IsAuthenticated ();
+		return GameController.gamesPlatform.IsAuthenticated ();
 	}
 
 	void SignOut ()
 	{
 		Debug.Log ("***SignOut() …");
-		PlayGamesPlatform.Instance.SignOut ();
+		GameController.gamesPlatform.SignOut ();
 	}
 
 }

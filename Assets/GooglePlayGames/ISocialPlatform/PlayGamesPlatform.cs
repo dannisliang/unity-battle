@@ -37,7 +37,7 @@ namespace GooglePlayGames
     /// implementation of the ISocialPlatform interface. Methods lacking an implementation
     /// or whose behavior is at variance with the standard are noted as such.
     /// </summary>
-    public class PlayGamesPlatform : ISocialPlatform
+    public class PlayGamesPlatform : ISocialPlatform, IPlayGamesPlatform
     {
         private static volatile PlayGamesPlatform sInstance = null;
 
@@ -1107,7 +1107,7 @@ namespace GooglePlayGames
             return id;
         }
 
-        internal IUserProfile[] GetFriends()
+        public IUserProfile[] GetFriends()
         {
             if (!IsAuthenticated())
             {

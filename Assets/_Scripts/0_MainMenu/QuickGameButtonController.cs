@@ -26,19 +26,19 @@ public class QuickGameButtonController : MonoBehaviour
 
 	bool IsIteractable ()
 	{
-		return PlayGamesPlatform.Instance.IsAuthenticated () && !PlayGamesPlatform.Instance.RealTime.IsRoomConnected ();
+		return GameController.gamesPlatform.IsAuthenticated () && !GameController.gamesPlatform.RealTime.IsRoomConnected ();
 	}
 
 	public void CreateQuickGameRoom ()
 	{
 		Debug.Log ("***Creating quick game room …");
-		PlayGamesPlatform.Instance.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: GameController.instance);
+		GameController.gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: GameController.instance);
 	}
 
 	public void CreateWithInvitationScreenRoom ()
 	{
 		Debug.Log ("***Creating with invitation room …");
-		PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: GameController.instance);
+		GameController.gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: GameController.instance);
 	}
 
 }

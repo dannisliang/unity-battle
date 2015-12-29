@@ -14,7 +14,7 @@ public class SignInButtonController : MonoBehaviour
 		button.onClick.AddListener (delegate {
 			Debug.Log ("***Clicked " + button.name);
 			if (IsIteractable ()) {
-				Authenticate (false);
+				GameController.instance.Authenticate (false);
 			}
 		});
 	}
@@ -26,14 +26,7 @@ public class SignInButtonController : MonoBehaviour
 
 	bool IsIteractable ()
 	{
-		return !PlayGamesPlatform.Instance.IsAuthenticated ();
+		return !GameController.gamesPlatform.IsAuthenticated ();
 	}
 
-	void Authenticate (bool silent)
-	{
-		Debug.Log ("***Authenticate() …");
-		PlayGamesPlatform.Instance.Authenticate ((bool success) => {
-			Debug.Log ("***Authenticate --> " + (success ? "SUCCESS" : "FAILURE"));
-		}, silent);
-	}
 }

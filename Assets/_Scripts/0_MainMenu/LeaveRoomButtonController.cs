@@ -26,13 +26,13 @@ public class LeaveRoomButtonController : MonoBehaviour
 
 	bool IsIteractable ()
 	{
-		return PlayGamesPlatform.Instance.IsAuthenticated () && PlayGamesPlatform.Instance.RealTime.IsRoomConnected ();
+		return GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ();
 	}
 
 	public void LeaveRoom ()
 	{
 		Debug.Log ("***Leaving room …");
-		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
+		GameController.gamesPlatform.RealTime.LeaveRoom ();
 	}
 
 }

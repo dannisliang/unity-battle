@@ -9,11 +9,14 @@ using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.Multiplayer;
+using System;
 
 [RequireComponent (typeof(AudioSource))]
 public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 {
 	public static GameController instance;
+
+	public static IPlayGamesPlatform gamesPlatform { get; private set; }
 
 	AudioSource source;
 	//	bool showingWaitingRoom;
@@ -36,8 +39,8 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		if (Time.frameCount <= 1) {
 			return;
 		}
-		bool IsAuthenticated = PlayGamesPlatform.Instance.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && PlayGamesPlatform.Instance.RealTime.IsRoomConnected ();
+		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
+		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
 		Debug.Log ("***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + "]");
 		if (!IsRoomConnected) {
 			Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
@@ -45,48 +48,53 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}
 	}
 
-	void InitNearby ()
-	{
-		Debug.Log ("***Initializing nearby connections …");
-		PlayGamesPlatform.InitializeNearby ((client) => {
-			Debug.Log ("***Nearby connections initialized: client=" + client);
-		});
-	}
+	//	void InitNearby ()
+	//	{
+	//		Debug.Log ("***Initializing nearby connections …");
+	//		PlayGamesPlatform.InitializeNearby ((client) => {
+	//			Debug.Log ("***Nearby connections initialized: client=" + client);
+	//		});
+	//	}
 
 	void Start ()
 	{
 		InitPlayGamesPlatform ();
-		TrySilentAuth ();
+		Authenticate (true);
 	}
 
 	void InitPlayGamesPlatform ()
 	{
-		// https://github.com/playgameservices/play-games-plugin-for-unity
-		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
-		                                      // enables saving game progress.
-		                                      //.EnableSavedGames ()
-		                                      // registers a callback to handle game invitations received while the game is not running.
-		                                      //.WithInvitationDelegate(<callback method>)
-		                                      // registers a callback for turn based match notifications received while the
-		                                      // game is not running.
-		                                      //.WithMatchDelegate(<callback method>)
+		if (Application.isEditor) {
+			gamesPlatform = new DummyPlayGamesPlatform ();
+		} else {
+			// https://github.com/playgameservices/play-games-plugin-for-unity
+			PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
+			                                      // enables saving game progress.
+			                                      //.EnableSavedGames ()
+			                                      // registers a callback to handle game invitations received while the game is not running.
+			                                      //.WithInvitationDelegate(<callback method>)
+			                                      // registers a callback for turn based match notifications received while the
+			                                      // game is not running.
+			                                      //.WithMatchDelegate(<callback method>)
 		.Build ();
 
-		PlayGamesPlatform.InitializeInstance (config);
+			PlayGamesPlatform.InitializeInstance (config);
 
-		// recommended for debugging:
-//		PlayGamesPlatform.DebugLogEnabled = true;
+			// recommended for debugging:
+//			PlayGamesPlatform.DebugLogEnabled = true;
 
-
-		Debug.Log ("***Activating PlayGamesPlatform …");
-		PlayGamesPlatform.Activate ();
+			Debug.Log ("***Activating PlayGamesPlatform …");
+			PlayGamesPlatform.Activate ();
+			gamesPlatform = PlayGamesPlatform.Instance;
+		}
 	}
 
-	void TrySilentAuth ()
+	public void Authenticate (bool silent)
 	{
-		PlayGamesPlatform.Instance.Authenticate ((bool success) => {
-			Debug.Log ("***Silent auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
-		}, true);
+		Debug.Log ("***Authenticate(" + (silent ? "silent" : "loud") + ") …");
+		gamesPlatform.Authenticate ((bool success) => {
+			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
+		}, silent);
 	}
 
 	// RealTimeMultiplayerListener
@@ -96,7 +104,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		// show the default waiting room.
 //		if (!showingWaitingRoom) {
 //			showingWaitingRoom = true;
-//			PlayGamesPlatform.Instance.RealTime.ShowWaitingRoomUI ();
+//			gamesClient.RealTime.ShowWaitingRoomUI ();
 //		}
 	}
 
@@ -117,7 +125,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 			BattleshipController.instance.boatsOursPlacementController.RecreateBoats ();
 			formatter.Serialize (stream, BattleshipController.instance.boatsOursPlacementController.boats);
 			byte[] bytes = stream.ToArray ();
-			//PlayGamesPlatform.Instance.RealTime.SendMessageToAll (true, bytes);
+			//gamesClient.RealTime.SendMessageToAll (true, bytes);
 		}
 	}
 
@@ -145,7 +153,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnPeersDisconnected (string[] participantIds)
 	{
 		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
-		PlayGamesPlatform.Instance.RealTime.LeaveRoom ();
+		gamesPlatform.RealTime.LeaveRoom ();
 	}
 
 	// RealTimeMultiplayerListener

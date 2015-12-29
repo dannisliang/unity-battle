@@ -25,13 +25,13 @@ namespace GooglePlayGames
     /// </summary>
     public class PlayGamesLocalUser : PlayGamesUserProfile, ILocalUser
     {
-        internal PlayGamesPlatform mPlatform;
+        internal IPlayGamesPlatform mPlatform;
 
         private string emailAddress;
 
         private PlayerStats mStats;
 
-        internal PlayGamesLocalUser(PlayGamesPlatform plaf)
+        internal PlayGamesLocalUser(IPlayGamesPlatform plaf)
             : base("localUser", string.Empty, string.Empty)
         {
             mPlatform = plaf;
