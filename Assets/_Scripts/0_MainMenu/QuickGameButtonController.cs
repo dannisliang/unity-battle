@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using GooglePlayGames;
 
-public class CreateQuickGameButtonController : MonoBehaviour
+public class QuickGameButtonController : MonoBehaviour
 {
 
 	Button button;

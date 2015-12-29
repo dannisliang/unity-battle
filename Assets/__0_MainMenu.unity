@@ -1089,7 +1089,7 @@ GameObject:
   - 114: {fileID: 359804425}
   - 114: {fileID: 359804424}
   m_Layer: 5
-  m_Name: Create Quick Game Button
+  m_Name: Quick Game Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1121,7 +1121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 359804422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e5df6f35d7ed47a1a2a58a50bd35525, type: 3}
+  m_Script: {fileID: 11500000, guid: 39933302ce51844d682b9ef661336507, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &359804425
@@ -2148,7 +2148,7 @@ GameObject:
   - 222: {fileID: 1159205670}
   - 114: {fileID: 1159205669}
   m_Layer: 5
-  m_Name: Create Quick Game Text
+  m_Name: Quick Game Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2203,7 +2203,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Create Quick Game
+  m_Text: Quick Game
 --- !u!222 &1159205670
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2498,6 +2498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5df6f35d7ed47a1a2a58a50bd35525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!114 &1509291584
 MonoBehaviour:
   m_ObjectHideFlags: 0
