@@ -13,14 +13,16 @@ public class TileController : MonoBehaviour, IPointerClickHandler
 
 	public void OnPointerClick (PointerEventData eventData)
 	{
-		FireAt (eventData.pointerPress.transform);
+		if (!BattleshipController.instance.IsFiring ()) {
+			FireAt (eventData.pointerPress.transform);
+		}
 	}
 
 	void FireAt (Transform targetTransform)
 	{
 		GameObject rocket = Instantiate (BattleshipController.instance.rocketPrefab);
 		//rocket.transform.SetParent (transform, false);
-		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform);
+		rocket.GetComponent<RocketController> ().MaybeLaunch (Camera.main.transform, targetTransform);
 	}
 
 }

@@ -28,7 +28,7 @@ public class RocketController : MonoBehaviour
 		}
 	}
 
-	public void Launch (Transform origin, Transform targetTransform)
+	public void MaybeLaunch (Transform origin, Transform targetTransform)
 	{
 //		this.targetTransform = targetTransform;
 		transform.position = origin.position;
@@ -52,6 +52,9 @@ public class RocketController : MonoBehaviour
 		Time.timeScale = 1f;
 		this.other = other;
 
+		Position position = other.GetComponent<PositionMarkerController> ().position;
+		RealtimeBattleship.EncodeAndSend (position);
+		
 		Invoke ("Explode", .3f * flameParticleSystem.duration);
 		FizzleOut (flameParticleSystem.duration);
 	}

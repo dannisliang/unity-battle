@@ -149,7 +149,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
-		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + data + ")");
+		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
 		RealtimeBattleship.DecodeAndExecute (data);
 	}
 
