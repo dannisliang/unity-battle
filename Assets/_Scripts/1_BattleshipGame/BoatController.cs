@@ -26,7 +26,7 @@ public class BoatController : MonoBehaviour
 			child.name = name + " Collider " + boat.positions [i];
 			child.transform.SetParent (transform, false);
 			child.layer = gameObject.layer;
-			PositionMakerController positionMakerController = child.AddComponent<PositionMakerController> ();
+			PositionMarkerController positionMakerController = child.AddComponent<PositionMarkerController> ();
 			positionMakerController.position = boat.GetPosition (i);
 
 			BoxCollider collider = child.AddComponent<BoxCollider> ();

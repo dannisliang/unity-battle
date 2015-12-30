@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PositionMakerController : MonoBehaviour
+public class PositionMarkerController : MonoBehaviour
 {
 
 	public Position position;

@@ -38,7 +38,7 @@ public class GridPlacementController : MonoBehaviour
 				clone.transform.localPosition = pos;
 				clone.transform.localScale = scale;
 
-				PositionMakerController markerController = clone.GetComponent<PositionMakerController> ();
+				PositionMarkerController markerController = clone.GetComponent<PositionMarkerController> ();
 				markerController.position = position;
 
 				Utils.SetNoSaveNoEditHideFlags (clone.transform);

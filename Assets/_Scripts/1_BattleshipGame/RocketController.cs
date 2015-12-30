@@ -59,12 +59,12 @@ public class RocketController : MonoBehaviour
 	void Explode ()
 	{
 		if (other.gameObject.layer == BattleshipController.layerTileTheirs.layer) {
-			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
+			PositionMarkerController positionMakerController = other.gameObject.GetComponent<PositionMarkerController> ();
 			//			TileController tileController = other.gameObject.GetComponent<TileController> ();
 			BattleshipController.instance.PlayWaterPlop ();
 			BattleshipController.instance.PlaceMarker (positionMakerController.position, false);
 		} else if (other.gameObject.layer == BattleshipController.layerBoatTheirs.layer) {
-			PositionMakerController positionMakerController = other.gameObject.GetComponent<PositionMakerController> ();
+			PositionMarkerController positionMakerController = other.gameObject.GetComponent<PositionMarkerController> ();
 			//			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
 			Debug.Log ("***HIT " + positionMakerController.position);
 			//			boatController.Hit (positionMakerController.position);
