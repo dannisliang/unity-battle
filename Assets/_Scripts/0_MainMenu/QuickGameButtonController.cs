@@ -33,13 +33,13 @@ public class QuickGameButtonController : MonoBehaviour
 	public void CreateQuickGameRoom ()
 	{
 		Debug.Log ("***Creating quick game room …");
-		GameController.gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: GameController.instance);
+		GameController.instance.SetupRoom (false);
 	}
 
 	public void CreateWithInvitationScreenRoom ()
 	{
 		Debug.Log ("***Creating with invitation room …");
-		GameController.gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: GameController.instance);
+		GameController.instance.SetupRoom (true);
 	}
 
 }

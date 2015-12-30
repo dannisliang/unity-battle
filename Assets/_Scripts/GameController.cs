@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
@@ -172,6 +173,17 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		yield return new  WaitForSeconds (delay);
 		action ();
+	}
+
+	public void SetupRoom (bool withInvitation)
+	{
+		Assert.IsTrue (roomSetupPercent == 0);
+		if (withInvitation) {
+			GameController.gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
+		} else {
+			GameController.gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
+		}
+		roomSetupPercent = 1;
 	}
 
 }
