@@ -20,9 +20,12 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 
 	public void CreateQuickGame (uint minOpponents, uint maxOpponents, uint variant, ulong exclusiveBitMask, RealTimeMultiplayerListener listener)
 	{
+		Assert.IsFalse (roomConnecting);
 		Assert.IsFalse (roomConnected);
-		listener.OnRoomSetupProgress (21);
-		roomConnecting = true;
+		GameController.instance.ExecuteDelayed (() => {
+			roomConnecting = true;
+			listener.OnRoomSetupProgress (21);
+		}, 1f);
 		GameController.instance.ExecuteDelayed (() => {
 			if (!roomConnecting || roomConnected) {
 				return;
@@ -32,7 +35,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
 			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
 			listener.OnRoomConnected (GameController.instance.RoomSetupPercent () > 0);
-		}, 1f);
+		}, 2f);
 	}
 
 	public void CreateWithInvitationScreen (uint minOpponents, uint maxOppponents, uint variant, RealTimeMultiplayerListener listener)
