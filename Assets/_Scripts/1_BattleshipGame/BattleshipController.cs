@@ -58,7 +58,7 @@ public class BattleshipController : MonoBehaviour
 	{
 		GameObject marker = Instantiate (hit ? boatHitPrefab : boatMissPrefab);
 		marker.transform.SetParent (theirs ? gridTheirs.transform : gridOurs.transform, false);
-		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, 0f);
+		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, -Utils.BOAT_HEIGHT);
 	}
 
 	public void PlayWaterPlop ()

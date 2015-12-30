@@ -3,8 +3,6 @@ using System.Collections;
 
 public class BoatController : MonoBehaviour
 {
-	float boatHeight = .2f;
-
 	[HideInInspector]
 	public Boat boat{ get; private set; }
 
@@ -18,8 +16,8 @@ public class BoatController : MonoBehaviour
 		transform.localPosition = new Vector3 (boat.GetPosition (0).x, Utils.GRID_SIZE - 1 - boat.GetPosition (0).y, 0f);
 		Transform meshChild = transform.GetChild (0);
 		meshChild.name += boatSuffix;
-		meshChild.localPosition = new Vector3 (boat.horizontal ? boat.Size () / 2f : .5f, boat.horizontal ? .5f : 1f - len / 2f, .5f * boatHeight);
-		meshChild.localScale = new Vector3 (boat.horizontal ? len : 1f, boat.horizontal ? 1f : len, boatHeight);
+		meshChild.localPosition = new Vector3 (boat.horizontal ? boat.Size () / 2f : .5f, boat.horizontal ? .5f : 1f - len / 2f, .5f * Utils.BOAT_HEIGHT);
+		meshChild.localScale = new Vector3 (boat.horizontal ? len : 1f, boat.horizontal ? 1f : len, Utils.BOAT_HEIGHT);
 
 		for (int i = 0; i < boat.Size (); i++) {
 			GameObject child = new GameObject ();
