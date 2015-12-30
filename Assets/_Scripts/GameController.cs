@@ -153,4 +153,15 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		RealtimeBattleship.DecodeAndExecute (data);
 	}
 
+	public void ExecuteDelayed (Action action, float delay)
+	{
+		StartCoroutine (ExecuteDelayedCoroutine (action, delay));
+	}
+
+	IEnumerator ExecuteDelayedCoroutine (Action action, float delay)
+	{
+		yield return new  WaitForSeconds (delay);
+		action ();
+	}
+
 }

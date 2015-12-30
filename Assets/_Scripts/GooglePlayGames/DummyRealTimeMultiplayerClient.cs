@@ -25,7 +25,9 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
 		participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
 		listener.OnRoomSetupProgress (21);
-		listener.OnRoomConnected (true);
+		GameController.instance.ExecuteDelayed (() => {
+			listener.OnRoomConnected (true);
+		}, 1f);
 	}
 
 	public void CreateWithInvitationScreen (uint minOpponents, uint maxOppponents, uint variant, RealTimeMultiplayerListener listener)
