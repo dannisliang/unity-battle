@@ -9,6 +9,7 @@ public class BattleshipController : MonoBehaviour
 	public static LayerInfo layerBoatTheirs;
 
 	public GameObject reticle;
+	public GameObject rocketPrefab;
 	public GameObject boatHitPrefab;
 	public GameObject boatMissPrefab;
 	public GameObject gridTheirs;
@@ -30,12 +31,14 @@ public class BattleshipController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
+	}
 
-		if (GameController.gamesPlatform.RealTime.IsRoomConnected ()) {
+	void Start ()
+	{
+		if (GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ()) {
 			boatsOursPlacementController.RecreateBoats ();
 			GameController.instance.SendOurBoatPositions ();
 		}
-
 	}
 
 	public void PlaceMarker (Position position, bool hit)
