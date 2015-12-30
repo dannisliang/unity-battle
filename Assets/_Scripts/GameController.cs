@@ -116,8 +116,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public void SendOurBoatPositions ()
 	{
-		byte[] bytes = RealtimeBattleship.Encode (BattleshipController.instance.boatsOursPlacementController.grid);
-		gamesPlatform.RealTime.SendMessageToAll (true, bytes);
+		RealtimeBattleship.EncodeAndSend (BattleshipController.instance.boatsOursPlacementController.grid);
 	}
 
 	// RealTimeMultiplayerListener
@@ -151,8 +150,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + data + ")");
-		Grid grid = RealtimeBattleship.DecodeGrid (data);
-		BattleshipController.instance.boatsTheirsPlacementController.CreateGameObjects (grid);
+		RealtimeBattleship.DecodeAndExecute (data);
 	}
 
 }

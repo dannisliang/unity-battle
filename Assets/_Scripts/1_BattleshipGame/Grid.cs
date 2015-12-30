@@ -48,4 +48,12 @@ public class Grid
 		return false;
 	}
 
+	public override string ToString ()
+	{
+		string[] arr = new string[boats.Length];
+		for (int i = 0; i < boats.Length; i++) {
+			arr [i] = boats [i].ToString ();
+		}
+		return "Grid(" + string.Join (",", arr) + ")";
+	}
 }

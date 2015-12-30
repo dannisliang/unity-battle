@@ -7,37 +7,48 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class RealtimeBattleship : MonoBehaviour
 {
-	static byte MESSAGE_TYPE_GRID = (byte)'G';
-	static byte MESSAGE_TYPE_SHOT = (byte)'S';
+	const byte MESSAGE_TYPE_GRID = (byte)'G';
+	const byte MESSAGE_TYPE_SHOT = (byte)'S';
 
-	public static byte[] Encode (Grid grid)
+	public static void EncodeAndSend (Grid grid)
 	{
-		return Encode (MESSAGE_TYPE_GRID, grid);
+		EncodeAndSend (MESSAGE_TYPE_GRID, grid);
 	}
 
-	public static byte[] Encode (Position position)
+	public static void EncodeAndSend (Position position)
 	{
-		return Encode (MESSAGE_TYPE_SHOT, position);
+		EncodeAndSend (MESSAGE_TYPE_SHOT, position);
 	}
 
-	public static byte[] Encode (byte messageType, System.Object obj)
+	static void EncodeAndSend (byte messageType, System.Object obj)
 	{
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {
 			stream.WriteByte (messageType);
 			formatter.Serialize (stream, obj);
 			byte[] bytes = stream.ToArray ();
-			return bytes;
+			GameController.gamesPlatform.RealTime.SendMessageToAll (true, bytes);
 		}
 	}
 
-	public static Grid DecodeGrid (byte[] bytes)
+	public static void DecodeAndExecute (byte[] bytes)
 	{
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream (bytes)) {
-			Assert.IsTrue (stream.ReadByte () == MESSAGE_TYPE_GRID);
-			Grid grid = formatter.Deserialize (stream) as Grid;
-			return grid;
+			byte messageType = (byte)stream.ReadByte ();
+			switch (messageType) {
+			case MESSAGE_TYPE_GRID:
+				Grid grid = formatter.Deserialize (stream) as Grid;
+				Debug.Log ("***Received other grid " + grid);
+				BattleshipController.instance.boatsTheirsPlacementController.CreateGameObjects (grid);
+				break;
+			case MESSAGE_TYPE_SHOT:
+				Position position = formatter.Deserialize (stream) as Position;
+				Debug.Log ("***Received shot at " + position);
+				break;
+			default:
+				throw new System.NotImplementedException ("Unknown message type " + messageType);
+			}
 		}
 	}
 
