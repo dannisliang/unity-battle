@@ -15,7 +15,11 @@ public class CurrentRoomTextController : MonoBehaviour
 
 	void Update ()
 	{
-		text.text = GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected () ?
-			"Room with " + GameController.gamesPlatform.RealTime.GetConnectedParticipants ().Count + " participants" : "(not in a room)";
+		if (GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ()) {
+			text.text = "Room with " + GameController.gamesPlatform.RealTime.GetConnectedParticipants ().Count + " participants";
+		} else {
+			int percent = GameController.instance.RoomSetupPercent ();
+			text.text = percent == 0 ? "(not in a room)" : "Setting up room (" + percent + "%)";
+		}
 	}
 }

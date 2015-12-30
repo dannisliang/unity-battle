@@ -26,7 +26,8 @@ public class LeaveRoomButtonController : MonoBehaviour
 
 	bool IsIteractable ()
 	{
-		return GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ();
+//		return GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ();
+		return GameController.instance.RoomSetupPercent () > 0;
 	}
 
 	public void LeaveRoom ()

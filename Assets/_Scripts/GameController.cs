@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	AudioSource source;
 	//	bool showingWaitingRoom;
+	int roomSetupPercent;
 
 	void Awake ()
 	{
@@ -94,10 +95,16 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}, silent);
 	}
 
+	public int RoomSetupPercent ()
+	{
+		return roomSetupPercent;
+	}
+
 	// RealTimeMultiplayerListener
 	public void OnRoomSetupProgress (float percent)
 	{
 		Debug.Log ("***OnRoomSetupProgress(" + percent + ")");
+		roomSetupPercent = (int)percent;
 		// show the default waiting room.
 //		if (!showingWaitingRoom) {
 //			showingWaitingRoom = true;
@@ -109,6 +116,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnRoomConnected (bool success)
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
+		roomSetupPercent = success ? 100 : 0;
 		if (success) {
 			SceneManager.LoadScene ("__BattleshipGame");
 		}
@@ -123,6 +131,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnLeftRoom ()
 	{
 		Debug.Log ("***OnLeftRoom()");
+		roomSetupPercent = 0;
 		SceneManager.LoadScene ("__MainMenu");
 //		boatPlacementController.DestroyBoats ();
 	}
@@ -131,6 +140,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnParticipantLeft (Participant participant)
 	{
 		Debug.Log ("***OnParticipantLeft(" + participant + ")");
+		gamesPlatform.RealTime.LeaveRoom ();
 	}
 
 	// RealTimeMultiplayerListener

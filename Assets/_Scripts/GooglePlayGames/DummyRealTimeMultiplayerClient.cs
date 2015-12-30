@@ -7,6 +7,7 @@ using GooglePlayGames.BasicApi.Multiplayer;
 public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 {
 
+	bool roomConnecting;
 	bool roomConnected;
 	List<Participant> participants;
 
@@ -20,13 +21,17 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 	public void CreateQuickGame (uint minOpponents, uint maxOpponents, uint variant, ulong exclusiveBitMask, RealTimeMultiplayerListener listener)
 	{
 		Assert.IsFalse (roomConnected);
-		roomConnected = true;
-		participants = new List<Participant> ();
-		participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
-		participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
 		listener.OnRoomSetupProgress (21);
+		roomConnecting = true;
 		GameController.instance.ExecuteDelayed (() => {
-			listener.OnRoomConnected (true);
+			if (!roomConnecting || roomConnected) {
+				return;
+			}
+			roomConnected = true;
+			participants = new List<Participant> ();
+			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
+			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
+			listener.OnRoomConnected (GameController.instance.RoomSetupPercent () > 0);
 		}, 1f);
 	}
 
@@ -99,8 +104,10 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 
 	public void LeaveRoom ()
 	{
+		roomConnecting = false;
 		roomConnected = false;
 		participants = null;
+		GameController.instance.OnLeftRoom ();
 	}
 
 	public bool IsRoomConnected ()
