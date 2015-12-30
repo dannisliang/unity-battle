@@ -10,7 +10,7 @@ public class Utils : MonoBehaviour
 {
 	//	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
-	public static float BOAT_HEIGHT = .2f;
+	public static float BOAT_HEIGHT = .01f;
 
 	public static HideFlags NO_SAVE_NO_EDIT_HIDE_FLAGS = HideFlags.DontSave | HideFlags.NotEditable;
 
