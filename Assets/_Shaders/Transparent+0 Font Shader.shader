@@ -17,7 +17,7 @@
         Pass {
             // Cull Back
 
-            ZTest Off
+            ZTest On
 
             ZWrite Off
 

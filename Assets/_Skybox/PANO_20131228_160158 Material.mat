@@ -6,11 +6,11 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: cardboard-logo-91x58
-  m_Shader: {fileID: 4800000, guid: 42c8b2eb784ee45ac8aac1a5599f9d39, type: 3}
+  m_Name: PANO_20131228_160158 Material
+  m_Shader: {fileID: 103, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 1000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -19,7 +19,7 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 36e1bc3052bda48e38723fd40d67529b, type: 3}
+          m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -34,6 +34,13 @@ Material:
           name: _DetailNormalMap
         second:
           m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Tex
+        second:
+          m_Texture: {fileID: 8900000, guid: d7c2cbf5a2f80434083e509d1440fd7b, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -93,6 +100,10 @@ Material:
         second: 0.5
       data:
         first:
+          name: _Exposure
+        second: 1
+      data:
+        first:
           name: _Parallax
         second: 0.02
       data:
@@ -129,8 +140,8 @@ Material:
         second: 0
       data:
         first:
-          name: _Intensity
-        second: 1
+          name: _Rotation
+        second: 0
     m_Colors:
       data:
         first:
@@ -140,3 +151,7 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _Tint
+        second: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
