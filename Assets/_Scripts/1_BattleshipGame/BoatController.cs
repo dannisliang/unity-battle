@@ -29,10 +29,10 @@ public class BoatController : MonoBehaviour
 			PositionMarkerController positionMakerController = child.AddComponent<PositionMarkerController> ();
 			positionMakerController.position = boat.GetPosition (i);
 
-			BoxCollider collider = child.AddComponent<BoxCollider> ();
-			collider.isTrigger = true;
-			collider.transform.localPosition = new Vector3 (boat.horizontal ? i + .5f : .5f, boat.horizontal ? .5f : -i + .5f, -.5f * boatHeight);
-			collider.transform.localScale = new Vector3 (1f, 1f, boatHeight);
+//			BoxCollider collider = child.AddComponent<BoxCollider> ();
+//			collider.isTrigger = true;
+//			collider.transform.localPosition = new Vector3 (boat.horizontal ? i + .5f : .5f, boat.horizontal ? .5f : -i + .5f, -.5f * boatHeight);
+//			collider.transform.localScale = new Vector3 (1f, 1f, boatHeight);
 		}
 	}
 	

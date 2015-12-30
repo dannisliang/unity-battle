@@ -12,6 +12,7 @@ public class BattleshipController : MonoBehaviour
 	public GameObject rocketPrefab;
 	public GameObject boatHitPrefab;
 	public GameObject boatMissPrefab;
+	public GameObject gridOurs;
 	public GameObject gridTheirs;
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
@@ -41,10 +42,22 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
-	public void PlaceMarker (Position position, bool hit)
+	public void Strike (bool theirs, Position position)
+	{
+		BoatPlacementController boatPlacementController = theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
+		bool hit = boatPlacementController.grid.IsHit (position);
+		PlaceMarker (theirs, position, hit);
+		if (hit) {
+			BattleshipController.instance.PlayShipExplosionAfter (1f);
+		} else {
+			BattleshipController.instance.PlayWaterPlop ();
+		}
+	}
+
+	void PlaceMarker (bool theirs, Position position, bool hit)
 	{
 		GameObject marker = Instantiate (hit ? boatHitPrefab : boatMissPrefab);
-		marker.transform.SetParent (gridTheirs.transform, false);
+		marker.transform.SetParent (theirs ? gridTheirs.transform : gridOurs.transform, false);
 		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, 0f);
 	}
 

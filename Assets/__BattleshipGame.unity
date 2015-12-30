@@ -1345,6 +1345,7 @@ MonoBehaviour:
   rocketPrefab: {fileID: 157702, guid: d97bea38486164912a79a4721bf06782, type: 2}
   boatHitPrefab: {fileID: 101766, guid: eeb0ce773684e49f5adf381f6ba475a5, type: 2}
   boatMissPrefab: {fileID: 101766, guid: 656114f2302be40ea9196aef325ebbbf, type: 2}
+  gridOurs: {fileID: 1828396184}
   gridTheirs: {fileID: 32654577}
   boatsOursPlacementController: {fileID: 1601558864}
   boatsTheirsPlacementController: {fileID: 1403814449}

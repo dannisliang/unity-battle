@@ -64,15 +64,7 @@ public class RocketController : MonoBehaviour
 		if (other.gameObject.layer == BattleshipController.layerTileTheirs.layer) {
 			PositionMarkerController positionMakerController = other.gameObject.GetComponent<PositionMarkerController> ();
 			//			TileController tileController = other.gameObject.GetComponent<TileController> ();
-			BattleshipController.instance.PlayWaterPlop ();
-			BattleshipController.instance.PlaceMarker (positionMakerController.position, false);
-		} else if (other.gameObject.layer == BattleshipController.layerBoatTheirs.layer) {
-			PositionMarkerController positionMakerController = other.gameObject.GetComponent<PositionMarkerController> ();
-			//			BoatController boatController = other.gameObject.GetComponentInParent<BoatController> ();
-			Debug.Log ("***HIT " + positionMakerController.position);
-			//			boatController.Hit (positionMakerController.position);
-			BattleshipController.instance.PlayShipExplosionAfter (1f);
-			BattleshipController.instance.PlaceMarker (positionMakerController.position, true);
+			BattleshipController.instance.Strike (true, positionMakerController.position);
 		} else {
 			Debug.LogError ("Unexpected collision with " + other);
 		}
