@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class TileController : MonoBehaviour, IPointerClickHandler
+public class TileController : MonoBehaviour, IPointerDownHandler
 {
 	PositionMarkerController positionMarkerController;
 
@@ -11,10 +11,11 @@ public class TileController : MonoBehaviour, IPointerClickHandler
 		positionMarkerController = GetComponent<PositionMarkerController> ();
 	}
 
-	public void OnPointerClick (PointerEventData eventData)
+	public void OnPointerDown (PointerEventData eventData)
 	{
 		if (!BattleshipController.instance.IsFiring ()) {
-			FireAt (eventData.pointerPress.transform);
+			eventData.Use ();
+			FireAt (eventData.pointerPressRaycast.gameObject.transform);
 		}
 	}
 

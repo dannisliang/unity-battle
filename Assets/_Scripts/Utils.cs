@@ -46,7 +46,7 @@ public class Utils : MonoBehaviour
 
 	public static bool DidFire ()
 	{
-		return Input.GetButtonUp ("Fire1"); // && ignoreCurrentFire1FrameCount != Time.frameCount;
+		return Input.GetButtonDown ("Fire1"); // && ignoreCurrentFire1FrameCount != Time.frameCount;
 	}
 
 }

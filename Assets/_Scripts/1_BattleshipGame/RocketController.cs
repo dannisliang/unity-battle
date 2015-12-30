@@ -20,7 +20,7 @@ public class RocketController : MonoBehaviour
 
 	void Update ()
 	{
-		if (Input.GetButtonUp ("Fire1")) {
+		if (Utils.DidFire ()) {
 			Time.timeScale = 10f;
 		}
 		if (fizzleOutTimes != null) {
