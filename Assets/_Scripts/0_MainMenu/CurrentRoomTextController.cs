@@ -15,11 +15,25 @@ public class CurrentRoomTextController : MonoBehaviour
 
 	void Update ()
 	{
+		text.text = GetStatus ();
+	}
+
+	string GetStatus ()
+	{
 		if (GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ()) {
-			text.text = "Room with " + GameController.gamesPlatform.RealTime.GetConnectedParticipants ().Count + " participants";
-		} else {
-			int percent = GameController.instance.RoomSetupPercent ();
-			text.text = percent == 0 ? "(not in a room)" : "Setting up room (" + percent + "%)";
+			int count = GameController.gamesPlatform.RealTime.GetConnectedParticipants ().Count;
+			return "Launching " + (count == 2 ? "two" : "" + count) + " player game…";
+		} 
+		int percent = GameController.instance.RoomSetupPercent ();
+		switch (percent) {
+		case 0:
+			return "Not in a game.\nWhy not join one?";
+		case 1:
+			return "Creating game…";
+		case 20:
+			return "Locating a suitable opponent…";
+		default:
+			return "Game is " + percent + "% ready…";
 		}
 	}
 }

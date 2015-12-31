@@ -24,7 +24,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		Assert.IsFalse (roomConnected);
 		GameController.instance.ExecuteDelayed (() => {
 			roomConnecting = true;
-			listener.OnRoomSetupProgress (21);
+			listener.OnRoomSetupProgress (20);
 		}, 1f);
 		GameController.instance.ExecuteDelayed (() => {
 			if (!roomConnecting || roomConnected) {
