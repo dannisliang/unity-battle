@@ -31,7 +31,7 @@ public class CardboardAssistantController : MonoBehaviour
 		Cardboard.SDK.OnBackButton += delegate {
 			Debug.Log ("BACK BUTTON!");
 		};
-		Cardboard.SDK.VRModeEnabled = VrMode;
+		Cardboard.SDK.VRModeEnabled = Prefs.VrMode;
 #if UNITY_EDITOR
 		Cardboard.SDK.StereoScreenScale = 2f;
 #endif

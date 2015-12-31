@@ -11,9 +11,9 @@ public class VrModeToggleController : MonoBehaviour
 	void Awake ()
 	{
 		toggle = GetComponent<Toggle> ();
-		toggle.isOn = CardboardAssistantController.instance.VrMode;
+		toggle.isOn = Prefs.VrMode;
 		toggle.onValueChanged.AddListener (delegate {
-			CardboardAssistantController.instance.VrMode = toggle.isOn;
+			Prefs.VrMode = toggle.isOn;
 		});
 	}
 
