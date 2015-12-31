@@ -17,14 +17,14 @@ public class BoatPlacementController : MonoBehaviour
 	{
 		Grid grid = new Grid ();
 		grid.RandomizeBoats ();
-		CreateGameObjects (grid);
+		SetGrid (grid);
+		CreateBoats ();
 	}
 
-	public void CreateGameObjects (Grid grid)
+	public void SetGrid (Grid grid)
 	{
 		this.grid = grid;
 		DestroyBoats ();
-		CreateBoats ();
 	}
 
 	public void DestroyBoats ()
