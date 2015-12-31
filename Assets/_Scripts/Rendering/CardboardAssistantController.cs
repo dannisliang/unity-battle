@@ -22,7 +22,7 @@ public class CardboardAssistantController : MonoBehaviour
 		DontDestroyOnLoad (gameObject);
 	}
 
-	void ApplyCardboardSettings ()
+	public void ApplyCardboardSettings ()
 	{
 		string n = SceneManager.GetActiveScene ().name;
 		Cardboard.SDK.TapIsTrigger = false;
