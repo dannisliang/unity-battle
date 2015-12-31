@@ -16,6 +16,6 @@ public class CurrentUserTextController : MonoBehaviour
 	void Update ()
 	{
 		//text.text = Social.localUser.userName + "(" + Social.localUser.state + ")";
-		text.text = GameController.gamesPlatform.localUser.userName + "(" + GameController.gamesPlatform.localUser.state + ")";
+		text.text = GameController.gamesPlatform.localUser.userName + "\n(" + GameController.gamesPlatform.localUser.state + ")";
 	}
 }
