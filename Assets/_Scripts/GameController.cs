@@ -12,7 +12,7 @@ using System;
 [RequireComponent (typeof(AudioSource))]
 public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 {
-	public static GameController instance;
+	public static GameController instance { get; private set; };
 
 	public static IPlayGamesPlatform gamesPlatform { get; private set; }
 

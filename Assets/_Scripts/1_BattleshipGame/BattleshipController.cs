@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent (typeof(AudioSource))]
 public class BattleshipController : MonoBehaviour
 {
-	public static BattleshipController instance;
+	public static BattleshipController instance { get; private set; };
 	public static LayerInfo layerTileTheirs;
 	public static LayerInfo layerBoatTheirs;
 
@@ -42,11 +42,11 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
-	public void Strike (bool theirs, Position position)
+	public void Strike (Whose whose, Position position)
 	{
-		BoatPlacementController boatPlacementController = theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
+		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		bool hit = boatPlacementController.grid.IsHit (position);
-		PlaceMarker (theirs, position, hit);
+		PlaceMarker (whose, position, hit);
 		if (hit) {
 			BattleshipController.instance.PlayShipExplosionAfter (1f);
 		} else {
@@ -54,10 +54,10 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
-	void PlaceMarker (bool theirs, Position position, bool hit)
+	void PlaceMarker (Whose whose, Position position, bool hit)
 	{
 		GameObject marker = Instantiate (hit ? boatHitPrefab : boatMissPrefab);
-		marker.transform.SetParent (theirs ? gridTheirs.transform : gridOurs.transform, false);
+		marker.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
 		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, -Utils.BOAT_HEIGHT);
 	}
 

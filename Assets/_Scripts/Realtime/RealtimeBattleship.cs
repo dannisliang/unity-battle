@@ -45,7 +45,7 @@ public class RealtimeBattleship : MonoBehaviour
 			case MESSAGE_TYPE_SHOT:
 				Position position = formatter.Deserialize (stream) as Position;
 				Debug.Log ("***Received shot at " + position);
-				BattleshipController.instance.Strike (false, position);
+				BattleshipController.instance.Strike (Whose.Ours, position);
 				break;
 			default:
 				throw new System.NotImplementedException ("Unknown message type " + messageType);
