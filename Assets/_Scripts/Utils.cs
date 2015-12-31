@@ -12,6 +12,9 @@ public class Utils : MonoBehaviour
 	public static int GRID_SIZE = 10;
 	public static float BOAT_HEIGHT = .01f;
 
+	public const string SCENE_MAIN_MENU = "__MainMenu";
+	public const string SCENE_BATTLESHIP_GAME = "__BattleshipGame";
+
 	public static HideFlags NO_SAVE_NO_EDIT_HIDE_FLAGS = HideFlags.DontSave | HideFlags.NotEditable;
 
 	public static void SetNoSaveNoEditHideFlags (Transform parent)

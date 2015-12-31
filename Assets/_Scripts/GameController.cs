@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		instance = this;
 		DontDestroyOnLoad (gameObject);
 
-		SceneManager.LoadScene ("__MainMenu");
+		SceneManager.LoadScene (Utils.SCENE_MAIN_MENU);
 //		InitNearby ();
 	}
 
@@ -119,7 +119,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		roomSetupPercent = success ? 100 : 0;
 		if (success) {
-			SceneManager.LoadScene ("__BattleshipGame");
+			SceneManager.LoadScene (Utils.SCENE_BATTLESHIP_GAME);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnLeftRoom()");
 		roomSetupPercent = 0;
-		SceneManager.LoadScene ("__MainMenu");
+		SceneManager.LoadScene (Utils.SCENE_MAIN_MENU);
 //		boatPlacementController.DestroyBoats ();
 	}
 
