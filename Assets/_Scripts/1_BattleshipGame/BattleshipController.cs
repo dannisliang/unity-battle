@@ -4,7 +4,8 @@ using System.Collections;
 [RequireComponent (typeof(AudioSource))]
 public class BattleshipController : MonoBehaviour
 {
-	public static BattleshipController instance { get; private set; };
+	public static BattleshipController instance { get; private set; }
+
 	public static LayerInfo layerTileTheirs;
 	public static LayerInfo layerBoatTheirs;
 
