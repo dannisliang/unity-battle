@@ -878,7 +878,7 @@ GameObject:
   - 114: {fileID: 1195234154}
   - 114: {fileID: 1195234157}
   m_Layer: 0
-  m_Name: Gaze Event System
+  m_Name: Event System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -915,7 +915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
-  m_DragThreshold: 5
+  m_DragThreshold: 50
 --- !u!4 &1195234156
 Transform:
   m_ObjectHideFlags: 0
@@ -1034,7 +1034,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c4672b5c4f74744a56182932a30a88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardboardToggle: {fileID: 0}
 --- !u!4 &1321132426
 Transform:
   m_ObjectHideFlags: 0
