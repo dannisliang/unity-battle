@@ -851,6 +851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reticle: {fileID: 2056223767}
   rocketPrefab: {fileID: 157702, guid: d97bea38486164912a79a4721bf06782, type: 2}
+  boatAimPrefab: {fileID: 101766, guid: 8967f83af9cdf4950aab378af7533a52, type: 2}
   boatHitPrefab: {fileID: 101766, guid: eeb0ce773684e49f5adf381f6ba475a5, type: 2}
   boatMissPrefab: {fileID: 101766, guid: 656114f2302be40ea9196aef325ebbbf, type: 2}
   gridOurs: {fileID: 1828396184}

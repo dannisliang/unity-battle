@@ -11,6 +11,7 @@ public class BattleshipController : MonoBehaviour
 
 	public GameObject reticle;
 	public GameObject rocketPrefab;
+	public GameObject boatAimPrefab;
 	public GameObject boatHitPrefab;
 	public GameObject boatMissPrefab;
 	public GameObject gridOurs;
@@ -22,6 +23,7 @@ public class BattleshipController : MonoBehaviour
 
 	bool firing;
 	AudioSource source;
+	public GameObject boatAimGameObject;
 
 	void Awake ()
 	{
@@ -33,6 +35,7 @@ public class BattleshipController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
+		boatAimGameObject = Instantiate (boatAimPrefab);
 	}
 
 	void Start ()
@@ -43,11 +46,16 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
+	public void AimAt (Whose whose, Position position)
+	{
+		PlaceMarker (whose, position, Marker.Aim);
+	}
+
 	public void Strike (Whose whose, Position position)
 	{
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		bool hit = boatPlacementController.grid.IsHit (position);
-		PlaceMarker (whose, position, hit);
+		PlaceMarker (whose, position, hit ? Marker.Hit : Marker.Miss);
 		if (hit) {
 			BattleshipController.instance.PlayShipExplosionAfter (1f);
 		} else {
@@ -55,11 +63,22 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
-	void PlaceMarker (Whose whose, Position position, bool hit)
+	void PlaceMarker (Whose whose, Position position, Marker marker)
 	{
-		GameObject marker = Instantiate (hit ? boatHitPrefab : boatMissPrefab);
-		marker.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
-		marker.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, -Utils.BOAT_HEIGHT);
+		GameObject go = null;
+		switch (marker) {
+		case Marker.Aim:
+			go = boatAimGameObject;
+			break;
+		case Marker.Hit:
+			go = Instantiate (boatHitPrefab);
+			break;
+		case Marker.Miss:
+			go = Instantiate (boatMissPrefab);
+			break;
+		}
+		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
+		go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, -Utils.BOAT_HEIGHT);
 	}
 
 	public void PlayWaterPlop ()
