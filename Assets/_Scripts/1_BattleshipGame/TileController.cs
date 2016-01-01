@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
+public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
 	PositionMarkerController positionMarkerController;
 
@@ -17,6 +17,12 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 			eventData.Use ();
 			Highlight (true);
 		}
+	}
+
+	public void OnPointerExit (PointerEventData eventData)
+	{
+		eventData.Use ();
+		Highlight (false);
 	}
 
 	public void OnPointerDown (PointerEventData eventData)
@@ -36,6 +42,6 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
 	void Highlight (bool highlight)
 	{
-		BattleshipController.instance.AimAt (Whose.Theirs, positionMarkerController.position);
+		BattleshipController.instance.AimAt (Whose.Theirs, highlight ? positionMarkerController.position : null);
 	}
 }

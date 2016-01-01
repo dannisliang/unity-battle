@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 
 [RequireComponent (typeof(AudioSource))]
@@ -48,7 +49,10 @@ public class BattleshipController : MonoBehaviour
 
 	public void AimAt (Whose whose, Position position)
 	{
-		PlaceMarker (whose, position, Marker.Aim);
+		aimReticle.SetActive (position != null);
+		if (position != null) {
+			PlaceMarker (whose, position, Marker.Aim);
+		}
 	}
 
 	public void Strike (Whose whose, Position position)
