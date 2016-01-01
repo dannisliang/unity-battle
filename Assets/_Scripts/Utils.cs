@@ -11,6 +11,7 @@ public class Utils : MonoBehaviour
 	//	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
 	public static float BOAT_HEIGHT = .01f;
+	public static float CLEARANCE_HEIGHT = .001f;
 
 	public const string SCENE_MAIN_MENU = "__MainMenu";
 	public const string SCENE_BATTLESHIP_GAME = "__BattleshipGame";

@@ -11,7 +11,7 @@ public class BattleshipController : MonoBehaviour
 
 	public GameObject reticle;
 	public GameObject rocketPrefab;
-	public GameObject boatAimPrefab;
+	public GameObject AimReticlePrefab;
 	public GameObject boatHitPrefab;
 	public GameObject boatMissPrefab;
 	public GameObject gridOurs;
@@ -23,7 +23,7 @@ public class BattleshipController : MonoBehaviour
 
 	bool firing;
 	AudioSource source;
-	public GameObject boatAimGameObject;
+	public GameObject aimReticle;
 
 	void Awake ()
 	{
@@ -35,7 +35,7 @@ public class BattleshipController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
-		boatAimGameObject = Instantiate (boatAimPrefab);
+		aimReticle = Instantiate (AimReticlePrefab);
 	}
 
 	void Start ()
@@ -66,19 +66,24 @@ public class BattleshipController : MonoBehaviour
 	void PlaceMarker (Whose whose, Position position, Marker marker)
 	{
 		GameObject go = null;
+		float zPos = 0f;
 		switch (marker) {
 		case Marker.Aim:
-			go = boatAimGameObject;
+			go = aimReticle;
+			zPos = -Utils.BOAT_HEIGHT - 2f * Utils.CLEARANCE_HEIGHT;
 			break;
 		case Marker.Hit:
 			go = Instantiate (boatHitPrefab);
+			zPos = -.5f * Utils.BOAT_HEIGHT - Utils.CLEARANCE_HEIGHT;
 			break;
 		case Marker.Miss:
 			go = Instantiate (boatMissPrefab);
+			zPos = -.5f * Utils.BOAT_HEIGHT - Utils.CLEARANCE_HEIGHT;
 			break;
 		}
 		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
-		go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, -Utils.BOAT_HEIGHT);
+		go.transform.localScale = new Vector3 (1f, 1f, Utils.BOAT_HEIGHT);
+		go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, zPos);
 	}
 
 	public void PlayWaterPlop ()

@@ -24,7 +24,6 @@ public class CardboardAssistantController : MonoBehaviour
 
 	public void ApplyCardboardSettings ()
 	{
-		string n = SceneManager.GetActiveScene ().name;
 		//Cardboard.SDK.TapIsTrigger = false; // causes OnBackButton to fire twice
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
 		Cardboard.SDK.EnableSettingsButton = true;
