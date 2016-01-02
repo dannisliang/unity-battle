@@ -43,7 +43,7 @@ public class RealtimeBattleship : MonoBehaviour
 			switch (messageType) {
 			case MESSAGE_TYPE_GRID:
 				Grid grid = formatter.Deserialize (stream) as Grid;
-				Debug.Log ("***Received other grid " + grid);
+				Debug.Log ("***Received other grid ");// + grid);
 				BattleshipController.instance.boatsTheirsPlacementController.SetGrid (grid);
 				break;
 			case MESSAGE_TYPE_SHOT:
