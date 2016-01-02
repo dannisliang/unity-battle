@@ -58,7 +58,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
 		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
 		Debug.Log ("***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
-		if (!IsRoomConnected) {
+		if (!pause && roomSetupPercent > 0 && !IsRoomConnected) {
 			Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
 			OnLeftRoom ();
 		}
