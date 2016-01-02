@@ -38,6 +38,7 @@ public class BattleshipController : MonoBehaviour
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
 		aimReticle = Instantiate (AimReticlePrefab);
+		AimAt (Whose.Theirs, null); // reticle starts disabled
 	}
 
 	void Start ()
