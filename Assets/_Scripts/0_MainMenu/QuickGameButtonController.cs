@@ -17,14 +17,10 @@ public class QuickGameButtonController : MonoBehaviour
 		});
 	}
 
-	void Start ()
-	{
-		GameController.instance.InvokeConnectStatusAction (UpdateInteractable);
-	}
-
 	void OnEnable ()
 	{
 		GameController.OnConnectStatusChanged += UpdateInteractable;
+		GameController.instance.InvokeConnectStatusAction (UpdateInteractable);
 	}
 
 	void OnDisable ()

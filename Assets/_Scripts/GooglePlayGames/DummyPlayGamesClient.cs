@@ -17,7 +17,7 @@ public class DummyPlayGamesClient : IPlayGamesClient
 		GameController.instance.ExecuteDelayed (() => {
 			authenticated = true;
 			if (callback != null) {
-				callback.Invoke (silent);
+				callback.Invoke (authenticated);
 			}
 		}, 1f);
 	}
@@ -29,10 +29,8 @@ public class DummyPlayGamesClient : IPlayGamesClient
 
 	public void SignOut ()
 	{
-		GameController.instance.ExecuteDelayed (() => {
-			authenticated = false;
-			mRealTimeClient = null;
-		}, 1f);
+		authenticated = false;
+		mRealTimeClient = null;
 	}
 
 	public string GetToken ()
