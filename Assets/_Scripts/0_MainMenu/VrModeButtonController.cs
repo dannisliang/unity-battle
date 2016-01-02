@@ -11,10 +11,13 @@ public class VrModeButtonController : MonoBehaviour
 	void Awake ()
 	{
 		toggle = GetComponent<Button> ();
-		toggle.onClick.AddListener (delegate {
-			Prefs.VrMode = true;
-			CardboardAssistantController.instance.ApplyCardboardSettings ();
-		});
+		toggle.onClick.AddListener (OnClick);
+	}
+
+	public void OnClick ()
+	{
+		Debug.Log ("***VR Mode Button CLICKED");
+		Prefs.VrMode = !Prefs.VrMode;
 	}
 
 }
