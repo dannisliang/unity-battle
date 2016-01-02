@@ -15,31 +15,34 @@ public class CurrentRoomTextController : MonoBehaviour
 
 	void Start ()
 	{
-		UpdateStatus (GameController.instance.roomSetupPercent);
+		GameController.instance.InvokeConnectStatusAction (UpdateStatus);
 	}
 
 	void OnEnable ()
 	{
-		GameController.OnRoomConnectStatusChanged += UpdateStatus;
+		GameController.OnConnectStatusChanged += UpdateStatus;
 	}
 
 	void OnDisable ()
 	{
-		GameController.OnRoomConnectStatusChanged -= UpdateStatus;
+		GameController.OnConnectStatusChanged -= UpdateStatus;
 	}
 
-	void UpdateStatus (int percent)
+	void UpdateStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		text.text = GetStatus (percent);
+		text.text = GetStatus (authenticated, isRoomConnected, roomSetupPercent);
 	}
 
-	string GetStatus (int percent)
+	string GetStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		if (GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ()) {
+		if (!authenticated) {
+			return "Sign in required";
+		}
+		if (isRoomConnected) {
 			int count = GameController.gamesPlatform.RealTime.GetConnectedParticipants ().Count;
-			return "Launching " + (count == 2 ? "two" : "" + count) + " player game…";
+			return "Launching " + (count == 2 ? "two" : "" + count) + " player game …";
 		} 
-		switch (percent) {
+		switch (roomSetupPercent) {
 		case 0:
 			return "Not in a game.\nWhy not join one?";
 		case 1:
@@ -47,7 +50,7 @@ public class CurrentRoomTextController : MonoBehaviour
 		case 20:
 			return "Locating a suitable opponent…";
 		default:
-			return "Game is " + percent + "% ready…";
+			return "Game is " + roomSetupPercent + "% ready…";
 		}
 	}
 }

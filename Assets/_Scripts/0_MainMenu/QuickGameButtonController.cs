@@ -19,22 +19,22 @@ public class QuickGameButtonController : MonoBehaviour
 
 	void Start ()
 	{
-		UpdateInteractable (GameController.instance.roomSetupPercent);
+		GameController.instance.InvokeConnectStatusAction (UpdateInteractable);
 	}
 
 	void OnEnable ()
 	{
-		GameController.OnRoomConnectStatusChanged += UpdateInteractable;
+		GameController.OnConnectStatusChanged += UpdateInteractable;
 	}
 
 	void OnDisable ()
 	{
-		GameController.OnRoomConnectStatusChanged -= UpdateInteractable;
+		GameController.OnConnectStatusChanged -= UpdateInteractable;
 	}
 
-	void UpdateInteractable (int percent)
+	void UpdateInteractable (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		button.interactable = percent == 0;
+		button.interactable = authenticated && roomSetupPercent == 0;
 	}
 
 	public void CreateQuickGameRoom ()

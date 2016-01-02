@@ -13,26 +13,34 @@ public class SignOutButtonController : MonoBehaviour
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
 			Debug.Log ("***Clicked " + button.name);
-			if (IsIteractable ()) {
-				SignOut ();
-			}
+			SignOut ();
 		});
 	}
 
-	void Update ()
+	void Start ()
 	{
-		button.interactable = IsIteractable ();
+		GameController.instance.InvokeConnectStatusAction (UpdateInteractable);
 	}
 
-	bool IsIteractable ()
+	void OnEnable ()
 	{
-		return GameController.gamesPlatform.IsAuthenticated ();
+		GameController.OnConnectStatusChanged += UpdateInteractable;
+	}
+
+	void OnDisable ()
+	{
+		GameController.OnConnectStatusChanged -= UpdateInteractable;
+	}
+
+	void UpdateInteractable (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	{
+		button.interactable = authenticated;
 	}
 
 	void SignOut ()
 	{
 		Debug.Log ("***SignOut() …");
-		GameController.gamesPlatform.SignOut ();
+		GameController.instance.SignOut ();
 	}
 
 }

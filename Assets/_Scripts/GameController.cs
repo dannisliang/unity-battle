@@ -16,14 +16,38 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public static IPlayGamesPlatform gamesPlatform { get; private set; }
 
-	public static event RoomConnectStatusAction OnRoomConnectStatusChanged;
+	public static event ConnectStatusAction OnConnectStatusChanged;
 
-	public delegate void RoomConnectStatusAction (int percent);
+	public delegate void ConnectStatusAction (bool authenticated, bool isRoomConnected, int roomSetupPercent);
 
+	bool _authenticated;
+	bool _roomConnected;
 	int _roomSetupPrecent;
 
 	AudioSource source;
 	//	bool showingWaitingRoom;
+
+	public bool authenticated {
+		get {
+			Assert.AreEqual (gamesPlatform.IsAuthenticated (), _authenticated);
+			return gamesPlatform.IsAuthenticated ();
+		}
+		set {
+			_authenticated = value;
+			InvokeConnectStatusAction ();
+		}
+	}
+
+	public bool roomConnected {
+		get {
+			Assert.AreEqual (gamesPlatform.IsAuthenticated () && gamesPlatform.RealTime.IsRoomConnected (), _roomConnected);
+			return _roomConnected;
+		}
+		set {
+			_roomConnected = value;
+			InvokeConnectStatusAction ();
+		}
+	}
 
 	public int roomSetupPercent {
 		get {
@@ -31,10 +55,19 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}
 		set { 
 			_roomSetupPrecent = value;
-			if (OnRoomConnectStatusChanged != null) {
-				OnRoomConnectStatusChanged (value);
-			}
+			InvokeConnectStatusAction ();
 		}
+	}
+
+	public void InvokeConnectStatusAction (ConnectStatusAction action = null)
+	{
+		action = action ?? OnConnectStatusChanged;
+		if (action == null) {
+			return;
+		}
+		bool authenticated = gamesPlatform.IsAuthenticated ();
+		bool roomConnected = authenticated && gamesPlatform.RealTime.IsRoomConnected ();
+		action (gamesPlatform.IsAuthenticated (), roomConnected, roomSetupPercent);
 	}
 
 	void Awake ()
@@ -115,7 +148,14 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		Debug.Log ("***Authenticate(" + (silent ? "silent" : "loud") + ") …");
 		gamesPlatform.Authenticate ((bool success) => {
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
+			authenticated = success;
 		}, silent);
+	}
+
+	public void SignOut ()
+	{
+		GameController.gamesPlatform.SignOut ();
+		InvokeConnectStatusAction ();
 	}
 
 	// RealTimeMultiplayerListener
@@ -135,6 +175,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		roomSetupPercent = success ? 100 : 0;
+		roomConnected = success;
 		if (success) {
 			SceneManager.LoadScene (Utils.SCENE_BATTLESHIP_GAME);
 			InvokeRepeating ("Checkup", 1f, 1f);
@@ -161,6 +202,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnLeftRoom()");
 		roomSetupPercent = 0;
+		roomConnected = false;
 		SceneManager.LoadScene (Utils.SCENE_MAIN_MENU);
 //		boatPlacementController.DestroyBoats ();
 	}
