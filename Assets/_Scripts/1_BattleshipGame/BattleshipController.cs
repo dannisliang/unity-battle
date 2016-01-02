@@ -17,7 +17,7 @@ public class BattleshipController : MonoBehaviour
 	public GameObject reticle;
 	public GameObject gridOurs;
 	public GameObject gridTheirs;
-	public Text fireAtWillText;
+	public FireAtWillController fireAtWillController;
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip waterPlopClip;
@@ -52,7 +52,7 @@ public class BattleshipController : MonoBehaviour
 	public void AimAt (Whose whose, Position position)
 	{
 		aimReticle.SetActive (position != null);
-		fireAtWillText.enabled = position != null;
+		fireAtWillController.SetVisible (position != null);
 		if (position != null) {
 			PlaceMarker (whose, position, Marker.Aim);
 		}
@@ -118,7 +118,7 @@ public class BattleshipController : MonoBehaviour
 		this.firing = firing;
 		reticle.SetActive (!firing);
 		if (firing) {
-			fireAtWillText.enabled = false;
+			fireAtWillController.enabled = false;
 		}
 	}
 

@@ -26,6 +26,8 @@ public class CardboardAssistantController : MonoBehaviour
 	{
 		//Cardboard.SDK.TapIsTrigger = false; // causes OnBackButton to fire twice
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
+//		Cardboard.SDK.ElectronicDisplayStabilization = false;
+		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
 		Cardboard.SDK.OnBackButton += delegate {
 			Prefs.VrMode = !Prefs.VrMode;

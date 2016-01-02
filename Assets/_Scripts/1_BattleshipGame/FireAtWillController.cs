@@ -2,9 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 
-[RequireComponent (typeof(Text))]
-public class FireAtWillTextController : MonoBehaviour
+[RequireComponent (typeof(Image))]
+public class FireAtWillController : MonoBehaviour
 {
+
+	public void SetVisible (bool active)
+	{
+		gameObject.SetActive (active);
+	}
 
 	void Start ()
 	{
@@ -23,7 +28,7 @@ public class FireAtWillTextController : MonoBehaviour
 
 	void UpdateText (bool vrMode)
 	{
-		GetComponent<Text> ().text = vrMode ?
+		GetComponentInChildren<Text> ().text = vrMode ?
 			"Aim, then use\ntrigger to fire" :
 			"Aim, then tap\nscreen to fire";
 	}
