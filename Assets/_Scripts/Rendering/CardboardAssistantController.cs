@@ -7,7 +7,7 @@ public class CardboardAssistantController : MonoBehaviour
 {
 	public static CardboardAssistantController instance { get; private set; }
 
-	bool VrMode;
+	public bool VrMode;
 
 	void Awake ()
 	{

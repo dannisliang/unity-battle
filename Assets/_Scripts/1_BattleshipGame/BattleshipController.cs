@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
+using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent (typeof(AudioSource))]
@@ -10,13 +10,14 @@ public class BattleshipController : MonoBehaviour
 	public static LayerInfo layerTileTheirs;
 	public static LayerInfo layerBoatTheirs;
 
-	public GameObject reticle;
 	public GameObject rocketPrefab;
 	public GameObject AimReticlePrefab;
 	public GameObject boatHitPrefab;
 	public GameObject boatMissPrefab;
+	public GameObject reticle;
 	public GameObject gridOurs;
 	public GameObject gridTheirs;
+	public Text fireAtWillText;
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip waterPlopClip;
@@ -24,7 +25,7 @@ public class BattleshipController : MonoBehaviour
 
 	bool firing;
 	AudioSource source;
-	public GameObject aimReticle;
+	GameObject aimReticle;
 
 	void Awake ()
 	{
@@ -50,6 +51,7 @@ public class BattleshipController : MonoBehaviour
 	public void AimAt (Whose whose, Position position)
 	{
 		aimReticle.SetActive (position != null);
+		fireAtWillText.enabled = position != null;
 		if (position != null) {
 			PlaceMarker (whose, position, Marker.Aim);
 		}
@@ -114,6 +116,9 @@ public class BattleshipController : MonoBehaviour
 	{
 		this.firing = firing;
 		reticle.SetActive (!firing);
+		if (firing) {
+			fireAtWillText.enabled = false;
+		}
 	}
 
 }
