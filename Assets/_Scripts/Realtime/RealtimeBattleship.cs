@@ -22,6 +22,10 @@ public class RealtimeBattleship : MonoBehaviour
 
 	static void EncodeAndSend (byte messageType, System.Object obj)
 	{
+		bool IsAuthenticated = GameController.gamesPlatform.IsAuthenticated ();
+		bool IsRoomConnected = IsAuthenticated && GameController.gamesPlatform.RealTime.IsRoomConnected ();
+		Debug.Log ("***EncodeAndSend() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + GameController.instance.roomSetupPercent + "]");
+
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {
 			stream.WriteByte (messageType);

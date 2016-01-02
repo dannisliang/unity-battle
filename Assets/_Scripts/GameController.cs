@@ -57,11 +57,16 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}
 		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
 		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		Debug.Log ("***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
+		Debug.Log ("---------------------------------------\n***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
 		if (!pause && roomSetupPercent > 0 && !IsRoomConnected) {
-			Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
-			OnLeftRoom ();
+//			WorkaroundPlayGamePauseBug();
 		}
+	}
+
+	void WorkaroundPlayGamePauseBug ()
+	{
+		Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
+		OnLeftRoom ();
 	}
 
 	//	void InitNearby ()
@@ -132,6 +137,17 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		roomSetupPercent = success ? 100 : 0;
 		if (success) {
 			SceneManager.LoadScene (Utils.SCENE_BATTLESHIP_GAME);
+			InvokeRepeating ("Checkup", 1f, 1f);
+		}
+	}
+
+	void Checkup ()
+	{
+		bool IsAuthenticated = GameController.gamesPlatform.IsAuthenticated ();
+		bool IsRoomConnected = IsAuthenticated && GameController.gamesPlatform.RealTime.IsRoomConnected ();
+		if (!IsRoomConnected && GameController.instance.roomSetupPercent == 100) {
+			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + GameController.instance.roomSetupPercent + "]");
+			WorkaroundPlayGamePauseBug ();
 		}
 	}
 
