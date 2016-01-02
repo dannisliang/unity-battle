@@ -11,6 +11,11 @@ public class AiMReticleController : MonoBehaviour
 	Vector3[] vertices;
 	int[] triangles;
 
+	void Awake ()
+	{
+		GenerateMesh ();
+	}
+
 	void OnValidate ()
 	{
 		inner = Mathf.Max (0, inner);
