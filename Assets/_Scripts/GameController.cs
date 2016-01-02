@@ -16,9 +16,26 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public static IPlayGamesPlatform gamesPlatform { get; private set; }
 
+	public static event RoomConnectStatusAction OnRoomConnectStatusChanged;
+
+	public delegate void RoomConnectStatusAction (int percent);
+
+	int _roomSetupPrecent;
+
 	AudioSource source;
 	//	bool showingWaitingRoom;
-	int roomSetupPercent;
+
+	public int roomSetupPercent {
+		get {
+			return _roomSetupPrecent;
+		}
+		set { 
+			_roomSetupPrecent = value;
+			if (OnRoomConnectStatusChanged != null) {
+				OnRoomConnectStatusChanged (value);
+			}
+		}
+	}
 
 	void Awake ()
 	{
@@ -40,7 +57,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}
 		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
 		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		Debug.Log ("***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + "]");
+		Debug.Log ("***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
 		if (!IsRoomConnected) {
 			Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
 			OnLeftRoom ();
@@ -94,11 +111,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		gamesPlatform.Authenticate ((bool success) => {
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 		}, silent);
-	}
-
-	public int RoomSetupPercent ()
-	{
-		return roomSetupPercent;
 	}
 
 	// RealTimeMultiplayerListener

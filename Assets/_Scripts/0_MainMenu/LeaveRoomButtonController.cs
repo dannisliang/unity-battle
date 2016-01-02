@@ -13,21 +13,28 @@ public class LeaveRoomButtonController : MonoBehaviour
 		button = GetComponent<Button> ();
 		button.onClick.AddListener (delegate {
 			Debug.Log ("***Clicked " + button.name);
-			if (IsIteractable ()) {
-				LeaveRoom ();
-			}
+			LeaveRoom ();
 		});
 	}
 
-	void Update ()
+	void Start ()
 	{
-		button.interactable = IsIteractable ();
+		UpdateInteractable (GameController.instance.roomSetupPercent);
 	}
 
-	bool IsIteractable ()
+	void OnEnable ()
 	{
-//		return GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ();
-		return GameController.instance.RoomSetupPercent () > 0;
+		GameController.OnRoomConnectStatusChanged += UpdateInteractable;
+	}
+
+	void OnDisable ()
+	{
+		GameController.OnRoomConnectStatusChanged -= UpdateInteractable;
+	}
+
+	void UpdateInteractable (int percent)
+	{
+		button.interactable = percent > 0;
 	}
 
 	public void LeaveRoom ()
