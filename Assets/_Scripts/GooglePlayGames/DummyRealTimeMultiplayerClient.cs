@@ -107,10 +107,12 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 
 	public void LeaveRoom ()
 	{
-		roomConnecting = false;
-		roomConnected = false;
-		participants = null;
-		GameController.instance.OnLeftRoom ();
+		GameController.instance.ExecuteDelayed (() => {
+			roomConnecting = false;
+			roomConnected = false;
+			participants = null;
+			GameController.instance.OnLeftRoom ();
+		}, 1f);
 	}
 
 	public bool IsRoomConnected ()
