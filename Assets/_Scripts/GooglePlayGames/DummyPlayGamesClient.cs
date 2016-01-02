@@ -13,11 +13,13 @@ public class DummyPlayGamesClient : IPlayGamesClient
 
 	public void Authenticate (System.Action<bool> callback, bool silent)
 	{
-		authenticated = true;
 		mRealTimeClient = new DummyRealTimeMultiplayerClient ();
-		if (callback != null) {
-			callback.Invoke (silent);
-		}
+		GameController.instance.ExecuteDelayed (() => {
+			authenticated = true;
+			if (callback != null) {
+				callback.Invoke (silent);
+			}
+		}, 1f);
 	}
 
 	public bool IsAuthenticated ()
@@ -27,8 +29,10 @@ public class DummyPlayGamesClient : IPlayGamesClient
 
 	public void SignOut ()
 	{
-		authenticated = false;
-		mRealTimeClient = null;
+		GameController.instance.ExecuteDelayed (() => {
+			authenticated = false;
+			mRealTimeClient = null;
+		}, 1f);
 	}
 
 	public string GetToken ()
