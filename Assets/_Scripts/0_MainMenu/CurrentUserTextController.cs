@@ -8,14 +8,32 @@ public class CurrentUserTextController : MonoBehaviour
 
 	Text text;
 
-	void Start ()
+	void Awake ()
 	{
 		text = GetComponent<Text> ();
 	}
 
-	void Update ()
+	void OnEnable ()
 	{
-		//text.text = Social.localUser.userName + "(" + Social.localUser.state + ")";
-		text.text = GameController.gamesPlatform.localUser.userName + "\n(" + GameController.gamesPlatform.localUser.state + ")";
+		GameController.OnConnectStatusChanged += UpdateStatus;
+		GameController.instance.InvokeConnectStatusAction (UpdateStatus);
+	}
+
+	void OnDisable ()
+	{
+		GameController.OnConnectStatusChanged -= UpdateStatus;
+	}
+
+	void UpdateStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	{
+		text.text = GetStatus (authenticated, isRoomConnected, roomSetupPercent);
+	}
+
+	string GetStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	{
+		if (!authenticated) {
+			return "(Not signed in)";
+		}
+		return "Signed in as\n" + GameController.gamesPlatform.localUser.userName + "\n(" + GameController.gamesPlatform.localUser.state + ")";
 	}
 }

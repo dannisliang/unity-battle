@@ -11,14 +11,10 @@ public class FireAtWillController : MonoBehaviour
 		gameObject.SetActive (active);
 	}
 
-	void Start ()
-	{
-		UpdateText (Prefs.VrMode);
-	}
-
 	void OnEnable ()
 	{
 		Prefs.OnVrModeChanged += UpdateText;
+		UpdateText (Prefs.VrMode);
 	}
 
 	void OnDisable ()

@@ -5,22 +5,10 @@ using System.Collections;
 public class RoomPanelController : MonoBehaviour
 {
 
-	void Awake ()
-	{
-	}
-
 	void Start ()
 	{
 		GameController.instance.InvokeConnectStatusAction (UpdateActive);
 		GameController.OnConnectStatusChanged += UpdateActive;
-	}
-
-	void OnEnable ()
-	{
-	}
-
-	void OnDisable ()
-	{
 	}
 
 	void OnDestroy ()

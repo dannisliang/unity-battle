@@ -13,14 +13,10 @@ public class CurrentRoomTextController : MonoBehaviour
 		text = GetComponent<Text> ();
 	}
 
-	void Start ()
-	{
-		GameController.instance.InvokeConnectStatusAction (UpdateStatus);
-	}
-
 	void OnEnable ()
 	{
 		GameController.OnConnectStatusChanged += UpdateStatus;
+		GameController.instance.InvokeConnectStatusAction (UpdateStatus);
 	}
 
 	void OnDisable ()
