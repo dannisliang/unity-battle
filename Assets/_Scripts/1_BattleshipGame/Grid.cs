@@ -45,7 +45,8 @@ public class Grid
 				conflict = false;
 				for (int j = 0; j < boat.positions.Length && !conflict; j++) {
 					Position pos = boat.positions [j];
-					StrikeResult result = FireAt (pos, testOnly: true);
+					Boat otherBoat;
+					StrikeResult result = FireAt (pos, out otherBoat, testOnly: true);
 					switch (result) {
 					case StrikeResult.MISS:
 					case StrikeResult.IGNORED_ALREADY_MISSED:
@@ -66,7 +67,7 @@ public class Grid
 		}
 	}
 
-	public StrikeResult FireAt (Position position, bool testOnly = false)
+	public StrikeResult FireAt (Position position, out Boat boat, bool testOnly = false)
 	{
 		for (int i = 0; i < boats.Length; i++) {
 			if (boats [i] == null) {
@@ -74,18 +75,22 @@ public class Grid
 			}
 			StrikeResult result = boats [i].FireAt (position, testOnly);
 			if (result == StrikeResult.IGNORED_ALREADY_HIT) {
+				boat = boats [i];
 				return result;
 			} else if (result == StrikeResult.MISS) {
 				continue;
 			} else {
 				Assert.IsTrue (result == StrikeResult.HIT_AND_SUNK || result == StrikeResult.HIT_NOT_SUNK);
+				boat = boats [i];
 				return result;
 			}
 		}
 		if (misses [position.x, position.y] > 0) {
+			boat = null;
 			return StrikeResult.IGNORED_ALREADY_MISSED;
 		}
 		misses [position.x, position.y]++;
+		boat = null;
 		return StrikeResult.MISS;
 	}
 

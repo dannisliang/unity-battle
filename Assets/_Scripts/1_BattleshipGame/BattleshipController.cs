@@ -61,7 +61,8 @@ public class BattleshipController : MonoBehaviour
 	public void Strike (Whose whose, Position position)
 	{
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
-		StrikeResult result = boatPlacementController.grid.FireAt (position);
+		Boat boat;
+		StrikeResult result = boatPlacementController.grid.FireAt (position, out boat);
 		Debug.Log ("***Strike(" + position + ") -> " + result);
 		switch (result) {
 		case StrikeResult.IGNORED_ALREADY_MISSED:
