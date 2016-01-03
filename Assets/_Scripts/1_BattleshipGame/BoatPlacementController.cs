@@ -35,17 +35,21 @@ public class BoatPlacementController : MonoBehaviour
 	void CreateBoats ()
 	{
 		for (int i = 0; i < grid.boats.Length; i++) {
-			GameObject clone = Instantiate (boatPrefab) as GameObject;
-			clone.transform.SetParent (transform, false);
-
-			BoatController boatController = clone.GetComponent<BoatController> ();
-			boatController.Configure (grid.boats [i]);
-
-			Utils.SetNoSaveNoEditHideFlags (clone.transform);
-#if UNITY_EDITOR
-			Undo.RegisterCreatedObjectUndo (clone, "Create " + grid.boats [i]);
-#endif
+			PlaceBoat (grid.boats [i], false);
 		}
 	}
 
+	public void PlaceBoat (Boat boat, bool aboveMarkers)
+	{
+		GameObject clone = Instantiate (boatPrefab) as GameObject;
+		clone.transform.SetParent (transform, false);
+
+		BoatController boatController = clone.GetComponent<BoatController> ();
+		boatController.Configure (boat, aboveMarkers);
+
+			Utils.SetNoSaveNoEditHideFlags (clone.transform);
+#if UNITY_EDITOR
+		Undo.RegisterCreatedObjectUndo (clone, "Create " + boat);
+#endif
+	}
 }

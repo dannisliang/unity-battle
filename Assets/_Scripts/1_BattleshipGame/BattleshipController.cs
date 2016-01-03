@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -81,11 +82,18 @@ public class BattleshipController : MonoBehaviour
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
+			PlaceBoat (whose, boat);
 			BattleshipController.instance.PlayShipExplosionAfter (1f);
 			break;
 		default:
 			throw new System.NotImplementedException ();
 		}
+	}
+
+	void PlaceBoat (Whose whose, Boat boat)
+	{
+		Assert.IsTrue (whose == Whose.Theirs);
+		boatsTheirsPlacementController.PlaceBoat (boat, true);
 	}
 
 	void PlaceMarker (Whose whose, Position position, Marker marker)
@@ -107,7 +115,6 @@ public class BattleshipController : MonoBehaviour
 			break;
 		}
 		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
-		go.transform.localScale = new Vector3 (1f, 1f, Utils.BOAT_HEIGHT);
 		go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, zPos);
 	}
 
