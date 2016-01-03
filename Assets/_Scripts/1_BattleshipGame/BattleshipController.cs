@@ -64,6 +64,9 @@ public class BattleshipController : MonoBehaviour
 		StrikeResult result = boatPlacementController.grid.FireAt (position);
 		Debug.Log ("***Strike(" + position + ") -> " + result);
 		switch (result) {
+		case StrikeResult.IGNORED_ALREADY_MISSED:
+			BattleshipController.instance.PlayWaterPlop ();
+			break;
 		case StrikeResult.IGNORED_ALREADY_HIT:
 			BattleshipController.instance.PlayShipExplosionAfter (1f);
 			break;

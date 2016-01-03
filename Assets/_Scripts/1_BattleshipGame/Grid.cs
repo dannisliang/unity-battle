@@ -29,8 +29,11 @@ public class Grid
 
 	public Boat[] boats;
 
+	int[,] misses;
+
 	public void RandomizeBoats ()
 	{
+		misses = new int[Utils.GRID_SIZE, Utils.GRID_SIZE];
 		boats = new Boat[fleet.Length];
 		for (int i = 0; i < fleet.Length; i++) {
 			int size = fleet [i].size;
@@ -45,6 +48,7 @@ public class Grid
 					StrikeResult result = FireAt (pos, testOnly: true);
 					switch (result) {
 					case StrikeResult.MISS:
+					case StrikeResult.IGNORED_ALREADY_MISSED:
 						continue;
 					case StrikeResult.IGNORED_ALREADY_HIT:
 					case StrikeResult.HIT_NOT_SUNK:
@@ -78,6 +82,10 @@ public class Grid
 				return result;
 			}
 		}
+		if (misses [position.x, position.y] > 0) {
+			return StrikeResult.IGNORED_ALREADY_MISSED;
+		}
+		misses [position.x, position.y]++;
 		return StrikeResult.MISS;
 	}
 
