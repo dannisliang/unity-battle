@@ -58,10 +58,8 @@ public class Grid
 			if (boats [i] == null) {
 				continue;
 			}
-			for (int j = 0; j < boats [i].positions.Length; j++) {
-				if (position.Equals (boats [i].positions [j])) {
-					return true;
-				}
+			if (boats [i].FireAt (position, 0)) {
+				return true;
 			}
 		}
 		return false;

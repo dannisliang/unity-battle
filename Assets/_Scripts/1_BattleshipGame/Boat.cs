@@ -7,23 +7,29 @@ public class Boat
 
 	public Position[] positions{ get; private set; }
 
-	static Position[] MakeBoatPositions (int u, int v, int size, bool horizontal)
-	{
-		Position[] locations = new Position[size];
-		for (int i = 0; i < size; i++) {
-			locations [i] = new Position (horizontal ? u + i : v, horizontal ? v : u + i);
-		}
-		return locations;
-	}
+	int size;
+	int[] hits;
 
 	public Boat (int size)
 	{
+		this.size = size;
 		horizontal = Random.value > .5f;
 		int u = Random.Range (0, Utils.GRID_SIZE - size + 1);
 		int v = Random.Range (0, Utils.GRID_SIZE);
 
-		//Debug.Log ("***u=" + u + " v=" + v);
 		positions = MakeBoatPositions (u, v, size, horizontal);
+		hits = new int[size];
+	}
+
+	public bool FireAt (Position position, int rounds)
+	{
+		for (int i = 0; i < size; i++) {
+			if (positions [i].Equals (position)) {
+				hits [i] += rounds;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public int Size ()
@@ -34,6 +40,15 @@ public class Boat
 	public Position GetPosition (int index)
 	{
 		return positions [index];
+	}
+
+	static Position[] MakeBoatPositions (int u, int v, int size, bool horizontal)
+	{
+		Position[] locations = new Position[size];
+		for (int i = 0; i < size; i++) {
+			locations [i] = new Position (horizontal ? u + i : v, horizontal ? v : u + i);
+		}
+		return locations;
 	}
 
 	public override string ToString ()
