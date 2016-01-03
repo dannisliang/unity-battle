@@ -38,7 +38,7 @@ public class Boat
 
 	public override string ToString ()
 	{
-		return (horizontal ? "Horizontal" : "Vertical") + "Boat(" + positions [0] + "," + positions [1] + ")";
+		return (horizontal ? "Horizontal" : "Vertical") + "Boat(" + positions [0] + ")";
 	}
 
 }
