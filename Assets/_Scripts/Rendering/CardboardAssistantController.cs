@@ -19,7 +19,7 @@ public class CardboardAssistantController : MonoBehaviour
 	{
 		Debug.Log ("***CardboardAssistantController.Start()");
 		instanceCreated = true;
-		Cardboard.SDK.TapIsTrigger = false;
+//		Cardboard.SDK.TapIsTrigger = false; // causes OnBackButton to be called twice
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
 		Cardboard.SDK.OnBackButton += OnBackButton;
 		//		Cardboard.SDK.ElectronicDisplayStabilization = false;
