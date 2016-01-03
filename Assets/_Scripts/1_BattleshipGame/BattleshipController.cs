@@ -61,12 +61,26 @@ public class BattleshipController : MonoBehaviour
 	public void Strike (Whose whose, Position position)
 	{
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
-		bool hit = boatPlacementController.grid.IsHit (position);
-		PlaceMarker (whose, position, hit ? Marker.Hit : Marker.Miss);
-		if (hit) {
+		StrikeResult result = boatPlacementController.grid.FireAt (position);
+		Debug.Log ("***Strike(" + position + ") -> " + result);
+		switch (result) {
+		case StrikeResult.IGNORED_ALREADY_HIT:
 			BattleshipController.instance.PlayShipExplosionAfter (1f);
-		} else {
+			break;
+		case StrikeResult.MISS:
+			PlaceMarker (whose, position, Marker.Miss);
 			BattleshipController.instance.PlayWaterPlop ();
+			break;
+		case StrikeResult.HIT_NOT_SUNK:
+			PlaceMarker (whose, position, Marker.Hit);
+			BattleshipController.instance.PlayShipExplosionAfter (1f);
+			break;
+		case StrikeResult.HIT_AND_SUNK:
+			PlaceMarker (whose, position, Marker.Hit);
+			BattleshipController.instance.PlayShipExplosionAfter (1f);
+			break;
+		default:
+			throw new System.NotImplementedException ();
 		}
 	}
 

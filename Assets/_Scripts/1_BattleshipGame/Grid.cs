@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 
 [System.Serializable]
@@ -40,9 +41,18 @@ public class Grid
 
 				conflict = false;
 				for (int j = 0; j < boat.positions.Length && !conflict; j++) {
-					Position c = boat.positions [j];
-					if (IsHit (c)) {
+					Position pos = boat.positions [j];
+					StrikeResult result = FireAt (pos, testOnly: true);
+					switch (result) {
+					case StrikeResult.MISS:
+						continue;
+					case StrikeResult.IGNORED_ALREADY_HIT:
+					case StrikeResult.HIT_NOT_SUNK:
+					case StrikeResult.HIT_AND_SUNK:
 						conflict = true;
+						break;
+					default:
+						throw new System.NotImplementedException ();
 					}
 				}
 				if (!conflict) {
@@ -52,17 +62,23 @@ public class Grid
 		}
 	}
 
-	public bool IsHit (Position position)
+	public StrikeResult FireAt (Position position, bool testOnly = false)
 	{
 		for (int i = 0; i < boats.Length; i++) {
 			if (boats [i] == null) {
 				continue;
 			}
-			if (boats [i].FireAt (position, 0)) {
-				return true;
+			StrikeResult result = boats [i].FireAt (position, testOnly);
+			if (result == StrikeResult.IGNORED_ALREADY_HIT) {
+				return result;
+			} else if (result == StrikeResult.MISS) {
+				continue;
+			} else {
+				Assert.IsTrue (result == StrikeResult.HIT_AND_SUNK || result == StrikeResult.HIT_NOT_SUNK);
+				return result;
 			}
 		}
-		return false;
+		return StrikeResult.MISS;
 	}
 
 	public override string ToString ()

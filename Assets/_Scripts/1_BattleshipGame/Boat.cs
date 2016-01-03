@@ -21,15 +21,30 @@ public class Boat
 		hits = new int[size];
 	}
 
-	public bool FireAt (Position position, int rounds)
+	public StrikeResult FireAt (Position position, bool testOnly = false)
 	{
 		for (int i = 0; i < size; i++) {
 			if (positions [i].Equals (position)) {
-				hits [i] += rounds;
-				return true;
+				if (hits [i] > 0) {
+					return StrikeResult.IGNORED_ALREADY_HIT;
+				}
+				if (!testOnly) {
+					hits [i]++;
+				}
+				return IsSunk () ? StrikeResult.HIT_AND_SUNK : StrikeResult.HIT_NOT_SUNK;
 			}
 		}
-		return false;
+		return StrikeResult.MISS;
+	}
+
+	public bool IsSunk ()
+	{
+		for (int i = 0; i < size; i++) {
+			if (hits [i] == 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public int Size ()
