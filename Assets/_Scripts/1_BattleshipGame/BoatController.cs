@@ -18,7 +18,7 @@ public class BoatController : MonoBehaviour
 		Transform meshChild = transform.GetChild (0);
 		meshChild.name += boatSuffix;
 		meshChild.localPosition = new Vector3 (boat.horizontal ? boat.Size () / 2f : .5f, boat.horizontal ? .5f : 1f - len / 2f, height);
-		meshChild.localScale = new Vector3 ((boat.horizontal ? len : 1f) - .3f, (boat.horizontal ? 1f : len) - .3f, 1f);
+		meshChild.localScale = new Vector3 ((boat.horizontal ? len : 1f) - .15f, (boat.horizontal ? 1f : len) - .15f, 1f);
 
 		for (int i = 0; i < boat.Size (); i++) {
 			GameObject child = new GameObject ();
