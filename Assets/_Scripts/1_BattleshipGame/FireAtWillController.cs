@@ -5,6 +5,7 @@ using System.Collections;
 [RequireComponent (typeof(Image))]
 public class FireAtWillController : MonoBehaviour
 {
+	bool playing;
 	bool firing;
 	bool reticleAimingAtGrid;
 	bool vrMode;
@@ -16,7 +17,7 @@ public class FireAtWillController : MonoBehaviour
 	{
 		image = GetComponent<Image> ();
 		text = GetComponentInChildren<Text> ();
-		BattleshipController.instance.OnFiringStatus += UpdateFiring;
+		BattleshipController.instance.OnGameState += UpdateGameState;
 		BattleshipController.instance.OnReticleAimingAtGrid += UpdateAimAtGrid;
 		Prefs.OnVrModeChanged += UpdateVrMode;
 		UpdateText ();
@@ -25,14 +26,15 @@ public class FireAtWillController : MonoBehaviour
 	void OnDisable ()
 	{
 		if (!GameController.instance.quitting) {
-			BattleshipController.instance.OnFiringStatus -= UpdateFiring;
+			BattleshipController.instance.OnGameState -= UpdateGameState;
 			BattleshipController.instance.OnReticleAimingAtGrid -= UpdateAimAtGrid;
 			Prefs.OnVrModeChanged -= UpdateVrMode;
 		}
 	}
 
-	void UpdateFiring (bool firing)
+	void UpdateGameState (bool playing, bool firing)
 	{
+		this.playing = playing;
 		this.firing = firing;
 		UpdateText ();
 	}
@@ -51,14 +53,26 @@ public class FireAtWillController : MonoBehaviour
 
 	void UpdateText ()
 	{
-		bool show = reticleAimingAtGrid && !firing;
+		string t = GetText ();
+		bool show = t != null;
 		image.enabled = show;
 		text.enabled = show;
 		if (show) {
-			text.text = vrMode ?
-			"Aim, then use\ntrigger to fire" :
-			"Aim, then tap\nscreen to fire";
+			text.text = t;
 		}
+	}
+
+	string GetText ()
+	{
+		if (!playing) {
+			return "Synchronizing.\nPlease wait…";
+		}
+		if (firing | !reticleAimingAtGrid) {
+			return null;
+		}
+		return "Missle is armed.\n" + (vrMode ?
+			"Aim, then use\ntrigger to fire." :
+			"Aim, then tap\nscreen to fire.");
 	}
 
 }

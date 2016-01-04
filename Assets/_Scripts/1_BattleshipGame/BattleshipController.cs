@@ -24,15 +24,15 @@ public class BattleshipController : MonoBehaviour
 	public AudioClip waterPlopClip;
 	public AudioClip shipExplosionClip;
 
-	public delegate void FiringStatus (bool firing);
+	public delegate void GameState (bool playing, bool firing);
 
-	public event FiringStatus OnFiringStatus;
-
+	public event GameState OnGameState;
 
 	public delegate void ReticleAimingAtGrid (bool firing);
 
 	public event ReticleAimingAtGrid OnReticleAimingAtGrid;
 
+	bool playing;
 	bool firing;
 	AudioSource source;
 	GameObject aimReticle;
@@ -59,6 +59,20 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
+	public void SetBoatsTheirs (Boat[] boats)
+	{
+		playing = true;
+		boatsTheirsPlacementController.SetBoats (boats);
+		AnnounceGameState ();
+	}
+
+	void AnnounceGameState ()
+	{
+		if (OnGameState != null) {
+			OnGameState (playing, firing);
+		}
+	}
+
 	public void AimAt (Whose whose, Position position)
 	{
 		if (OnReticleAimingAtGrid != null) {
@@ -72,7 +86,7 @@ public class BattleshipController : MonoBehaviour
 
 	public void FireAt (Transform targetTransform)
 	{
-		if (firing) {
+		if (firing || !playing) {
 			return;
 		}
 		GameObject rocket = Instantiate (rocketPrefab);
@@ -160,9 +174,7 @@ public class BattleshipController : MonoBehaviour
 	{
 		this.firing = firing;
 		reticle.SetActive (!firing);
-		if (OnFiringStatus != null) {
-			OnFiringStatus (firing);
-		}
+		AnnounceGameState ();
 	}
 
 }

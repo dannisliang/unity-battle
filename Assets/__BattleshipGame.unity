@@ -187,7 +187,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 109
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 1
@@ -195,7 +195,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Aim, then ___
 
-    ______ to fire'
+    ______ to fire.'
 --- !u!222 &20431626
 CanvasRenderer:
   m_ObjectHideFlags: 0
