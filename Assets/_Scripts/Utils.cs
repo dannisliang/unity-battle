@@ -8,7 +8,6 @@ using UnityEditor;
 
 public class Utils : MonoBehaviour
 {
-	public static bool DEBUG_FAST_SHOT = false;
 	public static float DUMMY_PLAY_GAMES_DELAY = .1f;
 
 	//	public static int ignoreCurrentFire1FrameCount;
