@@ -5,7 +5,7 @@ using System.Collections;
 [System.Serializable]
 public class Grid
 {
-	public delegate void BoatHit ();
+	public  delegate void BoatHit ();
 
 	public event BoatHit OnBoatHit;
 
@@ -20,12 +20,23 @@ public class Grid
 	};
 
 	public Boat[] boats;
+	volatile int[,] misses;
 
-	int[,] misses;
-
-	public void RandomizeBoats ()
+	public void SetBoats (Boat[] boats)
 	{
 		misses = new int[Utils.GRID_SIZE, Utils.GRID_SIZE];
+		if (boats == null) {
+			MakeRandomizedBoats ();
+		} else {
+			this.boats = boats;
+		}
+		if (OnBoatHit != null) {
+			OnBoatHit ();
+		}
+	}
+
+	Boat[] MakeRandomizedBoats ()
+	{
 		boats = new Boat[fleet.Length];
 		for (int i = 0; i < fleet.Length; i++) {
 			bool conflict = true;
@@ -55,6 +66,7 @@ public class Grid
 				}
 			}
 		}
+		return boats;
 	}
 
 	public StrikeResult FireAt (Position position, out Boat boat, bool testOnly = false)
@@ -72,6 +84,9 @@ public class Grid
 			} else {
 				Assert.IsTrue (result == StrikeResult.HIT_AND_SUNK || result == StrikeResult.HIT_NOT_SUNK);
 				boat = boats [i];
+				if (!testOnly && OnBoatHit != null) {
+					OnBoatHit ();
+				}
 				return result;
 			}
 		}

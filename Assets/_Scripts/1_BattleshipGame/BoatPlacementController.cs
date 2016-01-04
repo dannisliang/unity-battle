@@ -20,14 +20,13 @@ public class BoatPlacementController : MonoBehaviour
 
 	public void RecreateBoats ()
 	{
-		grid.RandomizeBoats ();
-		SetGrid (grid);
+		SetBoats (null);
 		CreateBoats ();
 	}
 
-	public void SetGrid (Grid grid)
+	public void SetBoats (Boat[] boats)
 	{
-		this.grid = grid;
+		this.grid.SetBoats (boats);
 		DestroyBoats ();
 	}
 
@@ -56,4 +55,5 @@ public class BoatPlacementController : MonoBehaviour
 		Undo.RegisterCreatedObjectUndo (clone, "Create " + boat);
 #endif
 	}
+		
 }
