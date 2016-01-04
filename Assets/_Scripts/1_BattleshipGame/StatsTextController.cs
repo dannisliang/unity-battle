@@ -55,9 +55,6 @@ public class StatsTextController : MonoBehaviour
 			t += "Segments hit: " + AsPercentage (hits, units) + "\n" + hits + " / " + units + "\n\n";
 			t += "Boats sunk: " + AsPercentage (sunk, boats.Length) + "\n" + sunk + " / " + boats.Length + "\n\n";
 			t += "Accuracy: " + AsPercentage (hits, hits + misses) + "\n" + hits + " / " + (hits + misses) + "\n\n";
-			if (hits == units) {
-				t += "\n<color='red'>YOU SUNK THE FLEET!!!</color>\n\n";
-			}
 		}
 		return t;
 	}
