@@ -19,7 +19,9 @@ public class FireAtWillController : MonoBehaviour
 
 	void OnDisable ()
 	{
-		Prefs.OnVrModeChanged -= UpdateText;
+		if (!GameController.instance.quitting) {
+			Prefs.OnVrModeChanged -= UpdateText;
+		}
 	}
 
 	void UpdateText (bool vrMode)

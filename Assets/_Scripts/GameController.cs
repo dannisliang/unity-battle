@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public delegate void ConnectStatusAction (bool authenticated, bool isRoomConnected, int roomSetupPercent);
 
+	public bool quitting { get; private set; }
+
 	bool _authenticated;
 	bool _roomConnected;
 	int _roomSetupPrecent;
@@ -85,6 +87,11 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		Authenticate (true);
 		Debug.Log ("***Loading " + Utils.SCENE_MAIN_MENU + " …");
 		SceneManager.LoadScene (Utils.SCENE_MAIN_MENU);
+	}
+
+	void OnApplicationQuit ()
+	{
+		quitting = true;
 	}
 
 	void OnApplicationPause (bool pause)
