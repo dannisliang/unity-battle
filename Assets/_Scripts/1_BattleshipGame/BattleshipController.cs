@@ -59,6 +59,12 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
+	public void FireAt (Transform targetTransform)
+	{
+		GameObject rocket = Instantiate (rocketPrefab);
+		rocket.GetComponent<RocketController> ().MaybeLaunch (Camera.main.transform, targetTransform);
+	}
+
 	public void Strike (Whose whose, Position position)
 	{
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
