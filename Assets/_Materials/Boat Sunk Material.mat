@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Boat Ours Material
+  m_Name: Boat Sunk Material
   m_Shader: {fileID: 4800000, guid: 34915239eaf1d4537a77c83f88d9d95b, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 5
@@ -144,4 +144,4 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: 0.9882353, g: 1, b: 0.27058825, a: 0.7058824}
+        second: {r: 0, g: 0, b: 0, a: 0.795}

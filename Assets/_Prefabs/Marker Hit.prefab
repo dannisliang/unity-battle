@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3317514}
   - 23: {fileID: 2385350}
   m_Layer: 10
-  m_Name: Boat Hit Mesh
+  m_Name: Marker Hit Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ GameObject:
   - 4: {fileID: 451500}
   - 114: {fileID: 11418212}
   m_Layer: 10
-  m_Name: Boat Hit
+  m_Name: Marker Hit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

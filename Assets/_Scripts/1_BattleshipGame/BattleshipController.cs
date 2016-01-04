@@ -12,9 +12,9 @@ public class BattleshipController : MonoBehaviour
 	public static LayerInfo layerBoatTheirs;
 
 	public GameObject rocketPrefab;
-	public GameObject AimReticlePrefab;
-	public GameObject boatHitPrefab;
-	public GameObject boatMissPrefab;
+	public GameObject markerAimReticlePrefab;
+	public GameObject markerHitPrefab;
+	public GameObject markerMissPrefab;
 	public GameObject reticle;
 	public GameObject gridOurs;
 	public GameObject gridTheirs;
@@ -38,7 +38,7 @@ public class BattleshipController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
-		aimReticle = Instantiate (AimReticlePrefab);
+		aimReticle = Instantiate (markerAimReticlePrefab);
 		AimAt (Whose.Theirs, null); // reticle starts disabled
 	}
 
@@ -105,11 +105,11 @@ public class BattleshipController : MonoBehaviour
 			zPos = -Utils.BOAT_HEIGHT - 2f * Utils.CLEARANCE_HEIGHT;
 			break;
 		case Marker.Hit:
-			go = Instantiate (boatHitPrefab);
+			go = Instantiate (markerHitPrefab);
 			zPos = -.5f * Utils.BOAT_HEIGHT - Utils.CLEARANCE_HEIGHT;
 			break;
 		case Marker.Miss:
-			go = Instantiate (boatMissPrefab);
+			go = Instantiate (markerMissPrefab);
 			zPos = -.5f * Utils.BOAT_HEIGHT - Utils.CLEARANCE_HEIGHT;
 			break;
 		}

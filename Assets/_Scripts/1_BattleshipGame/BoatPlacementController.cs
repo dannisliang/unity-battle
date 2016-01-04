@@ -9,7 +9,8 @@ using UnityEditor;
 public class BoatPlacementController : MonoBehaviour
 {
 
-	public GameObject boatPrefab;
+	public GameObject boatNormalPrefab;
+	public GameObject boatSunkPrefab;
 
 	public Grid grid { get; private set; }
 
@@ -42,13 +43,13 @@ public class BoatPlacementController : MonoBehaviour
 		}
 	}
 
-	public void PlaceBoat (Boat boat, bool aboveMarkers)
+	public void PlaceBoat (Boat boat, bool sunk)
 	{
-		GameObject clone = Instantiate (boatPrefab) as GameObject;
+		GameObject clone = Instantiate (sunk ? boatSunkPrefab : boatNormalPrefab) as GameObject;
 		clone.transform.SetParent (transform, false);
 
 		BoatController boatController = clone.GetComponent<BoatController> ();
-		boatController.Configure (boat, aboveMarkers);
+		boatController.Configure (boat, sunk);
 
 		//Utils.SetNoSaveNoEditHideFlags (clone.transform);
 #if UNITY_EDITOR
