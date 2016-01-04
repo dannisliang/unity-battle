@@ -70,7 +70,9 @@ public class BattleshipController : MonoBehaviour
 			BattleshipController.instance.PlayWaterPlop ();
 			break;
 		case StrikeResult.IGNORED_ALREADY_HIT:
-			BattleshipController.instance.PlayShipExplosionAfter (1f);
+			GameController.instance.ExecuteDelayed (delegate {
+				PlayShipExplosion ();
+			}, 1f);
 			break;
 		case StrikeResult.MISS:
 			PlaceMarker (whose, position, Marker.Miss);
@@ -78,12 +80,16 @@ public class BattleshipController : MonoBehaviour
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
-			BattleshipController.instance.PlayShipExplosionAfter (1f);
+			GameController.instance.ExecuteDelayed (delegate {
+				PlayShipExplosion ();
+			}, 1f);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
-			PlaceBoat (whose, boat);
-			BattleshipController.instance.PlayShipExplosionAfter (1f);
+			GameController.instance.ExecuteDelayed (delegate {
+				PlayShipExplosion ();
+				PlaceBoat (whose, boat);
+			}, 1f);
 			break;
 		default:
 			throw new System.NotImplementedException ();
@@ -120,11 +126,6 @@ public class BattleshipController : MonoBehaviour
 	public void PlayWaterPlop ()
 	{
 		source.PlayOneShot (waterPlopClip);
-	}
-
-	public void PlayShipExplosionAfter (float delay)
-	{
-		Invoke ("PlayShipExplosion", delay);
 	}
 
 	public void PlayShipExplosion ()
