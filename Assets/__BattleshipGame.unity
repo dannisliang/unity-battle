@@ -138,7 +138,7 @@ GameObject:
   - 222: {fileID: 20431626}
   - 114: {fileID: 20431625}
   m_Layer: 5
-  m_Name: Fire At Will Text
+  m_Name: Game State Hint Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1595,7 +1595,6 @@ MonoBehaviour:
   reticle: {fileID: 2056223767}
   gridOurs: {fileID: 1828396184}
   gridTheirs: {fileID: 32654577}
-  fireAtWillController: {fileID: 1582691964}
   boatsOursPlacementController: {fileID: 1601558864}
   boatsTheirsPlacementController: {fileID: 1403814449}
   waterPlopClip: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
@@ -2976,7 +2975,7 @@ GameObject:
   - 114: {fileID: 1582691962}
   - 114: {fileID: 1582691964}
   m_Layer: 5
-  m_Name: Fire At Will Panel
+  m_Name: Game State Hint Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3041,7 +3040,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1582691960}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4562e23f08ccc4c5685b7bea2a336d88, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f6eeb1ac22da402ab1b93c18cbdd064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1582979900

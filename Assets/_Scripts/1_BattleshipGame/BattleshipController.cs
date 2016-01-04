@@ -18,7 +18,6 @@ public class BattleshipController : MonoBehaviour
 	public GameObject reticle;
 	public GameObject gridOurs;
 	public GameObject gridTheirs;
-	public FireAtWillController fireAtWillController;
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip waterPlopClip;
