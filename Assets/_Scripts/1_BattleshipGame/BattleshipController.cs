@@ -109,9 +109,9 @@ public class BattleshipController : MonoBehaviour
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
+			PlaceSunkBoat (whose, boat);
 			GameController.instance.ExecuteDelayed (delegate {
 				PlayShipExplosion ();
-				PlaceSunkBoat (whose, boat);
 			}, 1f);
 			break;
 		default:
