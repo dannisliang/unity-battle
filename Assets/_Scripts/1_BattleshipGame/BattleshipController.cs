@@ -92,8 +92,7 @@ public class BattleshipController : MonoBehaviour
 
 	void PlaceBoat (Whose whose, Boat boat)
 	{
-		Assert.IsTrue (whose == Whose.Theirs);
-		boatsTheirsPlacementController.PlaceBoat (boat, true);
+		(whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController).PlaceBoat (boat, true);
 	}
 
 	void PlaceMarker (Whose whose, Position position, Marker marker)
