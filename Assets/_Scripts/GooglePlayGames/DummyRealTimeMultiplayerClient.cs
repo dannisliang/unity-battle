@@ -25,7 +25,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		GameController.instance.ExecuteDelayed (() => {
 			roomConnecting = true;
 			listener.OnRoomSetupProgress (20);
-		}, 1f);
+		}, Utils.DUMMY_PLAY_GAMES_DELAY);
 		GameController.instance.ExecuteDelayed (() => {
 			if (!roomConnecting || roomConnected) {
 				return;
@@ -35,7 +35,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
 			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
 			listener.OnRoomConnected (GameController.instance.roomSetupPercent > 0);
-		}, 2f);
+		}, 2f * Utils.DUMMY_PLAY_GAMES_DELAY);
 	}
 
 	public void CreateWithInvitationScreen (uint minOpponents, uint maxOppponents, uint variant, RealTimeMultiplayerListener listener)
@@ -112,7 +112,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			roomConnected = false;
 			participants = null;
 			GameController.instance.OnLeftRoom ();
-		}, 1f);
+		}, Utils.DUMMY_PLAY_GAMES_DELAY);
 	}
 
 	public bool IsRoomConnected ()

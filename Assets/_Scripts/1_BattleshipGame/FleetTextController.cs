@@ -42,7 +42,11 @@ public class FleetTextController : MonoBehaviour
 		if (boats != null) {
 			for (int i = 0; i < boats.Length; i++) {
 				BoatConfiguration config = boats [i].config;
-				t += config.designation + "\n- " + config.size + " units\n\n";
+				t += config.designation + "\n- " + config.size + " units";
+				if (boats [i].IsSunk ()) {
+					t += " <color='#f00'>(SUNK)</color>";
+				}
+				t += "\n\n";
 			}
 		}
 		return t;

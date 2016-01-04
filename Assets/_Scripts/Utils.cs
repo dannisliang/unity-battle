@@ -8,6 +8,8 @@ using UnityEditor;
 
 public class Utils : MonoBehaviour
 {
+	public static float DUMMY_PLAY_GAMES_DELAY = .1f;
+
 	//	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
 	public static float BOAT_HEIGHT = .01f;

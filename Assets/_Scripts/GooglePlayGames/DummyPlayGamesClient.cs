@@ -19,7 +19,7 @@ public class DummyPlayGamesClient : IPlayGamesClient
 			if (callback != null) {
 				callback.Invoke (authenticated);
 			}
-		}, 1f);
+		}, Utils.DUMMY_PLAY_GAMES_DELAY);
 	}
 
 	public bool IsAuthenticated ()
