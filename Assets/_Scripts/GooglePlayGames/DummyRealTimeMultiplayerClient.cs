@@ -66,8 +66,10 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
 		Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + "," + (char)data [0] + "-" + data.Length + ")");
-		// mirror back messages
-		GameController.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
+		// simply mirror back messages with delay
+		GameController.instance.ExecuteDelayed (() => {
+			GameController.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
+		}, Utils.DUMMY_PLAY_GAMES_DELAY);
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data, int offset, int length)
