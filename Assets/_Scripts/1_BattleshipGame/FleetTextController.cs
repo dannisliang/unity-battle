@@ -10,7 +10,7 @@ public class FleetTextController : MonoBehaviour
 	{
 		string t = "";
 		for (int i = 0; i < Grid.fleet.Length; i++) {
-			Grid.BoatConfiguration config = Grid.fleet [i];
+			BoatConfiguration config = Grid.fleet [i];
 			t += config.designation + "\n- " + config.size + " units\n\n";
 		}
 		GetComponent<Text> ().text = t;

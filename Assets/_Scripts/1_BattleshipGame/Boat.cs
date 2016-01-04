@@ -7,23 +7,24 @@ public class Boat
 
 	public Position[] positions{ get; private set; }
 
-	int size;
+	public BoatConfiguration config { get; private set; }
+
 	int[] hits;
 
-	public Boat (int size)
+	public Boat (BoatConfiguration config)
 	{
-		this.size = size;
+		this.config = config;
 		horizontal = Random.value > .5f;
-		int u = Random.Range (0, Utils.GRID_SIZE - size + 1);
+		int u = Random.Range (0, Utils.GRID_SIZE - config.size + 1);
 		int v = Random.Range (0, Utils.GRID_SIZE);
 
-		positions = MakeBoatPositions (u, v, size, horizontal);
-		hits = new int[size];
+		positions = MakeBoatPositions (u, v, config.size, horizontal);
+		hits = new int[config.size];
 	}
 
 	public StrikeResult FireAt (Position position, bool testOnly = false)
 	{
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < config.size; i++) {
 			if (positions [i].Equals (position)) {
 				if (hits [i] > 0) {
 					return StrikeResult.IGNORED_ALREADY_HIT;
@@ -39,7 +40,7 @@ public class Boat
 
 	public bool IsSunk ()
 	{
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < config.size; i++) {
 			if (hits [i] == 0) {
 				return false;
 			}

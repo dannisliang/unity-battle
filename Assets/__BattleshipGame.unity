@@ -2398,6 +2398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143b7fa7ea8524ebb9f5b48d81046099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boatPlacementController: {fileID: 1403814449}
 --- !u!1 &1818598052
 GameObject:
   m_ObjectHideFlags: 0

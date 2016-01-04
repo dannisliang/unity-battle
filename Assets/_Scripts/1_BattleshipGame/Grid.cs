@@ -5,18 +5,6 @@ using System.Collections;
 [System.Serializable]
 public class Grid
 {
-	public struct BoatConfiguration
-	{
-		public int size;
-		public string designation;
-
-		public BoatConfiguration (int size, string designation)
-		{
-			this.size = size;
-			this.designation = designation;
-		}
-	}
-
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
 		new BoatConfiguration (5, "Aircraft Carrier"),
@@ -36,11 +24,9 @@ public class Grid
 		misses = new int[Utils.GRID_SIZE, Utils.GRID_SIZE];
 		boats = new Boat[fleet.Length];
 		for (int i = 0; i < fleet.Length; i++) {
-			int size = fleet [i].size;
-
 			bool conflict = true;
 			while (conflict) {
-				Boat boat = new Boat (size);
+				Boat boat = new Boat (fleet [i]);
 
 				conflict = false;
 				for (int j = 0; j < boat.positions.Length && !conflict; j++) {
@@ -89,7 +75,9 @@ public class Grid
 			boat = null;
 			return StrikeResult.IGNORED_ALREADY_MISSED;
 		}
-		misses [position.x, position.y]++;
+		if (!testOnly) {
+			misses [position.x, position.y]++;
+		}
 		boat = null;
 		return StrikeResult.MISS;
 	}
