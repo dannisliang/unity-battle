@@ -52,13 +52,18 @@ public class StatsTextController : MonoBehaviour
 					sunk++;
 				}
 			}
-			t += "Segments hit\n" + hits + " / " + units + "\n\n";
-			t += "Boats sunk\n" + sunk + " / " + boats.Length + "\n\n";
-			t += "Accuracy\n" + hits + " hits / " + misses + " misses\n\n";
+			t += "Segments hit: " + AsPercentage (hits, units) + "\n" + hits + " / " + units + "\n\n";
+			t += "Boats sunk: " + AsPercentage (sunk, boats.Length) + "\n" + sunk + " / " + boats.Length + "\n\n";
+			t += "Accuracy: " + AsPercentage (hits, hits + misses) + "\n" + hits + " / " + (hits + misses) + "\n\n";
 			if (hits == units) {
 				t += "\n<color='red'>YOU SUNK THE FLEET!!!</color>\n\n";
 			}
 		}
 		return t;
+	}
+
+	string AsPercentage (float a, float b)
+	{
+		return (a / b).ToString ("P1").Replace (".0", "").Replace (" ", "");
 	}
 }
