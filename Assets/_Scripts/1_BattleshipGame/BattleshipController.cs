@@ -88,7 +88,7 @@ public class BattleshipController : MonoBehaviour
 			PlaceMarker (whose, position, Marker.Hit);
 			GameController.instance.ExecuteDelayed (delegate {
 				PlayShipExplosion ();
-				PlaceBoat (whose, boat);
+				PlaceSunkBoat (whose, boat);
 			}, 1f);
 			break;
 		default:
@@ -96,7 +96,7 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
-	void PlaceBoat (Whose whose, Boat boat)
+	void PlaceSunkBoat (Whose whose, Boat boat)
 	{
 		(whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController).PlaceBoat (boat, true);
 	}
