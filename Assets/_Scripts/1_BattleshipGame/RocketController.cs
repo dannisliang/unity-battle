@@ -28,7 +28,7 @@ public class RocketController : MonoBehaviour
 		}
 	}
 
-	public void MaybeLaunch (Transform origin, Transform targetTransform)
+	public void Launch (Transform origin, Transform targetTransform)
 	{
 //		this.targetTransform = targetTransform;
 		transform.position = origin.position;
