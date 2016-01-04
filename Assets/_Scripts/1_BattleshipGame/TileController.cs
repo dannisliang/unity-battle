@@ -43,5 +43,10 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	void Highlight (bool highlight)
 	{
 		BattleshipController.instance.AimAt (Whose.Theirs, highlight ? positionMarkerController.position : null);
+#if UNITY_EDITOR
+		if (highlight) {
+			BattleshipController.instance.Strike (Whose.Theirs, positionMarkerController.position);
+		}
+#endif
 	}
 }

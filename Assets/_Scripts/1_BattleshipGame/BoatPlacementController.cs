@@ -13,9 +13,13 @@ public class BoatPlacementController : MonoBehaviour
 
 	public Grid grid { get; private set; }
 
+	void Awake ()
+	{
+		grid = new Grid ();
+	}
+
 	public void RecreateBoats ()
 	{
-		Grid grid = new Grid ();
 		grid.RandomizeBoats ();
 		SetGrid (grid);
 		CreateBoats ();
@@ -47,7 +51,7 @@ public class BoatPlacementController : MonoBehaviour
 		BoatController boatController = clone.GetComponent<BoatController> ();
 		boatController.Configure (boat, aboveMarkers);
 
-			Utils.SetNoSaveNoEditHideFlags (clone.transform);
+		//Utils.SetNoSaveNoEditHideFlags (clone.transform);
 #if UNITY_EDITOR
 		Undo.RegisterCreatedObjectUndo (clone, "Create " + boat);
 #endif

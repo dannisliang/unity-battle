@@ -5,6 +5,10 @@ using System.Collections;
 [System.Serializable]
 public class Grid
 {
+	public delegate void BoatHit ();
+
+	public event BoatHit OnBoatHit;
+
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
 		new BoatConfiguration (5, "Aircraft Carrier"),

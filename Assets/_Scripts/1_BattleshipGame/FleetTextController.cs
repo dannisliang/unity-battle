@@ -5,15 +5,46 @@ using System.Collections;
 [RequireComponent (typeof(Text))]
 public class FleetTextController : MonoBehaviour
 {
+	public BoatPlacementController boatPlacementController;
 
-	void OnValidate ()
+	Text text;
+
+	void Awake ()
 	{
-		string t = "";
-		for (int i = 0; i < Grid.fleet.Length; i++) {
-			BoatConfiguration config = Grid.fleet [i];
-			t += config.designation + "\n- " + config.size + " units\n\n";
-		}
-		GetComponent<Text> ().text = t;
+		text = GetComponent<Text> ();
 	}
-	
+
+	void Start ()
+	{
+		GetComponent<Text> ().text = boatPlacementController.grid == null ? "" : GetText (boatPlacementController.grid);
+	}
+
+	void OnEnable ()
+	{
+		boatPlacementController.grid.OnBoatHit += UpdateText;
+		UpdateText ();
+	}
+
+	void OnDisable ()
+	{
+		boatPlacementController.grid.OnBoatHit += UpdateText;
+	}
+
+	void UpdateText ()
+	{
+		text.text = GetText (boatPlacementController.grid);
+	}
+
+	string GetText (Grid grid)
+	{
+		Boat[] boats = grid.boats;
+		string t = "";
+		if (boats != null) {
+			for (int i = 0; i < boats.Length; i++) {
+				BoatConfiguration config = boats [i].config;
+				t += config.designation + "\n- " + config.size + " units\n\n";
+			}
+		}
+		return t;
+	}
 }
