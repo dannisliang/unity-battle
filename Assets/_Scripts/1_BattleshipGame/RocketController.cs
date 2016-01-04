@@ -21,9 +21,7 @@ public class RocketController : MonoBehaviour
 
 	void Update ()
 	{
-		if (Utils.DidFire ()) {
-			Time.timeScale = 10f;
-		}
+		Time.timeScale = Mathf.Min (10f, Time.timeScale + 1.5f * Time.deltaTime);
 		if (fizzleOutTimes != null) {
 			source.volume = (fizzleOutTimes [1] - Time.time) / (fizzleOutTimes [1] - fizzleOutTimes [0]);
 		}
@@ -43,6 +41,8 @@ public class RocketController : MonoBehaviour
 
 	void OnDestroy ()
 	{
+		// restore time scale
+		Time.timeScale = 1f;
 		callback ();
 	}
 
@@ -51,8 +51,6 @@ public class RocketController : MonoBehaviour
 		// prevent additional collisions
 		GetComponent<Collider> ().enabled = false;
 
-		// restore time scale
-		Time.timeScale = 1f;
 		this.other = other;
 
 		Position position = other.GetComponent<PositionMarkerController> ().position;
