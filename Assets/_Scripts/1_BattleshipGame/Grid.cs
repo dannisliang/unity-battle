@@ -7,7 +7,7 @@ public class Grid
 {
 	public delegate void StrikeOccurred ();
 
-	public event StrikeOccurred OnStrikeOccurred;
+	[field:System.NonSerialized] public event StrikeOccurred OnStrikeOccurred;
 
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
@@ -20,7 +20,7 @@ public class Grid
 	};
 
 	public Boat[] boats;
-	volatile int[,] misses;
+	[System.NonSerialized] int[,] misses;
 
 	public int getMisses ()
 	{
