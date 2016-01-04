@@ -5,9 +5,9 @@ using System.Collections;
 [System.Serializable]
 public class Grid
 {
-	public  delegate void BoatHit ();
+	public delegate void StrikeOccurred ();
 
-	public event BoatHit OnBoatHit;
+	public event StrikeOccurred OnStrikeOccurred;
 
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
@@ -22,6 +22,19 @@ public class Grid
 	public Boat[] boats;
 	volatile int[,] misses;
 
+	public int getMisses ()
+	{
+		int m = 0;
+		for (int i = 0; i < Utils.GRID_SIZE; i++) {
+			for (int j = 0; j < Utils.GRID_SIZE; j++) {
+				if (misses [i, j] > 0) {
+					m++;
+				}
+			}
+		}
+		return m;
+	}
+
 	public void SetBoats (Boat[] boats)
 	{
 		misses = new int[Utils.GRID_SIZE, Utils.GRID_SIZE];
@@ -30,8 +43,8 @@ public class Grid
 		} else {
 			this.boats = boats;
 		}
-		if (OnBoatHit != null) {
-			OnBoatHit ();
+		if (OnStrikeOccurred != null) {
+			OnStrikeOccurred ();
 		}
 	}
 
@@ -84,8 +97,8 @@ public class Grid
 			} else {
 				Assert.IsTrue (result == StrikeResult.HIT_AND_SUNK || result == StrikeResult.HIT_NOT_SUNK);
 				boat = boats [i];
-				if (!testOnly && OnBoatHit != null) {
-					OnBoatHit ();
+				if (!testOnly && OnStrikeOccurred != null) {
+					OnStrikeOccurred ();
 				}
 				return result;
 			}
@@ -98,6 +111,9 @@ public class Grid
 			misses [position.x, position.y]++;
 		}
 		boat = null;
+		if (!testOnly && OnStrikeOccurred != null) {
+			OnStrikeOccurred ();
+		}
 		return StrikeResult.MISS;
 	}
 

@@ -40,12 +40,18 @@ public class Boat
 
 	public bool IsSunk ()
 	{
+		return HitCount () == config.size;
+	}
+
+	public int HitCount ()
+	{
+		int count = 0;
 		for (int i = 0; i < config.size; i++) {
-			if (hits [i] == 0) {
-				return false;
+			if (hits [i] > 0) {
+				count++;
 			}
 		}
-		return true;
+		return count;
 	}
 
 	public int Size ()

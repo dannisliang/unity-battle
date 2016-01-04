@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent (typeof(Text))]
-public class FleetTextController : MonoBehaviour
+public class StatsTextController : MonoBehaviour
 {
 	public BoatPlacementController boatPlacementController;
 
@@ -40,13 +40,23 @@ public class FleetTextController : MonoBehaviour
 		Boat[] boats = grid.boats;
 		string t = "";
 		if (boats != null) {
+			int units = 0;
+			int sunk = 0;
+			int hits = 0;
+			int misses = grid.getMisses ();
 			for (int i = 0; i < boats.Length; i++) {
 				BoatConfiguration config = boats [i].config;
-				t += config.designation + "\n- " + config.size + " units";
+				units += config.size;
+				hits += boats [i].HitCount ();
 				if (boats [i].IsSunk ()) {
-					t += " <color='#f00'>(SUNK)</color>";
+					sunk++;
 				}
-				t += "\n\n";
+			}
+			t += "Segments hit\n" + hits + " / " + units + "\n\n";
+			t += "Boats sunk\n" + sunk + " / " + boats.Length + "\n\n";
+			t += "Accuracy\n" + hits + " hits / " + misses + " misses\n\n";
+			if (hits == units) {
+				t += "\n<color='red'>YOU SUNK THE FLEET!!!</color>\n\n";
 			}
 		}
 		return t;
