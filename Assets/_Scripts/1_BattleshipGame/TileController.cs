@@ -13,10 +13,8 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
 	public void OnPointerEnter (PointerEventData eventData)
 	{
-		if (!BattleshipController.instance.IsFiring ()) {
-			eventData.Use ();
-			Highlight (true);
-		}
+		eventData.Use ();
+		Highlight (true);
 	}
 
 	public void OnPointerExit (PointerEventData eventData)
@@ -27,10 +25,8 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
 	public void OnPointerDown (PointerEventData eventData)
 	{
-		if (!BattleshipController.instance.IsFiring ()) {
-			BattleshipController.instance.FireAt (eventData.pointerPressRaycast.gameObject.transform);
-			eventData.Use ();
-		}
+		BattleshipController.instance.FireAt (eventData.pointerPressRaycast.gameObject.transform);
+		eventData.Use ();
 	}
 
 	void Highlight (bool highlight)

@@ -5,30 +5,60 @@ using System.Collections;
 [RequireComponent (typeof(Image))]
 public class FireAtWillController : MonoBehaviour
 {
+	bool firing;
+	bool reticleAimingAtGrid;
+	bool vrMode;
 
-	public void SetVisible (bool active)
-	{
-		gameObject.SetActive (active);
-	}
+	Image image;
+	Text text;
 
 	void OnEnable ()
 	{
-		Prefs.OnVrModeChanged += UpdateText;
-		UpdateText (Prefs.VrMode);
+		image = GetComponent<Image> ();
+		text = GetComponentInChildren<Text> ();
+		BattleshipController.instance.OnFiringStatus += UpdateFiring;
+		BattleshipController.instance.OnReticleAimingAtGrid += UpdateAimAtGrid;
+		Prefs.OnVrModeChanged += UpdateVrMode;
+		UpdateText ();
 	}
 
 	void OnDisable ()
 	{
 		if (!GameController.instance.quitting) {
-			Prefs.OnVrModeChanged -= UpdateText;
+			BattleshipController.instance.OnFiringStatus -= UpdateFiring;
+			BattleshipController.instance.OnReticleAimingAtGrid -= UpdateAimAtGrid;
+			Prefs.OnVrModeChanged -= UpdateVrMode;
 		}
 	}
 
-	void UpdateText (bool vrMode)
+	void UpdateFiring (bool firing)
 	{
-		GetComponentInChildren<Text> ().text = vrMode ?
+		this.firing = firing;
+		UpdateText ();
+	}
+
+	void UpdateAimAtGrid (bool reticleAimingAtGrid)
+	{
+		this.reticleAimingAtGrid = reticleAimingAtGrid;
+		UpdateText ();
+	}
+
+	void UpdateVrMode (bool vrMode)
+	{
+		this.vrMode = vrMode;
+		UpdateText ();
+	}
+
+	void UpdateText ()
+	{
+		bool show = reticleAimingAtGrid && !firing;
+		image.enabled = show;
+		text.enabled = show;
+		if (show) {
+			text.text = vrMode ?
 			"Aim, then use\ntrigger to fire" :
 			"Aim, then tap\nscreen to fire";
+		}
 	}
 
 }

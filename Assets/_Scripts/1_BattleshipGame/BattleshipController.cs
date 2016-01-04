@@ -24,6 +24,15 @@ public class BattleshipController : MonoBehaviour
 	public AudioClip waterPlopClip;
 	public AudioClip shipExplosionClip;
 
+	public delegate void FiringStatus (bool firing);
+
+	public event FiringStatus OnFiringStatus;
+
+
+	public delegate void ReticleAimingAtGrid (bool firing);
+
+	public event ReticleAimingAtGrid OnReticleAimingAtGrid;
+
 	bool firing;
 	AudioSource source;
 	GameObject aimReticle;
@@ -52,8 +61,10 @@ public class BattleshipController : MonoBehaviour
 
 	public void AimAt (Whose whose, Position position)
 	{
+		if (OnReticleAimingAtGrid != null) {
+			OnReticleAimingAtGrid (position != null);
+		}
 		aimReticle.SetActive (position != null);
-		fireAtWillController.SetVisible (position != null);
 		if (position != null) {
 			PlaceMarker (whose, position, Marker.Aim);
 		}
@@ -61,6 +72,9 @@ public class BattleshipController : MonoBehaviour
 
 	public void FireAt (Transform targetTransform)
 	{
+		if (firing) {
+			return;
+		}
 		GameObject rocket = Instantiate (rocketPrefab);
 		BattleshipController.instance.SetIsFiring (true);
 		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform, delegate {
@@ -142,17 +156,12 @@ public class BattleshipController : MonoBehaviour
 		source.PlayOneShot (shipExplosionClip);
 	}
 
-	public bool IsFiring ()
-	{
-		return firing;
-	}
-
 	void SetIsFiring (bool firing)
 	{
 		this.firing = firing;
 		reticle.SetActive (!firing);
-		if (firing) {
-			fireAtWillController.enabled = false;
+		if (OnFiringStatus != null) {
+			OnFiringStatus (firing);
 		}
 	}
 

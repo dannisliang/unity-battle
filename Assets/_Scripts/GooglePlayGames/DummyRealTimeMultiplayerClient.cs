@@ -25,7 +25,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		GameController.instance.ExecuteDelayed (() => {
 			roomConnecting = true;
 			listener.OnRoomSetupProgress (20);
-		}, Utils.DUMMY_PLAY_GAMES_DELAY);
+		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 		GameController.instance.ExecuteDelayed (() => {
 			if (!roomConnecting || roomConnected) {
 				return;
@@ -35,7 +35,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
 			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
 			listener.OnRoomConnected (GameController.instance.roomSetupPercent > 0);
-		}, 2f * Utils.DUMMY_PLAY_GAMES_DELAY);
+		}, 2f * Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
 	public void CreateWithInvitationScreen (uint minOpponents, uint maxOppponents, uint variant, RealTimeMultiplayerListener listener)
@@ -69,7 +69,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		// simply mirror back messages with delay
 		GameController.instance.ExecuteDelayed (() => {
 			GameController.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
-		}, Utils.DUMMY_PLAY_GAMES_DELAY);
+		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data, int offset, int length)
@@ -114,7 +114,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			roomConnected = false;
 			participants = null;
 			GameController.instance.OnLeftRoom ();
-		}, Utils.DUMMY_PLAY_GAMES_DELAY);
+		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
 	public bool IsRoomConnected ()
