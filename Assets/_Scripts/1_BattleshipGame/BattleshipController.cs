@@ -62,7 +62,10 @@ public class BattleshipController : MonoBehaviour
 	public void FireAt (Transform targetTransform)
 	{
 		GameObject rocket = Instantiate (rocketPrefab);
-		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform);
+		BattleshipController.instance.SetIsFiring (true);
+		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform, delegate {
+			SetIsFiring (false);
+		});
 	}
 
 	public void Strike (Whose whose, Position position)
@@ -144,7 +147,7 @@ public class BattleshipController : MonoBehaviour
 		return firing;
 	}
 
-	public void SetIsFiring (bool firing)
+	void SetIsFiring (bool firing)
 	{
 		this.firing = firing;
 		reticle.SetActive (!firing);

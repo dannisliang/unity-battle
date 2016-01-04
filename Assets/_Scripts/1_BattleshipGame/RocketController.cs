@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 [RequireComponent (typeof(AudioSource))]
@@ -10,10 +11,10 @@ public class RocketController : MonoBehaviour
 	float velocity = 1.5f;
 	float[] fizzleOutTimes;
 	Collider other;
+	Action callback;
 
 	void Awake ()
 	{
-		BattleshipController.instance.SetIsFiring (true);
 		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
 		source = GetComponent<AudioSource> ();
 	}
@@ -28,8 +29,10 @@ public class RocketController : MonoBehaviour
 		}
 	}
 
-	public void Launch (Transform origin, Transform targetTransform)
+	public void Launch (Transform origin, Transform targetTransform, Action callback)
 	{
+		this.callback = callback;
+
 //		this.targetTransform = targetTransform;
 		transform.position = origin.position;
 		transform.rotation = origin.rotation;
@@ -40,7 +43,7 @@ public class RocketController : MonoBehaviour
 
 	void OnDestroy ()
 	{
-		BattleshipController.instance.SetIsFiring (false);
+		callback ();
 	}
 
 	void OnTriggerEnter (Collider other)
