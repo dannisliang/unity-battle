@@ -44,7 +44,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	{
 		BattleshipController.instance.AimAt (Whose.Theirs, highlight ? positionMarkerController.position : null);
 #if UNITY_EDITOR
-		if (highlight) {
+		if (Utils.DEBUG_FAST_SHOT && highlight) {
 			BattleshipController.instance.Strike (Whose.Theirs, positionMarkerController.position);
 		}
 #endif
