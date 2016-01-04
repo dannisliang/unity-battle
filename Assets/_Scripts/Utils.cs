@@ -10,7 +10,6 @@ public class Utils : MonoBehaviour
 {
 	public static float DUMMY_PLAY_GAMES_DELAY = .1f;
 
-	//	public static int ignoreCurrentFire1FrameCount;
 	public static int GRID_SIZE = 10;
 	public static float BOAT_HEIGHT = .01f;
 	public static float CLEARANCE_HEIGHT = .001f;
@@ -45,14 +44,9 @@ public class Utils : MonoBehaviour
 		}
 	}
 
-	//	public static void IgnoreCurrentFire1 ()
-	//	{
-	//		ignoreCurrentFire1FrameCount = Time.frameCount;
-	//	}
-
 	public static bool DidFire ()
 	{
-		return Input.GetButtonDown ("Fire1"); // && ignoreCurrentFire1FrameCount != Time.frameCount;
+		return Input.GetButtonDown ("Fire1");
 	}
 
 }
