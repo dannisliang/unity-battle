@@ -9,7 +9,7 @@ using UnityEditor;
 public class Utils : MonoBehaviour
 {
 	public static float DUMMY_PLAY_GAMES_ASYNC_DELAY = .1f;
-	public static float DUMMY_PLAY_GAMES_REPLAY_DELAY = 3f;
+	public static float DUMMY_PLAY_GAMES_REPLAY_DELAY = .3f;
 
 	public static int GRID_SIZE = 10;
 	public static float BOAT_HEIGHT = .01f;
