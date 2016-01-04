@@ -10,16 +10,9 @@ public class CardboardAssistantController : MonoBehaviour
 	// in OnDisable(), which may be cardboard instance is destroy
 	bool instanceCreated;
 
-	void Awake ()
-	{
-		Debug.Log ("***CardboardAssistantController.Awake()");
-	}
-
 	void Start ()
 	{
-		Debug.Log ("***CardboardAssistantController.Start()");
 		instanceCreated = true;
-//		Cardboard.SDK.TapIsTrigger = false; // causes OnBackButton to be called twice
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
 		Cardboard.SDK.OnBackButton += OnBackButton;
 		//		Cardboard.SDK.ElectronicDisplayStabilization = false;
@@ -30,13 +23,11 @@ public class CardboardAssistantController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		Debug.Log ("***CardboardAssistantController.OnEnable()");
 		Prefs.OnVrModeChanged += VrModeChanged;
 	}
 
 	void OnApplicationQuit ()
 	{
-		Debug.Log ("***CardboardAssistantController.OnApplicationQuit()");
 		if (instanceCreated) {
 			Cardboard.SDK.OnBackButton -= OnBackButton;
 		}
@@ -44,14 +35,8 @@ public class CardboardAssistantController : MonoBehaviour
 		instanceCreated = false;
 	}
 
-	void OnDestroy ()
-	{
-		Debug.Log ("***CardboardAssistantController.OnDestroy()");
-	}
-
 	void OnDisable ()
 	{
-		Debug.Log ("***CardboardAssistantController.OnDisable()");
 		Prefs.OnVrModeChanged -= VrModeChanged;
 	}
 
@@ -62,7 +47,6 @@ public class CardboardAssistantController : MonoBehaviour
 			return;
 		}
 		Cardboard.SDK.VRModeEnabled = vrMode;
-		Debug.Log ("***Cardboard.SDK.VRModeEnabled -> " + Cardboard.SDK.VRModeEnabled);
 		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
 	}
 
