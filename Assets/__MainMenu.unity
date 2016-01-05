@@ -750,8 +750,8 @@ GameObject:
   - 222: {fileID: 359804427}
   - 114: {fileID: 359804426}
   - 114: {fileID: 359804425}
-  - 114: {fileID: 359804424}
   - 114: {fileID: 359804428}
+  - 114: {fileID: 359804424}
   m_Layer: 5
   m_Name: Start Game Button
   m_TagString: Untagged
@@ -1326,7 +1326,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1893346231}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -1709,8 +1709,8 @@ GameObject:
   - 222: {fileID: 1720113054}
   - 114: {fileID: 1720113053}
   - 114: {fileID: 1720113052}
-  - 114: {fileID: 1720113051}
   - 114: {fileID: 1720113055}
+  - 114: {fileID: 1720113051}
   m_Layer: 5
   m_Name: Leave Game Button
   m_TagString: Untagged
@@ -1730,7 +1730,7 @@ RectTransform:
   m_Children:
   - {fileID: 104346990}
   m_Father: {fileID: 1893346231}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -2257,8 +2257,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 359804423}
-  - {fileID: 1173563129}
   - {fileID: 1720113050}
+  - {fileID: 1173563129}
   m_Father: {fileID: 1925407168}
   m_RootOrder: 3
   m_AnchorMin: {x: 0, y: 0.2}
