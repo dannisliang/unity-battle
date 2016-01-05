@@ -1601,6 +1601,7 @@ MonoBehaviour:
   boatsTheirsPlacementController: {fileID: 1403814449}
   waterPlopClip: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
   shipExplosionClip: {fileID: 8300000, guid: 0d0c9adbbf0c94ed883eb926017aeabf, type: 3}
+  noFireClip: {fileID: 8300000, guid: 1b2d4b654314246d58c8afd9f8d16a68, type: 3}
 --- !u!4 &889480879
 Transform:
   m_ObjectHideFlags: 0

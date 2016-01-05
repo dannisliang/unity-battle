@@ -22,6 +22,7 @@ public class BattleshipController : MonoBehaviour
 	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip waterPlopClip;
 	public AudioClip shipExplosionClip;
+	public AudioClip noFireClip;
 
 	public delegate void GameState (bool playing, bool firing);
 
@@ -84,19 +85,28 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
-	public void FireAt (Transform targetTransform)
+	public void FalseFire ()
 	{
-		if (firing || !playing) {
+		if (!playing || firing) {
 			return;
+		}
+		source.PlayOneShot (noFireClip);
+	}
+
+	public bool FireAt (Transform targetTransform)
+	{
+		if (!playing || firing) {
+			return false;
 		}
 		GameObject rocket = Instantiate (rocketPrefab);
 		BattleshipController.instance.SetIsFiring (true);
 		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform, delegate {
 			SetIsFiring (false);
 		});
+		return true;
 	}
 
-	public void Strike (Whose whose, Position position)
+	public StrikeResult Strike (Whose whose, Position position)
 	{
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		Boat boat;
@@ -104,33 +114,34 @@ public class BattleshipController : MonoBehaviour
 		Debug.Log ("***Strike(" + position + ") -> " + result);
 		switch (result) {
 		case StrikeResult.IGNORED_ALREADY_MISSED:
-			BattleshipController.instance.PlayWaterPlop ();
+			source.PlayOneShot (waterPlopClip);
 			break;
 		case StrikeResult.IGNORED_ALREADY_HIT:
 			GameController.instance.ExecuteDelayed (delegate {
-				PlayShipExplosion ();
+				source.PlayOneShot (shipExplosionClip);
 			}, 1f);
 			break;
 		case StrikeResult.MISS:
 			PlaceMarker (whose, position, Marker.Miss);
-			BattleshipController.instance.PlayWaterPlop ();
+			source.PlayOneShot (waterPlopClip);
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
 			GameController.instance.ExecuteDelayed (delegate {
-				PlayShipExplosion ();
+				source.PlayOneShot (shipExplosionClip);
 			}, 1f);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
 			PlaceSunkBoat (whose, boat);
 			GameController.instance.ExecuteDelayed (delegate {
-				PlayShipExplosion ();
+				source.PlayOneShot (shipExplosionClip);
 			}, 1f);
 			break;
 		default:
 			throw new System.NotImplementedException ();
 		}
+		return result;
 	}
 
 	void PlaceSunkBoat (Whose whose, Boat boat)
@@ -158,16 +169,6 @@ public class BattleshipController : MonoBehaviour
 		}
 		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
 		go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, zPos);
-	}
-
-	public void PlayWaterPlop ()
-	{
-		source.PlayOneShot (waterPlopClip);
-	}
-
-	public void PlayShipExplosion ()
-	{
-		source.PlayOneShot (shipExplosionClip);
 	}
 
 	void SetIsFiring (bool firing)
