@@ -31,9 +31,6 @@ public class CurrentUserTextController : MonoBehaviour
 
 	string GetStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		if (!authenticated) {
-			return "(Not signed in)";
-		}
-		return "Signed in as " + GameController.instance.GetLocalUser ().userName;
+		return authenticated ? "Signed in " + GameController.instance.GetLocalUser ().userName.ToString () : "";
 	}
 }
