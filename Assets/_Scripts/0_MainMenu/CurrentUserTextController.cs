@@ -34,6 +34,6 @@ public class CurrentUserTextController : MonoBehaviour
 		if (!authenticated) {
 			return "(Not signed in)";
 		}
-		return "Signed in as\n" + GameController.gamesPlatform.localUser.userName + "\n(" + GameController.gamesPlatform.localUser.state + ")";
+		return "Signed in as " + GameController.gamesPlatform.localUser.userName;
 	}
 }

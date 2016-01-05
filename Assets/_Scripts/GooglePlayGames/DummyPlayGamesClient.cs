@@ -50,7 +50,7 @@ public class DummyPlayGamesClient : IPlayGamesClient
 
 	public string GetUserDisplayName ()
 	{
-		return "Ford Prefect";
+		return "Tricia McMillan";
 	}
 
 	public string GetAccessToken ()
