@@ -36,7 +36,7 @@ public class LeaveRoomButtonController : MonoBehaviour
 	public void LeaveRoom ()
 	{
 		Debug.Log ("***Leaving room …");
-		GameController.gamesPlatform.RealTime.LeaveRoom ();
+		GameController.instance.LeaveRoom ();
 	}
 
 }

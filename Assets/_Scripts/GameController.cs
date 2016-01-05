@@ -198,10 +198,16 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		Debug.Log ("***Workaround: Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling LeaveRoom() / OnLeftRoom() manually …");
 		if (gamesPlatform.RealTime != null) {
 			Debug.Log ("***Workaround: Calling LeaveRoom() …");
-			gamesPlatform.RealTime.LeaveRoom ();
+			LeaveRoom ();
 		}
 		Debug.Log ("***Workaround: Calling OnLeftRoom() …");
 		OnLeftRoom ();
+	}
+
+	public void LeaveRoom ()
+	{
+		Debug.Log ("***LeaveRoom() …");
+		gamesPlatform.RealTime.LeaveRoom ();
 	}
 
 	public void SendOurBoatPositions ()
@@ -223,7 +229,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnParticipantLeft (Participant participant)
 	{
 		Debug.Log ("***OnParticipantLeft(" + participant + ")");
-		gamesPlatform.RealTime.LeaveRoom ();
+		LeaveRoom ();
 	}
 
 	// RealTimeMultiplayerListener
@@ -236,7 +242,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnPeersDisconnected (string[] participantIds)
 	{
 		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
-		gamesPlatform.RealTime.LeaveRoom ();
+		LeaveRoom ();
 	}
 
 	// RealTimeMultiplayerListener
