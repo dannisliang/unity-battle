@@ -3047,6 +3047,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f6eeb1ac22da402ab1b93c18cbdd064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncingBackgroundColor: {r: 0.294219, g: 0.294219, b: 0.641, a: 1}
+  defaultBackgroundColor: {r: 0, g: 0, b: 0, a: 0.3882353}
 --- !u!114 &1582691965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3074,8 +3076,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 3
     m_Right: 3
-    m_Top: 0
-    m_Bottom: 2
+    m_Top: 2
+    m_Bottom: 3
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1

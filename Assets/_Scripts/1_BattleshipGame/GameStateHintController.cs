@@ -13,6 +13,9 @@ public class GameStateHintController : MonoBehaviour
 	Image image;
 	Text text;
 
+	public Color syncingBackgroundColor = Color.blue;
+	public Color defaultBackgroundColor = Color.white;
+
 	void OnEnable ()
 	{
 		image = GetComponent<Image> ();
@@ -53,26 +56,31 @@ public class GameStateHintController : MonoBehaviour
 
 	void UpdateText ()
 	{
-		string t = GetText ();
+		Color color;
+		string t = GetText (out color);
 		bool show = t != null;
 		image.enabled = show;
 		text.enabled = show;
 		if (show) {
 			text.text = t;
+			image.color = color;
 		}
 	}
 
-	string GetText ()
+	string GetText (out Color color)
 	{
 		if (!playing) {
+			color = syncingBackgroundColor;
 			return "Synchronizing.\nPlease wait…";
 		}
 		if (firing | !reticleAimingAtGrid) {
+			color = defaultBackgroundColor;
 			return null;
 		}
-		return "Missle is armed.\n" + (vrMode ?
-			"Aim, then use\ntrigger to fire." :
-			"Aim, then tap\nscreen to fire.");
+		color = defaultBackgroundColor;
+		return "Missle is armed and ready.\n" + (vrMode ?
+			"Aim, then use trigger to fire." :
+			"Aim, then tap screen to fire.");
 	}
 
 }
