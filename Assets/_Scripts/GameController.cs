@@ -281,6 +281,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public void SetupRoom (bool withInvitation)
 	{
+		Debug.Log ("***SetupRoom(withInvitation=" + withInvitation + ")");
 		Assert.IsTrue (roomSetupPercent == 0);
 		if (withInvitation) {
 			gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);

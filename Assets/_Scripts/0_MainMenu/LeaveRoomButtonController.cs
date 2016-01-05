@@ -6,37 +6,29 @@ using GooglePlayGames;
 public class LeaveRoomButtonController : MonoBehaviour
 {
 
-	Button button;
-
 	void Awake ()
 	{
-		button = GetComponent<Button> ();
-		button.onClick.AddListener (delegate {
-			Debug.Log ("***Clicked " + button.name);
-			LeaveRoom ();
+		GetComponent<Button> ().onClick.AddListener (delegate {
+			GameController.instance.LeaveRoom ();
 		});
 	}
 
-	void OnEnable ()
+	void Start ()
 	{
-		GameController.OnConnectStatusChanged += UpdateInteractable;
-		GameController.instance.InvokeConnectStatusAction (UpdateInteractable);
+		GameController.OnConnectStatusChanged += UpdateActive;
+		GameController.instance.InvokeConnectStatusAction (UpdateActive);
 	}
 
-	void OnDisable ()
+	void OnDestroy ()
 	{
-		GameController.OnConnectStatusChanged -= UpdateInteractable;
+		if (!GameController.instance.quitting) {
+			GameController.OnConnectStatusChanged -= UpdateActive;
+		}
 	}
 
-	void UpdateInteractable (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	void UpdateActive (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		button.interactable = authenticated && roomSetupPercent > 0;
-	}
-
-	public void LeaveRoom ()
-	{
-		Debug.Log ("***Leaving room …");
-		GameController.instance.LeaveRoom ();
+		gameObject.SetActive (authenticated && roomSetupPercent > 0);
 	}
 
 }

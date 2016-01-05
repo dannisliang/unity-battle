@@ -6,43 +6,29 @@ using GooglePlayGames;
 public class QuickGameButtonController : MonoBehaviour
 {
 
-	Button button;
-
 	void Awake ()
 	{
-		button = GetComponent<Button> ();
-		button.onClick.AddListener (delegate {
-			Debug.Log ("***Clicked " + button.name);
-			CreateQuickGameRoom ();
+		GetComponent<Button> ().onClick.AddListener (delegate {
+			GameController.instance.SetupRoom (false);
 		});
 	}
 
-	void OnEnable ()
+	void Start ()
 	{
-		GameController.OnConnectStatusChanged += UpdateInteractable;
-		GameController.instance.InvokeConnectStatusAction (UpdateInteractable);
+		GameController.OnConnectStatusChanged += UpdateActive;
+		GameController.instance.InvokeConnectStatusAction (UpdateActive);
 	}
 
-	void OnDisable ()
+	void OnDestroy ()
 	{
-		GameController.OnConnectStatusChanged -= UpdateInteractable;
+		if (!GameController.instance.quitting) {
+			GameController.OnConnectStatusChanged -= UpdateActive;
+		}
 	}
 
-	void UpdateInteractable (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	void UpdateActive (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		button.interactable = authenticated && roomSetupPercent == 0;
-	}
-
-	public void CreateQuickGameRoom ()
-	{
-		Debug.Log ("***Creating quick game room …");
-		GameController.instance.SetupRoom (false);
-	}
-
-	public void CreateWithInvitationScreenRoom ()
-	{
-		Debug.Log ("***Creating with invitation room …");
-		GameController.instance.SetupRoom (true);
+		gameObject.SetActive (authenticated && roomSetupPercent == 0);
 	}
 
 }
