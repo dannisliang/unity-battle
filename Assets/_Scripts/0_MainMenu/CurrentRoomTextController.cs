@@ -38,7 +38,7 @@ public class CurrentRoomTextController : MonoBehaviour
 		}
 		if (isRoomConnected) {
 			int count = GameController.instance.GetConnectedParticipants ().Count;
-			return "Launching " + (count == 2 ? "two" : "" + count) + " player game …";
+			return "Starting " + count + " player game …";
 		} 
 		switch (roomSetupPercent) {
 		case 0:
@@ -46,7 +46,7 @@ public class CurrentRoomTextController : MonoBehaviour
 		case 1:
 			return "Setting up game …";
 		case 20:
-			return "Locating a suitable opponent …";
+			return "Finding a suitable opponent …";
 		default:
 			return "Game is " + roomSetupPercent + "% ready …";
 		}
