@@ -94,25 +94,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		quitting = true;
 	}
 
-	void OnApplicationPause (bool pause)
-	{
-		if (Time.frameCount <= 1) {
-			return;
-		}
-		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		Debug.Log ("---------------------------------------\n***OnApplicationPause(" + pause + "), i.e. " + (pause ? "PAUSED" : "RESUMING") + " [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
-		if (!pause && roomSetupPercent > 0 && !IsRoomConnected) {
-//			WorkaroundPlayGamePauseBug();
-		}
-	}
-
-	void WorkaroundPlayGamePauseBug ()
-	{
-		Debug.Log ("***Workaround Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling it manually …");
-		OnLeftRoom ();
-	}
-
 	//	void InitNearby ()
 	//	{
 	//		Debug.Log ("***Initializing nearby connections …");
@@ -188,6 +169,19 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		}
 	}
 
+	void OnApplicationPause (bool pause)
+	{
+		if (Time.frameCount <= 1) {
+			return;
+		}
+		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
+		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
+		Debug.Log ("---------------------------------------\n***Application " + (pause ? "PAUSED" : "RESUMING") + " OnApplicationPause(" + pause + ") [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
+		//		if (!pause && roomSetupPercent > 0 && !IsRoomConnected) {
+		//			WorkaroundPlayGamePauseBug();
+		//		}
+	}
+
 	void Checkup ()
 	{
 		bool IsAuthenticated = GameController.gamesPlatform.IsAuthenticated ();
@@ -196,6 +190,17 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + GameController.instance.roomSetupPercent + "]");
 			WorkaroundPlayGamePauseBug ();
 		}
+	}
+
+	void WorkaroundPlayGamePauseBug ()
+	{
+		Debug.Log ("***Workaround: Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling LeaveRoom() / OnLeftRoom() manually …");
+		if (gamesPlatform.RealTime != null) {
+			Debug.Log ("***Workaround: Calling LeaveRoom() …");
+			gamesPlatform.RealTime.LeaveRoom ();
+		}
+		Debug.Log ("***Workaround: Calling OnLeftRoom() …");
+		OnLeftRoom ();
 	}
 
 	public void SendOurBoatPositions ()
@@ -211,7 +216,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		roomConnected = false;
 		Debug.Log ("***Loading " + Utils.SCENE_MAIN_MENU + " …");
 		SceneManager.LoadScene (Utils.SCENE_MAIN_MENU);
-//		boatPlacementController.DestroyBoats ();
 	}
 
 	// RealTimeMultiplayerListener
