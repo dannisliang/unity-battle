@@ -15,7 +15,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 {
 	public static GameController instance { get; private set; }
 
-	//	public static IPlayGamesPlatform gamesPlatform { get; private set; }
 	IPlayGamesPlatform gamesPlatform;
 
 	public static event ConnectStatusAction OnConnectStatusChanged;
