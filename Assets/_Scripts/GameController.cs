@@ -158,19 +158,6 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 //		}
 	}
 
-	// RealTimeMultiplayerListener
-	public void OnRoomConnected (bool success)
-	{
-		Debug.Log ("***OnRoomConnected(" + success + ")");
-		roomSetupPercent = success ? 100 : 0;
-		roomConnected = success;
-		if (success) {
-			Debug.Log ("***Loading " + Utils.SCENE_BATTLESHIP_GAME + " …");
-			SceneManager.LoadScene (Utils.SCENE_BATTLESHIP_GAME);
-			InvokeRepeating ("Checkup", 1f, 1f);
-		}
-	}
-
 	void OnApplicationPause (bool pause)
 	{
 		if (Time.frameCount <= 1) {
@@ -184,10 +171,23 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		//		}
 	}
 
+	// RealTimeMultiplayerListener
+	public void OnRoomConnected (bool success)
+	{
+		Debug.Log ("***OnRoomConnected(" + success + ")");
+		roomSetupPercent = success ? 100 : 0;
+		roomConnected = success;
+		if (success) {
+			Debug.Log ("***Loading " + Utils.SCENE_BATTLESHIP_GAME + " …");
+			SceneManager.LoadScene (Utils.SCENE_BATTLESHIP_GAME);
+			InvokeRepeating ("Checkup", 1f, 1f);
+		}
+	}
+
 	void Checkup ()
 	{
-		bool IsAuthenticated = authenticated;
-		bool IsRoomConnected = roomConnected;
+		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
+		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
 		if (!IsRoomConnected && roomSetupPercent == 100) {
 			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
 			WorkaroundPlayGamePauseBug ();
