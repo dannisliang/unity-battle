@@ -61,6 +61,6 @@ public class StatsTextController : MonoBehaviour
 
 	string AsPercentage (float a, float b)
 	{
-		return (a / b).ToString ("P1").Replace (".0", "").Replace (" ", "");
+		return b == 0 ? "" : (a / b).ToString ("P1").Replace (".0", "").Replace (" ", "");
 	}
 }
