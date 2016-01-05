@@ -8,13 +8,15 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.Multiplayer;
 using System;
+using System.Collections.Generic;
 
 [RequireComponent (typeof(AudioSource))]
 public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 {
 	public static GameController instance { get; private set; }
 
-	public static IPlayGamesPlatform gamesPlatform { get; private set; }
+	//	public static IPlayGamesPlatform gamesPlatform { get; private set; }
+	IPlayGamesPlatform gamesPlatform;
 
 	public static event ConnectStatusAction OnConnectStatusChanged;
 
@@ -141,7 +143,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void SignOut ()
 	{
 		Debug.Log ("***SignOut() …");
-		GameController.gamesPlatform.SignOut ();
+		gamesPlatform.SignOut ();
 		InvokeConnectStatusAction ();
 	}
 
@@ -185,10 +187,10 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	void Checkup ()
 	{
-		bool IsAuthenticated = GameController.gamesPlatform.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && GameController.gamesPlatform.RealTime.IsRoomConnected ();
-		if (!IsRoomConnected && GameController.instance.roomSetupPercent == 100) {
-			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + GameController.instance.roomSetupPercent + "]");
+		bool IsAuthenticated = authenticated;
+		bool IsRoomConnected = roomConnected;
+		if (!IsRoomConnected && roomSetupPercent == 100) {
+			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
 			WorkaroundPlayGamePauseBug ();
 		}
 	}
@@ -204,10 +206,25 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		OnLeftRoom ();
 	}
 
+	public ILocalUser GetLocalUser ()
+	{
+		return gamesPlatform.localUser;
+	}
+
+	public List<Participant> GetConnectedParticipants ()
+	{
+		return gamesPlatform.RealTime.GetConnectedParticipants ();
+	}
+
 	public void LeaveRoom ()
 	{
 		Debug.Log ("***LeaveRoom() …");
 		gamesPlatform.RealTime.LeaveRoom ();
+	}
+
+	public void SendMessageToAll (bool reliable, byte[] data)
+	{
+		gamesPlatform.RealTime.SendMessageToAll (reliable, data);
 	}
 
 	public void SendOurBoatPositions ()
@@ -267,9 +284,9 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	{
 		Assert.IsTrue (roomSetupPercent == 0);
 		if (withInvitation) {
-			GameController.gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
+			gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
 		} else {
-			GameController.gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
+			gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
 		}
 		roomSetupPercent = 1;
 	}

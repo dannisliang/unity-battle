@@ -52,7 +52,8 @@ public class BattleshipController : MonoBehaviour
 
 	void Start ()
 	{
-		if (GameController.gamesPlatform.IsAuthenticated () && GameController.gamesPlatform.RealTime.IsRoomConnected ()) {
+		Assert.IsTrue (GameController.instance.authenticated && GameController.instance.roomConnected);
+		if (GameController.instance.authenticated && GameController.instance.roomConnected) {
 			boatsOursPlacementController.RecreateBoats ();
 			GameController.instance.SendOurBoatPositions ();
 		}

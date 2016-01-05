@@ -22,16 +22,14 @@ public class RealtimeBattleship : MonoBehaviour
 
 	static void EncodeAndSend (byte messageType, System.Object obj)
 	{
-		bool IsAuthenticated = GameController.gamesPlatform.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && GameController.gamesPlatform.RealTime.IsRoomConnected ();
-		Debug.Log ("***EncodeAndSend() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + GameController.instance.roomSetupPercent + "]");
+		Debug.Log ("***EncodeAndSend() [authenticated==" + GameController.instance.authenticated + ", roomConnected==" + GameController.instance.roomConnected + ", roomSetupPercent=" + GameController.instance.roomSetupPercent + "]");
 
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {
 			stream.WriteByte (messageType);
 			formatter.Serialize (stream, obj);
 			byte[] bytes = stream.ToArray ();
-			GameController.gamesPlatform.RealTime.SendMessageToAll (true, bytes);
+			GameController.instance.SendMessageToAll (reliable: true, data: bytes);
 		}
 	}
 

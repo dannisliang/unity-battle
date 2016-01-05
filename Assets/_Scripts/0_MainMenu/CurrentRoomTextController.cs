@@ -35,7 +35,7 @@ public class CurrentRoomTextController : MonoBehaviour
 			return "Sign in required";
 		}
 		if (isRoomConnected) {
-			int count = GameController.gamesPlatform.RealTime.GetConnectedParticipants ().Count;
+			int count = GameController.instance.GetConnectedParticipants ().Count;
 			return "Launching " + (count == 2 ? "two" : "" + count) + " player game …";
 		} 
 		switch (roomSetupPercent) {
