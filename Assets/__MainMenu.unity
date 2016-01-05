@@ -753,7 +753,7 @@ GameObject:
   - 114: {fileID: 359804424}
   - 114: {fileID: 359804428}
   m_Layer: 5
-  m_Name: Quick Game Button
+  m_Name: Start Game Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1235,7 +1235,7 @@ GameObject:
   - 222: {fileID: 1159205670}
   - 114: {fileID: 1159205669}
   m_Layer: 5
-  m_Name: Quick Game Text
+  m_Name: Start Game Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
