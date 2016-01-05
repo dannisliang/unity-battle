@@ -5,11 +5,7 @@ using System.Collections.Generic;
 
 public class UiTextLogController : MonoBehaviour
 {
-	#if UNITY_EDITOR
-	static int MAX_ENTRIES = 3;
-	#else
-	static int MAX_ENTRIES = 10;
-	#endif
+	static int MAX_ENTRIES = 5;
 
 	LinkedList<string> buf = new LinkedList<string> ();
 	Text text;
