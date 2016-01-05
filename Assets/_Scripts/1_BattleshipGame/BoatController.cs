@@ -6,6 +6,25 @@ public class BoatController : MonoBehaviour
 	[HideInInspector]
 	public Boat boat{ get; private set; }
 
+	public Whose whose;
+
+	public Material highlightMaterial;
+
+	MeshRenderer meshRenderer;
+	Material initialMaterial;
+
+	void Awake ()
+	{
+		meshRenderer = gameObject.GetComponentInChildren<MeshRenderer> ();
+		initialMaterial = meshRenderer.material;
+	}
+
+	public void Identify (bool highlight, Position position)
+	{
+		meshRenderer.material = highlight ? highlightMaterial : initialMaterial;
+		BattleshipController.instance.Identify (highlight ? boat : null, highlight ? position : null);
+	}
+
 	public void Configure (Boat boat, bool aboveMarkers)
 	{
 		this.boat = boat;
@@ -28,10 +47,13 @@ public class BoatController : MonoBehaviour
 			PositionMarkerController positionMakerController = child.AddComponent<PositionMarkerController> ();
 			positionMakerController.position = boat.GetPosition (i);
 
-//			BoxCollider collider = child.AddComponent<BoxCollider> ();
-//			collider.isTrigger = true;
-//			collider.transform.localPosition = new Vector3 (boat.horizontal ? i + .5f : .5f, boat.horizontal ? .5f : -i + .5f, -.5f * boatHeight);
-//			collider.transform.localScale = new Vector3 (1f, 1f, boatHeight);
+			// add after PositionMarkerController
+			child.AddComponent<BoatIdentificationController> ();
+
+			BoxCollider collider = child.AddComponent<BoxCollider> ();
+			collider.isTrigger = true;
+			collider.transform.localPosition = new Vector3 (boat.horizontal ? i + .5f : .5f, boat.horizontal ? .5f : -i + .5f, -Utils.BOAT_HEIGHT);
+			collider.transform.localScale = new Vector3 (1f, 1f, 0f);
 		}
 	}
 	

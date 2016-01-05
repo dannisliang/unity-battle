@@ -75,7 +75,7 @@ public class Boat
 
 	public override string ToString ()
 	{
-		return (horizontal ? "Horizontal" : "Vertical") + "Boat(" + positions [0] + ")";
+		return config.ToString ();// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
 	}
 
 }

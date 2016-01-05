@@ -1008,6 +1008,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
+  highlightMaterial: {fileID: 0}
 --- !u!1 &539646807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,6 +1052,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
+  highlightMaterial: {fileID: 0}
 --- !u!1 &570944920
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,6 +1736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
+  highlightMaterial: {fileID: 0}
 --- !u!1 &924942096
 GameObject:
   m_ObjectHideFlags: 0
@@ -2622,6 +2628,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
+  highlightMaterial: {fileID: 0}
 --- !u!1 &1429291710
 GameObject:
   m_ObjectHideFlags: 0
@@ -2976,9 +2984,9 @@ GameObject:
   - 224: {fileID: 1582691961}
   - 222: {fileID: 1582691963}
   - 114: {fileID: 1582691962}
-  - 114: {fileID: 1582691964}
   - 114: {fileID: 1582691966}
   - 114: {fileID: 1582691965}
+  - 114: {fileID: 1582691964}
   m_Layer: 5
   m_Name: Game State Hint Panel
   m_TagString: Untagged
@@ -3048,8 +3056,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f6eeb1ac22da402ab1b93c18cbdd064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncingBackgroundColor: {r: 0.294219, g: 0.294219, b: 0.641, a: 1}
   defaultBackgroundColor: {r: 0, g: 0, b: 0, a: 0.3882353}
+  syncingBackgroundColor: {r: 0.294219, g: 0.294219, b: 0.641, a: 1}
+  identifyBackgroundColor: {r: 0.27058825, g: 0.65882355, b: 0.30588236, a: 0.7921569}
 --- !u!114 &1582691965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3323,7 +3332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EventMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 3584
 --- !u!1 &1601558862
 GameObject:
   m_ObjectHideFlags: 0
@@ -3517,6 +3526,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
+  highlightMaterial: {fileID: 0}
 --- !u!1 &1625390655
 GameObject:
   m_ObjectHideFlags: 0
@@ -3562,6 +3573,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
+  highlightMaterial: {fileID: 0}
 --- !u!1 &1676392720
 GameObject:
   m_ObjectHideFlags: 0

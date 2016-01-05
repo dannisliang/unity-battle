@@ -9,5 +9,10 @@ public struct BoatConfiguration
 		this.size = size;
 		this.designation = designation;
 	}
+
+	public override string ToString ()
+	{
+		return designation + " (" + size + " " + (size == 1 ? "unit" : "units") + ")";
+	}
 }
 

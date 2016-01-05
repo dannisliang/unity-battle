@@ -9,7 +9,6 @@ public class BattleshipController : MonoBehaviour
 	public static BattleshipController instance { get; private set; }
 
 	public static LayerInfo layerTileTheirs;
-	public static LayerInfo layerBoatTheirs;
 
 	public GameObject rocketPrefab;
 	public GameObject markerAimReticlePrefab;
@@ -28,9 +27,12 @@ public class BattleshipController : MonoBehaviour
 
 	public event GameState OnGameState;
 
-	public delegate void ReticleAimingAtGrid (bool firing);
+	public delegate void ReticleIdentify (Boat boat);
 
-	public event ReticleAimingAtGrid OnReticleAimingAtGrid;
+	public delegate void ReticleAim (Whose whose, Position position);
+
+	public event ReticleIdentify OnReticleIdentify;
+	public event ReticleAim OnReticleAim;
 
 	bool playing;
 	bool firing;
@@ -45,7 +47,6 @@ public class BattleshipController : MonoBehaviour
 		}
 		instance = this;
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
-		layerBoatTheirs = new LayerInfo ("Boat Theirs");
 		source = GetComponent<AudioSource> ();
 		aimReticle = Instantiate (markerAimReticlePrefab);
 		AimAt (Whose.Theirs, null); // reticle starts disabled
@@ -74,10 +75,18 @@ public class BattleshipController : MonoBehaviour
 		}
 	}
 
+	public void Identify (Boat boat, Position position)
+	{
+		if (OnReticleIdentify != null) {
+			OnReticleIdentify.Invoke (boat);
+		}
+
+	}
+
 	public void AimAt (Whose whose, Position position)
 	{
-		if (OnReticleAimingAtGrid != null) {
-			OnReticleAimingAtGrid (position != null);
+		if (OnReticleAim != null) {
+			OnReticleAim (whose, position);
 		}
 		aimReticle.SetActive (position != null);
 		if (position != null) {

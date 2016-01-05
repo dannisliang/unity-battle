@@ -5,6 +5,10 @@ using System.Collections;
 [RequireComponent (typeof(Image))]
 public class GameStateHintController : MonoBehaviour
 {
+	public Color defaultBackgroundColor = Color.white;
+	public Color syncingBackgroundColor = Color.blue;
+	public Color identifyBackgroundColor = Color.white;
+	
 	bool playing;
 	bool firing;
 	bool reticleAimingAtGrid;
@@ -12,16 +16,15 @@ public class GameStateHintController : MonoBehaviour
 
 	Image image;
 	Text text;
-
-	public Color syncingBackgroundColor = Color.blue;
-	public Color defaultBackgroundColor = Color.white;
+	Boat reticleBoatTarget;
 
 	void OnEnable ()
 	{
 		image = GetComponent<Image> ();
 		text = GetComponentInChildren<Text> ();
 		BattleshipController.instance.OnGameState += UpdateGameState;
-		BattleshipController.instance.OnReticleAimingAtGrid += UpdateAimAtGrid;
+		BattleshipController.instance.OnReticleAim += UpdateAimAtGrid;
+		BattleshipController.instance.OnReticleIdentify += UpdateAimAtBoat;
 		Prefs.OnVrModeChanged += UpdateVrMode;
 		UpdateText ();
 	}
@@ -30,7 +33,8 @@ public class GameStateHintController : MonoBehaviour
 	{
 		if (!GameController.instance.quitting) {
 			BattleshipController.instance.OnGameState -= UpdateGameState;
-			BattleshipController.instance.OnReticleAimingAtGrid -= UpdateAimAtGrid;
+			BattleshipController.instance.OnReticleAim -= UpdateAimAtGrid;
+			BattleshipController.instance.OnReticleIdentify -= UpdateAimAtBoat;
 			Prefs.OnVrModeChanged -= UpdateVrMode;
 		}
 	}
@@ -42,9 +46,15 @@ public class GameStateHintController : MonoBehaviour
 		UpdateText ();
 	}
 
-	void UpdateAimAtGrid (bool reticleAimingAtGrid)
+	void UpdateAimAtGrid (Whose whose, Position position)
 	{
-		this.reticleAimingAtGrid = reticleAimingAtGrid;
+		this.reticleAimingAtGrid = position != null;
+		UpdateText ();
+	}
+
+	void UpdateAimAtBoat (Boat boat)
+	{
+		this.reticleBoatTarget = boat;
 		UpdateText ();
 	}
 
@@ -71,11 +81,19 @@ public class GameStateHintController : MonoBehaviour
 	{
 		if (!playing) {
 			color = syncingBackgroundColor;
-			return "Synchronizing.\nPlease wait…";
+			return "Synchronizing.\nPlease wait …";
 		}
-		if (firing | !reticleAimingAtGrid) {
+		if (firing) {
 			color = defaultBackgroundColor;
-			return null;
+			return "Missle firing …";
+		}
+		if (reticleBoatTarget != null) {
+			color = identifyBackgroundColor;
+			return reticleBoatTarget.ToString ();
+		}
+		if (!reticleAimingAtGrid) {
+			color = defaultBackgroundColor;
+			return "Please locate the upper game grid;";
 		}
 		color = defaultBackgroundColor;
 		return "Missle is armed and ready.\n" + (vrMode ?
