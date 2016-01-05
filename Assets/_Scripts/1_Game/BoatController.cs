@@ -22,7 +22,7 @@ public class BoatController : MonoBehaviour
 	public void Identify (bool highlight, Position position)
 	{
 		meshRenderer.material = highlight ? highlightMaterial : initialMaterial;
-		BattleshipController.instance.Identify (highlight ? boat : null, highlight ? position : null);
+		BattleController.instance.Identify (highlight ? boat : null, highlight ? position : null);
 	}
 
 	public void Configure (Boat boat, bool aboveMarkers)

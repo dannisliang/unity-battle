@@ -15,13 +15,13 @@
 
      <!-- Required for Nearby Connections API -->
         <meta-data android:name="com.google.android.gms.nearby.connection.SERVICE_ID"
-            android:value="sauer.battleship" />
+            android:value="sauer.battle" />
 
         <!-- the space in these forces it to be interpreted as a string vs. int -->
         <meta-data android:name="com.google.android.gms.games.APP_ID"
-            android:value="\ 426836610100" />
+            android:value="\ 406476638518" />
         <meta-data android:name="com.google.android.gms.appstate.APP_ID"
-            android:value="\ 426836610100" />
+            android:value="\ 406476638518" />
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 

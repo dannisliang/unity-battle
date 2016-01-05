@@ -10,7 +10,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Fred Sauer
-  productName: VR Battleship
+  productName: VR Battle At Sea
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_ShowUnitySplashScreen: 1
@@ -88,7 +88,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: sauer.battleship
+  bundleIdentifier: sauer.battle
   bundleVersion: 0.8
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
@@ -96,7 +96,7 @@ PlayerSettings:
   xboxOneDisableKinectGpuReservation: 0
   virtualRealitySupported: 0
   productGUID: 2851111e1e11e434d8d2a9c9b7068c8c
-  AndroidBundleVersionCode: 12
+  AndroidBundleVersionCode: 13
   AndroidMinSdkVersion: 14
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -327,14 +327,14 @@ PlayerSettings:
   psmSplashimage: {fileID: 0}
   spritePackerPolicy: 
   scriptingDefineSymbols: {}
-  metroPackageName: unity-battleship
+  metroPackageName: unity-battle-at-sea
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: unity-battleship
+  metroApplicationDescription: unity-battle-at-sea
   wsaImages: {}
   metroTileShortName: 
   metroCommandLineArgsFile: 

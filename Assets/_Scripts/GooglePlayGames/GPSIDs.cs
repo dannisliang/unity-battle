@@ -24,11 +24,11 @@
 
 public static class GPSIDs
 {
-        public const string achievement_played_25_rounds_of_battleship_cardbaord = "CgkItJjHi7YMEAIQBQ"; // <GPGSID>
-        public const string achievement_won_five_rounds_of_battleship_cardbaord = "CgkItJjHi7YMEAIQAw"; // <GPGSID>
-        public const string achievement_played_one_round_of_battleship_cardboard = "CgkItJjHi7YMEAIQAQ"; // <GPGSID>
-        public const string achievement_played_ten_rounds_of_battleship_cardboard = "CgkItJjHi7YMEAIQAg"; // <GPGSID>
-        public const string achievement_won_ten_rounds_of_battleship_cardbaord = "CgkItJjHi7YMEAIQBA"; // <GPGSID>
+        public const string achievement_play_1_round = "CgkItpKVn-oLEAIQAA"; // <GPGSID>
+        public const string achievement_play_10_rounds = "CgkItpKVn-oLEAIQAg"; // <GPGSID>
+        public const string achievement_play_50_rounds = "CgkItpKVn-oLEAIQBA"; // <GPGSID>
+        public const string achievement_play_5_rounds = "CgkItpKVn-oLEAIQAQ"; // <GPGSID>
+        public const string achievement_play_25_rounds = "CgkItpKVn-oLEAIQAw"; // <GPGSID>
 
 }
 

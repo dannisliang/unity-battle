@@ -54,7 +54,7 @@ public class RocketController : MonoBehaviour
 		this.other = other;
 
 		Position position = other.GetComponent<PositionMarkerController> ().position;
-		RealtimeBattleship.EncodeAndSend (position);
+		RealtimeBattle.EncodeAndSend (position);
 		
 		Invoke ("Explode", .3f * flameParticleSystem.duration);
 		FizzleOut (flameParticleSystem.duration);
@@ -62,10 +62,10 @@ public class RocketController : MonoBehaviour
 
 	void Explode ()
 	{
-		if (other.gameObject.layer == BattleshipController.layerTileTheirs.layer) {
+		if (other.gameObject.layer == BattleController.layerTileTheirs.layer) {
 			PositionMarkerController positionMakerController = other.gameObject.GetComponent<PositionMarkerController> ();
 			//			TileController tileController = other.gameObject.GetComponent<TileController> ();
-			BattleshipController.instance.Strike (Whose.Theirs, positionMakerController.position);
+			BattleController.instance.Strike (Whose.Theirs, positionMakerController.position);
 		} else {
 			Debug.LogError ("Unexpected collision with " + other);
 		}

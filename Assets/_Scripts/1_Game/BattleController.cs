@@ -4,9 +4,9 @@ using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent (typeof(AudioSource))]
-public class BattleshipController : MonoBehaviour
+public class BattleController : MonoBehaviour
 {
-	public static BattleshipController instance { get; private set; }
+	public static BattleController instance { get; private set; }
 
 	public static LayerInfo layerTileTheirs;
 
@@ -108,7 +108,7 @@ public class BattleshipController : MonoBehaviour
 			return false;
 		}
 		GameObject rocket = Instantiate (rocketPrefab);
-		BattleshipController.instance.SetIsFiring (true);
+		BattleController.instance.SetIsFiring (true);
 		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform, delegate {
 			SetIsFiring (false);
 		});

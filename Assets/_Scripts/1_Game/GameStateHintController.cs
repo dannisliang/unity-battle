@@ -22,9 +22,9 @@ public class GameStateHintController : MonoBehaviour
 	{
 		image = GetComponent<Image> ();
 		text = GetComponentInChildren<Text> ();
-		BattleshipController.instance.OnGameState += UpdateGameState;
-		BattleshipController.instance.OnReticleAim += UpdateAimAtGrid;
-		BattleshipController.instance.OnReticleIdentify += UpdateAimAtBoat;
+		BattleController.instance.OnGameState += UpdateGameState;
+		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
+		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
 		Prefs.OnVrModeChanged += UpdateVrMode;
 		UpdateText ();
 	}
@@ -32,9 +32,9 @@ public class GameStateHintController : MonoBehaviour
 	void OnDisable ()
 	{
 		if (!GameController.instance.quitting) {
-			BattleshipController.instance.OnGameState -= UpdateGameState;
-			BattleshipController.instance.OnReticleAim -= UpdateAimAtGrid;
-			BattleshipController.instance.OnReticleIdentify -= UpdateAimAtBoat;
+			BattleController.instance.OnGameState -= UpdateGameState;
+			BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
+			BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
 			Prefs.OnVrModeChanged -= UpdateVrMode;
 		}
 	}

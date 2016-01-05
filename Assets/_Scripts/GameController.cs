@@ -10,6 +10,10 @@ using GooglePlayGames.BasicApi.Multiplayer;
 using System;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [RequireComponent (typeof(AudioSource))]
 public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 {
@@ -89,6 +93,18 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		Debug.Log ("***Loading " + Utils.SCENE_MAIN_MENU + " …");
 		SceneManager.LoadScene (Utils.SCENE_MAIN_MENU);
 	}
+
+	#if UNITY_EDITOR
+	void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.S)) {
+			int scale = 2;
+			string filename = PlayerSettings.bundleIdentifier + "-" + (Screen.width * scale) + "x" + (Screen.height * scale) + "-" + DateTime.Now.ToString ("yyyy-MM-dd-HH-mm-ss") + ".png";
+			Application.CaptureScreenshot (filename, scale);
+			Debug.Log (scale + "x screenshot saved as " + filename);
+		}
+	}
+	#endif
 
 	void OnApplicationQuit ()
 	{
@@ -178,8 +194,8 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		roomSetupPercent = success ? 100 : 0;
 		roomConnected = success;
 		if (success) {
-			Debug.Log ("***Loading " + Utils.SCENE_BATTLESHIP_GAME + " …");
-			SceneManager.LoadScene (Utils.SCENE_BATTLESHIP_GAME);
+			Debug.Log ("***Loading " + Utils.SCENE_GAME + " …");
+			SceneManager.LoadScene (Utils.SCENE_GAME);
 			InvokeRepeating ("Checkup", 1f, 1f);
 		}
 	}
@@ -228,7 +244,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public void SendOurBoatPositions ()
 	{
-		RealtimeBattleship.EncodeAndSend (BattleshipController.instance.boatsOursPlacementController.grid);
+		RealtimeBattle.EncodeAndSend (BattleController.instance.boatsOursPlacementController.grid);
 	}
 
 	// RealTimeMultiplayerListener
@@ -265,7 +281,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
-		RealtimeBattleship.DecodeAndExecute (data);
+		RealtimeBattle.DecodeAndExecute (data);
 	}
 
 	public void ExecuteDelayed (Action action, float delay)

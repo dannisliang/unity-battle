@@ -30,22 +30,22 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	public void OnPointerDown (PointerEventData eventData)
 	{
 		if (firedUpon) {
-			BattleshipController.instance.FalseFire ();
+			BattleController.instance.FalseFire ();
 			return;
 		}
 		eventData.Use ();
-		if (BattleshipController.instance.FireAt (eventData.pointerPressRaycast.gameObject.transform)) {
+		if (BattleController.instance.FireAt (eventData.pointerPressRaycast.gameObject.transform)) {
 			firedUpon = true;
 		}
 	}
 
 	void Highlight (bool highlight)
 	{
-		BattleshipController.instance.AimAt (Whose.Theirs, highlight ? positionMarkerController.position : null);
+		BattleController.instance.AimAt (Whose.Theirs, highlight ? positionMarkerController.position : null);
 #if UNITY_EDITOR
-		if (!firedUpon && Input.GetKey (KeyCode.S)) {
-			RealtimeBattleship.EncodeAndSend (positionMarkerController.position);
-			StrikeResult result = BattleshipController.instance.Strike (Whose.Theirs, positionMarkerController.position);
+		if (!firedUpon && Input.GetKey (KeyCode.F)) {
+			RealtimeBattle.EncodeAndSend (positionMarkerController.position);
+			StrikeResult result = BattleController.instance.Strike (Whose.Theirs, positionMarkerController.position);
 			switch (result) {
 			case StrikeResult.IGNORED_ALREADY_MISSED:
 			case StrikeResult.IGNORED_ALREADY_HIT:
