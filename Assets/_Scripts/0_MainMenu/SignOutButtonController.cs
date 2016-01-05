@@ -6,37 +6,22 @@ using GooglePlayGames;
 public class SignOutButtonController : MonoBehaviour
 {
 
-	Button button;
-
 	void Awake ()
 	{
-		button = GetComponent<Button> ();
-		button.onClick.AddListener (delegate {
-			Debug.Log ("***Clicked " + button.name);
-			SignOut ();
+		GetComponent<Button> ().onClick.AddListener (delegate {
+			GameController.instance.SignOut ();
 		});
 	}
 
-	void OnEnable ()
+	void Start ()
 	{
-		GameController.OnConnectStatusChanged += UpdateInteractable;
-		GameController.instance.InvokeConnectStatusAction (UpdateInteractable);
+		GameController.OnConnectStatusChanged += UpdateActive;
+		GameController.instance.InvokeConnectStatusAction (UpdateActive);
 	}
 
-	void OnDisable ()
+	void UpdateActive (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		GameController.OnConnectStatusChanged -= UpdateInteractable;
-	}
-
-	void UpdateInteractable (bool authenticated, bool isRoomConnected, int roomSetupPercent)
-	{
-		button.interactable = authenticated;
-	}
-
-	void SignOut ()
-	{
-		Debug.Log ("***SignOut() …");
-		GameController.instance.SignOut ();
+		gameObject.SetActive (authenticated);
 	}
 
 }

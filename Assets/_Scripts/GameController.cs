@@ -140,6 +140,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 
 	public void SignOut ()
 	{
+		Debug.Log ("***SignOut() …");
 		GameController.gamesPlatform.SignOut ();
 		InvokeConnectStatusAction ();
 	}
