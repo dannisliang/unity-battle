@@ -7,7 +7,6 @@ public class RocketController : MonoBehaviour
 {
 	ParticleSystem flameParticleSystem;
 	AudioSource source;
-	//	Transform targetTransform;
 	float velocity = 1.5f;
 	float[] fizzleOutTimes;
 	Collider other;
@@ -31,11 +30,9 @@ public class RocketController : MonoBehaviour
 	{
 		this.callback = callback;
 
-//		this.targetTransform = targetTransform;
-		transform.position = origin.position;
-		transform.rotation = origin.rotation;
-
 		Vector3 direction = targetTransform.position - origin.position;
+		transform.position = origin.position;
+		transform.rotation = Quaternion.LookRotation (direction);
 		GetComponent<Rigidbody> ().velocity = direction.normalized * velocity;
 	}
 
