@@ -7,6 +7,7 @@ using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.Multiplayer;
+using GooglePlayGames.BasicApi.Nearby;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ using UnityEditor;
 #endif
 
 [RequireComponent (typeof(AudioSource))]
-public class GameController : MonoBehaviour,RealTimeMultiplayerListener
+public class GameController : MonoBehaviour,RealTimeMultiplayerListener,IDiscoveryListener,IMessageListener
 {
 	public static GameController instance { get; private set; }
 
@@ -86,7 +87,7 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		instance = this;
 		DontDestroyOnLoad (gameObject);
 
-//		InitNearby ();
+		InitNearby ();
 
 		InitPlayGamesPlatform ();
 		Authenticate (true);
@@ -111,13 +112,90 @@ public class GameController : MonoBehaviour,RealTimeMultiplayerListener
 		quitting = true;
 	}
 
-	//	void InitNearby ()
-	//	{
-	//		Debug.Log ("***Initializing nearby connections …");
-	//		PlayGamesPlatform.InitializeNearby ((client) => {
-	//			Debug.Log ("***Nearby connections initialized: client=" + client);
-	//		});
-	//	}
+	void InitNearby ()
+	{
+		Debug.Log ("***Initializing nearby connections …");
+		PlayGamesPlatform.InitializeNearby ((client) => {
+			Debug.Log ("***Nearby connections initialized: client=" + client);
+			StartNearbyBroadcast ();
+			StartNearbyDiscovery ();
+		});
+	}
+
+	void StartNearbyBroadcast ()
+	{
+		Debug.Log ("***Nearby broadcast — Starting …");
+		List<string> appIdentifiers = new List<string> ();
+		//		appIdentifiers.Add (Application.bundleIdentifier);
+		appIdentifiers.Add (PlayGamesPlatform.Nearby.GetAppBundleId ());
+		PlayGamesPlatform.Nearby.StartAdvertising (
+			"VR Battle Grid",
+			appIdentifiers,
+			TimeSpan.FromSeconds (0),// 0 = advertise forever
+			(AdvertisingResult result) => {
+				Debug.Log ("***Nearby OnAdvertisingResult() -> Status=" + result.Status + ",Succeeded=" + result.Succeeded + ",LocalEndpointName=" + result.LocalEndpointName);
+			},
+			(ConnectionRequest request) => {
+				Debug.Log ("***Nearby Received connection request: " +
+				request.RemoteEndpoint.DeviceId + " " +
+				request.RemoteEndpoint.EndpointId + " " +
+				request.RemoteEndpoint.Name);
+			}
+		);
+	}
+
+	void StartNearbyDiscovery ()
+	{
+		Debug.Log ("***Nearby discovery — Starting …");
+		PlayGamesPlatform.Nearby.StartDiscovery (
+			PlayGamesPlatform.Nearby.GetServiceId (),
+			TimeSpan.FromSeconds (0),
+			(IDiscoveryListener)this);
+	}
+
+	//IDiscoveryListener
+	public void OnEndpointFound (EndpointDetails discoveredEndpoint)
+	{
+		Debug.Log ("***Nearby discovery — Found Endpoint: " +
+		discoveredEndpoint.DeviceId + " " +
+		discoveredEndpoint.EndpointId + " " +
+		discoveredEndpoint.Name);
+		SendNearbyConnectionRequest (discoveredEndpoint);
+
+	}
+
+	void SendNearbyConnectionRequest (EndpointDetails remote)
+	{
+		Debug.Log ("***Nearby sending connection request …");
+		PlayGamesPlatform.Nearby.SendConnectionRequest (
+			"Local Game player",  // the user-friendly name
+			remote.EndpointId,  // the discovered endpoint  
+			System.Text.Encoding.UTF8.GetBytes ("hello, neighbor"), // byte[] of data
+			(response) => {
+				Debug.Log ("***Nearby connection response: ResponseStatus" +
+				response.ResponseStatus + ",Payload=" + response.Payload);
+			},
+			(IMessageListener)this);
+	}
+
+	//IDiscoveryListener
+	public void OnEndpointLost (string lostEndpointId)
+	{
+		Debug.Log ("***Nearby discovery — Endpoint lost: " + lostEndpointId);
+	}
+
+	//IMessageListener
+	public void OnMessageReceived (string remoteEndpointId, byte[] data,
+	                               bool isReliableMessage)
+	{
+		Debug.Log ("***Nearby OnMessageReceived() remoteEndpointId=" + remoteEndpointId + ",reliable=" + isReliableMessage + ",data=" + data);
+	}
+
+	//IMessageListener
+	public void OnRemoteEndpointDisconnected (string remoteEndpointId)
+	{
+		Debug.Log ("***Nearby OnRemoteEndpointDisconnected() remoteEndpointId=" + remoteEndpointId);
+	}
 
 	void InitPlayGamesPlatform ()
 	{
