@@ -17,13 +17,13 @@ public class CurrentRoomTextController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		GameController.OnConnectStatusChanged += UpdateStatus;
-		GameController.instance.InvokeConnectStatusAction (UpdateStatus);
+		ButlerController.instance.OnConnectStatusChanged += UpdateStatus;
+		ButlerController.instance.InvokeConnectStatusAction (UpdateStatus);
 	}
 
 	void OnDisable ()
 	{
-		GameController.OnConnectStatusChanged -= UpdateStatus;
+		ButlerController.instance.OnConnectStatusChanged -= UpdateStatus;
 	}
 
 	void UpdateStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
@@ -37,7 +37,7 @@ public class CurrentRoomTextController : MonoBehaviour
 			return "Sign in required";
 		}
 		if (isRoomConnected) {
-			int count = GameController.instance.GetConnectedParticipants ().Count;
+			int count = ButlerController.instance.GetConnectedParticipants ().Count;
 			return "Starting " + count + " player game …";
 		} 
 		switch (roomSetupPercent) {

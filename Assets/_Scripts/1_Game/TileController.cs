@@ -21,7 +21,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
 	public void OnPointerExit (PointerEventData eventData)
 	{
-		if (!GameController.instance.quitting) {
+		if (!SceneMaster.quitting) {
 			eventData.Use ();
 			Highlight (false);
 		}

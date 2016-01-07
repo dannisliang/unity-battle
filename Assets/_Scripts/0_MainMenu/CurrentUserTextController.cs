@@ -15,13 +15,13 @@ public class CurrentUserTextController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		GameController.OnConnectStatusChanged += UpdateStatus;
-		GameController.instance.InvokeConnectStatusAction (UpdateStatus);
+		ButlerController.instance.OnConnectStatusChanged += UpdateStatus;
+		ButlerController.instance.InvokeConnectStatusAction (UpdateStatus);
 	}
 
 	void OnDisable ()
 	{
-		GameController.OnConnectStatusChanged -= UpdateStatus;
+		ButlerController.instance.OnConnectStatusChanged -= UpdateStatus;
 	}
 
 	void UpdateStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
@@ -31,6 +31,6 @@ public class CurrentUserTextController : MonoBehaviour
 
 	string GetStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		return authenticated ? "Signed in " + GameController.instance.GetLocalUser ().userName.ToString () : "";
+		return authenticated ? "Signed in " + ButlerController.instance.GetLocalUser ().userName.ToString () : "";
 	}
 }

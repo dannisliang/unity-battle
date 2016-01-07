@@ -14,7 +14,7 @@ public class DummyPlayGamesClient : IPlayGamesClient
 	public void Authenticate (System.Action<bool> callback, bool silent)
 	{
 		mRealTimeClient = new DummyRealTimeMultiplayerClient ();
-		GameController.instance.ExecuteDelayed (() => {
+		SceneMaster.instance.Async (() => {
 			authenticated = true;
 			if (callback != null) {
 				callback.Invoke (authenticated);

@@ -54,8 +54,8 @@ public class BattleController : MonoBehaviour
 
 	void Start ()
 	{
-		Assert.IsTrue (GameController.instance.authenticated && GameController.instance.roomConnected);
-		if (GameController.instance.authenticated && GameController.instance.roomConnected) {
+		Assert.IsTrue (ButlerController.instance.authenticated && ButlerController.instance.roomConnected);
+		if (ButlerController.instance.authenticated && ButlerController.instance.roomConnected) {
 			boatsOursPlacementController.RecreateBoats ();
 			GameController.instance.SendOurBoatPositions ();
 		}
@@ -126,7 +126,7 @@ public class BattleController : MonoBehaviour
 			source.PlayOneShot (waterPlopClip);
 			break;
 		case StrikeResult.IGNORED_ALREADY_HIT:
-			GameController.instance.ExecuteDelayed (delegate {
+			SceneMaster.instance.Async (delegate {
 				source.PlayOneShot (shipExplosionClip);
 			}, 1f);
 			break;
@@ -136,14 +136,14 @@ public class BattleController : MonoBehaviour
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
-			GameController.instance.ExecuteDelayed (delegate {
+			SceneMaster.instance.Async (delegate {
 				source.PlayOneShot (shipExplosionClip);
 			}, 1f);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
 			PlaceSunkBoat (whose, boat);
-			GameController.instance.ExecuteDelayed (delegate {
+			SceneMaster.instance.Async (delegate {
 				source.PlayOneShot (shipExplosionClip);
 			}, 1f);
 			break;

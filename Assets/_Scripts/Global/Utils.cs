@@ -15,9 +15,6 @@ public class Utils : MonoBehaviour
 	public static float BOAT_HEIGHT = .01f;
 	public static float CLEARANCE_HEIGHT = .001f;
 
-	public const string SCENE_MAIN_MENU = "__MainMenu";
-	public const string SCENE_GAME = "__Game";
-
 	public static HideFlags NO_SAVE_NO_EDIT_HIDE_FLAGS = HideFlags.DontSave | HideFlags.NotEditable;
 
 	public static void SetNoSaveNoEditHideFlags (Transform parent)

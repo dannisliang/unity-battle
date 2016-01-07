@@ -9,20 +9,20 @@ public class LeaveRoomButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			GameController.instance.LeaveRoom ();
+			ButlerController.instance.LeaveRoom ();
 		});
 	}
 
 	void Start ()
 	{
-		GameController.OnConnectStatusChanged += UpdateActive;
-		GameController.instance.InvokeConnectStatusAction (UpdateActive);
+		ButlerController.instance.OnConnectStatusChanged += UpdateActive;
+		ButlerController.instance.InvokeConnectStatusAction (UpdateActive);
 	}
 
 	void OnDestroy ()
 	{
-		if (!GameController.instance.quitting) {
-			GameController.OnConnectStatusChanged -= UpdateActive;
+		if (!SceneMaster.quitting) {
+			ButlerController.instance.OnConnectStatusChanged -= UpdateActive;
 		}
 	}
 

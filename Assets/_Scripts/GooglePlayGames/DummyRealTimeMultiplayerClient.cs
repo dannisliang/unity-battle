@@ -22,11 +22,11 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 	{
 		Assert.IsFalse (roomConnecting);
 		Assert.IsFalse (roomConnected);
-		GameController.instance.ExecuteDelayed (() => {
+		SceneMaster.instance.Async (() => {
 			roomConnecting = true;
 			listener.OnRoomSetupProgress (20);
 		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
-		GameController.instance.ExecuteDelayed (() => {
+		SceneMaster.instance.Async (() => {
 			if (!roomConnecting || roomConnected) {
 				return;
 			}
@@ -34,7 +34,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			participants = new List<Participant> ();
 			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
 			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
-			listener.OnRoomConnected (GameController.instance.roomSetupPercent > 0);
+			listener.OnRoomConnected (ButlerController.instance.roomSetupPercent > 0);
 		}, 2f * Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
@@ -67,8 +67,8 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 	{
 		Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + "," + (char)data [0] + "-" + data.Length + ")");
 		// simply mirror back messages with delay
-		GameController.instance.ExecuteDelayed (() => {
-			GameController.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
+		SceneMaster.instance.Async (() => {
+			ButlerController.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
 		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
@@ -109,11 +109,11 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 
 	public void LeaveRoom ()
 	{
-		GameController.instance.ExecuteDelayed (() => {
+		SceneMaster.instance.Async (() => {
 			roomConnecting = false;
 			roomConnected = false;
 			participants = null;
-			GameController.instance.OnLeftRoom ();
+			ButlerController.instance.OnLeftRoom ();
 		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 

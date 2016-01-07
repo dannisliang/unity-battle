@@ -31,7 +31,7 @@ public class GameStateHintController : MonoBehaviour
 
 	void OnDisable ()
 	{
-		if (!GameController.instance.quitting) {
+		if (!SceneMaster.quitting) {
 			BattleController.instance.OnGameState -= UpdateGameState;
 			BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
 			BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
