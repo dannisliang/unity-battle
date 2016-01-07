@@ -93,7 +93,7 @@ public class GameStateHintController : MonoBehaviour
 		}
 		if (!reticleAimingAtGrid) {
 			color = defaultBackgroundColor;
-			return "Please locate the upper game grid;";
+			return "Please locate the upper game grid.";
 		}
 		color = defaultBackgroundColor;
 		return "Missle is armed and ready.\n" + (vrMode ?
