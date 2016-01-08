@@ -1324,7 +1324,7 @@ GameObject:
   - 4: {fileID: 744055278}
   - 114: {fileID: 744055277}
   m_Layer: 0
-  m_Name: Main Menu Butler
+  m_Name: Game Controller Main Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1339,7 +1339,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 744055276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aab0fd00703f460b969dd1ef91acc4f, type: 3}
+  m_Script: {fileID: 11500000, guid: 5aa73a0618b0d44c38f4961532a0ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &744055278

@@ -7,13 +7,13 @@ public class RoomPanelController : MonoBehaviour
 
 	void Start ()
 	{
-		ButlerController.instance.InvokeConnectStatusAction (UpdateActive);
-		ButlerController.instance.OnConnectStatusChanged += UpdateActive;
+		GameController.instance.InvokeConnectStatusAction (UpdateActive);
+		GameController.instance.OnConnectStatusChanged += UpdateActive;
 	}
 
 	void OnDestroy ()
 	{
-		ButlerController.instance.OnConnectStatusChanged -= UpdateActive;
+		GameController.instance.OnConnectStatusChanged -= UpdateActive;
 	}
 
 	void UpdateActive (bool authenticated, bool isRoomConnected, int roomSetupPercent)

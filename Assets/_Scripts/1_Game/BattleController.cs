@@ -54,8 +54,8 @@ public class BattleController : MonoBehaviour
 
 	void Start ()
 	{
-		Assert.IsTrue (ButlerController.butler.IsSignedIn () && ButlerController.butler.IsGameConnected ());
-		if (ButlerController.butler.IsSignedIn () && ButlerController.butler.IsGameConnected ()) {
+		Assert.IsTrue (GameController.butler.IsSignedIn () && GameController.butler.IsGameConnected ());
+		if (GameController.butler.IsSignedIn () && GameController.butler.IsGameConnected ()) {
 			boatsOursPlacementController.RecreateBoats ();
 			SendOurBoatPositions ();
 		}

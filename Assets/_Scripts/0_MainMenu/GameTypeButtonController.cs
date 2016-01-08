@@ -9,20 +9,20 @@ public class GameTypeButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			ButlerController.instance.gameType = gameType;
+			GameController.instance.gameType = gameType;
 		});
 	}
 
 	void Start ()
 	{
-		ButlerController.instance.OnGameTypeChanged += UpdateActive;
-		ButlerController.instance.InvokeGameTypeChanged (UpdateActive);
+		GameController.instance.OnGameTypeChanged += UpdateActive;
+		GameController.instance.InvokeGameTypeChanged (UpdateActive);
 	}
 
 	void OnDestroy ()
 	{
 		if (!SceneMaster.quitting) {
-			ButlerController.instance.OnGameTypeChanged -= UpdateActive;
+			GameController.instance.OnGameTypeChanged -= UpdateActive;
 		}
 	}
 

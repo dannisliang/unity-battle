@@ -37,7 +37,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 		set {
 			_signedIn = value;
-			ButlerController.instance.InvokeConnectStatusAction ();
+			GameController.instance.InvokeConnectStatusAction ();
 		}
 	}
 
@@ -48,7 +48,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 		set {
 			_gameConnected = value;
-			ButlerController.instance.InvokeConnectStatusAction ();
+			GameController.instance.InvokeConnectStatusAction ();
 		}
 	}
 
@@ -58,7 +58,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 		set { 
 			_gameSetupPercent = value;
-			ButlerController.instance.InvokeConnectStatusAction ();
+			GameController.instance.InvokeConnectStatusAction ();
 		}
 	}
 
@@ -150,7 +150,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***SignOut() …");
 		gamesPlatform.SignOut ();
-		ButlerController.instance.InvokeConnectStatusAction ();
+		GameController.instance.InvokeConnectStatusAction ();
 	}
 
 
@@ -211,7 +211,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		Debug.Log ("***OnLeftRoom()");
 		gameSetupPercent = 0;
 		gameConnected = false;
-		ButlerController.instance.OnLeftGame ();
+		GameController.instance.OnLeftGame ();
 	}
 
 	// RealTimeMultiplayerListener
@@ -238,7 +238,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
-		ButlerController.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
+		GameController.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
 	}
 
 

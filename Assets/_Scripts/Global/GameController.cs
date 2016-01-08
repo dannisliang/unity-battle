@@ -13,10 +13,10 @@ using System;
 using UnityEditor;
 #endif
 
-public class ButlerController : MonoBehaviour,IDiscoveryListener,IMessageListener
+public class GameController : MonoBehaviour,IDiscoveryListener,IMessageListener
 {
 
-	public static ButlerController instance;
+	public static GameController instance;
 
 	public static IButler butler { get; private set; }
 

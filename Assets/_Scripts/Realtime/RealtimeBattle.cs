@@ -22,16 +22,16 @@ public class RealtimeBattle : MonoBehaviour
 
 	static void EncodeAndSend (byte messageType, System.Object obj)
 	{
-		Debug.Log ("***EncodeAndSend() [authenticated==" + ButlerController.butler.IsSignedIn () +
-		", roomConnected==" + ButlerController.butler.IsGameConnected () +
-		", roomSetupPercent=" + ButlerController.butler.GameSetupPercent () + "]");
+		Debug.Log ("***EncodeAndSend() [authenticated==" + GameController.butler.IsSignedIn () +
+		", roomConnected==" + GameController.butler.IsGameConnected () +
+		", roomSetupPercent=" + GameController.butler.GameSetupPercent () + "]");
 
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {
 			stream.WriteByte (messageType);
 			formatter.Serialize (stream, obj);
 			byte[] bytes = stream.ToArray ();
-			ButlerController.instance.SendMessageToAll (reliable: true, data: bytes);
+			GameController.instance.SendMessageToAll (reliable: true, data: bytes);
 		}
 	}
 

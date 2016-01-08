@@ -231,7 +231,7 @@ Transform:
   - {fileID: 1403814450}
   - {fileID: 600891559}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
 --- !u!1 &35986394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,7 +1502,7 @@ GameObject:
   - 82: {fileID: 854977910}
   - 114: {fileID: 854977908}
   m_Layer: 0
-  m_Name: Game Controller
+  m_Name: Game Controller Game
   m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1516,7 +1516,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 854977907}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aab0fd00703f460b969dd1ef91acc4f, type: 3}
+  m_Script: {fileID: 11500000, guid: 5aa73a0618b0d44c38f4961532a0ff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &854977909
@@ -1530,7 +1530,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!82 &854977910
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1658,7 +1658,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!82 &889480880
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1820,7 +1820,7 @@ Transform:
   - {fileID: 1072113669}
   - {fileID: 1818598056}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!1 &951152795
 GameObject:
   m_ObjectHideFlags: 0
@@ -2249,7 +2249,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!114 &1195234157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2451,7 +2451,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &1342758084
 GameObject:
   m_ObjectHideFlags: 0
@@ -3355,7 +3355,7 @@ Transform:
   - {fileID: 821473049}
   - {fileID: 95398953}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!114 &1586100396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3473,7 +3473,7 @@ Transform:
   - {fileID: 1870285320}
   - {fileID: 1728805349}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!114 &1609040340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3889,46 +3889,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatPlacementController: {fileID: 1403814449}
---- !u!1 &1793113074
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 124456, guid: cc107ae3da6394f6ca4a2fd7b3fd6bf4, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1793113076}
-  - 114: {fileID: 1793113075}
-  m_Layer: 0
-  m_Name: Game Butler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1793113075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11423844, guid: cc107ae3da6394f6ca4a2fd7b3fd6bf4,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1793113074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aab0fd00703f460b969dd1ef91acc4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1793113076
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 432486, guid: cc107ae3da6394f6ca4a2fd7b3fd6bf4, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1793113074}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
 --- !u!1 &1808218488
 GameObject:
   m_ObjectHideFlags: 0
@@ -4091,7 +4051,7 @@ Transform:
   - {fileID: 1601558863}
   - {fileID: 1453214367}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!1 &1857581281
 GameObject:
   m_ObjectHideFlags: 0
