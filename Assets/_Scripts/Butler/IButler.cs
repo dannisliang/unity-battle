@@ -6,14 +6,9 @@ public interface IButler
 
 	//	event Game.ConnectStatusAction OnConnectChanged;
 
-	bool IsSignedIn ();
-
-	bool IsGameConnected ();
-
-	int GameSetupPercent ();
-
-
 	void Init ();
+
+	ConnectionStatus GetConnectionStatus ();
 
 
 	void SignIn (bool silent = false);

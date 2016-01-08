@@ -15,22 +15,6 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	bool _gameConnected;
 	int _gameSetupPercent;
 
-
-	public bool IsSignedIn ()
-	{
-		return signedIn;
-	}
-
-	public bool IsGameConnected ()
-	{
-		return gameConnected;
-	}
-
-	public int GameSetupPercent ()
-	{
-		return gameSetupPercent;
-	}
-
 	public bool signedIn {
 		get {
 			Assert.AreEqual (gamesPlatform.IsAuthenticated (), _signedIn);
@@ -138,6 +122,23 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 	}
 
+	public ConnectionStatus GetConnectionStatus ()
+	{
+		if (!gamesPlatform.IsAuthenticated ()) {
+			return ConnectionStatus.AUTHENTICATION_REQUIRED;
+		}
+		if (gamesPlatform.RealTime.IsRoomConnected ()) {
+			Assert.IsTrue (gameSetupPercent == 100);
+			return ConnectionStatus.AUTHENTICATED_IN_GAME;
+		} else {
+			if (gameSetupPercent == 0) {
+				return ConnectionStatus.AUTHENTICATED_NO_GAME;
+			} else {
+				// TODO implement ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME
+				return ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME;
+			}
+		}
+	}
 
 	public void SignIn (bool silent = false)
 	{
@@ -244,5 +245,9 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	}
 
 
+	public override string ToString ()
+	{
+		return string.Format ("[ButlerPlayGames: signedIn={0}, gameConnected={1}, gameSetupPercent={2}]", signedIn, gameConnected, gameSetupPercent);
+	}
 
 }

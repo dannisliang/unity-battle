@@ -110,28 +110,8 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		if (action == null) {
 			return;
 		}
-		action (GetConnectionStatus ());
-	}
-
-	ConnectionStatus GetConnectionStatus ()
-	{
-		if (butler == null) {
-			return ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED;
-		}
-		if (!butler.IsSignedIn ()) {
-			return ConnectionStatus.AUTHENTICATION_REQUIRED;
-		}
-		if (butler.IsGameConnected ()) {
-			Assert.IsTrue (butler.GameSetupPercent () == 100);
-			return ConnectionStatus.AUTHENTICATED_IN_GAME;
-		} else {
-			if (butler.GameSetupPercent () == 0) {
-				return ConnectionStatus.AUTHENTICATED_NO_GAME;
-			} else {
-				// TODO implement ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME
-				return ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME;
-			}
-		}
+		ConnectionStatus status = butler == null ? ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED : butler.GetConnectionStatus ();
+		action (status);
 	}
 
 

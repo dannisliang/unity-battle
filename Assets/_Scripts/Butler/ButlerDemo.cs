@@ -12,21 +12,6 @@ public class ButlerDemo : MonoBehaviour,IButler
 	bool _gameConnected;
 	int _gameSetupPercent;
 
-	public bool IsSignedIn ()
-	{
-		return signedIn;
-	}
-
-	public bool IsGameConnected ()
-	{
-		return gameConnected;
-	}
-
-	public int GameSetupPercent ()
-	{
-		return gameSetupPercent;
-	}
-
 	public bool signedIn {
 		get {
 			return _signedIn;
@@ -81,6 +66,24 @@ public class ButlerDemo : MonoBehaviour,IButler
 	{
 	}
 
+	public ConnectionStatus GetConnectionStatus ()
+	{
+		if (!_signedIn) {
+			return ConnectionStatus.AUTHENTICATION_REQUIRED;
+		}
+		if (_gameConnected) {
+			Assert.IsTrue (gameSetupPercent == 100);
+			return ConnectionStatus.AUTHENTICATED_IN_GAME;
+		} else {
+			if (_gameSetupPercent == 0) {
+				return ConnectionStatus.AUTHENTICATED_NO_GAME;
+			} else {
+				// TODO implement ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME
+				return ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME;
+			}
+		}
+	}
+
 	public void SignIn (bool silent = false)
 	{
 		SceneMaster.instance.Async (delegate {
@@ -119,4 +122,8 @@ public class ButlerDemo : MonoBehaviour,IButler
 		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
+	public override string ToString ()
+	{
+		return string.Format ("[ButlerDemo: signedIn={0}, gameConnected={1}, gameSetupPercent={2}]", signedIn, gameConnected, gameSetupPercent);
+	}
 }
