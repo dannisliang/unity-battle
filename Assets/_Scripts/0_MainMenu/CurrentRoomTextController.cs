@@ -42,7 +42,7 @@ public class CurrentRoomTextController : MonoBehaviour
 		case ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME:
 			return "Quitting game …";
 		case ConnectionStatus.AUTHENTICATED_IN_GAME:
-			int count = Game.butler.GetConnectedParticipantCount ();
+			int count = Game.butler.NumPlayers ();
 			return "Starting " + count + " player game …";
 		default:
 			throw new System.NotImplementedException ();

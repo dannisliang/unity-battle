@@ -19,7 +19,7 @@ public interface IButler
 	void SignOut ();
 
 
-	int GetConnectedParticipantCount ();
+	int NumPlayers ();
 
 	string GetLocalUsername ();
 

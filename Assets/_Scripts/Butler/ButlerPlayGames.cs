@@ -62,7 +62,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 	}
 
-	public int GetConnectedParticipantCount ()
+	public int NumPlayers ()
 	{
 		return gamesPlatform.RealTime.GetConnectedParticipants ().Count;
 
