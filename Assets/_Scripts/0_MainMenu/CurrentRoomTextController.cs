@@ -36,7 +36,7 @@ public class CurrentRoomTextController : MonoBehaviour
 			return "Sign in required";
 		}
 		if (isRoomConnected) {
-			int count = ButlerController.instance.GetConnectedParticipants ().Count;
+			int count = ButlerController.butler.GetConnectedParticipantCount ();
 			return "Starting " + count + " player game …";
 		} 
 		switch (roomSetupPercent) {

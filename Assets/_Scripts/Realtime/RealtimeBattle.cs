@@ -22,7 +22,9 @@ public class RealtimeBattle : MonoBehaviour
 
 	static void EncodeAndSend (byte messageType, System.Object obj)
 	{
-		Debug.Log ("***EncodeAndSend() [authenticated==" + ButlerController.instance.authenticated + ", roomConnected==" + ButlerController.instance.roomConnected + ", roomSetupPercent=" + ButlerController.instance.roomSetupPercent + "]");
+		Debug.Log ("***EncodeAndSend() [authenticated==" + ButlerController.butler.IsSignedIn () +
+		", roomConnected==" + ButlerController.butler.IsGameConnected () +
+		", roomSetupPercent=" + ButlerController.butler.GameSetupPercent () + "]");
 
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {

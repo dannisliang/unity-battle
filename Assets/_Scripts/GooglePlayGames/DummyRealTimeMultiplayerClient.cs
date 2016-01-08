@@ -34,7 +34,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			participants = new List<Participant> ();
 			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
 			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
-			listener.OnRoomConnected (ButlerController.instance.roomSetupPercent > 0);
+			listener.OnRoomConnected (ButlerController.butler.GameSetupPercent () > 0);
 		}, 2f * Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
@@ -113,7 +113,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			roomConnecting = false;
 			roomConnected = false;
 			participants = null;
-			ButlerController.instance.OnLeftRoom ();
+			ButlerController.instance.OnLeftGame ();
 		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 

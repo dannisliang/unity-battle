@@ -48,9 +48,4 @@ public class GameController : MonoBehaviour
 	}
 	#endif
 
-	public void SendOurBoatPositions ()
-	{
-		RealtimeBattle.EncodeAndSend (BattleController.instance.boatsOursPlacementController.grid);
-	}
-
 }

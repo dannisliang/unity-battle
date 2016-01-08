@@ -8,7 +8,7 @@ public class QuickGameButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			ButlerController.instance.SetupRoom (false);
+			ButlerController.butler.SetupGame (false);
 		});
 	}
 

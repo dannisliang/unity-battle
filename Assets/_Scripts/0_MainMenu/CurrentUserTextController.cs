@@ -30,6 +30,6 @@ public class CurrentUserTextController : MonoBehaviour
 
 	string GetStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
 	{
-		return authenticated ? "Signed in " + ButlerController.instance.GetLocalUser ().userName.ToString () : "";
+		return authenticated ? "Signed in " + ButlerController.instance.GetLocalUsername () : "";
 	}
 }

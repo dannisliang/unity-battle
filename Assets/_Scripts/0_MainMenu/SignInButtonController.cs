@@ -8,7 +8,7 @@ public class SignInButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			ButlerController.instance.Authenticate (false);
+			ButlerController.instance.SignIn (false);
 		});
 	}
 

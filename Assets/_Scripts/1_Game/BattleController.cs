@@ -54,11 +54,16 @@ public class BattleController : MonoBehaviour
 
 	void Start ()
 	{
-		Assert.IsTrue (ButlerController.instance.authenticated && ButlerController.instance.roomConnected);
-		if (ButlerController.instance.authenticated && ButlerController.instance.roomConnected) {
+		Assert.IsTrue (ButlerController.butler.IsSignedIn () && ButlerController.butler.IsGameConnected ());
+		if (ButlerController.butler.IsSignedIn () && ButlerController.butler.IsGameConnected ()) {
 			boatsOursPlacementController.RecreateBoats ();
-			GameController.instance.SendOurBoatPositions ();
+			SendOurBoatPositions ();
 		}
+	}
+
+	void SendOurBoatPositions ()
+	{
+		RealtimeBattle.EncodeAndSend (boatsOursPlacementController.grid);
 	}
 
 	public void SetBoatsTheirs (Boat[] boats)

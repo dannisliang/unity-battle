@@ -8,7 +8,7 @@ public class LeaveRoomButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			ButlerController.instance.LeaveRoom ();
+			ButlerController.instance.QuitGame ();
 		});
 	}
 

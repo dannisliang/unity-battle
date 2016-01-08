@@ -9,11 +9,12 @@ using System.Collections.Generic;
 using UnityEngine.SocialPlatforms;
 using System;
 
-public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDiscoveryListener,IMessageListener
+public class ButlerController : MonoBehaviour,IDiscoveryListener,IMessageListener
 {
 
 	public static ButlerController instance;
-	//	public static ButlerController instance { get; private set; }
+
+	public static IButler butler { get; private set; }
 
 	public delegate void ConnectStatusAction (bool authenticated, bool isRoomConnected, int roomSetupPercent);
 
@@ -23,46 +24,6 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 
 	public event GameTypeChanged OnGameTypeChanged;
 
-	//	public IPlayGamesPlatform gamesPlatform { get; private set; }
-	IPlayGamesPlatform gamesPlatform;
-
-
-	bool _authenticated;
-	bool _roomConnected;
-	int _roomSetupPrecent;
-
-	public bool authenticated {
-		get {
-			Assert.AreEqual (gamesPlatform.IsAuthenticated (), _authenticated);
-			_authenticated = gamesPlatform.IsAuthenticated ();
-			return _authenticated;
-		}
-		set {
-			_authenticated = value;
-			InvokeConnectStatusAction ();
-		}
-	}
-
-	public bool roomConnected {
-		get {
-			Assert.AreEqual (gamesPlatform.IsAuthenticated () && gamesPlatform.RealTime.IsRoomConnected (), _roomConnected);
-			return _roomConnected;
-		}
-		set {
-			_roomConnected = value;
-			InvokeConnectStatusAction ();
-		}
-	}
-
-	public int roomSetupPercent {
-		get {
-			return _roomSetupPrecent;
-		}
-		set { 
-			_roomSetupPrecent = value;
-			InvokeConnectStatusAction ();
-		}
-	}
 
 	GameType _gameType;
 
@@ -87,8 +48,9 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 
 //		InitNearby ();
 
-		InitPlayGamesPlatform ();
-		Authenticate (true);
+		butler = new ButlerPlayGames ();
+		butler.Init ();
+		SignIn (true);
 	}
 
 	public void InvokeGameTypeChanged (GameTypeChanged action = null)
@@ -106,35 +68,16 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 		if (action == null) {
 			return;
 		}
-		bool authenticated = gamesPlatform.IsAuthenticated ();
-		bool roomConnected = authenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		action (gamesPlatform.IsAuthenticated (), roomConnected, roomSetupPercent);
-	}
-
-	public List<Participant> GetConnectedParticipants ()
-	{
-		return gamesPlatform.RealTime.GetConnectedParticipants ();
+		action (butler.IsSignedIn (), butler.IsGameConnected (), butler.GameSetupPercent ());
 	}
 
 
 
 
 
-	public void SetupRoom (bool withInvitation)
+	public string GetLocalUsername ()
 	{
-		Debug.Log ("***SetupRoom(withInvitation=" + withInvitation + ")");
-		Assert.IsTrue (roomSetupPercent == 0);
-		if (withInvitation) {
-			gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
-		} else {
-			gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
-		}
-		roomSetupPercent = 1;
-	}
-
-	public ILocalUser GetLocalUser ()
-	{
-		return gamesPlatform.localUser;
+		return butler.GetLocalUsername ();
 	}
 
 
@@ -150,7 +93,7 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
-		gamesPlatform.RealTime.SendMessageToAll (reliable, data);
+		butler.SendMessageToAll (reliable, data);
 	}
 
 
@@ -177,152 +120,37 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 	}
 
 
-	void InitPlayGamesPlatform ()
+
+
+	public void SignIn (bool silent = false)
 	{
-		if (Application.isEditor) {
-			gamesPlatform = new DummyPlayGamesPlatform ();
-		} else {
-			// https://github.com/playgameservices/play-games-plugin-for-unity
-			PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
-			                                      // enables saving game progress.
-			                                      //.EnableSavedGames ()
-			                                      // registers a callback to handle game invitations received while the game is not running.
-			                                      //.WithInvitationDelegate(<callback method>)
-			                                      // registers a callback for turn based match notifications received while the
-			                                      // game is not running.
-			                                      //.WithMatchDelegate(<callback method>)
-				.Build ();
-
-			PlayGamesPlatform.InitializeInstance (config);
-
-			// recommended for debugging:
-			//			PlayGamesPlatform.DebugLogEnabled = true;
-
-			Debug.Log ("***Activating PlayGamesPlatform …");
-			PlayGamesPlatform.Activate ();
-			gamesPlatform = PlayGamesPlatform.Instance;
-		}
-	}
-
-	public void Authenticate (bool silent)
-	{
-		Debug.Log ("***Authenticate(" + (silent ? "silent" : "loud") + ") …");
-		gamesPlatform.Authenticate ((bool success) => {
-			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
-			authenticated = success;
-		}, silent);
+		butler.SignIn (silent);
 	}
 
 	public void SignOut ()
 	{
-		Debug.Log ("***SignOut() …");
-		gamesPlatform.SignOut ();
-		InvokeConnectStatusAction ();
+		butler.SignOut ();
 	}
 
-	// RealTimeMultiplayerListener
-	public void OnRoomSetupProgress (float percent)
+	public void QuitGame ()
 	{
-		Debug.Log ("***OnRoomSetupProgress(" + percent + ")");
-		roomSetupPercent = (int)percent;
-		// show the default waiting room.
-		//		if (!showingWaitingRoom) {
-		//			showingWaitingRoom = true;
-		//			gamesPlatform.RealTime.ShowWaitingRoomUI ();
-		//		}
-	}
-
-	void OnApplicationPause (bool pause)
-	{
-		if (Time.frameCount <= 1) {
-			return;
-		}
-		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		Debug.Log ("---------------------------------------\n***Application " + (pause ? "PAUSED" : "RESUMING") + " OnApplicationPause(" + pause + ") [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
-		//		if (!pause && roomSetupPercent > 0 && !IsRoomConnected) {
-		//			WorkaroundPlayGamePauseBug();
-		//		}
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnRoomConnected (bool success)
-	{
-		Debug.Log ("***OnRoomConnected(" + success + ")");
-		roomSetupPercent = success ? 100 : 0;
-		roomConnected = success;
-		if (success) {
-			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
-			InvokeRepeating ("Checkup", 1f, 1f);
-		}
-	}
-
-	void Checkup ()
-	{
-		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		if (!IsRoomConnected && roomSetupPercent == 100) {
-			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + roomSetupPercent + "]");
-			WorkaroundPlayGamePauseBug ();
-		}
-	}
-
-	void WorkaroundPlayGamePauseBug ()
-	{
-		Debug.Log ("***Workaround: Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling LeaveRoom() / OnLeftRoom() manually …");
-		if (gamesPlatform.RealTime != null) {
-			Debug.Log ("***Workaround: Calling LeaveRoom() …");
-			LeaveRoom ();
-		}
-		Debug.Log ("***Workaround: Calling OnLeftRoom() …");
-		OnLeftRoom ();
-	}
-
-	public void LeaveRoom ()
-	{
-		Debug.Log ("***LeaveRoom() …");
-		gamesPlatform.RealTime.LeaveRoom ();
+		Debug.Log ("***QuitGame() …");
+		butler.QuitGame ();
 	}
 
 
-	// RealTimeMultiplayerListener
-	public void OnLeftRoom ()
+
+	public void OnLeftGame ()
 	{
-		Debug.Log ("***OnLeftRoom()");
-		roomSetupPercent = 0;
-		roomConnected = false;
+		Debug.Log ("***OnLeftGame()");
 		SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
 	}
 
-	// RealTimeMultiplayerListener
-	public void OnParticipantLeft (Participant participant)
-	{
-		Debug.Log ("***OnParticipantLeft(" + participant + ")");
-		LeaveRoom ();
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnPeersConnected (string[] participantIds)
-	{
-		Debug.Log ("***OnPeersConnected(" + string.Join (",", participantIds) + ")");
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnPeersDisconnected (string[] participantIds)
-	{
-		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
-		LeaveRoom ();
-	}
-
-	// RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
 		RealtimeBattle.DecodeAndExecute (data);
 	}
-
-
-
 
 
 
