@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class RoomPanelController : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class RoomPanelController : MonoBehaviour
 	void UpdateActive (ConnectionStatus status)
 	{
 		switch (status) {
+		case ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED:
 		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 			gameObject.SetActive (false);
 			break;
@@ -29,7 +31,7 @@ public class RoomPanelController : MonoBehaviour
 			gameObject.SetActive (true);
 			break;
 		default:
-			throw new System.NotImplementedException ();
+			throw new NotImplementedException ();
 		}
 	}
 

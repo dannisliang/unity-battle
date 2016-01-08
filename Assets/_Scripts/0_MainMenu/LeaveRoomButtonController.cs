@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class LeaveRoomButtonController : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class LeaveRoomButtonController : MonoBehaviour
 	void UpdateActive (ConnectionStatus status)
 	{
 		switch (status) {
+		case ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED:
 		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 		case ConnectionStatus.AUTHENTICATED_NO_GAME:
 			gameObject.SetActive (false);
@@ -38,7 +40,7 @@ public class LeaveRoomButtonController : MonoBehaviour
 			gameObject.SetActive (true);
 			break;
 		default:
-			throw new System.NotImplementedException ();
+			throw new NotImplementedException ();
 		}
 	}
 

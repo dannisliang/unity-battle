@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class SignOutButtonController : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class SignOutButtonController : MonoBehaviour
 		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 			gameObject.SetActive (false);
 			break;
+		case ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED:
 		case ConnectionStatus.AUTHENTICATED_NO_GAME:
 		case ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME:
 		case ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME:
@@ -38,7 +40,7 @@ public class SignOutButtonController : MonoBehaviour
 			gameObject.SetActive (true);
 			break;
 		default:
-			throw new System.NotImplementedException ();
+			throw new NotImplementedException ();
 		}
 	}
 

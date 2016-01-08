@@ -52,19 +52,27 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 //		InitNearby ();
 
-		butler = MakeButler ();
-		butler.Init ();
-		SignIn (true);
+		OnGameTypeChanged += (GameType gameType) => {
+			butler = MakeButler (gameType);
+			butler.Init ();
+			SignIn (true);
+		};
 	}
 
-	IButler MakeButler ()
+	IButler MakeButler (GameType gameType)
 	{
 		GameObject go = new GameObject ();
 		IButler butler;
-		if (Application.isEditor) {
+		switch (gameType) {
+		case GameType.ONE_PLAYER_DEMO:
 			butler = go.AddComponent<ButlerDemo> ();
-		} else {
+			break;
+		case GameType.TWO_PLAYER_PLAY_GAMES:
 			butler = go.AddComponent<ButlerPlayGames> ();
+			break;
+		case GameType.NONE_SELECTED:
+		default:
+			throw new NotImplementedException ();
 		}
 		go.name = "Butler - " + butler.GetType ().ToString ();
 		OnConnectStatusChanged += (ConnectionStatus status) => {
@@ -107,6 +115,9 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 	ConnectionStatus GetConnectionStatus ()
 	{
+		if (butler == null) {
+			return ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED;
+		}
 		if (!butler.IsSignedIn ()) {
 			return ConnectionStatus.AUTHENTICATION_REQUIRED;
 		}

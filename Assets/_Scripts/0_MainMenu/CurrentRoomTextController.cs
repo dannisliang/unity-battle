@@ -33,6 +33,8 @@ public class CurrentRoomTextController : MonoBehaviour
 	string GetStatus (ConnectionStatus status)
 	{
 		switch (status) {
+		case ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED:
+			return "Game type selection required.";
 		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 			return "Sign in required";
 		case ConnectionStatus.AUTHENTICATED_NO_GAME:

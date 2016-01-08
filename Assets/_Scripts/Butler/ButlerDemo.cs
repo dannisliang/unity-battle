@@ -81,7 +81,6 @@ public class ButlerDemo : MonoBehaviour,IButler
 	{
 	}
 
-	
 	public void SignIn (bool silent = false)
 	{
 		SceneMaster.instance.Async (delegate {
@@ -95,8 +94,6 @@ public class ButlerDemo : MonoBehaviour,IButler
 		signedIn = false;
 	}
 
-	
-	
 	public void SetupGame (bool withInvitation)
 	{
 		Assert.IsTrue (gameSetupPercent == 0);

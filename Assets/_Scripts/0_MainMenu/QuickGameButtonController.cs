@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class QuickGameButtonController : MonoBehaviour
 {
@@ -28,17 +29,18 @@ public class QuickGameButtonController : MonoBehaviour
 	void UpdateActive (ConnectionStatus status)
 	{
 		switch (status) {
-		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 		case ConnectionStatus.AUTHENTICATED_NO_GAME:
 			gameObject.SetActive (true);
 			break;
+		case ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED:
+		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 		case ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME:
 		case ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME:
 		case ConnectionStatus.AUTHENTICATED_IN_GAME:
 			gameObject.SetActive (false);
 			break;
 		default:
-			throw new System.NotImplementedException ();
+			throw new NotImplementedException ();
 		}
 	}
 

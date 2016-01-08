@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class CurrentUserTextController : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class CurrentUserTextController : MonoBehaviour
 	string GetStatus (ConnectionStatus status)
 	{
 		switch (status) {
+		case ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED:
+			return "";
 		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 			return "";
 		case ConnectionStatus.AUTHENTICATED_NO_GAME:
@@ -39,7 +42,7 @@ public class CurrentUserTextController : MonoBehaviour
 		case ConnectionStatus.AUTHENTICATED_IN_GAME:
 			return "Signed in " + Game.instance.GetLocalUsername ();
 		default:
-			throw new System.NotImplementedException ();
+			throw new NotImplementedException ();
 		}
 	}
 }
