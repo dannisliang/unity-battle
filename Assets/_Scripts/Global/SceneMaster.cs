@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
+using UnityEngine.Assertions;
 
 public class SceneMaster : MonoBehaviour
 {
@@ -37,11 +38,12 @@ public class SceneMaster : MonoBehaviour
 		quitting = true;
 	}
 
-	public void LoadAsync (string menu)
+	public void LoadAsync (string sceneName)
 	{
+		Assert.AreNotEqual (sceneName, SceneManager.GetActiveScene ().name);
 		Async (delegate {
-			Debug.Log ("***Loading " + menu + " …");
-			SceneManager.LoadScene (menu);
+			Debug.Log ("***Loading " + sceneName + " …");
+			SceneManager.LoadScene (sceneName);
 		});
 	}
 

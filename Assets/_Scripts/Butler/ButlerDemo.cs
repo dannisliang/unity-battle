@@ -3,14 +3,14 @@ using System.Collections;
 using UnityEngine.Assertions;
 using GooglePlayGames.BasicApi.Multiplayer;
 
-public class ButlerDemo : MonoBehaviour,IButler,RealTimeMultiplayerListener
+public class ButlerDemo : MonoBehaviour,IButler
 {
-	IPlayGamesPlatform gamesPlatform;
+
+	//	public event Game.ConnectStatusAction OnConnectChanged;
 
 	bool _signedIn;
 	bool _gameConnected;
 	int _gameSetupPercent;
-
 
 	public bool IsSignedIn ()
 	{
@@ -29,11 +29,12 @@ public class ButlerDemo : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public bool signedIn {
 		get {
-			Assert.AreEqual (gamesPlatform.IsAuthenticated (), _signedIn);
-			_signedIn = gamesPlatform.IsAuthenticated ();
 			return _signedIn;
 		}
 		set {
+			if (_signedIn == value) {
+				return;
+			}
 			_signedIn = value;
 			Game.instance.InvokeConnectStatusAction ();
 		}
@@ -41,10 +42,12 @@ public class ButlerDemo : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public bool gameConnected {
 		get {
-			Assert.AreEqual (gamesPlatform.IsAuthenticated () && gamesPlatform.RealTime.IsRoomConnected (), _gameConnected);
 			return _gameConnected;
 		}
 		set {
+			if (_gameConnected == value) {
+				return;
+			}
 			_gameConnected = value;
 			Game.instance.InvokeConnectStatusAction ();
 		}
@@ -54,7 +57,10 @@ public class ButlerDemo : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		get {
 			return _gameSetupPercent;
 		}
-		set { 
+		set {
+			if (_gameSetupPercent == value) {
+				return;
+			}
 			_gameSetupPercent = value;
 			Game.instance.InvokeConnectStatusAction ();
 		}
@@ -62,126 +68,58 @@ public class ButlerDemo : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public int NumPlayers ()
 	{
-		return gamesPlatform.RealTime.GetConnectedParticipants ().Count;
-
+		return gameConnected ? 2 : 0;
+	
 	}
 
 	public string GetLocalUsername ()
 	{
-		return gamesPlatform.localUser.userName;
+		return gameConnected ? "Ford Prefect" : "";
 	}
 
 	public void Init ()
 	{
-		gamesPlatform = new DummyPlayGamesPlatform ();
 	}
 
-
+	
 	public void SignIn (bool silent = false)
 	{
-		Debug.Log ("***SignIn(" + (silent ? "silent" : "loud") + ") …");
-		gamesPlatform.Authenticate ((bool success) => {
-			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
-			signedIn = success;
-		}, silent);
+		SceneMaster.instance.Async (delegate {
+			signedIn = true;
+		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
 	public void SignOut ()
 	{
-		Debug.Log ("***SignOut() …");
-		gamesPlatform.SignOut ();
-		Game.instance.InvokeConnectStatusAction ();
+		gameConnected = false;
+		signedIn = false;
 	}
 
-
-
+	
+	
 	public void SetupGame (bool withInvitation)
 	{
-		Debug.Log ("***SetupGame(withInvitation=" + withInvitation + ")");
 		Assert.IsTrue (gameSetupPercent == 0);
-		if (withInvitation) {
-			gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
-		} else {
-			gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
-		}
 		gameSetupPercent = 1;
+		SceneMaster.instance.Async (delegate {
+			gameSetupPercent = 100;
+			gameConnected = true;
+		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
 	public void QuitGame ()
 	{
-		Debug.Log ("***QuitGame() …");
-		gamesPlatform.RealTime.LeaveRoom ();
+		SceneMaster.instance.Async (delegate {
+			gameConnected = false;
+			gameSetupPercent = 0;
+		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
-
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
-		gamesPlatform.RealTime.SendMessageToAll (reliable, data);
+		SceneMaster.instance.Async (delegate {
+			Game.instance.OnRealTimeMessageReceived (reliable, "dummySenderId", data);
+		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
-
-
-
-	// RealTimeMultiplayerListener
-	public void OnRoomSetupProgress (float percent)
-	{
-		Debug.Log ("***OnRoomSetupProgress(" + percent + ")");
-		gameSetupPercent = (int)percent;
-		// show the default waiting room.
-		//		if (!showingWaitingRoom) {
-		//			showingWaitingRoom = true;
-		//			gamesPlatform.RealTime.ShowWaitingRoomUI ();
-		//		}
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnRoomConnected (bool success)
-	{
-		Debug.Log ("***OnRoomConnected(" + success + ")");
-		gameSetupPercent = success ? 100 : 0;
-		gameConnected = success;
-		if (success) {
-			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
-			InvokeRepeating ("Checkup", 1f, 1f);
-		}
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnLeftRoom ()
-	{
-		Debug.Log ("***OnLeftRoom()");
-		gameSetupPercent = 0;
-		gameConnected = false;
-		Game.instance.OnLeftGame ();
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnParticipantLeft (Participant participant)
-	{
-		Debug.Log ("***OnParticipantLeft(" + participant + ")");
-		QuitGame ();
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnPeersConnected (string[] participantIds)
-	{
-		Debug.Log ("***OnPeersConnected(" + string.Join (",", participantIds) + ")");
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnPeersDisconnected (string[] participantIds)
-	{
-		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
-		QuitGame ();
-	}
-
-	// RealTimeMultiplayerListener
-	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
-	{
-		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
-		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
-	}
-
-
-
 
 }

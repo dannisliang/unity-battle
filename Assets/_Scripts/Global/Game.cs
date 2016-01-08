@@ -52,13 +52,27 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 //		InitNearby ();
 
-		if (Application.isEditor) {
-			butler = new ButlerDemo ();
-		} else {
-			butler = new ButlerPlayGames ();
-		}
+		butler = MakeButler ();
 		butler.Init ();
 		SignIn (true);
+	}
+
+	IButler MakeButler ()
+	{
+		GameObject go = new GameObject ();
+		IButler butler;
+		if (Application.isEditor) {
+			butler = go.AddComponent<ButlerDemo> ();
+		} else {
+			butler = go.AddComponent<ButlerPlayGames> ();
+		}
+		go.name = "Butler - " + butler.GetType ().ToString ();
+		OnConnectStatusChanged += (ConnectionStatus status) => {
+			if (status == ConnectionStatus.AUTHENTICATED_IN_GAME) {
+				SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
+			}
+		};
+		return butler;
 	}
 
 	#if UNITY_EDITOR
@@ -103,8 +117,7 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 			if (butler.GameSetupPercent () == 0) {
 				return ConnectionStatus.AUTHENTICATED_NO_GAME;
 			} else {
-				Debug.Log ("*** TODO: Consider AUTHENTICATED_TEARING_DOWN_GAME case");
-				//				return ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME;
+				// TODO implement ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME
 				return ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME;
 			}
 		}

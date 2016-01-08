@@ -4,6 +4,8 @@ using System.Collections;
 public interface IButler
 {
 
+	//	event Game.ConnectStatusAction OnConnectChanged;
+
 	bool IsSignedIn ();
 
 	bool IsGameConnected ();

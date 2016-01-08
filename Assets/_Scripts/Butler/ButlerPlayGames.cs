@@ -9,6 +9,8 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 {
 	IPlayGamesPlatform gamesPlatform;
 
+	//	public event Game.ConnectStatusAction OnConnectChanged;
+
 	bool _signedIn;
 	bool _gameConnected;
 	int _gameSetupPercent;
@@ -111,25 +113,29 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public void Init ()
 	{
-		// https://github.com/playgameservices/play-games-plugin-for-unity
-		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
-		                                       // enables saving game progress.
-		                                       //.EnableSavedGames ()
-		                                       // registers a callback to handle game invitations received while the game is not running.
-		                                       //.WithInvitationDelegate(<callback method>)
-		                                       // registers a callback for turn based match notifications received while the
-		                                       // game is not running.
-		                                       //.WithMatchDelegate(<callback method>)
+		if (Application.isEditor) {
+			gamesPlatform = new DummyPlayGamesPlatform ();
+		} else {
+			// https://github.com/playgameservices/play-games-plugin-for-unity
+			PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
+			                                      // enables saving game progress.
+			                                      //.EnableSavedGames ()
+			                                      // registers a callback to handle game invitations received while the game is not running.
+			                                      //.WithInvitationDelegate(<callback method>)
+			                                      // registers a callback for turn based match notifications received while the
+			                                      // game is not running.
+			                                      //.WithMatchDelegate(<callback method>)
 				.Build ();
 
-		PlayGamesPlatform.InitializeInstance (config);
+			PlayGamesPlatform.InitializeInstance (config);
 
-		// recommended for debugging:
-		//			PlayGamesPlatform.DebugLogEnabled = true;
+			// recommended for debugging:
+			//			PlayGamesPlatform.DebugLogEnabled = true;
 
-		Debug.Log ("***Activating PlayGamesPlatform …");
-		PlayGamesPlatform.Activate ();
-		gamesPlatform = PlayGamesPlatform.Instance;
+			Debug.Log ("***Activating PlayGamesPlatform …");
+			PlayGamesPlatform.Activate ();
+			gamesPlatform = PlayGamesPlatform.Instance;
+		}
 	}
 
 
