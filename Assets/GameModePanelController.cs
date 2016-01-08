@@ -2,16 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameTypeButtonController : MonoBehaviour
+public class GameModePanelController : MonoBehaviour
 {
 	public GameType gameType;
-
-	void Awake ()
-	{
-		GetComponent<Button> ().onClick.AddListener (delegate {
-			ButlerController.instance.gameType = gameType;
-		});
-	}
 
 	void Start ()
 	{
@@ -28,7 +21,6 @@ public class GameTypeButtonController : MonoBehaviour
 
 	void UpdateActive (GameType gameType)
 	{
-		gameObject.SetActive (gameType == GameType.NONE_SELECTED);
+		gameObject.SetActive (gameType == this.gameType);
 	}
-
 }
