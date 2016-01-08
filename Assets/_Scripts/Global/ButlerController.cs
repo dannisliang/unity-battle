@@ -19,6 +19,10 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 
 	public event ConnectStatusAction OnConnectStatusChanged;
 
+	public delegate void GameTypeChanged (GameType gameType);
+
+	public event GameTypeChanged OnGameTypeChanged;
+
 	//	public IPlayGamesPlatform gamesPlatform { get; private set; }
 	IPlayGamesPlatform gamesPlatform;
 
@@ -60,6 +64,18 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 		}
 	}
 
+	GameType _gameType;
+
+	public GameType gameType {
+		get {
+			return _gameType;
+		}
+		set {
+			_gameType = value;
+			InvokeGameTypeChanged ();
+		}
+	}
+
 	void Awake ()
 	{
 		if (instance != null && instance != this) {
@@ -73,6 +89,15 @@ public class ButlerController : MonoBehaviour,RealTimeMultiplayerListener,IDisco
 
 		InitPlayGamesPlatform ();
 		Authenticate (true);
+	}
+
+	public void InvokeGameTypeChanged (GameTypeChanged action = null)
+	{
+		action = action ?? OnGameTypeChanged;
+		if (action == null) {
+			return;
+		}
+		action (gameType);
 	}
 
 	public void InvokeConnectStatusAction (ConnectStatusAction action = null)
