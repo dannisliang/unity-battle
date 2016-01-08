@@ -69,7 +69,7 @@ do
   (
     adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null
     user_count=$(( $( adb shell pm list users | grep UserInfo | wc -l ) ))
-    user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo{([0-9]+).*/\1/' )
+    user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo.([0-9]+).*/\1/' )
     install_pkg -r -g --user $user $apk ||
     (
       echo " and reinstalling on $serial …"
