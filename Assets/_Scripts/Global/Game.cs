@@ -52,7 +52,11 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 //		InitNearby ();
 
-		butler = new ButlerPlayGames ();
+		if (Application.isEditor) {
+			butler = new ButlerDemo ();
+		} else {
+			butler = new ButlerPlayGames ();
+		}
 		butler.Init ();
 		SignIn (true);
 	}

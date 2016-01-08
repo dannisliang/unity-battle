@@ -2,10 +2,8 @@
 using System.Collections;
 using UnityEngine.Assertions;
 using GooglePlayGames.BasicApi.Multiplayer;
-using GooglePlayGames.BasicApi;
-using GooglePlayGames;
 
-public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
+public class ButlerDemo : MonoBehaviour,IButler,RealTimeMultiplayerListener
 {
 	IPlayGamesPlatform gamesPlatform;
 
@@ -73,63 +71,9 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		return gamesPlatform.localUser.userName;
 	}
 
-	void OnApplicationPause (bool pause)
-	{
-		if (Time.frameCount <= 1) {
-			return;
-		}
-		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		Debug.Log ("---------------------------------------\n***Application " + (pause ? "PAUSED" : "RESUMING") + " OnApplicationPause(" + pause + ") [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + gameSetupPercent + "]");
-		//		if (!pause && roomSetupPercent > 0 && !IsRoomConnected) {
-		//			WorkaroundPlayGamePauseBug();
-		//		}
-	}
-
-	void Checkup ()
-	{
-		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
-		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		if (!IsRoomConnected && gameSetupPercent == 100) {
-			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", roomSetupPercent=" + gameSetupPercent + "]");
-			WorkaroundPlayGamePauseBug ();
-		}
-	}
-
-	void WorkaroundPlayGamePauseBug ()
-	{
-		Debug.Log ("***Workaround: Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling LeaveRoom() / OnLeftRoom() manually …");
-		if (gamesPlatform.RealTime != null) {
-			Debug.Log ("***Workaround: Calling LeaveRoom() …");
-			QuitGame ();
-		}
-		Debug.Log ("***Workaround: Calling OnLeftRoom() …");
-		OnLeftRoom ();
-	}
-
-
-
 	public void Init ()
 	{
-		// https://github.com/playgameservices/play-games-plugin-for-unity
-		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
-		                                       // enables saving game progress.
-		                                       //.EnableSavedGames ()
-		                                       // registers a callback to handle game invitations received while the game is not running.
-		                                       //.WithInvitationDelegate(<callback method>)
-		                                       // registers a callback for turn based match notifications received while the
-		                                       // game is not running.
-		                                       //.WithMatchDelegate(<callback method>)
-				.Build ();
-
-		PlayGamesPlatform.InitializeInstance (config);
-
-		// recommended for debugging:
-		//			PlayGamesPlatform.DebugLogEnabled = true;
-
-		Debug.Log ("***Activating PlayGamesPlatform …");
-		PlayGamesPlatform.Activate ();
-		gamesPlatform = PlayGamesPlatform.Instance;
+		gamesPlatform = new DummyPlayGamesPlatform ();
 	}
 
 
@@ -236,6 +180,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
 		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
 	}
+
 
 
 
