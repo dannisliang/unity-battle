@@ -25,29 +25,27 @@ public class CurrentRoomTextController : MonoBehaviour
 		Game.instance.OnConnectStatusChanged -= UpdateStatus;
 	}
 
-	void UpdateStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	void UpdateStatus (ConnectionStatus status)
 	{
-		text.text = GetStatus (authenticated, isRoomConnected, roomSetupPercent);
+		text.text = GetStatus (status);
 	}
 
-	string GetStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	string GetStatus (ConnectionStatus status)
 	{
-		if (!authenticated) {
+		switch (status) {
+		case ConnectionStatus.AUTHENTICATION_REQUIRED:
 			return "Sign in required";
-		}
-		if (isRoomConnected) {
+		case ConnectionStatus.AUTHENTICATED_NO_GAME:
+			return "Tap “" + startGameButton.GetComponentInChildren<Text> ().text + "” to play.";
+		case ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME:
+			return "Finding a suitable opponent …";
+		case ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME:
+			return "Quitting game …";
+		case ConnectionStatus.AUTHENTICATED_IN_GAME:
 			int count = Game.butler.GetConnectedParticipantCount ();
 			return "Starting " + count + " player game …";
-		} 
-		switch (roomSetupPercent) {
-		case 0:
-			return "Tap “" + startGameButton.GetComponentInChildren<Text> ().text + "” to play.";
-		case 1:
-			return "Setting up game …";
-		case 20:
-			return "Finding a suitable opponent …";
 		default:
-			return "Game is " + roomSetupPercent + "% ready …";
+			throw new System.NotImplementedException ();
 		}
 	}
 }

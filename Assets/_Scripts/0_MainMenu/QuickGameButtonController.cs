@@ -25,9 +25,21 @@ public class QuickGameButtonController : MonoBehaviour
 		}
 	}
 
-	void UpdateActive (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	void UpdateActive (ConnectionStatus status)
 	{
-		gameObject.SetActive (authenticated && roomSetupPercent == 0);
+		switch (status) {
+		case ConnectionStatus.AUTHENTICATION_REQUIRED:
+		case ConnectionStatus.AUTHENTICATED_NO_GAME:
+			gameObject.SetActive (true);
+			break;
+		case ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME:
+		case ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME:
+		case ConnectionStatus.AUTHENTICATED_IN_GAME:
+			gameObject.SetActive (false);
+			break;
+		default:
+			throw new System.NotImplementedException ();
+		}
 	}
 
 }

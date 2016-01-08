@@ -20,7 +20,7 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 	public static IButler butler { get; private set; }
 
-	public delegate void ConnectStatusAction (bool authenticated, bool isRoomConnected, int roomSetupPercent);
+	public delegate void ConnectStatusAction (ConnectionStatus status);
 
 	public event ConnectStatusAction OnConnectStatusChanged;
 
@@ -84,10 +84,27 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		if (action == null) {
 			return;
 		}
-		action (butler.IsSignedIn (), butler.IsGameConnected (), butler.GameSetupPercent ());
+		action (GetConnectionStatus ());
 	}
 
-
+	ConnectionStatus GetConnectionStatus ()
+	{
+		if (!butler.IsSignedIn ()) {
+			return ConnectionStatus.AUTHENTICATION_REQUIRED;
+		}
+		if (butler.IsGameConnected ()) {
+			Assert.IsTrue (butler.GameSetupPercent () == 100);
+			return ConnectionStatus.AUTHENTICATED_IN_GAME;
+		} else {
+			if (butler.GameSetupPercent () == 0) {
+				return ConnectionStatus.AUTHENTICATED_NO_GAME;
+			} else {
+				Debug.Log ("*** TODO: Consider AUTHENTICATED_TEARING_DOWN_GAME case");
+				//				return ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME;
+				return ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME;
+			}
+		}
+	}
 
 
 

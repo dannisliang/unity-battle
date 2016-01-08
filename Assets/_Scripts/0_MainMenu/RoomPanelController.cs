@@ -16,9 +16,21 @@ public class RoomPanelController : MonoBehaviour
 		Game.instance.OnConnectStatusChanged -= UpdateActive;
 	}
 
-	void UpdateActive (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	void UpdateActive (ConnectionStatus status)
 	{
-		gameObject.SetActive (authenticated);
+		switch (status) {
+		case ConnectionStatus.AUTHENTICATION_REQUIRED:
+			gameObject.SetActive (false);
+			break;
+		case ConnectionStatus.AUTHENTICATED_NO_GAME:
+		case ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME:
+		case ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME:
+		case ConnectionStatus.AUTHENTICATED_IN_GAME:
+			gameObject.SetActive (true);
+			break;
+		default:
+			throw new System.NotImplementedException ();
+		}
 	}
 
 }

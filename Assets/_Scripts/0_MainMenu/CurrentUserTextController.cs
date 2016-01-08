@@ -23,13 +23,23 @@ public class CurrentUserTextController : MonoBehaviour
 		Game.instance.OnConnectStatusChanged -= UpdateStatus;
 	}
 
-	void UpdateStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	void UpdateStatus (ConnectionStatus status)
 	{
-		text.text = GetStatus (authenticated, isRoomConnected, roomSetupPercent);
+		text.text = GetStatus (status);
 	}
 
-	string GetStatus (bool authenticated, bool isRoomConnected, int roomSetupPercent)
+	string GetStatus (ConnectionStatus status)
 	{
-		return authenticated ? "Signed in " + Game.instance.GetLocalUsername () : "";
+		switch (status) {
+		case ConnectionStatus.AUTHENTICATION_REQUIRED:
+			return "";
+		case ConnectionStatus.AUTHENTICATED_NO_GAME:
+		case ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME:
+		case ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME:
+		case ConnectionStatus.AUTHENTICATED_IN_GAME:
+			return "Signed in " + Game.instance.GetLocalUsername ();
+		default:
+			throw new System.NotImplementedException ();
+		}
 	}
 }
