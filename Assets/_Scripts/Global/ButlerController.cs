@@ -9,6 +9,10 @@ using System.Collections.Generic;
 using UnityEngine.SocialPlatforms;
 using System;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class ButlerController : MonoBehaviour,IDiscoveryListener,IMessageListener
 {
 
@@ -52,6 +56,18 @@ public class ButlerController : MonoBehaviour,IDiscoveryListener,IMessageListene
 		butler.Init ();
 		SignIn (true);
 	}
+
+	#if UNITY_EDITOR
+	void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.S)) {
+			int scale = 2;
+			string filename = PlayerSettings.bundleIdentifier + "-" + (Screen.width * scale) + "x" + (Screen.height * scale) + "-" + DateTime.Now.ToString ("yyyy-MM-dd-HH-mm-ss") + ".png";
+			Application.CaptureScreenshot (filename, scale);
+			Debug.Log (scale + "x screenshot saved as " + filename);
+		}
+	}
+	#endif
 
 	public void InvokeGameTypeChanged (GameTypeChanged action = null)
 	{
