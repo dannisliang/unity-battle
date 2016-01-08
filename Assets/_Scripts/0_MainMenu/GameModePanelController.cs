@@ -8,14 +8,14 @@ public class GameModePanelController : MonoBehaviour
 
 	void Start ()
 	{
-		GameController.instance.OnGameTypeChanged += UpdateActive;
-		GameController.instance.InvokeGameTypeChanged (UpdateActive);
+		Game.instance.OnGameTypeChanged += UpdateActive;
+		Game.instance.InvokeGameTypeChanged (UpdateActive);
 	}
 
 	void OnDestroy ()
 	{
 		if (!SceneMaster.quitting) {
-			GameController.instance.OnGameTypeChanged -= UpdateActive;
+			Game.instance.OnGameTypeChanged -= UpdateActive;
 		}
 	}
 

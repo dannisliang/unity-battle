@@ -8,20 +8,20 @@ public class QuickGameButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			GameController.butler.SetupGame (false);
+			Game.butler.SetupGame (false);
 		});
 	}
 
 	void Start ()
 	{
-		GameController.instance.OnConnectStatusChanged += UpdateActive;
-		GameController.instance.InvokeConnectStatusAction (UpdateActive);
+		Game.instance.OnConnectStatusChanged += UpdateActive;
+		Game.instance.InvokeConnectStatusAction (UpdateActive);
 	}
 
 	void OnDestroy ()
 	{
 		if (!SceneMaster.quitting) {
-			GameController.instance.OnConnectStatusChanged -= UpdateActive;
+			Game.instance.OnConnectStatusChanged -= UpdateActive;
 		}
 	}
 

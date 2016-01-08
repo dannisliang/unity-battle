@@ -8,20 +8,20 @@ public class SignInButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			GameController.instance.SignIn (false);
+			Game.instance.SignIn (false);
 		});
 	}
 
 	void Start ()
 	{
-		GameController.instance.OnConnectStatusChanged += UpdateActive;
-		GameController.instance.InvokeConnectStatusAction (UpdateActive);
+		Game.instance.OnConnectStatusChanged += UpdateActive;
+		Game.instance.InvokeConnectStatusAction (UpdateActive);
 	}
 
 	void OnDestroy ()
 	{
 		if (!SceneMaster.quitting) {
-			GameController.instance.OnConnectStatusChanged -= UpdateActive;
+			Game.instance.OnConnectStatusChanged -= UpdateActive;
 		}
 	}
 

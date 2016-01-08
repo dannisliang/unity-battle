@@ -14,13 +14,13 @@ public class CurrentGameTypeTextController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		GameController.instance.OnGameTypeChanged += UpdateStatus;
-		GameController.instance.InvokeGameTypeChanged (UpdateStatus);
+		Game.instance.OnGameTypeChanged += UpdateStatus;
+		Game.instance.InvokeGameTypeChanged (UpdateStatus);
 	}
 
 	void OnDisable ()
 	{
-		GameController.instance.OnGameTypeChanged -= UpdateStatus;
+		Game.instance.OnGameTypeChanged -= UpdateStatus;
 	}
 
 	void UpdateStatus (GameType gameType)

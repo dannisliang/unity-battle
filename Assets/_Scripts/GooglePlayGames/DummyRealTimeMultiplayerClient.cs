@@ -34,7 +34,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			participants = new List<Participant> ();
 			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
 			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
-			listener.OnRoomConnected (GameController.butler.GameSetupPercent () > 0);
+			listener.OnRoomConnected (Game.butler.GameSetupPercent () > 0);
 		}, 2f * Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
@@ -68,7 +68,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + "," + (char)data [0] + "-" + data.Length + ")");
 		// simply mirror back messages with delay
 		SceneMaster.instance.Async (() => {
-			GameController.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
+			Game.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
 		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
@@ -113,7 +113,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			roomConnecting = false;
 			roomConnected = false;
 			participants = null;
-			GameController.instance.OnLeftGame ();
+			Game.instance.OnLeftGame ();
 		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 
