@@ -42,12 +42,6 @@ public class ButlerDemo : MonoBehaviour,IButler
 		SetGameState (GameState.PLAYING);
 	}
 
-	void SetGameState (GameState gameState)
-	{
-		this.gameState = gameState;
-		OnGameStateChange (gameState);
-	}
-
 	public GameState GetGameState ()
 	{
 		return gameState;
@@ -58,7 +52,6 @@ public class ButlerDemo : MonoBehaviour,IButler
 		Assert.AreEqual (GameState.PLAYING, gameState);
 		SetGameState (GameState.TEARING_DOWN_GAME);
 		SetGameState (GameState.GAME_WAS_TORN_DOWN);
-		SetGameState (GameState.NEED_TO_SELECT_GAME_TYPE);
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data)
@@ -66,6 +59,15 @@ public class ButlerDemo : MonoBehaviour,IButler
 		SceneMaster.instance.Async (delegate {
 			Game.instance.OnRealTimeMessageReceived (reliable, "dummySenderId", data);
 		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
+	}
+
+	void SetGameState (GameState gameState)
+	{
+		this.gameState = gameState;
+		OnGameStateChange (gameState);
+		if (gameState == GameState.GAME_WAS_TORN_DOWN) {
+			SetGameState (GameState.NEED_TO_SELECT_GAME_TYPE);
+		}
 	}
 
 	public override string ToString ()

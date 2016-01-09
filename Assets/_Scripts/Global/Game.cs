@@ -13,7 +13,7 @@ using System;
 using UnityEditor;
 #endif
 
-public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
+public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 {
 
 	public static Game instance;
@@ -40,25 +40,6 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		}
 	}
 
-	public delegate void GameTypeChanged (GameType gameType);
-
-	public event GameTypeChanged OnGameTypeChanged;
-
-
-	GameType _gameType;
-
-	public GameType gameType {
-		get {
-			return _gameType;
-		}
-		set {
-			_gameType = value;
-			if (OnGameTypeChanged != null) {
-				OnGameTypeChanged (_gameType);
-			}
-		}
-	}
-
 	void Awake ()
 	{
 		if (instance != null && instance != this) {
@@ -70,45 +51,41 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 //		InitNearby ();
 
-		gameObject.AddComponent<ButlerDemo> ();
-		gameObject.AddComponent<ButlerPlayGames> ();
-
-		OnGameTypeChanged += HandleGameTypeChanged;
 		OnGameStateChange += HandleGameStateChanged;
 	}
 
-	void HandleGameTypeChanged (GameType gameType)
+	void HandleButlerGameStateChange (GameState state)
 	{
-		butler = GetButler (gameType);
-		butler.OnGameStateChange += (GameState state) => {
-			if (_OnGameStateChange != null) {
-				_OnGameStateChange (state);
-			}
-		};
-		butler.Init ();
-		butler.NewGame ();
+		if (_OnGameStateChange != null) {
+			_OnGameStateChange (state);
+		}
 	}
 
 	IButler GetButler (GameType gameType)
 	{
 		switch (gameType) {
 		case GameType.ONE_PLAYER_DEMO:
-			return gameObject.GetComponent<ButlerDemo> ();
+			butler = gameObject.AddComponent<ButlerDemo> ();
+			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
-			return gameObject.GetComponent<ButlerPlayGames> ();
-		case GameType.NONE_SELECTED:
+			butler = gameObject.AddComponent<ButlerPlayGames> ();
+			break;
 		default:
 			throw new NotImplementedException ();
 		}
+		butler.OnGameStateChange += HandleButlerGameStateChange;
+		return butler;
 	}
 
 	void HandleGameStateChanged (GameState state)
 	{
+		Debug.Log ("===>" + state);
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
 			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
 			break;
 		case GameState.NEED_TO_SELECT_GAME_TYPE:
+			break;
 		case GameState.AUTHENTICATING:
 		case GameState.SETTING_UP_GAME:
 		case GameState.TEARING_DOWN_GAME:
@@ -181,8 +158,10 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 	}
 
 
-	public void NewGame ()
+	public void NewGame (GameType gameType)
 	{
+		butler = GetButler (gameType);
+		butler.Init ();
 		butler.NewGame ();
 	}
 
@@ -193,12 +172,6 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 	}
 
 
-
-	public void OnLeftGame ()
-	{
-		Debug.Log ("***OnLeftGame()");
-		SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
-	}
 
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{

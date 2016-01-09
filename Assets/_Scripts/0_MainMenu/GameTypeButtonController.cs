@@ -9,25 +9,25 @@ public class GameTypeButtonController : MonoBehaviour
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			Game.instance.gameType = gameType;
+			Game.instance.NewGame (gameType);
 		});
 	}
 
 	void Start ()
 	{
-		Game.instance.OnGameTypeChanged += UpdateActive;
+		Game.instance.OnGameStateChange += UpdateActive;
 	}
 
 	void OnDestroy ()
 	{
 		if (!SceneMaster.quitting) {
-			Game.instance.OnGameTypeChanged -= UpdateActive;
+			Game.instance.OnGameStateChange -= UpdateActive;
 		}
 	}
 
-	void UpdateActive (GameType gameType)
+	void UpdateActive (GameState gameState)
 	{
-		gameObject.SetActive (gameType == GameType.NONE_SELECTED);
+		gameObject.SetActive (gameState == GameState.NEED_TO_SELECT_GAME_TYPE);
 	}
 
 }

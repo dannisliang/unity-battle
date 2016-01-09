@@ -17,7 +17,7 @@ public class LayerInfo
 		Assert.IsTrue (layerMask == LayerMask.GetMask (layerName));
 	}
 
-	public string ToString ()
+	public override string ToString ()
 	{
 		return "LayerInfo(" + layerName + ", layer " + layer + ", mask " + layerMask + ")";
 	}

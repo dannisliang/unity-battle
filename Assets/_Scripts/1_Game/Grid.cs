@@ -117,7 +117,7 @@ public class Grid
 		return StrikeResult.MISS;
 	}
 
-	public string ToString ()
+	public override string ToString ()
 	{
 		string[] arr = new string[boats.Length];
 		for (int i = 0; i < boats.Length; i++) {

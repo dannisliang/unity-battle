@@ -10,6 +10,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 	bool roomConnecting;
 	bool roomConnected;
 	List<Participant> participants;
+	RealTimeMultiplayerListener listener;
 
 	#region IRealTimeMultiplayerClient implementation
 
@@ -20,6 +21,8 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 
 	public void CreateQuickGame (uint minOpponents, uint maxOpponents, uint variant, ulong exclusiveBitMask, RealTimeMultiplayerListener listener)
 	{
+		Assert.IsTrue (this.listener == null || this.listener == listener);
+		this.listener = listener;
 		Assert.IsFalse (roomConnecting);
 		Assert.IsFalse (roomConnected);
 		SceneMaster.instance.Async (() => {
@@ -70,7 +73,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + "," + (char)data [0] + "-" + data.Length + ")");
 		// simply mirror back messages with delay
 		SceneMaster.instance.Async (() => {
-			Game.instance.OnRealTimeMessageReceived (reliable, "senderid", data);
+			listener.OnRealTimeMessageReceived (reliable, "senderid", data);
 		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
@@ -115,7 +118,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			roomConnecting = false;
 			roomConnected = false;
 			participants = null;
-			Game.instance.OnLeftGame ();
+			listener.OnLeftRoom ();
 		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 

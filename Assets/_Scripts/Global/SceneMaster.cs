@@ -40,7 +40,10 @@ public class SceneMaster : MonoBehaviour
 
 	public void LoadAsync (string sceneName)
 	{
-		Assert.AreNotEqual (sceneName, SceneManager.GetActiveScene ().name);
+		if (sceneName.Equals (SceneManager.GetActiveScene ().name)) {
+			Debug.Log ("*** NOT loading already loaded scene " + sceneName);
+			return;
+		} 
 		Async (delegate {
 			Debug.Log ("***Loading " + sceneName + " …");
 			SceneManager.LoadScene (sceneName);

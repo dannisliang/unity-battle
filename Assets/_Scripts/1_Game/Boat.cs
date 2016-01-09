@@ -73,7 +73,7 @@ public class Boat
 		return locations;
 	}
 
-	public string ToString ()
+	public override string ToString ()
 	{
 		return config.ToString ();// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
 	}
