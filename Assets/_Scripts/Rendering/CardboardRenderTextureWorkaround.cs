@@ -4,6 +4,8 @@ using System.Collections;
 public class CardboardRenderTextureWorkaround : MonoBehaviour
 {
 
+	#if UNITY_EDITOR
+
 	int width, height;
 
 	void Awake ()
@@ -37,4 +39,5 @@ public class CardboardRenderTextureWorkaround : MonoBehaviour
 		Cardboard.SDK.DeviceType = deviceType;
 	}
 
+	#endif
 }
