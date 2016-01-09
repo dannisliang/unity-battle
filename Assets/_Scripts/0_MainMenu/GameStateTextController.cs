@@ -30,18 +30,21 @@ public class GameStateTextController : MonoBehaviour
 
 	string GetText (GameState state)
 	{
-		return state.ToString ();
-//		switch (state) {
-//		case GameState.SELECTING_GAME_TYPE:
-//			return "";
-//		case GameState.AUTHENTICATING:
-//			return "";
-//		case GameState.SETTING_UP_GAME:
-//		case GameState.TEARING_DOWN_GAME:
-//		case GameState.PLAYING:
-//			return "Signed in " + Game.instance.GetLocalUsername ();
-//		default:
-//			throw new NotImplementedException ();
-//		}
+		switch (state) {
+		case GameState.NEED_TO_SELECT_GAME_TYPE:
+			return "";
+		case GameState.AUTHENTICATING:
+			return "Signing in …";
+		case GameState.SETTING_UP_GAME:
+			return "Seting up new game …";
+		case GameState.TEARING_DOWN_GAME:
+			return "Game is ending.";
+		case GameState.GAME_WAS_TORN_DOWN:
+			return "Game has ended.";
+		case GameState.PLAYING:
+			return "Game is ready.";
+		default:
+			return state.ToString ();
+		}
 	}
 }
