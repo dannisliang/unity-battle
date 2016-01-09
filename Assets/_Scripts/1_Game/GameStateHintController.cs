@@ -85,7 +85,7 @@ public class GameStateHintController : MonoBehaviour
 		}
 		if (firing) {
 			color = defaultBackgroundColor;
-			return "Missle firing …";
+			return "Firing missle …";
 		}
 		if (reticleBoatTarget != null) {
 			color = identifyBackgroundColor;
@@ -93,7 +93,8 @@ public class GameStateHintController : MonoBehaviour
 		}
 		if (!reticleAimingAtGrid) {
 			color = defaultBackgroundColor;
-			return "Please locate the upper game grid.";
+			return "Locate the upper game grid\n" +
+			"to target your opponent's ships.";
 		}
 		color = defaultBackgroundColor;
 		return "Missle is armed and ready.\n" + (vrMode ?
