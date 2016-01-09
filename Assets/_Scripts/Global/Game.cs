@@ -30,6 +30,7 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		add {
 			lock (GameStateChangeLock) {
 				_OnGameStateChange += value;
+				value (butler == null ? GameState.SELECTING_GAME_TYPE : butler.GetGameState ());
 			}
 		}
 		remove {
@@ -69,41 +70,57 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 //		InitNearby ();
 
-		OnGameTypeChanged += (GameType gameType) => {
-			butler = MakeButler (gameType);
-			butler.OnGameStateChange += (GameState state) => {
-				if (_OnGameStateChange != null) {
-					_OnGameStateChange (state);
-				}
-			};
-			butler.Init ();
-			butler.NewGame ();
-		};
+		gameObject.AddComponent<ButlerDemo> ();
+		gameObject.AddComponent<ButlerPlayGames> ();
+
+		OnGameTypeChanged += HandleGameTypeChanged;
+		OnGameStateChange += HandleGameStateChanged;
 	}
 
-	IButler MakeButler (GameType gameType)
+	void HandleGameTypeChanged (GameType gameType)
 	{
-		GameObject go = new GameObject ();
-		IButler butler;
+		butler = GetButler (gameType);
+		butler.OnGameStateChange += (GameState state) => {
+			if (_OnGameStateChange != null) {
+				_OnGameStateChange (state);
+			}
+		};
+		butler.Init ();
+		butler.NewGame ();
+	}
+
+	IButler GetButler (GameType gameType)
+	{
 		switch (gameType) {
 		case GameType.ONE_PLAYER_DEMO:
-			butler = go.AddComponent<ButlerDemo> ();
-			break;
+			return gameObject.GetComponent<ButlerDemo> ();
 		case GameType.TWO_PLAYER_PLAY_GAMES:
-			butler = go.AddComponent<ButlerPlayGames> ();
-			break;
+			return gameObject.GetComponent<ButlerPlayGames> ();
 		case GameType.NONE_SELECTED:
 		default:
 			throw new NotImplementedException ();
 		}
-		go.name = "Butler - " + butler.GetType ().ToString ();
-		OnGameStateChange += (GameState state) => {
-			if (state == GameState.PLAYING) {
-				SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
-			}
-		};
 		return butler;
 	}
+
+	void HandleGameStateChanged (GameState state)
+	{
+		switch (state) {
+		case GameState.SELECTING_GAME_TYPE:
+			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
+			break;
+		case GameState.AUTHENTICATING:
+		case GameState.SETTING_UP_GAME:
+		case GameState.TEARING_DOWN_GAME:
+			break;
+		case GameState.PLAYING:
+			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
+			break;
+		default:
+			throw new NotImplementedException ();
+		}
+	}
+
 
 	#if UNITY_EDITOR
 	void Update ()

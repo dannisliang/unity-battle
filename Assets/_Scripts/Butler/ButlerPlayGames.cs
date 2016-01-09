@@ -13,7 +13,6 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public event Game.GameStateChange OnGameStateChange;
 
 	protected bool _signedIn;
-	protected bool _gameConnected;
 	protected int _gameSetupPercent;
 
 	public bool signedIn {
@@ -25,21 +24,6 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 				return;
 			}
 			_signedIn = value;
-			if (OnGameStateChange != null) {
-				OnGameStateChange (GetGameState ());
-			}
-		}
-	}
-
-	public bool gameConnected {
-		get {
-			return _gameConnected;
-		}
-		set {
-			if (_gameConnected == value) {
-				return;
-			}
-			_gameConnected = value;
 			if (OnGameStateChange != null) {
 				OnGameStateChange (GetGameState ());
 			}
@@ -234,9 +218,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		gameSetupPercent = success ? 100 : 0;
-		gameConnected = success;
 		if (success) {
-			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
 			InvokeRepeating ("Checkup", 1f, 1f);
 		}
 	}
@@ -246,7 +228,6 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnLeftRoom()");
 		gameSetupPercent = 0;
-		gameConnected = false;
 		Game.instance.OnLeftGame ();
 	}
 
@@ -278,9 +259,9 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	}
 
 
-	public string ToString ()
+	public override string ToString ()
 	{
-		return string.Format ("[ButlerPlayGames: signedIn={0}, gameConnected={1}, gameSetupPercent={2}]", signedIn, gameConnected, gameSetupPercent);
+		return string.Format ("[ButlerPlayGames: signedIn={0}, gameSetupPercent={1}]", signedIn, gameSetupPercent);
 	}
 
 }

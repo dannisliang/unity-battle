@@ -10,6 +10,14 @@ public class ButlerDemo : MonoBehaviour,IButler
 
 	bool playing;
 
+	void Update ()
+	{
+		if (playing && Input.GetKeyDown (KeyCode.F)) {
+			Debug.Log ("***Simulating failure …");
+			QuitGame ();
+		}
+	}
+
 	public int NumPlayers ()
 	{
 		return playing ? 2 : 0;
@@ -50,7 +58,7 @@ public class ButlerDemo : MonoBehaviour,IButler
 		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
-	public string ToString ()
+	public override string ToString ()
 	{
 		return string.Format ("[ButlerDemo: playing={0}]", playing);
 	}
