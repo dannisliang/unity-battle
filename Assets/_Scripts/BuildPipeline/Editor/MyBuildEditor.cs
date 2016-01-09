@@ -6,7 +6,9 @@ using System;
 
 public class MyBuildEditor
 {
-	[MenuItem ("MyTools/Build %&b")]
+	static bool executing;
+
+	[MenuItem ("FRED/Build %&b")]
 	public static void BuildGame ()
 	{
 		ClearLog ();
@@ -21,6 +23,11 @@ public class MyBuildEditor
 
 	static int Execute (string cmd, params string[] args)
 	{
+		if (executing) {
+			UnityEngine.Debug.LogError ("ALREADY EXECUTING !!");
+			return 1;
+		}
+		executing = true;
 		string joinedArgs = string.Join (" ", args);
 		Process proc = new Process ();
 		proc.StartInfo.UseShellExecute = false;
@@ -43,6 +50,7 @@ public class MyBuildEditor
 		proc.BeginOutputReadLine ();
 		var error = proc.StandardError.ReadToEnd ();
 		proc.WaitForExit ();
+		executing = false;
 
 		var exitCode = proc.ExitCode;
 		if (exitCode != 0 || error.Length > 0) {
