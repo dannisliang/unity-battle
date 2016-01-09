@@ -111,10 +111,19 @@ public class BattleController : MonoBehaviour
 		}
 		GameObject rocket = Instantiate (rocketPrefab);
 		BattleController.instance.SetIsFiring (true);
-		rocket.GetComponent<RocketController> ().Launch (Camera.main.transform, targetTransform, delegate {
+		rocket.GetComponent<RocketController> ().Launch (FirePos (), targetTransform.position, delegate {
 			SetIsFiring (false);
 		});
 		return true;
+	}
+
+	Vector3 FirePos ()
+	{
+		if (Random.value > .5) {
+			return Camera.main.transform.position + Camera.main.transform.right;
+		} else {
+			return Camera.main.transform.position - Camera.main.transform.right;
+		}
 	}
 
 	public StrikeResult Strike (Whose whose, Position position)

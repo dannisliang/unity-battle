@@ -26,12 +26,12 @@ public class RocketController : MonoBehaviour
 		}
 	}
 
-	public void Launch (Transform origin, Transform targetTransform, Action callback)
+	public void Launch (Vector3 origin, Vector3 target, Action callback)
 	{
 		this.callback = callback;
 
-		Vector3 direction = targetTransform.position - origin.position;
-		transform.position = origin.position;
+		Vector3 direction = target - origin;
+		transform.position = origin;
 		transform.rotation = Quaternion.LookRotation (direction);
 		GetComponent<Rigidbody> ().velocity = direction.normalized * velocity;
 	}
