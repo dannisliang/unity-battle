@@ -12,7 +12,7 @@ public class Position
 		this.y = y;
 	}
 
-	public override bool Equals (System.Object obj)
+	public bool Equals (System.Object obj)
 	{
 		if (obj == null) {
 			return false;
@@ -21,12 +21,12 @@ public class Position
 		return other.x == x && other.y == y;
 	}
 
-	public override int GetHashCode ()
+	public int GetHashCode ()
 	{
 		return x * 31 + y;
 	}
 
-	public override string ToString ()
+	public string ToString ()
 	{
 		return "" + ((char)(x + 65)) + (y + 1);
 	}

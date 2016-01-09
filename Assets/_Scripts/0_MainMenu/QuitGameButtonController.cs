@@ -16,7 +16,6 @@ public class QuitGameButtonController : MonoBehaviour
 	void Start ()
 	{
 		Game.instance.OnGameStateChange += UpdateActive;
-		Game.instance.InvokeConnectStatusAction (UpdateActive);
 	}
 
 	void OnDestroy ()

@@ -22,7 +22,22 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 	public delegate void GameStateChange (GameState state);
 
-	public event GameStateChange OnGameStateChange;
+	object GameStateChangeLock = new System.Object ();
+
+	private event GameStateChange _OnGameStateChange;
+
+	public event GameStateChange OnGameStateChange {
+		add {
+			lock (GameStateChangeLock) {
+				_OnGameStateChange += value;
+			}
+		}
+		remove {
+			lock (GameStateChangeLock) {
+				_OnGameStateChange -= value;
+			}
+		}
+	}
 
 	public delegate void GameTypeChanged (GameType gameType);
 
@@ -37,7 +52,9 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		}
 		set {
 			_gameType = value;
-			InvokeGameTypeChanged ();
+			if (OnGameTypeChanged != null) {
+				OnGameTypeChanged (_gameType);
+			}
 		}
 	}
 
@@ -54,6 +71,11 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 		OnGameTypeChanged += (GameType gameType) => {
 			butler = MakeButler (gameType);
+			butler.OnGameStateChange += (GameState state) => {
+				if (_OnGameStateChange != null) {
+					_OnGameStateChange (state);
+				}
+			};
 			butler.Init ();
 			butler.NewGame ();
 		};
@@ -94,25 +116,6 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		}
 	}
 	#endif
-
-	public void InvokeGameTypeChanged (GameTypeChanged action = null)
-	{
-		action = action ?? OnGameTypeChanged;
-		if (action == null) {
-			return;
-		}
-		action (gameType);
-	}
-
-	public void InvokeConnectStatusAction (GameStateChange action = null)
-	{
-		action = action ?? OnGameStateChange;
-		if (action == null) {
-			return;
-		}
-		GameState state = butler == null ? GameState.SELECTING_GAME_TYPE : butler.GetConnectionStatus ();
-		action (state);
-	}
 
 
 

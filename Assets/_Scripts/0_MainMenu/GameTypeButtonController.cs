@@ -16,7 +16,6 @@ public class GameTypeButtonController : MonoBehaviour
 	void Start ()
 	{
 		Game.instance.OnGameTypeChanged += UpdateActive;
-		Game.instance.InvokeGameTypeChanged (UpdateActive);
 	}
 
 	void OnDestroy ()

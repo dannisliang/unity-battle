@@ -4,11 +4,11 @@ using System.Collections;
 public interface IButler
 {
 
-	//	event Game.ConnectStatusAction OnConnectChanged;
+	event Game.GameStateChange OnGameStateChange;
 
 	void Init ();
 
-	GameState GetConnectionStatus ();
+	GameState GetGameState ();
 
 	void NewGame ();
 

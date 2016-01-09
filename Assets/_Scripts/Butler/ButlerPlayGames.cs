@@ -4,37 +4,45 @@ using UnityEngine.Assertions;
 using GooglePlayGames.BasicApi.Multiplayer;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames;
+using System;
 
 public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 {
 	IPlayGamesPlatform gamesPlatform;
 
-	//	public event Game.ConnectStatusAction OnConnectChanged;
+	public event Game.GameStateChange OnGameStateChange;
 
-	bool _signedIn;
-	bool _gameConnected;
-	int _gameSetupPercent;
+	protected bool _signedIn;
+	protected bool _gameConnected;
+	protected int _gameSetupPercent;
 
 	public bool signedIn {
 		get {
-			Assert.AreEqual (gamesPlatform.IsAuthenticated (), _signedIn);
-			_signedIn = gamesPlatform.IsAuthenticated ();
 			return _signedIn;
 		}
 		set {
+			if (_signedIn == value) {
+				return;
+			}
 			_signedIn = value;
-			Game.instance.InvokeConnectStatusAction ();
+			if (OnGameStateChange != null) {
+				OnGameStateChange (GetGameState ());
+			}
 		}
 	}
 
 	public bool gameConnected {
 		get {
-			Assert.AreEqual (gamesPlatform.IsAuthenticated () && gamesPlatform.RealTime.IsRoomConnected (), _gameConnected);
 			return _gameConnected;
 		}
 		set {
+			if (_gameConnected == value) {
+				return;
+			}
 			_gameConnected = value;
-			Game.instance.InvokeConnectStatusAction ();
+			if (OnGameStateChange != null) {
+				OnGameStateChange (GetGameState ());
+			}
 		}
 	}
 
@@ -42,16 +50,21 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		get {
 			return _gameSetupPercent;
 		}
-		set { 
+		set {
+			if (_gameSetupPercent == value) {
+				return;
+			}
 			_gameSetupPercent = value;
-			Game.instance.InvokeConnectStatusAction ();
+			if (OnGameStateChange != null) {
+				OnGameStateChange (GetGameState ());
+			}
 		}
 	}
+
 
 	public int NumPlayers ()
 	{
 		return gamesPlatform.RealTime.GetConnectedParticipants ().Count;
-
 	}
 
 	public string GetLocalUsername ()
@@ -120,14 +133,64 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 			PlayGamesPlatform.Activate ();
 			gamesPlatform = PlayGamesPlatform.Instance;
 		}
+
+		OnGameStateChange += (GameState state) => {
+			switch (state) {
+			case GameState.SELECTING_GAME_TYPE:
+			case GameState.AUTHENTICATING:
+				break;
+			case GameState.SETTING_UP_GAME:
+				gameObject.SetActive (false);
+				break;
+			case GameState.TEARING_DOWN_GAME:
+			case GameState.PLAYING:
+				gameObject.SetActive (true);
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+		};
 	}
 
 	public void NewGame ()
 	{
+		PlayGamesSignIn ((bool success) => {
+			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
+			signedIn = success;
+			if (success) {
+				PlayGamesNewGame ();
+			} else {
+				throw new NotImplementedException ();
+			}
+		});
 	}
 
+	void PlayGamesSignIn (Action<bool> callback)
+	{
+		// check if already signed in
+		if (gamesPlatform.IsAuthenticated ()) {
+			callback (true);
+		} else {
+			gamesPlatform.Authenticate (callback, false);
+		}
+	}
 
-	public GameState GetConnectionStatus ()
+	//	void PlayGamesSignOut ()
+	//	{
+	//		Debug.Log ("***SignOut() …");
+	//		gamesPlatform.SignOut ();
+	//		Game.instance.InvokeConnectStatusAction ();
+	//	}
+
+	void PlayGamesNewGame ()
+	{
+		Assert.IsTrue (gameSetupPercent == 0);
+//		gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
+		gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
+		gameSetupPercent = 1;
+	}
+
+	public GameState GetGameState ()
 	{
 		if (!gamesPlatform.IsAuthenticated ()) {
 			return GameState.AUTHENTICATING;
@@ -139,34 +202,6 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 			return GameState.SETTING_UP_GAME;
 		}
 	}
-
-	//	void SignIn (bool silent = false)
-	//	{
-	//		Debug.Log ("***SignIn(" + (silent ? "silent" : "loud") + ") …");
-	//		gamesPlatform.Authenticate ((bool success) => {
-	//			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
-	//			signedIn = success;
-	//		}, silent);
-	//	}
-	//
-	//	void SignOut ()
-	//	{
-	//		Debug.Log ("***SignOut() …");
-	//		gamesPlatform.SignOut ();
-	//		Game.instance.InvokeConnectStatusAction ();
-	//	}
-	//
-	//	void SetupGame (bool withInvitation)
-	//	{
-	//		Debug.Log ("***SetupGame(withInvitation=" + withInvitation + ")");
-	//		Assert.IsTrue (gameSetupPercent == 0);
-	//		if (withInvitation) {
-	//			gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
-	//		} else {
-	//			gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
-	//		}
-	//		gameSetupPercent = 1;
-	//	}
 
 	public void QuitGame ()
 	{
@@ -243,7 +278,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	}
 
 
-	public override string ToString ()
+	public string ToString ()
 	{
 		return string.Format ("[ButlerPlayGames: signedIn={0}, gameConnected={1}, gameSetupPercent={2}]", signedIn, gameConnected, gameSetupPercent);
 	}

@@ -16,7 +16,6 @@ public class ConnectionStatusTextController : MonoBehaviour
 	void OnEnable ()
 	{
 		Game.instance.OnGameStateChange += UpdateText;
-		Game.instance.InvokeConnectStatusAction (UpdateText);
 	}
 
 	void OnDisable ()
