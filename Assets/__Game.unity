@@ -2347,6 +2347,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1321132426}
   - 114: {fileID: 1321132425}
+  - 114: {fileID: 1321132427}
   m_Layer: 0
   m_Name: Cardboard Assistant
   m_TagString: Untagged
@@ -2377,6 +2378,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &1321132427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1321132424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a33c1b5ba8e4fb5a592282259a5bab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1342758084
 GameObject:
   m_ObjectHideFlags: 0
