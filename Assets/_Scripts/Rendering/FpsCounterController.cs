@@ -14,12 +14,12 @@ public class FpsCounterController : MonoBehaviour
 
 	void Awake ()
 	{
-#if _DEBUG || UNITY_EDITOR || DEVELOPMENT_BUILD || UNITY_ANDROID
-		QualitySettings.vSyncCount = 0;
-		text = GetComponent<Text> ();
-#else
-		Destroy (gameObject);
-#endif		
+		if (Application.installMode == ApplicationInstallMode.DeveloperBuild) {
+			QualitySettings.vSyncCount = 0;
+			text = GetComponent<Text> ();
+		} else {
+			Destroy (gameObject);
+		}
 	}
 
 	void Update ()
