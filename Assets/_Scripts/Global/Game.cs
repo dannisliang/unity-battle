@@ -20,9 +20,9 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 
 	public static IButler butler { get; private set; }
 
-	public delegate void ConnectStatusAction (ConnectionStatus status);
+	public delegate void GameStateChange (GameState state);
 
-	public event ConnectStatusAction OnConnectStatusChanged;
+	public event GameStateChange OnGameStateChange;
 
 	public delegate void GameTypeChanged (GameType gameType);
 
@@ -55,7 +55,7 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		OnGameTypeChanged += (GameType gameType) => {
 			butler = MakeButler (gameType);
 			butler.Init ();
-			SignIn (true);
+			butler.NewGame ();
 		};
 	}
 
@@ -75,8 +75,8 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 			throw new NotImplementedException ();
 		}
 		go.name = "Butler - " + butler.GetType ().ToString ();
-		OnConnectStatusChanged += (ConnectionStatus status) => {
-			if (status == ConnectionStatus.AUTHENTICATED_IN_GAME) {
+		OnGameStateChange += (GameState state) => {
+			if (state == GameState.PLAYING) {
 				SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
 			}
 		};
@@ -104,14 +104,14 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		action (gameType);
 	}
 
-	public void InvokeConnectStatusAction (ConnectStatusAction action = null)
+	public void InvokeConnectStatusAction (GameStateChange action = null)
 	{
-		action = action ?? OnConnectStatusChanged;
+		action = action ?? OnGameStateChange;
 		if (action == null) {
 			return;
 		}
-		ConnectionStatus status = butler == null ? ConnectionStatus.GAME_TYPE_SELECTION_REQUIRED : butler.GetConnectionStatus ();
-		action (status);
+		GameState state = butler == null ? GameState.SELECTING_GAME_TYPE : butler.GetConnectionStatus ();
+		action (state);
 	}
 
 
@@ -161,16 +161,9 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 	}
 
 
-
-
-	public void SignIn (bool silent = false)
+	public void NewGame ()
 	{
-		butler.SignIn (silent);
-	}
-
-	public void SignOut ()
-	{
-		butler.SignOut ();
+		butler.NewGame ();
 	}
 
 	public void QuitGame ()

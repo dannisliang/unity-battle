@@ -122,53 +122,51 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 	}
 
-	public ConnectionStatus GetConnectionStatus ()
+	public void NewGame ()
+	{
+	}
+
+
+	public GameState GetConnectionStatus ()
 	{
 		if (!gamesPlatform.IsAuthenticated ()) {
-			return ConnectionStatus.AUTHENTICATION_REQUIRED;
+			return GameState.AUTHENTICATING;
 		}
 		if (gamesPlatform.RealTime.IsRoomConnected ()) {
 			Assert.IsTrue (gameSetupPercent == 100);
-			return ConnectionStatus.AUTHENTICATED_IN_GAME;
+			return GameState.PLAYING;
 		} else {
-			if (gameSetupPercent == 0) {
-				return ConnectionStatus.AUTHENTICATED_NO_GAME;
-			} else {
-				// TODO implement ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME
-				return ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME;
-			}
+			return GameState.SETTING_UP_GAME;
 		}
 	}
 
-	public void SignIn (bool silent = false)
-	{
-		Debug.Log ("***SignIn(" + (silent ? "silent" : "loud") + ") …");
-		gamesPlatform.Authenticate ((bool success) => {
-			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
-			signedIn = success;
-		}, silent);
-	}
-
-	public void SignOut ()
-	{
-		Debug.Log ("***SignOut() …");
-		gamesPlatform.SignOut ();
-		Game.instance.InvokeConnectStatusAction ();
-	}
-
-
-
-	public void SetupGame (bool withInvitation)
-	{
-		Debug.Log ("***SetupGame(withInvitation=" + withInvitation + ")");
-		Assert.IsTrue (gameSetupPercent == 0);
-		if (withInvitation) {
-			gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
-		} else {
-			gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
-		}
-		gameSetupPercent = 1;
-	}
+	//	void SignIn (bool silent = false)
+	//	{
+	//		Debug.Log ("***SignIn(" + (silent ? "silent" : "loud") + ") …");
+	//		gamesPlatform.Authenticate ((bool success) => {
+	//			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
+	//			signedIn = success;
+	//		}, silent);
+	//	}
+	//
+	//	void SignOut ()
+	//	{
+	//		Debug.Log ("***SignOut() …");
+	//		gamesPlatform.SignOut ();
+	//		Game.instance.InvokeConnectStatusAction ();
+	//	}
+	//
+	//	void SetupGame (bool withInvitation)
+	//	{
+	//		Debug.Log ("***SetupGame(withInvitation=" + withInvitation + ")");
+	//		Assert.IsTrue (gameSetupPercent == 0);
+	//		if (withInvitation) {
+	//			gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
+	//		} else {
+	//			gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
+	//		}
+	//		gameSetupPercent = 1;
+	//	}
 
 	public void QuitGame ()
 	{

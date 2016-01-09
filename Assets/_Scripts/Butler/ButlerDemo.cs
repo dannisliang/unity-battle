@@ -66,46 +66,45 @@ public class ButlerDemo : MonoBehaviour,IButler
 	{
 	}
 
-	public ConnectionStatus GetConnectionStatus ()
+	public void NewGame ()
+	{
+	}
+
+	public GameState GetConnectionStatus ()
 	{
 		if (!_signedIn) {
-			return ConnectionStatus.AUTHENTICATION_REQUIRED;
+			return GameState.AUTHENTICATING;
 		}
 		if (_gameConnected) {
 			Assert.IsTrue (gameSetupPercent == 100);
-			return ConnectionStatus.AUTHENTICATED_IN_GAME;
+			return GameState.PLAYING;
 		} else {
-			if (_gameSetupPercent == 0) {
-				return ConnectionStatus.AUTHENTICATED_NO_GAME;
-			} else {
-				// TODO implement ConnectionStatus.AUTHENTICATED_TEARING_DOWN_GAME
-				return ConnectionStatus.AUTHENTICATED_SETTING_UP_GAME;
-			}
+			return GameState.SETTING_UP_GAME;
 		}
 	}
 
-	public void SignIn (bool silent = false)
-	{
-		SceneMaster.instance.Async (delegate {
-			signedIn = true;
-		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
-	}
-
-	public void SignOut ()
-	{
-		gameConnected = false;
-		signedIn = false;
-	}
-
-	public void SetupGame (bool withInvitation)
-	{
-		Assert.IsTrue (gameSetupPercent == 0);
-		gameSetupPercent = 1;
-		SceneMaster.instance.Async (delegate {
-			gameSetupPercent = 100;
-			gameConnected = true;
-		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
-	}
+	//	void SignIn (bool silent = false)
+	//	{
+	//		SceneMaster.instance.Async (delegate {
+	//			signedIn = true;
+	//		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
+	//	}
+	//
+	//	void SignOut ()
+	//	{
+	//		gameConnected = false;
+	//		signedIn = false;
+	//	}
+	//
+	//	void SetupGame (bool withInvitation)
+	//	{
+	//		Assert.IsTrue (gameSetupPercent == 0);
+	//		gameSetupPercent = 1;
+	//		SceneMaster.instance.Async (delegate {
+	//			gameSetupPercent = 100;
+	//			gameConnected = true;
+	//		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
+	//	}
 
 	public void QuitGame ()
 	{

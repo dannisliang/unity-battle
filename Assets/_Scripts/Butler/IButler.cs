@@ -8,22 +8,16 @@ public interface IButler
 
 	void Init ();
 
-	ConnectionStatus GetConnectionStatus ();
+	GameState GetConnectionStatus ();
 
+	void NewGame ();
 
-	void SignIn (bool silent = false);
-
-	void SignOut ();
+	void QuitGame ();
 
 
 	int NumPlayers ();
 
 	string GetLocalUsername ();
-
-
-	void SetupGame (bool withInvitation);
-
-	void QuitGame ();
 
 
 	void SendMessageToAll (bool reliable, byte[] data);
