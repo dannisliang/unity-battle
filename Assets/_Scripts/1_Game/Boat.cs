@@ -75,7 +75,7 @@ public class Boat
 
 	public override string ToString ()
 	{
-		return config.ToString ();// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
+		return config.designation + (IsSunk () ? " — SUNK" : "");// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
 	}
 
 }
