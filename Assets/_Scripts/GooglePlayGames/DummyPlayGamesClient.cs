@@ -15,7 +15,7 @@ public class DummyPlayGamesClient : IPlayGamesClient
 	{
 		mRealTimeClient = new DummyRealTimeMultiplayerClient ();
 		SceneMaster.instance.Async (() => {
-			authenticated = true;
+			authenticated = !Input.GetKey (KeyCode.F);
 			if (callback != null) {
 				callback.Invoke (authenticated);
 			}

@@ -28,9 +28,10 @@ public class QuitGameButtonController : MonoBehaviour
 	void UpdateActive (GameState state)
 	{
 		switch (state) {
-		case GameState.SELECTING_GAME_TYPE:
+		case GameState.NEED_TO_SELECT_GAME_TYPE:
 		case GameState.AUTHENTICATING:
 		case GameState.SETTING_UP_GAME:
+		case GameState.GAME_WAS_TORN_DOWN:
 			gameObject.SetActive (false);
 			break;
 		case GameState.TEARING_DOWN_GAME:

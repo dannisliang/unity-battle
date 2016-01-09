@@ -8,24 +8,26 @@ public class ButlerDemo : MonoBehaviour,IButler
 
 	public event Game.GameStateChange OnGameStateChange;
 
-	bool playing;
+	GameState gameState = GameState.NEED_TO_SELECT_GAME_TYPE;
 
+	#if UNITY_EDITOR
 	void Update ()
 	{
-		if (playing && Input.GetKeyDown (KeyCode.F)) {
+		if (gameState == GameState.PLAYING && Input.GetKeyDown (KeyCode.F)) {
 			Debug.Log ("***Simulating failure …");
 			QuitGame ();
 		}
 	}
+	#endif
 
 	public int NumPlayers ()
 	{
-		return playing ? 2 : 0;
+		return gameState == GameState.PLAYING ? 2 : 0;
 	}
 
 	public string GetLocalUsername ()
 	{
-		return playing ? "Ford Prefect" : "";
+		return gameState == GameState.PLAYING ? "Ford Prefect" : "";
 	}
 
 	public void Init ()
@@ -34,21 +36,29 @@ public class ButlerDemo : MonoBehaviour,IButler
 
 	public void NewGame ()
 	{
-		Assert.IsFalse (playing);
-		playing = true;
-		OnGameStateChange (GameState.PLAYING);
+		Assert.AreEqual (GameState.NEED_TO_SELECT_GAME_TYPE, gameState);
+		SetGameState (GameState.AUTHENTICATING);
+		SetGameState (GameState.SETTING_UP_GAME);
+		SetGameState (GameState.PLAYING);
+	}
+
+	void SetGameState (GameState gameState)
+	{
+		this.gameState = gameState;
+		OnGameStateChange (gameState);
 	}
 
 	public GameState GetGameState ()
 	{
-		return playing ? GameState.PLAYING : GameState.SELECTING_GAME_TYPE;
+		return gameState;
 	}
 
 	public void QuitGame ()
 	{
-		Assert.IsTrue (playing);
-		playing = false;
-		OnGameStateChange (GameState.SELECTING_GAME_TYPE);
+		Assert.AreEqual (GameState.PLAYING, gameState);
+		SetGameState (GameState.TEARING_DOWN_GAME);
+		SetGameState (GameState.GAME_WAS_TORN_DOWN);
+		SetGameState (GameState.NEED_TO_SELECT_GAME_TYPE);
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data)
@@ -60,6 +70,6 @@ public class ButlerDemo : MonoBehaviour,IButler
 
 	public override string ToString ()
 	{
-		return string.Format ("[ButlerDemo: playing={0}]", playing);
+		return string.Format ("[ButlerDemo: gameState={0}]", gameState);
 	}
 }

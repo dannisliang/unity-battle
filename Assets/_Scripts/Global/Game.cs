@@ -30,7 +30,7 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		add {
 			lock (GameStateChangeLock) {
 				_OnGameStateChange += value;
-				value (butler == null ? GameState.SELECTING_GAME_TYPE : butler.GetGameState ());
+				value (butler == null ? GameState.NEED_TO_SELECT_GAME_TYPE : butler.GetGameState ());
 			}
 		}
 		remove {
@@ -100,15 +100,15 @@ public class Game : MonoBehaviour,IDiscoveryListener,IMessageListener
 		default:
 			throw new NotImplementedException ();
 		}
-		return butler;
 	}
 
 	void HandleGameStateChanged (GameState state)
 	{
 		switch (state) {
-		case GameState.SELECTING_GAME_TYPE:
+		case GameState.GAME_WAS_TORN_DOWN:
 			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
 			break;
+		case GameState.NEED_TO_SELECT_GAME_TYPE:
 		case GameState.AUTHENTICATING:
 		case GameState.SETTING_UP_GAME:
 		case GameState.TEARING_DOWN_GAME:

@@ -23,18 +23,20 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		Assert.IsFalse (roomConnecting);
 		Assert.IsFalse (roomConnected);
 		SceneMaster.instance.Async (() => {
-			roomConnecting = true;
-			listener.OnRoomSetupProgress (20);
+			roomConnecting = !Input.GetKey (KeyCode.F);
+			listener.OnRoomSetupProgress (roomConnecting ? 20 : 0);
 		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 		SceneMaster.instance.Async (() => {
 			if (!roomConnecting || roomConnected) {
 				return;
 			}
-			roomConnected = true;
-			participants = new List<Participant> ();
-			participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
-			participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
-			listener.OnRoomConnected (true);
+			roomConnected = !Input.GetKey (KeyCode.F);
+			if (roomConnected) {
+				participants = new List<Participant> ();
+				participants.Add (new Participant ("me", "me42", Participant.ParticipantStatus.Joined, new Player ("me player", "player42", null), true));
+				participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
+			}
+			listener.OnRoomConnected (roomConnected);
 		}, 2f * Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
 	}
 

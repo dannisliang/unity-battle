@@ -45,6 +45,19 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 	}
 
+	//	#if UNITY_EDITOR
+	//	void Update ()
+	//	{
+	//		if (Input.GetKeyDown (KeyCode.F) && gamesPlatform.IsAuthenticated ()) {
+	//			Debug.Log ("***Simulating failure …");
+	//			if (gamesPlatform.RealTime.IsRoomConnected ()) {
+	//				PlayGamesSignOut ();
+	//			} else {
+	//				QuitGame ();
+	//			}
+	//		}
+	//	}
+	//	#endif
 
 	public int NumPlayers ()
 	{
@@ -118,22 +131,23 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 			gamesPlatform = PlayGamesPlatform.Instance;
 		}
 
-		OnGameStateChange += (GameState state) => {
-			switch (state) {
-			case GameState.SELECTING_GAME_TYPE:
-			case GameState.AUTHENTICATING:
-				break;
-			case GameState.SETTING_UP_GAME:
-				gameObject.SetActive (false);
-				break;
-			case GameState.TEARING_DOWN_GAME:
-			case GameState.PLAYING:
-				gameObject.SetActive (true);
-				break;
-			default:
-				throw new NotImplementedException ();
-			}
-		};
+//		OnGameStateChange += (GameState state) => {
+//			switch (state) {
+//			case GameState.NEED_TO_SELECT_GAME_TYPE:
+//			case GameState.AUTHENTICATING:
+//				break;
+//			case GameState.SETTING_UP_GAME:
+//				enabled = false;
+//				break;
+//			case GameState.TEARING_DOWN_GAME:
+//			case GameState.GAME_WAS_TORN_DOWN:
+//			case GameState.PLAYING:
+//				enabled = true;
+//				break;
+//			default:
+//				throw new NotImplementedException ();
+//			}
+//		};
 	}
 
 	public void NewGame ()
@@ -145,6 +159,8 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 				PlayGamesNewGame ();
 			} else {
 				throw new NotImplementedException ();
+//				OnGameStateChange (GameState.GAME_WAS_TORN_DOWN);
+//				OnGameStateChange (GameState.NEED_TO_SELECT_GAME_TYPE);
 			}
 		});
 	}
@@ -159,12 +175,12 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 	}
 
-	//	void PlayGamesSignOut ()
-	//	{
-	//		Debug.Log ("***SignOut() …");
-	//		gamesPlatform.SignOut ();
-	//		Game.instance.InvokeConnectStatusAction ();
-	//	}
+	void PlayGamesSignOut ()
+	{
+		Debug.Log ("***SignOut() …");
+		gamesPlatform.SignOut ();
+		signedIn = false;
+	}
 
 	void PlayGamesNewGame ()
 	{
