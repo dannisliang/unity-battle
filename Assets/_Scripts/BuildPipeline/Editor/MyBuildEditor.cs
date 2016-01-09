@@ -14,7 +14,7 @@ public class MyBuildEditor
 		ClearLog ();
 		UnityEngine.Debug.Log (typeof(MyBuildEditor).Name + " …");
 
-		string path = PlayerSettings.bundleIdentifier + ".apk";
+//		string apk = PlayerSettings.bundleIdentifier + ".apk";
 //		BuildPipeline.BuildPlayer (SceneMaster.buildLevels, path, BuildTarget.Android, BuildOptions.None);
 
 		UnityEngine.Debug.Log ("Installing on devices …");
