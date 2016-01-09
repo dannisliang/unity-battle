@@ -10,6 +10,10 @@ public class SceneMaster : MonoBehaviour
 
 	public const string SCENE_MAIN_MENU = "__MainMenu";
 	public const string SCENE_GAME = "__Game";
+	public static readonly string[] buildLevels = {
+		"Assets/" + SCENE_MAIN_MENU + ".unity",
+		"Assets/" + SCENE_GAME + ".unity",
+	};
 
 	public static bool sawMainMenu { get; private set; }
 
