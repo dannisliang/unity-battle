@@ -48,6 +48,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 		instance = this;
 		DontDestroyOnLoad (gameObject);
+		gameObject.AddComponent<ButlerDemo> ();
+		gameObject.AddComponent<ButlerPlayGames> ();
 
 //		InitNearby ();
 
@@ -61,20 +63,22 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
-	IButler GetButler (GameType gameType)
+	void SetActiveButler (GameType gameType)
 	{
+		if (butler != null) {
+			butler.OnGameStateChange -= HandleButlerGameStateChange;
+		}
 		switch (gameType) {
 		case GameType.ONE_PLAYER_DEMO:
-			butler = gameObject.AddComponent<ButlerDemo> ();
+			butler = gameObject.GetComponent<ButlerDemo> ();
 			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
-			butler = gameObject.AddComponent<ButlerPlayGames> ();
+			butler = gameObject.GetComponent<ButlerPlayGames> ();
 			break;
 		default:
 			throw new NotImplementedException ();
 		}
 		butler.OnGameStateChange += HandleButlerGameStateChange;
-		return butler;
 	}
 
 	void HandleGameStateChanged (GameState state)
@@ -160,22 +164,14 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void NewGame (GameType gameType)
 	{
-		butler = GetButler (gameType);
+		SetActiveButler (gameType);
 		butler.Init ();
 		butler.NewGame ();
 	}
 
-	public void QuitGame ()
-	{
-		Debug.Log ("***QuitGame() …");
-		butler.QuitGame ();
-	}
-
-
 
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
-		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
 		RealtimeBattle.DecodeAndExecute (data);
 	}
 

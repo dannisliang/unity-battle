@@ -159,7 +159,7 @@ public class DummyPlayGamesPlatform : IPlayGamesPlatform,ISocialPlatform
 	{
 		// make a platform-specific Play Games client
 		if (mClient == null) {
-			Debug.Log ("Creating platform-specific Play Games client.");
+			Debug.Log ("***Creating dummy platform-specific Play Games client.");
 			mClient = new DummyPlayGamesClient ();
 		}
 

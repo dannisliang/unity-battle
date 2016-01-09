@@ -78,6 +78,10 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public void Init ()
 	{
+		if (gamesPlatform != null) {
+			return;
+		}
+		Debug.Log ("***Init() …");
 		if (Application.isEditor) {
 			gamesPlatform = new DummyPlayGamesPlatform ();
 		} else {
@@ -92,12 +96,13 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 			                                      //.WithMatchDelegate(<callback method>)
 				.Build ();
 
+			Debug.Log ("***PlayGamesPlatform.InitializeInstance() …");
 			PlayGamesPlatform.InitializeInstance (config);
 
 			// recommended for debugging:
 			//			PlayGamesPlatform.DebugLogEnabled = true;
 
-			Debug.Log ("***Activating PlayGamesPlatform …");
+			Debug.Log ("***PlayGamesPlatform.Activate() …");
 			PlayGamesPlatform.Activate ();
 			gamesPlatform = PlayGamesPlatform.Instance;
 		}
@@ -105,6 +110,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public void NewGame ()
 	{
+		Debug.Log ("***NewGame() …");
 		PlayGamesSignIn ((bool success) => {
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 			if (success) {
@@ -117,14 +123,15 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	void PlayGamesSignIn (Action<bool> callback)
 	{
+		Debug.Log ("***PlayGamesSignIn() …");
 		Assert.AreEqual (GameState.NEED_TO_SELECT_GAME_TYPE, gameState);
 		SetGameState (GameState.AUTHENTICATING);
-		// check if already signed in
-		if (gamesPlatform.IsAuthenticated ()) {
-			callback (true);
-		} else {
-			gamesPlatform.Authenticate (callback, false);
-		}
+//		// check if already signed in
+//		if (gamesPlatform.IsAuthenticated ()) {
+//			callback (true);
+//		} else {
+		gamesPlatform.Authenticate (callback, false);
+//		}
 	}
 
 	void PlayGamesSignOut ()
@@ -135,6 +142,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	void PlayGamesNewGame ()
 	{
+		Debug.Log ("***PlayGamesNewGame() …");
 		Assert.AreEqual (GameState.AUTHENTICATING, gameState);
 		SetGameState (GameState.SETTING_UP_GAME);
 //		gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
@@ -150,18 +158,20 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***QuitGame() …");
 		switch (gameState) {
-		case GameState.PLAYING:
-			gamesPlatform.RealTime.LeaveRoom ();
-			break;
-		case GameState.NEED_TO_SELECT_GAME_TYPE:
 		case GameState.AUTHENTICATING:
+			PlayGamesSignOut ();
+			break;
 		case GameState.SETTING_UP_GAME:
 		case GameState.TEARING_DOWN_GAME:
+		case GameState.PLAYING:
+			PlayGamesLeaveRoom ();
+			break;
 		case GameState.GAME_WAS_TORN_DOWN:
+		case GameState.NEED_TO_SELECT_GAME_TYPE:
+			break;
 		default:
 			throw new NotImplementedException ();
 		}
-
 	}
 
 
@@ -206,7 +216,8 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public void OnParticipantLeft (Participant participant)
 	{
 		Debug.Log ("***OnParticipantLeft(" + participant + ")");
-		SetGameState (GameState.GAME_WAS_TORN_DOWN);
+		Debug.Log ("***Mandatory call to LeaveRoom () in order to cleanup …");
+		PlayGamesLeaveRoom ();
 	}
 
 	// RealTimeMultiplayerListener
@@ -219,6 +230,15 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public void OnPeersDisconnected (string[] participantIds)
 	{
 		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
+		Debug.Log ("***Mandatory call to LeaveRoom () in order to cleanup …");
+		PlayGamesLeaveRoom ();
+	}
+
+	void PlayGamesLeaveRoom ()
+	{
+		if (gamesPlatform.RealTime != null) {
+			gamesPlatform.RealTime.LeaveRoom ();
+		}
 		SetGameState (GameState.GAME_WAS_TORN_DOWN);
 	}
 
