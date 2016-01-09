@@ -17,7 +17,9 @@ public class MyBuildEditor
 		string path = PlayerSettings.bundleIdentifier + ".apk";
 //		BuildPipeline.BuildPlayer (SceneMaster.buildLevels, path, BuildTarget.Android, BuildOptions.None);
 
-		Execute ("/bin/ls", "-l", path);
+		UnityEngine.Debug.Log ("Installing on devices …");
+		Execute ("/bin/bash", "-lc", "./reinstall.sh");
+
 		UnityEngine.Debug.Log ("Done");
 	}
 
