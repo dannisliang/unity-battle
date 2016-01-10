@@ -14,6 +14,7 @@ public class RealtimeBattle : MonoBehaviour
 
 	static int lastAimMessageSendCount = 0;
 	static int lastAimMessageReceiveCount = 0;
+	static Position unsentAimPosition;
 	
 	const byte MESSAGE_TYPE_GRID = (byte)'G';
 	const byte MESSAGE_TYPE_SHOT = (byte)'S';
@@ -29,11 +30,18 @@ public class RealtimeBattle : MonoBehaviour
 		EncodeAndSend (MESSAGE_TYPE_SHOT, position);
 	}
 
-	public static void MaybeEncodeAndSendAim (Position position)
+	public static void EncodeAndSendAim (Position position)
 	{
 		if (Time.unscaledTime < nextAimAllowed) {
+			unsentAimPosition = position;
+			SceneMaster.instance.Async (delegate {
+				if (unsentAimPosition != null) {
+					EncodeAndSendAim (unsentAimPosition);
+				}
+			}, AIM_INTERVAL);
 			return;
 		}
+		unsentAimPosition = null;
 		EncodeAndSend (MESSAGE_TYPE_AIM, position, messageCount: lastAimMessageSendCount++);
 		nextAimAllowed = Time.unscaledTime + AIM_INTERVAL;
 	}

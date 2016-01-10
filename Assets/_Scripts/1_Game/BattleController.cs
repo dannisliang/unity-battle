@@ -95,7 +95,7 @@ public class BattleController : MonoBehaviour
 		}
 		PlaceMarker (whose, position, Marker.Aim);
 		if (position != null) {
-			RealtimeBattle.MaybeEncodeAndSendAim (position);
+			RealtimeBattle.EncodeAndSendAim (position);
 		}
 	}
 
