@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent (typeof(MeshFilter), typeof(MeshRenderer))]
-public class AiMReticleController : MonoBehaviour
+public class AimReticleController : MonoBehaviour
 {
 
 	public float inner = .8f;

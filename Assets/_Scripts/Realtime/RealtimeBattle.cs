@@ -4,23 +4,38 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System;
 
 public class RealtimeBattle : MonoBehaviour
 {
+	const float AIM_INTERVAL = 1f;
+
+	static float nextAimAllowed = 0f;
+	
 	const byte MESSAGE_TYPE_GRID = (byte)'G';
 	const byte MESSAGE_TYPE_SHOT = (byte)'S';
+	const byte MESSAGE_TYPE_AIM = (byte)'A';
 
-	public static void EncodeAndSend (Grid grid)
+	public static void EncodeAndSendGrid (Grid grid)
 	{
 		EncodeAndSend (MESSAGE_TYPE_GRID, grid);
 	}
 
-	public static void EncodeAndSend (Position position)
+	public static void EncodeAndSendHit (Position position)
 	{
 		EncodeAndSend (MESSAGE_TYPE_SHOT, position);
 	}
 
-	static void EncodeAndSend (byte messageType, System.Object obj)
+	public static void MaybeEncodeAndSendAim (Position position)
+	{
+		if (Time.unscaledTime < nextAimAllowed) {
+			return;
+		}
+		EncodeAndSend (MESSAGE_TYPE_AIM, position, reliable: false);
+		nextAimAllowed = Time.unscaledTime + AIM_INTERVAL;
+	}
+
+	static void EncodeAndSend (byte messageType, System.Object obj, bool reliable = true)
 	{
 		Debug.Log ("***EncodeAndSend() [" + Game.butler + "]");
 		BinaryFormatter formatter = new BinaryFormatter ();
@@ -28,7 +43,7 @@ public class RealtimeBattle : MonoBehaviour
 			stream.WriteByte (messageType);
 			formatter.Serialize (stream, obj);
 			byte[] bytes = stream.ToArray ();
-			Game.instance.SendMessageToAll (reliable: true, data: bytes);
+			Game.instance.SendMessageToAll (reliable: reliable, data: bytes);
 		}
 	}
 
@@ -43,13 +58,18 @@ public class RealtimeBattle : MonoBehaviour
 				Debug.Log ("***Received other grid ");// + grid);
 				BattleController.instance.SetBoatsTheirs (grid.boats);
 				break;
+			case MESSAGE_TYPE_AIM:
+				Position aimPosition = formatter.Deserialize (stream) as Position;
+				Debug.Log ("***Received aim at " + aimPosition);
+				BattleController.instance.AimAt (aimPosition);
+				break;
 			case MESSAGE_TYPE_SHOT:
-				Position position = formatter.Deserialize (stream) as Position;
-				Debug.Log ("***Received shot at " + position);
-				BattleController.instance.Strike (Whose.Ours, position);
+				Position shotPosition = formatter.Deserialize (stream) as Position;
+				Debug.Log ("***Received shot at " + shotPosition);
+				BattleController.instance.Strike (Whose.Ours, shotPosition);
 				break;
 			default:
-				throw new System.NotImplementedException ("Unknown message type " + messageType);
+				throw new NotImplementedException ("Unknown message type " + messageType);
 			}
 		}
 	}

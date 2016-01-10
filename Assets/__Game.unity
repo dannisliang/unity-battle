@@ -1560,7 +1560,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rocketPrefab: {fileID: 157702, guid: d97bea38486164912a79a4721bf06782, type: 2}
-  markerAimReticlePrefab: {fileID: 179534, guid: 30bcbad1dae1a4c4197cab68794cc46a,
+  markerAimReticleTheirsAtOursPrefab: {fileID: 179534, guid: 30bcbad1dae1a4c4197cab68794cc46a,
+    type: 2}
+  markerAimReticleOursAtTheirsPrefab: {fileID: 179534, guid: 81529f106172d40b7bb1a05b9ba360bb,
     type: 2}
   markerHitPrefab: {fileID: 101766, guid: eeb0ce773684e49f5adf381f6ba475a5, type: 2}
   markerMissPrefab: {fileID: 101766, guid: 656114f2302be40ea9196aef325ebbbf, type: 2}
@@ -2867,7 +2869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.27058825, g: 0.63529414, b: 1, a: 0.772}
+  m_Color: {r: 0.16262975, g: 0.19896193, b: 0.2352941, a: 0.772}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:

@@ -11,7 +11,8 @@ public class BattleController : MonoBehaviour
 	public static LayerInfo layerTileTheirs;
 
 	public GameObject rocketPrefab;
-	public GameObject markerAimReticlePrefab;
+	public GameObject markerAimReticleTheirsAtOursPrefab;
+	public GameObject markerAimReticleOursAtTheirsPrefab;
 	public GameObject markerHitPrefab;
 	public GameObject markerMissPrefab;
 	public GameObject reticle;
@@ -37,7 +38,8 @@ public class BattleController : MonoBehaviour
 	bool playing;
 	bool firing;
 	AudioSource source;
-	GameObject aimReticle;
+	GameObject aimReticleOurs;
+	GameObject aimReticleTheirs;
 
 	void Awake ()
 	{
@@ -48,8 +50,10 @@ public class BattleController : MonoBehaviour
 		instance = this;
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		source = GetComponent<AudioSource> ();
-		aimReticle = Instantiate (markerAimReticlePrefab);
+		aimReticleOurs = Instantiate (markerAimReticleTheirsAtOursPrefab);
+		aimReticleTheirs = Instantiate (markerAimReticleOursAtTheirsPrefab);
 		AimAt (Whose.Theirs, null); // reticle starts disabled
+		AimAt (Whose.Ours, null); // reticle starts disabled
 	}
 
 	void Start ()
@@ -60,7 +64,7 @@ public class BattleController : MonoBehaviour
 
 	void SendOurBoatPositions ()
 	{
-		RealtimeBattle.EncodeAndSend (boatsOursPlacementController.grid);
+		RealtimeBattle.EncodeAndSendGrid (boatsOursPlacementController.grid);
 	}
 
 	public void SetBoatsTheirs (Boat[] boats)
@@ -82,7 +86,6 @@ public class BattleController : MonoBehaviour
 		if (OnReticleIdentify != null) {
 			OnReticleIdentify.Invoke (boat);
 		}
-
 	}
 
 	public void AimAt (Whose whose, Position position)
@@ -90,9 +93,9 @@ public class BattleController : MonoBehaviour
 		if (OnReticleAim != null) {
 			OnReticleAim (whose, position);
 		}
-		aimReticle.SetActive (position != null);
+		PlaceMarker (whose, position, Marker.Aim);
 		if (position != null) {
-			PlaceMarker (whose, position, Marker.Aim);
+			RealtimeBattle.MaybeEncodeAndSendAim (position);
 		}
 	}
 
@@ -124,6 +127,11 @@ public class BattleController : MonoBehaviour
 		} else {
 			return Camera.main.transform.position - Camera.main.transform.right;
 		}
+	}
+
+	public void AimAt (Position position)
+	{
+		PlaceMarker (Whose.Ours, position, Marker.Aim);
 	}
 
 	public StrikeResult Strike (Whose whose, Position position)
@@ -175,7 +183,8 @@ public class BattleController : MonoBehaviour
 		float zPos = 0f;
 		switch (marker) {
 		case Marker.Aim:
-			go = aimReticle;
+			go = whose == Whose.Theirs ? aimReticleTheirs : aimReticleOurs;
+			go.SetActive (position != null);
 			zPos = -Utils.BOAT_HEIGHT - 2f * Utils.CLEARANCE_HEIGHT;
 			break;
 		case Marker.Hit:
@@ -188,7 +197,9 @@ public class BattleController : MonoBehaviour
 			break;
 		}
 		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
-		go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, zPos);
+		if (position != null) {
+			go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, zPos);
+		} 	
 	}
 
 	void SetIsFiring (bool firing)

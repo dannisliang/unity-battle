@@ -10,9 +10,9 @@ GameObject:
   - 4: {fileID: 461632}
   - 33: {fileID: 3348554}
   - 23: {fileID: 2375010}
-  - 114: {fileID: 11450034}
+  - 114: {fileID: 11437344}
   m_Layer: 0
-  m_Name: Marker Aim Reticle
+  m_Name: Marker Aim Reticle Theirs At Ours
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 179534}
   m_Mesh: {fileID: 0}
---- !u!114 &11450034
+--- !u!114 &11437344
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

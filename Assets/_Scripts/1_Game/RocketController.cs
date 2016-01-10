@@ -51,7 +51,7 @@ public class RocketController : MonoBehaviour
 		this.other = other;
 
 		Position position = other.GetComponent<PositionMarkerController> ().position;
-		RealtimeBattle.EncodeAndSend (position);
+		RealtimeBattle.EncodeAndSendHit (position);
 		
 		Invoke ("Explode", .3f * flameParticleSystem.duration);
 		FizzleOut (flameParticleSystem.duration);
