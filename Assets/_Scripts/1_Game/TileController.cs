@@ -16,7 +16,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	public void OnPointerEnter (PointerEventData eventData)
 	{
 		eventData.Use ();
-		Highlight (true);
+		Highlight (!tileHasBeenFiredUpon);
 	}
 
 	public void OnPointerExit (PointerEventData eventData)
