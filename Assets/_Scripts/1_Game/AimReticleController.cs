@@ -5,10 +5,10 @@ using System.Collections;
 public class AimReticleController : MonoBehaviour
 {
 
-	public float inner = .8f;
-	public float outer = 1f;
+	public float innerScale = .85f;
+	public float outerScale = 1f;
+	public float trackSpeed = 10f;
 
-	float track_speed = 10f;
 
 	Vector3[] vertices;
 	int[] triangles;
@@ -16,8 +16,8 @@ public class AimReticleController : MonoBehaviour
 
 	void OnValidate ()
 	{
-		inner = Mathf.Max (0, inner);
-		outer = Mathf.Max (inner + 0.01f, outer);
+		innerScale = Mathf.Max (0, innerScale);
+		outerScale = Mathf.Max (innerScale + 0.01f, outerScale);
 		GenerateMesh ();
 	}
 
@@ -28,7 +28,7 @@ public class AimReticleController : MonoBehaviour
 
 	void Update ()
 	{
-		transform.localPosition = Vector3.Lerp (transform.localPosition, targetLocalPosition, Time.deltaTime * track_speed);
+		transform.localPosition = Vector3.Lerp (transform.localPosition, targetLocalPosition, Time.deltaTime * trackSpeed);
 	}
 
 	public void SetTargetPosition (Position position)
@@ -43,22 +43,22 @@ public class AimReticleController : MonoBehaviour
 	void GenerateMesh ()
 	{
 		// https://docs.google.com/drawings/d/18noGlM8Zkx9jDpK4sWDgrIlREdgPIF84i_8z7dtF2ho/edit
-		float a = .5f * (outer - inner);
-		float b = a + inner;
+		float a = .5f * (outerScale - innerScale);
+		float b = a + innerScale;
 		vertices = new Vector3[] {
 			new Vector2 (0, 0),
 			new Vector2 (b, 0),
 			new Vector3 (b, a),
 
-			new Vector3 (outer, 0),
-			new Vector3 (outer, b),
+			new Vector3 (outerScale, 0),
+			new Vector3 (outerScale, b),
 			new Vector3 (b, b),
 
-			new Vector3 (outer, outer),
-			new Vector3 (a, outer),
+			new Vector3 (outerScale, outerScale),
+			new Vector3 (a, outerScale),
 			new Vector3 (a, b),
 
-			new Vector3 (0, outer),
+			new Vector3 (0, outerScale),
 			new Vector3 (0, a),
 			new Vector3 (a, a),
 		};

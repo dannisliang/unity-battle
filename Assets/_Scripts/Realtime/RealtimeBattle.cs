@@ -8,9 +8,12 @@ using System;
 
 public class RealtimeBattle : MonoBehaviour
 {
-	const float AIM_INTERVAL = 1f;
+	const float AIM_INTERVAL = .5f;
 
 	static float nextAimAllowed = 0f;
+
+	static int lastAimMessageSendCount = 0;
+	static int lastAimMessageReceiveCount = 0;
 	
 	const byte MESSAGE_TYPE_GRID = (byte)'G';
 	const byte MESSAGE_TYPE_SHOT = (byte)'S';
@@ -31,27 +34,39 @@ public class RealtimeBattle : MonoBehaviour
 		if (Time.unscaledTime < nextAimAllowed) {
 			return;
 		}
-		EncodeAndSend (MESSAGE_TYPE_AIM, position, reliable: false);
+		EncodeAndSend (MESSAGE_TYPE_AIM, position, messageCount: lastAimMessageSendCount++);
 		nextAimAllowed = Time.unscaledTime + AIM_INTERVAL;
 	}
 
-	static void EncodeAndSend (byte messageType, System.Object obj, bool reliable = true)
+	static void EncodeAndSend (byte messageType, System.Object obj, int messageCount = 0)
 	{
 		Debug.Log ("***EncodeAndSend() [" + Game.butler + "]");
+		bool reliable = messageCount == 0;
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {
 			stream.WriteByte (messageType);
+			if (!reliable) {
+				formatter.Serialize (stream, messageCount);
+			}
 			formatter.Serialize (stream, obj);
 			byte[] bytes = stream.ToArray ();
 			Game.instance.SendMessageToAll (reliable: reliable, data: bytes);
 		}
 	}
 
-	public static void DecodeAndExecute (byte[] bytes)
+	public static void DecodeAndExecute (byte[] bytes, bool reliable)
 	{
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream (bytes)) {
 			byte messageType = (byte)stream.ReadByte ();
+			if (!reliable) {
+				int messageCount = formatter.Deserialize (stream) as int? ?? 0;
+				if (messageCount < lastAimMessageReceiveCount) {
+					Debug.LogWarning ("***Ignoring out of order uneliable message " + messageType + " #" + messageCount);
+					return;
+				}
+				lastAimMessageReceiveCount = messageCount;
+			}
 			switch (messageType) {
 			case MESSAGE_TYPE_GRID:
 				Grid grid = formatter.Deserialize (stream) as Grid;

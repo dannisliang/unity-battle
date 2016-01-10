@@ -172,7 +172,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
-		RealtimeBattle.DecodeAndExecute (data);
+		RealtimeBattle.DecodeAndExecute (data, isReliable);
 	}
 
 
