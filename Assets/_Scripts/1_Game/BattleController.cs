@@ -180,26 +180,23 @@ public class BattleController : MonoBehaviour
 	void PlaceMarker (Whose whose, Position position, Marker marker)
 	{
 		GameObject go = null;
-		float zPos = 0f;
 		switch (marker) {
 		case Marker.Aim:
 			go = whose == Whose.Theirs ? aimReticleTheirs : aimReticleOurs;
-			go.SetActive (position != null);
-			zPos = -Utils.BOAT_HEIGHT - 2f * Utils.CLEARANCE_HEIGHT;
 			break;
 		case Marker.Hit:
 			go = Instantiate (markerHitPrefab);
-			zPos = -.5f * Utils.BOAT_HEIGHT - Utils.CLEARANCE_HEIGHT;
 			break;
 		case Marker.Miss:
 			go = Instantiate (markerMissPrefab);
-			zPos = -.5f * Utils.BOAT_HEIGHT - Utils.CLEARANCE_HEIGHT;
 			break;
 		}
 		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
-		if (position != null) {
-			go.transform.localPosition = new Vector3 (position.x, Utils.GRID_SIZE - 1f - position.y, zPos);
-		} 	
+		if (marker == Marker.Aim) {
+			go.GetComponent<AimReticleController> ().SetTargetPosition (position);
+		} else {
+			go.transform.localPosition = position.AsGridLocalPosition (marker);
+		}
 	}
 
 	void SetIsFiring (bool firing)

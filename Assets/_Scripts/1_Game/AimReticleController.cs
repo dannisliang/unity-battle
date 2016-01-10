@@ -8,19 +8,35 @@ public class AimReticleController : MonoBehaviour
 	public float inner = .8f;
 	public float outer = 1f;
 
+	float track_speed = 10f;
+
 	Vector3[] vertices;
 	int[] triangles;
-
-	void Awake ()
-	{
-		GenerateMesh ();
-	}
+	Vector3 targetLocalPosition;
 
 	void OnValidate ()
 	{
 		inner = Mathf.Max (0, inner);
 		outer = Mathf.Max (inner + 0.01f, outer);
 		GenerateMesh ();
+	}
+
+	void Awake ()
+	{
+		GenerateMesh ();
+	}
+
+	void Update ()
+	{
+		transform.localPosition = Vector3.Lerp (transform.localPosition, targetLocalPosition, Time.deltaTime * track_speed);
+	}
+
+	public void SetTargetPosition (Position position)
+	{
+		gameObject.SetActive (position != null);
+		if (position != null) {
+			targetLocalPosition = position.AsGridLocalPosition (Marker.Aim);
+		}
 	}
 
 	// Thanks to http://catlikecoding.com/unity/tutorials/procedural-grid/
