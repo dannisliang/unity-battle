@@ -30,7 +30,7 @@ fi
 if [ -f "$MANIFEST_PATH" ]
 then
   echo
-  echo "Extracting activity name from $MANIFEST_PATH …"
+  echo "Extracting activity name from $MANIFEST_PATH"
   activity=$( grep '<activity android:name="' "$MANIFEST_PATH" | cut -d '"' -f 2 )
 fi
 
@@ -48,15 +48,16 @@ echo
 uninstall_pkg()
 {
   echo
-  echo "$ANDROID_SERIAL Uninstalling $* …"
+  echo "$ANDROID_SERIAL Uninstalling $*"
   adb shell pm uninstall $* || true
 }
 
 install_pkg()
 {
   echo
-  echo "$ANDROID_SERIAL adb install $* …"
-  adb install $*
+  echo "$ANDROID_SERIAL adb install $*"
+  output=$( adb install $* 2>&1 | grep -v 'KB/s' | grep -v 'pkg:' | grep -v 'Success' )
+  [ -z "$output" ]
 }
 
 # Begin actual un/re-install and launch
@@ -72,13 +73,13 @@ do
     user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo.([0-9]+).*/\1/' )
     install_pkg -r -g --user $user $apk ||
     (
-      echo " and reinstalling on $serial …"
+      echo " and reinstalling on $serial"
       uninstall_pkg $pkg \
        && install_pkg --user $user $apk
     )
     echo
-    echo "$ANDROID_SERIAL Launching $pkg/$activity …"
-    adb shell am start --user $user -n $pkg/$activity
+    echo "$ANDROID_SERIAL Launching $pkg/$activity"
+    adb shell am start --user $user -n $pkg/$activity | grep -v 'Starting: Intent'
   ) &
   pids="$pids $!"
 done
