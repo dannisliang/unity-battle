@@ -6,7 +6,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 {
 	PositionMarkerController positionMarkerController;
 
-	bool firedUpon;
+	bool tileHasBeenFiredUpon;
 
 	void Awake ()
 	{
@@ -29,13 +29,13 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
 	public void OnPointerDown (PointerEventData eventData)
 	{
-		if (firedUpon) {
+		if (tileHasBeenFiredUpon) {
 			BattleController.instance.FalseFire ();
 			return;
 		}
 		eventData.Use ();
 		if (BattleController.instance.FireAt (eventData.pointerPressRaycast.gameObject.transform)) {
-			firedUpon = true;
+			tileHasBeenFiredUpon = true;
 		}
 	}
 
@@ -43,7 +43,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	{
 		BattleController.instance.AimAt (Whose.Theirs, highlight ? positionMarkerController.position : null);
 #if UNITY_EDITOR
-		if (!firedUpon && Input.GetKey (KeyCode.F)) {
+		if (!tileHasBeenFiredUpon && Input.GetKey (KeyCode.X)) {
 			RealtimeBattle.EncodeAndSend (positionMarkerController.position);
 			StrikeResult result = BattleController.instance.Strike (Whose.Theirs, positionMarkerController.position);
 			switch (result) {
@@ -52,7 +52,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 			case StrikeResult.MISS:
 			case StrikeResult.HIT_NOT_SUNK:
 			case StrikeResult.HIT_AND_SUNK:
-				firedUpon = true;
+				tileHasBeenFiredUpon = true;
 				break;
 			default:
 				throw new System.NotImplementedException ();
