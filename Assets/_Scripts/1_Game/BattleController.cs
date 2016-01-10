@@ -203,6 +203,9 @@ public class BattleController : MonoBehaviour
 	{
 		this.firing = firing;
 		reticle.SetActive (!firing);
+		if (firing) {
+			aimReticleTheirs.SetActive (false);
+		}
 		AnnounceGameState ();
 	}
 
