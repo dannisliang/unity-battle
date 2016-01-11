@@ -17,6 +17,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	{
 		eventData.Use ();
 		Highlight (!tileHasBeenFiredUpon);
+		RealtimeBattle.EncodeAndSendAim (positionMarkerController.position);
 	}
 
 	public void OnPointerExit (PointerEventData eventData)

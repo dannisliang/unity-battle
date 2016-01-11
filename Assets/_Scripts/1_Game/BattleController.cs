@@ -95,9 +95,6 @@ public class BattleController : MonoBehaviour
 			OnReticleAim (whose, position);
 		}
 		PlaceMarker (whose, position, Marker.Aim);
-		if (position != null) {
-			RealtimeBattle.EncodeAndSendAim (position);
-		}
 	}
 
 	public void FalseFire ()

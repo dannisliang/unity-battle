@@ -18,6 +18,7 @@ public class BoatIdentificationController : MonoBehaviour, IPointerEnterHandler,
 	public void OnPointerEnter (PointerEventData eventData)
 	{
 		Highlight (true);
+		RealtimeBattle.EncodeAndSendAim (positionMarkerController.position);
 	}
 
 	public void OnPointerExit (PointerEventData eventData)
