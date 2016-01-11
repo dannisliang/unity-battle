@@ -3037,7 +3037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.3882353}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3072,6 +3072,8 @@ MonoBehaviour:
   defaultBackgroundColor: {r: 0, g: 0, b: 0, a: 0.3882353}
   syncingBackgroundColor: {r: 0.294219, g: 0.294219, b: 0.641, a: 1}
   identifyBackgroundColor: {r: 0.27058825, g: 0.65882355, b: 0.30588236, a: 0.7921569}
+  ourColor: {r: 0.91, g: 0.55, b: 0.22, a: 0.65}
+  theirColor: {r: 0.27, g: 0.64, b: 1, a: 0.65}
 --- !u!114 &1582691965
 MonoBehaviour:
   m_ObjectHideFlags: 0

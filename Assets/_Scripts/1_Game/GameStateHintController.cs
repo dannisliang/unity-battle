@@ -8,6 +8,8 @@ public class GameStateHintController : MonoBehaviour
 	public Color defaultBackgroundColor = Color.white;
 	public Color syncingBackgroundColor = Color.blue;
 	public Color identifyBackgroundColor = Color.white;
+	public Color ourColor = new Color (.91f, .55f, .22f, .65f);
+	public Color theirColor = new Color (.27f, .64f, 1f, .65f);
 	
 	bool playing;
 	bool firing;
@@ -82,8 +84,10 @@ public class GameStateHintController : MonoBehaviour
 	string GetText (out Color color)
 	{
 		if (loser != null) {
-			color = syncingBackgroundColor;
-			return loser == Whose.Ours ? "Your opponent wins!" : "You win!";
+			color = loser == Whose.Ours ? theirColor : ourColor;
+			return loser == Whose.Ours ?
+				"Your entire fleet was sunk.\nYour opponent has won." :
+				"You win! You sunk your\nopponent's entire fleet.";
 		}
 		if (!playing) {
 			color = syncingBackgroundColor;
