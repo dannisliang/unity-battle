@@ -56,6 +56,12 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		OnGameStateChange += HandleGameStateChanged;
 	}
 
+	public void Restart ()
+	{
+		Debug.Log ("*** ** ** ** ** ** ** Restarting game NOW ** ** ** ** ** **");
+		butler.QuitGame ();
+	}
+
 	void HandleButlerGameStateChange (GameState state)
 	{
 		if (_OnGameStateChange != null) {

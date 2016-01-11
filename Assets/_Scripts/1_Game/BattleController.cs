@@ -141,12 +141,17 @@ public class BattleController : MonoBehaviour
 
 	void CheckAllBoatsSunk (Whose whose)
 	{
+		if (loser != null) {
+			return;
+		}
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		if (boatPlacementController.grid.AllBoatsSunk ()) {
 			loser = whose;
 			AnnounceGameState ();
+			SceneMaster.instance.Async (delegate {
+				Game.instance.Restart ();
+			}, Utils.RESTART_DELAY);
 		}
-		throw new System.NotImplementedException ();
 	}
 
 	public StrikeResult _Strike (Whose whose, Position position)
