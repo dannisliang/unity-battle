@@ -11,6 +11,7 @@ public class GameStateHintController : MonoBehaviour
 	
 	bool playing;
 	bool firing;
+	Whose? loser;
 	bool reticleAimingAtGrid;
 	bool vrMode;
 
@@ -39,10 +40,11 @@ public class GameStateHintController : MonoBehaviour
 		}
 	}
 
-	void UpdateGameState (bool playing, bool firing)
+	void UpdateGameState (bool playing, bool firing, Whose? loser)
 	{
 		this.playing = playing;
 		this.firing = firing;
+		this.loser = loser;
 		UpdateText ();
 	}
 
@@ -79,6 +81,10 @@ public class GameStateHintController : MonoBehaviour
 
 	string GetText (out Color color)
 	{
+		if (loser != null) {
+			color = syncingBackgroundColor;
+			return loser == Whose.Ours ? "Your opponent wins!" : "You win!";
+		}
 		if (!playing) {
 			color = syncingBackgroundColor;
 			return "Synchronizing.\nPlease wait …";

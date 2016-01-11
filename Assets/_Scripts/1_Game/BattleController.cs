@@ -24,7 +24,7 @@ public class BattleController : MonoBehaviour
 	public AudioClip shipExplosionClip;
 	public AudioClip noFireClip;
 
-	public delegate void GameState (bool playing, bool firing);
+	public delegate void GameState (bool playing, bool firing, Whose? loser);
 
 	public event GameState OnGameState;
 
@@ -37,6 +37,7 @@ public class BattleController : MonoBehaviour
 
 	bool playing;
 	bool firing;
+	Whose? loser;
 	AudioSource source;
 	GameObject aimReticleOurs;
 	GameObject aimReticleTheirs;
@@ -77,7 +78,7 @@ public class BattleController : MonoBehaviour
 	void AnnounceGameState ()
 	{
 		if (OnGameState != null) {
-			OnGameState (playing, firing);
+			OnGameState (playing, firing, loser);
 		}
 	}
 
@@ -135,6 +136,23 @@ public class BattleController : MonoBehaviour
 	}
 
 	public StrikeResult Strike (Whose whose, Position position)
+	{
+		StrikeResult result = _Strike (whose, position);
+		CheckAllBoatsSunk (whose);
+		return result;
+	}
+
+	void CheckAllBoatsSunk (Whose whose)
+	{
+		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
+		if (boatPlacementController.grid.AllBoatsSunk ()) {
+			loser = whose;
+			AnnounceGameState ();
+		}
+		throw new System.NotImplementedException ();
+	}
+
+	public StrikeResult _Strike (Whose whose, Position position)
 	{
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		Boat boat;

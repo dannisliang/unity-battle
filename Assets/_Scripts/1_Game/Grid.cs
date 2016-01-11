@@ -82,6 +82,17 @@ public class Grid
 		return boats;
 	}
 
+	public bool AllBoatsSunk ()
+	{
+		for (int i = 0; i < boats.Length; i++) {
+			if (!boats [i].IsSunk ()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
 	public StrikeResult FireAt (Position position, out Boat boat, bool testOnly = false)
 	{
 		for (int i = 0; i < boats.Length; i++) {
