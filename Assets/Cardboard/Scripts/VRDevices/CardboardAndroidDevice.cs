@@ -94,7 +94,7 @@ public class CardboardAndroidDevice : BaseCardboardDevice {
         CallObjectMethod(activityListener, "injectSingleTap");
       }
       if (backButtonPressed) {
-        CallObjectMethod(activityListener, "injectKeyPress", 111);  // Escape key.
+//        CallObjectMethod(activityListener, "injectKeyPress", 111);  // Escape key.
       }
     }
   }
