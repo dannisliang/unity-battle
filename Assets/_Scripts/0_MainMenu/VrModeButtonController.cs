@@ -14,6 +14,22 @@ public class VrModeButtonController : MonoBehaviour
 		toggle.onClick.AddListener (OnClick);
 	}
 
+	void Start ()
+	{
+		Prefs.OnVrModeChanged += UpdateActive;
+		UpdateActive (Prefs.VrMode);
+	}
+
+	void OnDestroy ()
+	{
+		Prefs.OnVrModeChanged -= UpdateActive;
+	}
+
+	void UpdateActive (bool vrMode)
+	{
+		gameObject.SetActive (!vrMode);
+	}
+
 	public void OnClick ()
 	{
 		Debug.Log ("***VR Mode Button CLICKED");
