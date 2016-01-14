@@ -17,13 +17,13 @@ public class FredBuildEditor
 			UnityEngine.Debug.LogError ("ALREADY EXECUTING !!");
 			return;
 		}
-		executing = true;
 
 		if (PlayerSettings.keystorePass.Length == 0 || PlayerSettings.keyaliasPass.Length == 0) {
 			UnityEngine.Debug.LogError ("Need keystore and key alias passwords !!");
 			return;
 		}
 
+		executing = true;
 		ClearLog ();
 		UnityEngine.Debug.Log ("===================== CUSTOM BUILD =====================\n");
 
