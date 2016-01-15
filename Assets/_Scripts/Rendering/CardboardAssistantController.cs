@@ -6,13 +6,8 @@ using System.Collections;
 
 public class CardboardAssistantController : MonoBehaviour
 {
-	// workaround SDK bug caused by calling 'Cardboard.SDK.OnBackButton -= …'
-	// in OnDisable(), which may be cardboard instance is destroy
-	bool instanceCreated;
-
 	void Start ()
 	{
-		instanceCreated = true;
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
 		Cardboard.SDK.OnBackButton += OnBackButton;
 		//		Cardboard.SDK.ElectronicDisplayStabilization = false;
@@ -31,11 +26,7 @@ public class CardboardAssistantController : MonoBehaviour
 
 	void OnApplicationQuit ()
 	{
-		if (instanceCreated) {
-			Cardboard.SDK.OnBackButton -= OnBackButton;
-		}
-		// assume Cardboard.SDK will be torn down
-		instanceCreated = false;
+		Cardboard.SDK.OnBackButton -= OnBackButton;
 	}
 
 	void OnDisable ()
@@ -45,7 +36,6 @@ public class CardboardAssistantController : MonoBehaviour
 
 	public void VrModeChanged (bool vrMode)
 	{
-		Assert.IsTrue (instanceCreated);
 		if (Cardboard.SDK.VRModeEnabled == vrMode) {
 			return;
 		}
