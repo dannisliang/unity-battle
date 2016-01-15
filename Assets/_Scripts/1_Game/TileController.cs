@@ -36,7 +36,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 			return;
 		}
 		eventData.Use ();
-		if (BattleController.instance.FireAt (eventData.pointerPressRaycast.gameObject.transform)) {
+		if (BattleController.instance.FireAt (positionMarkerController.position)) {
 			tileHasBeenFiredUpon = true;
 		}
 	}

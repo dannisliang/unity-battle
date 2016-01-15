@@ -43,7 +43,9 @@ public class RocketController : MonoBehaviour
 		}
 		// restore time scale
 		Time.timeScale = 1f;
-		callback ();
+		if (callback != null) {
+			callback ();
+		}
 	}
 
 	void OnTriggerEnter (Collider other)

@@ -2,6 +2,7 @@
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 [RequireComponent (typeof(AudioSource))]
 public class BattleController : MonoBehaviour
@@ -18,6 +19,7 @@ public class BattleController : MonoBehaviour
 	public GameObject reticle;
 	public GameObject gridOurs;
 	public GameObject gridTheirs;
+	public GameObject rocketOriginTheirs;
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip waterPlopClip;
@@ -105,25 +107,36 @@ public class BattleController : MonoBehaviour
 		source.PlayOneShot (noFireClip);
 	}
 
-	public bool FireAt (Transform targetTransform)
+	public bool FireAt (Position targetPosition)
 	{
 		if (!playing || firing) {
 			return false;
 		}
-		GameObject rocket = Instantiate (rocketPrefab);
 		BattleController.instance.SetIsFiring (true);
-		rocket.GetComponent<RocketController> ().Launch (FirePos (), targetTransform.position, delegate {
+		RealtimeBattle.EncodeAndSendLaunch (targetPosition);
+		LaunchRocket (Whose.Theirs, targetPosition, delegate {
 			SetIsFiring (false);
 		});
 		return true;
 	}
 
-	Vector3 FirePos ()
+	public void LaunchRocket (Whose atWhose, Position targetPosition, Action callback)
 	{
-		if (Random.value > .5) {
-			return Camera.main.transform.position + Camera.main.transform.right;
+		GameObject rocket = Instantiate (rocketPrefab);
+		Vector3 localPos = targetPosition.AsGridLocalPosition (Marker.Aim);
+		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirs : gridOurs).transform;
+		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localPos);
+		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
+		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
+		rocket.GetComponent<RocketController> ().Launch (FirePos (originTransform), pos, callback);
+	}
+
+	Vector3 FirePos (Transform originTransform)
+	{
+		if (UnityEngine.Random.value > .5) {
+			return originTransform.position + originTransform.right;
 		} else {
-			return Camera.main.transform.position - Camera.main.transform.right;
+			return originTransform.position - originTransform.right;
 		}
 	}
 

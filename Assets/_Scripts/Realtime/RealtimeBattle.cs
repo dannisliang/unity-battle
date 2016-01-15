@@ -18,11 +18,17 @@ public class RealtimeBattle : MonoBehaviour
 	
 	const byte MESSAGE_TYPE_GRID = (byte)'G';
 	const byte MESSAGE_TYPE_SHOT = (byte)'S';
+	const byte MESSAGE_TYPE_LAUNCH = (byte)'L';
 	const byte MESSAGE_TYPE_AIM = (byte)'A';
 
 	public static void EncodeAndSendGrid (Grid grid)
 	{
 		EncodeAndSend (MESSAGE_TYPE_GRID, grid);
+	}
+
+	public static void EncodeAndSendLaunch (Position position)
+	{
+		EncodeAndSend (MESSAGE_TYPE_LAUNCH, position);
 	}
 
 	public static void EncodeAndSendHit (Position position)
@@ -85,6 +91,11 @@ public class RealtimeBattle : MonoBehaviour
 				Position aimPosition = formatter.Deserialize (stream) as Position;
 				Debug.Log ("***Received aim at " + aimPosition);
 				BattleController.instance.AimAt (aimPosition);
+				break;
+			case MESSAGE_TYPE_LAUNCH:
+				Position targetPosition = formatter.Deserialize (stream) as Position;
+				Debug.Log ("***Received launch at " + targetPosition);
+				BattleController.instance.LaunchRocket (Whose.Ours, targetPosition, null);
 				break;
 			case MESSAGE_TYPE_SHOT:
 				Position shotPosition = formatter.Deserialize (stream) as Position;
