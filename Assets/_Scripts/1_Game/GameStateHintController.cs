@@ -34,12 +34,13 @@ public class GameStateHintController : MonoBehaviour
 
 	void OnDisable ()
 	{
-		if (!SceneMaster.quitting) {
-			BattleController.instance.OnGameState -= UpdateGameState;
-			BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
-			BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
-			Prefs.OnVrModeChanged -= UpdateVrMode;
+		if (SceneMaster.quitting) {
+			return;
 		}
+		BattleController.instance.OnGameState -= UpdateGameState;
+		BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
+		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
+		Prefs.OnVrModeChanged -= UpdateVrMode;
 	}
 
 	void UpdateGameState (bool playing, bool firing, Whose? loser)
