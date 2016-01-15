@@ -38,6 +38,9 @@ public class RocketController : MonoBehaviour
 
 	void OnDestroy ()
 	{
+		if (SceneMaster.quitting) {
+			return;
+		}
 		// restore time scale
 		Time.timeScale = 1f;
 		callback ();
