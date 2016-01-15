@@ -10,8 +10,8 @@ public class CardboardAssistantController : MonoBehaviour
 	{
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
 		Cardboard.SDK.OnBackButton += OnBackButton;
-		//		Cardboard.SDK.ElectronicDisplayStabilization = false;
-		Cardboard.SDK.AutoDriftCorrection = false;
+//		Cardboard.SDK.ElectronicDisplayStabilization = false;
+//		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
 		Cardboard.SDK.StereoScreenScale = Application.isEditor ? 1f : .7f;
 		VrModeChanged (Prefs.VrMode);
