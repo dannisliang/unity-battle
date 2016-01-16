@@ -782,7 +782,7 @@ ParticleSystem:
       maxGradient:
         key0:
           serializedVersion: 2
-          rgba: 17663
+          rgba: 16734208
         key1:
           serializedVersion: 2
           rgba: 4294967295
@@ -825,7 +825,7 @@ ParticleSystem:
       minGradient:
         key0:
           serializedVersion: 2
-          rgba: 58367
+          rgba: 16760832
         key1:
           serializedVersion: 2
           rgba: 4294967295
