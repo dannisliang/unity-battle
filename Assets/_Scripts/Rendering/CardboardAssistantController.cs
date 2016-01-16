@@ -17,6 +17,7 @@ public class CardboardAssistantController : MonoBehaviour
 		VrModeChanged (Prefs.VrMode);
 		// just in case VrMode already set to default
 		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
+		Prefs.Notify ();
 	}
 
 	void OnEnable ()

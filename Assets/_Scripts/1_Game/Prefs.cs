@@ -9,15 +9,20 @@ public class Prefs
 
 	public static event PrefChangedAction OnVrModeChanged;
 
+	public static void Notify ()
+	{
+		if (OnVrModeChanged != null) {
+			OnVrModeChanged (VrMode);
+		}
+	}
+
 	public static bool VrMode {
 		get {
 			return PlayerPrefs.GetInt ("VrMode") == 1;
 		}
 		set {
 			PlayerPrefs.SetInt ("VrMode", value ? 1 : 0);
-			if (OnVrModeChanged != null) {
-				OnVrModeChanged (value);
-			}
+			Notify ();
 		}
 	}
 
