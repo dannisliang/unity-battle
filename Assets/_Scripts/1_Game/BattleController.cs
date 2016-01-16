@@ -134,7 +134,7 @@ public class BattleController : MonoBehaviour
 		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
 
-		rocket.GetComponent<RocketController> ().Launch (start, end, callback);
+		rocket.GetComponent<RocketController> ().Launch (atWhose, targetPosition, start, end, callback);
 	}
 
 	Vector3 FirePos (Transform originTransform)
@@ -180,9 +180,7 @@ public class BattleController : MonoBehaviour
 			source.PlayOneShot (waterPlopClip);
 			break;
 		case StrikeResult.IGNORED_ALREADY_HIT:
-			SceneMaster.instance.Async (delegate {
-				source.PlayOneShot (shipExplosionClip);
-			}, 1f);
+			source.PlayOneShot (shipExplosionClip);
 			break;
 		case StrikeResult.MISS:
 			PlaceMarker (whose, position, Marker.Miss);
@@ -190,16 +188,12 @@ public class BattleController : MonoBehaviour
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
-			SceneMaster.instance.Async (delegate {
-				source.PlayOneShot (shipExplosionClip);
-			}, 1f);
+			source.PlayOneShot (shipExplosionClip);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
 			PlaceSunkBoat (whose, boat);
-			SceneMaster.instance.Async (delegate {
-				source.PlayOneShot (shipExplosionClip);
-			}, 1f);
+			source.PlayOneShot (shipExplosionClip);
 			break;
 		default:
 			throw new System.NotImplementedException ();

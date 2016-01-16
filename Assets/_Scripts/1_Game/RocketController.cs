@@ -12,10 +12,11 @@ public class RocketController : MonoBehaviour
 	ParticleSystem flameParticleSystem;
 	AudioSource source;
 	float[] fizzleOutTimes;
-	Collider other;
 	Action callback;
 	float t0;
 	BezierController bezier;
+	Whose atWhose;
+	Position targetPosition;
 
 	void Awake ()
 	{
@@ -36,14 +37,23 @@ public class RocketController : MonoBehaviour
 			transform.rotation = Quaternion.LookRotation (velocity);
 		}
 
+		if (fizzleOutTimes == null) {
+			if (t >= 1f) {
+				Explode ();
+				FizzleOut (flameParticleSystem.duration);
+			}
+		}
+
 		if (fizzleOutTimes != null) {
 			source.volume = (fizzleOutTimes [1] - Time.time) / (fizzleOutTimes [1] - fizzleOutTimes [0]);
 		}
 	}
 
-	public void Launch (PosRot start, PosRot end, Action callback)
+	public void Launch (Whose atWhose, Position targetPosition, PosRot start, PosRot end, Action callback)
 	{
 		this.callback = callback;
+		this.atWhose = atWhose;
+		this.targetPosition = targetPosition;
 
 		t0 = Time.time;
 
@@ -67,8 +77,8 @@ public class RocketController : MonoBehaviour
 
 	Vector3 Deviation (Transform transform)
 	{
-		return Utils.RandomSign () * UnityEngine.Random.Range (4f, 6f) * transform.right
-		+ Utils.RandomSign () * UnityEngine.Random.Range (4f, 6f) * transform.up;
+		return Utils.RandomSign () * UnityEngine.Random.Range (6f, 8f) * transform.right
+		+ Utils.RandomSign () * UnityEngine.Random.Range (6f, 8f) * transform.up;
 	}
 
 	void OnDestroy ()
@@ -82,26 +92,11 @@ public class RocketController : MonoBehaviour
 		}
 	}
 
-	void OnTriggerEnter (Collider other)
-	{
-		// prevent additional collisions
-		GetComponent<Collider> ().enabled = false;
-
-		this.other = other;
-
-		Invoke ("Explode", .3f * flameParticleSystem.duration);
-		FizzleOut (flameParticleSystem.duration);
-	}
-
 	void Explode ()
 	{
-		if (other.gameObject.layer == BattleController.layerTileTheirs.layer) {
-			PositionMarkerController positionMakerController = other.gameObject.GetComponent<PositionMarkerController> ();
-			//			TileController tileController = other.gameObject.GetComponent<TileController> ();
-			BattleController.instance.Strike (Whose.Theirs, positionMakerController.position);
-			RealtimeBattle.EncodeAndSendHit (positionMakerController.position);
-		} else {
-			Debug.LogError ("Unexpected collision with " + other);
+		if (atWhose == Whose.Theirs) {
+			BattleController.instance.Strike (atWhose, targetPosition);
+			RealtimeBattle.EncodeAndSendHit (targetPosition);
 		}
 	}
 

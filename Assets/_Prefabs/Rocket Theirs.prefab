@@ -8,8 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 453756}
-  - 136: {fileID: 13635630}
-  - 54: {fileID: 5404454}
   - 82: {fileID: 8266760}
   - 114: {fileID: 11439776}
   m_Layer: 12
@@ -124,21 +122,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 161656}
   m_Mesh: {fileID: 4300000, guid: 36bb0b824e7e14884aa5935acb2f794e, type: 3}
---- !u!54 &5404454
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 116402}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!82 &8266760
 AudioSource:
   m_ObjectHideFlags: 1
@@ -225,19 +208,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bezierPrefab: {fileID: 11481738, guid: f16b2d17f7e28464d9de67eee013dca3, type: 2}
---- !u!136 &13635630
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 116402}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.075
-  m_Height: 0.7
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0.15}
 --- !u!198 &19856432
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -286,7 +256,7 @@ ParticleSystem:
   looping: 1
   prewarm: 0
   playOnAwake: 1
-  moveWithTransform: 1
+  moveWithTransform: 0
   scalingMode: 1
   InitialModule:
     serializedVersion: 2
@@ -1792,6 +1762,10 @@ Prefab:
       value: 
       objectReference: {fileID: 11481738, guid: f16b2d17f7e28464d9de67eee013dca3,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: moveWithTransform
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 116402}
