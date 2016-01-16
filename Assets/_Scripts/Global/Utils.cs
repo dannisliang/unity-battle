@@ -10,7 +10,7 @@ public class Utils : MonoBehaviour
 {
 	public const float RESTART_DELAY = 10f;
 	public const float DUMMY_PLAY_GAMES_ASYNC_DELAY = 1f;
-	public const float DUMMY_PLAY_GAMES_REPLAY_DELAY = .1f;
+	public const float DUMMY_PLAY_GAMES_REPLAY_DELAY = 6f;
 
 	public const int GRID_SIZE = 10;
 	public const float BOAT_HEIGHT = .01f;
