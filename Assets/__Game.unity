@@ -2949,6 +2949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f2a9902d859e40ba87f068a137103b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 1
   boatNormalPrefab: {fileID: 114054, guid: 52194d64550094f1b9c307587d66fa76, type: 2}
   boatSunkPrefab: {fileID: 165002, guid: ca90ec1aa76754bc3a3bddce38820735, type: 2}
 --- !u!4 &1403814450
@@ -3889,6 +3890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f2a9902d859e40ba87f068a137103b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
   boatNormalPrefab: {fileID: 114054, guid: 52194d64550094f1b9c307587d66fa76, type: 2}
   boatSunkPrefab: {fileID: 165002, guid: ca90ec1aa76754bc3a3bddce38820735, type: 2}
 --- !u!1 &1609040337

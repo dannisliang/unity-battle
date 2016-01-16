@@ -8,7 +8,7 @@ using UnityEditor;
 
 public class BoatPlacementController : MonoBehaviour
 {
-
+	public Whose whose;
 	public GameObject boatNormalPrefab;
 	public GameObject boatSunkPrefab;
 
@@ -27,7 +27,7 @@ public class BoatPlacementController : MonoBehaviour
 
 	public void SetBoats (Boat[] boats)
 	{
-		this.grid.SetBoats (boats);
+		this.grid.SetBoats (whose, boats);
 		DestroyBoats ();
 	}
 

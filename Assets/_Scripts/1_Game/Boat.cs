@@ -3,15 +3,18 @@
 [System.Serializable]
 public class Boat
 {
+	[System.NonSerialized] public Whose whose;
+
 	public bool horizontal{ get; private set; }
 
 	public Position[] positions{ get; private set; }
 
 	public BoatConfiguration config { get; private set; }
 
+	//[System.NonSerialized]
 	int[] hits;
 
-	public Boat (BoatConfiguration config)
+	public Boat (Whose whose, BoatConfiguration config)
 	{
 		this.config = config;
 		horizontal = Random.value > .5f;
@@ -75,7 +78,9 @@ public class Boat
 
 	public override string ToString ()
 	{
-		return config.designation + (IsSunk () ? " — SUNK" : "");// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
+		return (whose == Whose.Theirs ? "Your opponent's " : "Your ")
+		+ config.designation
+		+ (IsSunk () ? " — SUNK" : "");// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
 	}
 
 }

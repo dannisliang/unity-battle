@@ -5,6 +5,8 @@ using System.Collections;
 [System.Serializable]
 public class Grid
 {
+	[System.NonSerialized] public Whose whose;
+
 	public delegate void StrikeOccurred ();
 
 	[field:System.NonSerialized] public event StrikeOccurred OnStrikeOccurred;
@@ -20,6 +22,7 @@ public class Grid
 	};
 
 	public Boat[] boats;
+
 	[System.NonSerialized] int[,] misses;
 
 	public int getMisses ()
@@ -35,12 +38,16 @@ public class Grid
 		return m;
 	}
 
-	public void SetBoats (Boat[] boats)
+	public void SetBoats (Whose whose, Boat[] boats)
 	{
+		this.whose = whose;
 		misses = new int[Utils.GRID_SIZE, Utils.GRID_SIZE];
 		if (boats == null) {
-			MakeRandomizedBoats ();
+			MakeRandomizedBoats (whose);
 		} else {
+			for (int i = 0; i < fleet.Length; i++) {
+				boats [i].whose = whose;
+			}
 			this.boats = boats;
 		}
 		if (OnStrikeOccurred != null) {
@@ -48,13 +55,13 @@ public class Grid
 		}
 	}
 
-	Boat[] MakeRandomizedBoats ()
+	Boat[] MakeRandomizedBoats (Whose whose)
 	{
 		boats = new Boat[fleet.Length];
 		for (int i = 0; i < fleet.Length; i++) {
 			bool conflict = true;
 			while (conflict) {
-				Boat boat = new Boat (fleet [i]);
+				Boat boat = new Boat (whose, fleet [i]);
 
 				conflict = false;
 				for (int j = 0; j < boat.positions.Length && !conflict; j++) {
