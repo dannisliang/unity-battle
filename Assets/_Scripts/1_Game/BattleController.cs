@@ -11,7 +11,8 @@ public class BattleController : MonoBehaviour
 
 	public static LayerInfo layerTileTheirs;
 
-	public GameObject rocketPrefab;
+	public GameObject rocketOursPrefab;
+	public GameObject rocketTheirsPrefab;
 	public GameObject markerAimReticleTheirsAtOursPrefab;
 	public GameObject markerAimReticleOursAtTheirsPrefab;
 	public GameObject markerHitPrefab;
@@ -122,7 +123,7 @@ public class BattleController : MonoBehaviour
 
 	public void LaunchRocket (Whose atWhose, Position targetPosition, Action callback)
 	{
-		GameObject rocket = Instantiate (rocketPrefab);
+		GameObject rocket = Instantiate (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
 		Vector3 localPos = targetPosition.AsGridLocalPosition (Marker.Aim);
 		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirs : gridOurs).transform;
 		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localPos);
