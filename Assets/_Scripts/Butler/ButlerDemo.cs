@@ -58,7 +58,7 @@ public class ButlerDemo : MonoBehaviour,IButler
 	{
 		SceneMaster.instance.Async (delegate {
 			Game.instance.OnRealTimeMessageReceived (reliable, "dummySenderId", data);
-		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
+		}, data [0] == (byte)'G' ? .1f : Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
 	void SetGameState (GameState gameState)
