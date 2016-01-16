@@ -96,7 +96,7 @@ public class GameStateHintController : MonoBehaviour
 		}
 		if (firing) {
 			color = defaultBackgroundColor;
-			return "Firing missle …";
+			return null; // "Firing missle …";
 		}
 		if (reticleBoatTarget != null) {
 			color = identifyBackgroundColor;
