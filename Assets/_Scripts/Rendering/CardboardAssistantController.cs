@@ -13,7 +13,7 @@ public class CardboardAssistantController : MonoBehaviour
 //		Cardboard.SDK.ElectronicDisplayStabilization = false;
 //		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
-		Cardboard.SDK.StereoScreenScale = Application.isEditor ? 1f : .7f;
+//		Cardboard.SDK.StereoScreenScale = Application.isEditor ? 1f : .8f;
 		VrModeChanged (Prefs.VrMode);
 		// just in case VrMode already set to default
 		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
