@@ -69,17 +69,18 @@ do
   device_num=$(( $device_num + 1))
   (
     adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null
-    user_count=$(( $( adb shell pm list users | grep UserInfo | wc -l ) ))
-    user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo.([0-9]+).*/\1/' )
-    install_pkg -r -g --user $user $apk ||
+    #user_count=$(( $( adb shell pm list users | grep UserInfo | wc -l ) ))
+    #user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo.([0-9]+).*/\1/' )
+    adb_args=$( cat android-serial.txt | grep $ANDROID_SERIAL | cut -d' ' -f2- )
+    install_pkg -r -g $adb_args $apk ||
     (
       echo " and reinstalling on $serial"
       uninstall_pkg $pkg \
-       && install_pkg --user $user $apk
+       && install_pkg $adb_args $apk
     )
     echo
     echo "$ANDROID_SERIAL Launching $pkg/$activity"
-    adb shell am start --user $user -n $pkg/$activity | grep -v 'Starting: Intent'
+    adb shell am start $adb_args -n $pkg/$activity | grep -v 'Starting: Intent'
   ) &
   pids="$pids $!"
 done
