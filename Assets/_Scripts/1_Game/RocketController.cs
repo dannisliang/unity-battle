@@ -45,23 +45,30 @@ public class RocketController : MonoBehaviour
 	{
 		this.callback = callback;
 
-//		Vector3 dir = end.position - start.position;
+		t0 = Time.time;
+
+		Vector3 aim = end.position - start.position;
 
 		bezier.t0.position = start.position;
 		bezier.t0.rotation = start.rotation;
 
-		bezier.t1.position = start.position;
-		bezier.t1.rotation = start.rotation;
-
-		bezier.t2.position = end.position;
-		bezier.t2.rotation = end.rotation;
-
 		bezier.t3.position = end.position;
 		bezier.t3.rotation = end.rotation;
+		
+		bezier.t1.position = start.position + .3f * aim + Deviation (bezier.t0);
+		bezier.t1.rotation = start.rotation;
 
-		t0 = Time.time;
+		bezier.t2.position = end.position - .3f * aim + Deviation (bezier.t3);
+		bezier.t2.rotation = end.rotation;
+
 		transform.position = start.position;
 		transform.rotation = start.rotation;
+	}
+
+	Vector3 Deviation (Transform transform)
+	{
+		return Utils.RandomSign () * UnityEngine.Random.Range (4f, 6f) * transform.right
+		+ Utils.RandomSign () * UnityEngine.Random.Range (4f, 6f) * transform.up;
 	}
 
 	void OnDestroy ()
@@ -69,7 +76,7 @@ public class RocketController : MonoBehaviour
 		if (SceneMaster.quitting) {
 			return;
 		}
-		Destroy (bezier);
+		Destroy (bezier.gameObject);
 		if (callback != null) {
 			callback ();
 		}

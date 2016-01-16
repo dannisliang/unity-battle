@@ -18,6 +18,11 @@ public class Utils : MonoBehaviour
 
 	public const HideFlags NO_SAVE_NO_EDIT_HIDE_FLAGS = HideFlags.DontSave | HideFlags.NotEditable;
 
+	public static float RandomSign ()
+	{
+		return UnityEngine.Random.value > .5f ? 1f : -1f;
+	}
+
 	public static void SetNoSaveNoEditHideFlags (Transform parent)
 	{
 		parent.gameObject.name = "[NO SAVE] " + parent.gameObject.name;

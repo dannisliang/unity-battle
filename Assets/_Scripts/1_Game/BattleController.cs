@@ -139,11 +139,7 @@ public class BattleController : MonoBehaviour
 
 	Vector3 FirePos (Transform originTransform)
 	{
-		if (UnityEngine.Random.value > .5) {
-			return originTransform.position + originTransform.right;
-		} else {
-			return originTransform.position - originTransform.right;
-		}
+		return originTransform.position + Utils.RandomSign () * originTransform.right;
 	}
 
 	public void AimAt (Position position)
