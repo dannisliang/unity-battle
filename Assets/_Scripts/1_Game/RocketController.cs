@@ -56,8 +56,7 @@ public class RocketController : MonoBehaviour
 		this.targetPosition = targetPosition;
 
 		t0 = Time.time;
-
-		Vector3 aim = end.position - start.position;
+		float distance = Vector3.Distance (start.position, end.position);
 
 		bezier.t0.position = start.position;
 		bezier.t0.rotation = start.rotation;
@@ -65,10 +64,10 @@ public class RocketController : MonoBehaviour
 		bezier.t3.position = end.position;
 		bezier.t3.rotation = end.rotation;
 		
-		bezier.t1.position = start.position + .3f * aim + Deviation (bezier.t0);
+		bezier.t1.position = start.position + .3f * distance * bezier.t0.forward + Deviation (bezier.t0);
 		bezier.t1.rotation = start.rotation;
 
-		bezier.t2.position = end.position - .3f * aim + Deviation (bezier.t3);
+		bezier.t2.position = end.position - .3f * distance * bezier.t3.forward;
 		bezier.t2.rotation = end.rotation;
 
 		transform.position = start.position;
@@ -77,8 +76,8 @@ public class RocketController : MonoBehaviour
 
 	Vector3 Deviation (Transform transform)
 	{
-		return Utils.RandomSign () * UnityEngine.Random.Range (6f, 8f) * transform.right
-		+ Utils.RandomSign () * UnityEngine.Random.Range (6f, 8f) * transform.up;
+		return Utils.RandomSign () * UnityEngine.Random.Range (3f, 4f) * transform.right
+		+ Utils.RandomSign () * UnityEngine.Random.Range (4f, 4f) * transform.up;
 	}
 
 	void OnDestroy ()
