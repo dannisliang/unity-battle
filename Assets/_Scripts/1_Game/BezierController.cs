@@ -3,47 +3,75 @@ using System.Collections;
 
 public class BezierController : MonoBehaviour
 {
-	public class Points
-	{
-		public Transform t0;
-		public Transform t1;
-		public Transform t2;
-		public Transform t3;
-	}
+	[HideInInspector]
+	public PosRot pr0;
 
 	[HideInInspector]
-	public Points points;
+	public PosRot pr1;
+
+	[HideInInspector]
+	public PosRot pr2;
+
+	[HideInInspector]
+	public PosRot pr3;
 
 	void OnValidate ()
 	{
-		MayInitializePoints ();
+		InitializePoints ();
 	}
 
 	void Awake ()
 	{
-		MayInitializePoints ();
+		InitializePoints ();
 	}
 
-	void MayInitializePoints ()
-	{
-		if (points != null) {
-			return;
+	public Transform transform0 {
+		get {
+			return AdjustTransform (transform.GetChild (0), pr0);
 		}
-		points = new Points ();
-		points.t0 = transform.GetChild (0);
-		points.t1 = transform.GetChild (1);
-		points.t2 = transform.GetChild (2);
-		points.t3 = transform.GetChild (3);
+	}
+
+	public Transform transform1 {
+		get {
+			return AdjustTransform (transform.GetChild (1), pr1);
+		}
+	}
+
+	public Transform transform2 {
+		get {
+			return AdjustTransform (transform.GetChild (2), pr2);
+		}
+	}
+
+	public Transform transform3 {
+		get {
+			return AdjustTransform (transform.GetChild (3), pr3);
+		}
+	}
+
+	Transform AdjustTransform (Transform t, PosRot pr)
+	{
+		t.position = pr.position;
+		t.rotation = pr.rotation;
+		return t;
+	}
+
+	void InitializePoints ()
+	{
+		pr0 = pr0 ?? new PosRot (transform.GetChild (0));
+		pr1 = pr1 ?? new PosRot (transform.GetChild (1));
+		pr2 = pr2 ?? new PosRot (transform.GetChild (2));
+		pr3 = pr3 ?? new PosRot (transform.GetChild (3));
 	}
 
 	public Vector3 GetPoint (float t)
 	{
-		return GetPoint (points.t0.position, points.t1.position, points.t2.position, points.t3.position, t);
+		return GetPoint (pr0.position, pr1.position, pr2.position, pr3.position, t);
 	}
 
 	public Vector3 GetVelocity (float t)
 	{
-		return GetFirstDerivative (points.t0.position, points.t1.position, points.t2.position, points.t3.position, t);
+		return GetFirstDerivative (pr0.position, pr1.position, pr2.position, pr3.position, t);
 	}
 
 	public static Vector3 GetPoint (Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)

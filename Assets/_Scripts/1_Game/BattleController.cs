@@ -125,11 +125,16 @@ public class BattleController : MonoBehaviour
 	{
 		GameObject rocket = Instantiate (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
 		Vector3 localPos = targetPosition.AsGridLocalPosition (Marker.Aim);
+		
+		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
+		PosRot start = new PosRot (FirePos (originTransform), originTransform.rotation);
+
 		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirs : gridOurs).transform;
 		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localPos);
 		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
-		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
-		rocket.GetComponent<RocketController> ().Launch (FirePos (originTransform), pos, callback);
+		PosRot end = new PosRot (pos, targetGridTransform.rotation);
+
+		rocket.GetComponent<RocketController> ().Launch (start, end, callback);
 	}
 
 	Vector3 FirePos (Transform originTransform)

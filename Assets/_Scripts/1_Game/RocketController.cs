@@ -5,35 +5,53 @@ using System.Collections;
 [RequireComponent (typeof(AudioSource))]
 public class RocketController : MonoBehaviour
 {
+	const float DURATION = 3f;
+
+	public BezierController bezierPrefab;
+
 	ParticleSystem flameParticleSystem;
 	AudioSource source;
-	float velocity = 1.5f;
 	float[] fizzleOutTimes;
 	Collider other;
 	Action callback;
+	float t0;
+	BezierController bezier;
 
 	void Awake ()
 	{
 		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
 		source = GetComponent<AudioSource> ();
+
+		bezier = Instantiate (bezierPrefab);
+		bezier.name += "(" + gameObject.name + ")";
 	}
 
 	void Update ()
 	{
-		Time.timeScale = Mathf.Min (10f, Time.timeScale + 1.5f * Time.deltaTime);
+		float t = (Time.time - t0) / DURATION;
+		Vector3 position = bezier.GetPoint (t);
+		Vector3 velocity = bezier.GetVelocity (t);
+		transform.position = position;
+		if (velocity.sqrMagnitude > 0f) {
+			transform.rotation = Quaternion.LookRotation (velocity);
+		}
+
 		if (fizzleOutTimes != null) {
 			source.volume = (fizzleOutTimes [1] - Time.time) / (fizzleOutTimes [1] - fizzleOutTimes [0]);
 		}
 	}
 
-	public void Launch (Vector3 origin, Vector3 target, Action callback)
+	public void Launch (PosRot start, PosRot end, Action callback)
 	{
 		this.callback = callback;
 
-		Vector3 direction = target - origin;
-		transform.position = origin;
-		transform.rotation = Quaternion.LookRotation (direction);
-		GetComponent<Rigidbody> ().velocity = direction.normalized * velocity;
+		bezier.pr0 = start;
+		bezier.pr1 = start;
+		bezier.pr2 = end;
+		bezier.pr3 = end;
+
+		t0 = Time.time;
+		transform.position = start.position;
 	}
 
 	void OnDestroy ()
@@ -41,8 +59,7 @@ public class RocketController : MonoBehaviour
 		if (SceneMaster.quitting) {
 			return;
 		}
-		// restore time scale
-		Time.timeScale = 1f;
+		Destroy (bezier);
 		if (callback != null) {
 			callback ();
 		}

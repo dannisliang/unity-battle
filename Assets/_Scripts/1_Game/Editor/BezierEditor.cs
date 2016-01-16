@@ -14,18 +14,18 @@ public class BezierEditor : Editor
 		BezierController bezier = target as BezierController;
 
 		Handles.color = Color.white;
-		Handles.DrawDottedLine (bezier.points.t0.position, bezier.points.t3.position, 5f);
-		DoPositionHandle (bezier.points.t0);
-		DoPositionHandle (bezier.points.t1);
-		DoPositionHandle (bezier.points.t2);
-		DoPositionHandle (bezier.points.t3);
-		Handles.DrawBezier (bezier.points.t0.position, bezier.points.t3.position, bezier.points.t1.position, bezier.points.t2.position, Color.white, null, 4f);
+		Handles.DrawDottedLine (bezier.pr0.position, bezier.pr3.position, 5f);
+		DoPositionHandle (bezier.transform0);
+		DoPositionHandle (bezier.transform1);
+		DoPositionHandle (bezier.transform2);
+		DoPositionHandle (bezier.transform3);
+		Handles.DrawBezier (bezier.pr0.position, bezier.pr3.position, bezier.pr1.position, bezier.pr2.position, Color.white, null, 4f);
 		GUIStyle style = new GUIStyle ();
 		style.fontSize = 20;
-		Handles.Label (bezier.points.t0.position, "p0", style);
-		Handles.Label (bezier.points.t1.position, "p1", style);
-		Handles.Label (bezier.points.t2.position, "p2", style);
-		Handles.Label (bezier.points.t3.position, "p3", style);
+		Handles.Label (bezier.pr0.position, "PR0", style);
+		Handles.Label (bezier.pr1.position, "PR1", style);
+		Handles.Label (bezier.pr2.position, "PR2", style);
+		Handles.Label (bezier.pr3.position, "PR3", style);
 		for (int i = 0; i < STEPS; i++) {
 			float t = (float)i / STEPS;
 			Handles.color = Color.green;
