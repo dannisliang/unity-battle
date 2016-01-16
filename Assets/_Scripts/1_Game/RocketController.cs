@@ -45,13 +45,23 @@ public class RocketController : MonoBehaviour
 	{
 		this.callback = callback;
 
-		bezier.pr0 = start;
-		bezier.pr1 = start;
-		bezier.pr2 = end;
-		bezier.pr3 = end;
+//		Vector3 dir = end.position - start.position;
+
+		bezier.t0.position = start.position;
+		bezier.t0.rotation = start.rotation;
+
+		bezier.t1.position = start.position;
+		bezier.t1.rotation = start.rotation;
+
+		bezier.t2.position = end.position;
+		bezier.t2.rotation = end.rotation;
+
+		bezier.t3.position = end.position;
+		bezier.t3.rotation = end.rotation;
 
 		t0 = Time.time;
 		transform.position = start.position;
+		transform.rotation = start.rotation;
 	}
 
 	void OnDestroy ()
