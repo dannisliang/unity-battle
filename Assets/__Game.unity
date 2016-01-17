@@ -758,7 +758,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Fleet
+  m_Text: Opponent's Fleet
 --- !u!222 &343962780
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3309,7 +3309,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: -100}
+  m_SizeDelta: {x: 300, y: -100}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1566461822
 MonoBehaviour:
@@ -3554,8 +3554,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.000023841858}
-  m_SizeDelta: {x: 1000, y: 600}
+  m_AnchoredPosition: {x: 0.5, y: 0.000023841858}
+  m_SizeDelta: {x: 1050, y: 600}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &1586100389
 GameObject:
@@ -4902,7 +4902,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Opponent Stats
+  m_Text: Opponent's Stats
 --- !u!222 &2030823400
 CanvasRenderer:
   m_ObjectHideFlags: 0
