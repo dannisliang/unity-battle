@@ -58,10 +58,47 @@ public class GameAi :MonoBehaviour
 
 	public Position NextMove ()
 	{
-		var index = Random.Range (0, emptyPositions.Count - 1);
-		Position pos = emptyPositions [index];
-		emptyPositions.RemoveAt (index);
+		Position pos = SmartMove () ?? RandomMove ();
+		emptyPositions.Remove (pos);
 		return pos;
 	}
 
+	Position SmartMove ()
+	{
+		foreach (Position hitPos in unidentifiedHits) {
+			Position pos = FindEmptyPositionAround (hitPos);
+			if (pos != null) {
+				return pos;
+			}
+		}
+		return null;
+	}
+
+	Position FindEmptyPositionAround (Position hitPos)
+	{
+		return IfIsOpenPosition (hitPos.Above ())
+		?? IfIsOpenPosition (hitPos.Below ())
+		?? IfIsOpenPosition (hitPos.Left ())
+		?? IfIsOpenPosition (hitPos.Right ());
+	}
+
+	Position IfIsOpenPosition (Position pos)
+	{
+		if (pos == null) {
+			return null;
+		}
+		foreach (Position emptyPos in emptyPositions) {
+			if (pos.Equals (emptyPos)) {
+				return pos;
+			}
+		}
+		return null;
+	}
+
+	Position RandomMove ()
+	{
+		var index = Random.Range (0, emptyPositions.Count - 1);
+		Position pos = emptyPositions [index];
+		return pos;
+	}
 }

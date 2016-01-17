@@ -14,6 +14,26 @@ public class Position
 		this.y = y;
 	}
 
+	public Position Above ()
+	{
+		return y == 0 ? null : new Position (x, y - 1);
+	}
+
+	public Position Below ()
+	{
+		return y == Utils.GRID_SIZE - 1 ? null : new Position (x, y + 1);
+	}
+
+	public Position Left ()
+	{
+		return x == 0 ? null : new Position (x - 1, y);
+	}
+
+	public Position Right ()
+	{
+		return x == Utils.GRID_SIZE - 1 ? null : new Position (x + 1, y);
+	}
+
 	public Vector3 AsGridLocalPosition (Marker marker)
 	{
 		return new Vector3 (x, Utils.GRID_SIZE - 1f - y, GetZ (marker));
