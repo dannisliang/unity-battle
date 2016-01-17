@@ -58,7 +58,7 @@ public class GameAi :MonoBehaviour
 
 	public Position NextMove ()
 	{
-		Position pos = SmartMove () ?? RandomMove ();
+		Position pos = SmartMove () ?? RandomAim ();
 		emptyPositions.Remove (pos);
 		return pos;
 	}
@@ -95,7 +95,7 @@ public class GameAi :MonoBehaviour
 		return null;
 	}
 
-	Position RandomMove ()
+	public Position RandomAim ()
 	{
 		var index = Random.Range (0, emptyPositions.Count - 1);
 		Position pos = emptyPositions [index];

@@ -68,6 +68,8 @@ public class ButlerAi : MonoBehaviour,IButler
 	byte[] MakeReply (bool reliable, byte[] data)
 	{
 		switch (Protocol.GetMessageType (data)) {
+		case Protocol.MessageType.AIM_AT:
+			return MakeAimMessage ();
 		case Protocol.MessageType.GRID_POSITIONS:
 			Assert.IsNull (ai);
 			ai = gameObject.AddComponent<GameAi> ();
@@ -77,6 +79,11 @@ public class ButlerAi : MonoBehaviour,IButler
 		default:
 			return data;
 		}
+	}
+
+	byte[] MakeAimMessage ()
+	{
+		return Protocol.Encode (Protocol.MessageType.AIM_AT, ai.RandomAim (), false);
 	}
 
 	byte[] MakeAiGridMessage ()
