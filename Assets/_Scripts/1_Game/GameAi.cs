@@ -58,15 +58,15 @@ public class GameAi :MonoBehaviour
 
 	public Position NextMove ()
 	{
-		Position pos = SmartMove () ?? RandomAim ();
+		Position pos = AimInLine () ?? AimAround () ?? AimRandom ();
 		emptyPositions.Remove (pos);
 		return pos;
 	}
 
-	Position SmartMove ()
+	Position AimInLine ()
 	{
 		foreach (Position hitPos in unidentifiedHits) {
-			Position pos = FindEmptyPositionAround (hitPos);
+			Position pos = NextInLine (hitPos);
 			if (pos != null) {
 				return pos;
 			}
@@ -74,7 +74,34 @@ public class GameAi :MonoBehaviour
 		return null;
 	}
 
-	Position FindEmptyPositionAround (Position hitPos)
+	Position NextInLine (Position hitPos)
+	{
+		return IfIsInLine (hitPos.Above (), hitPos.Above ().Above ())
+		?? IfIsInLine (hitPos.Below (), hitPos.Below ().Below ())
+		?? IfIsInLine (hitPos.Left (), hitPos.Left ().Left ())
+		?? IfIsInLine (hitPos.Right (), hitPos.Right ().Right ());
+	}
+
+	Position IfIsInLine (Position checkPosition, Position candidatePosition)
+	{
+		if (unidentifiedHits.Contains (checkPosition) && emptyPositions.Contains (candidatePosition)) {
+			return candidatePosition;
+		}
+		return null;
+	}
+
+	Position AimAround ()
+	{
+		foreach (Position hitPos in unidentifiedHits) {
+			Position pos = NextEmptyPositionAround (hitPos);
+			if (pos != null) {
+				return pos;
+			}
+		}
+		return null;
+	}
+
+	Position NextEmptyPositionAround (Position hitPos)
 	{
 		return IfIsOpenPosition (hitPos.Above ())
 		?? IfIsOpenPosition (hitPos.Below ())
@@ -95,7 +122,7 @@ public class GameAi :MonoBehaviour
 		return null;
 	}
 
-	public Position RandomAim ()
+	public Position AimRandom ()
 	{
 		var index = Random.Range (0, emptyPositions.Count - 1);
 		Position pos = emptyPositions [index];

@@ -83,7 +83,7 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	byte[] MakeAimMessage ()
 	{
-		return Protocol.Encode (Protocol.MessageType.AIM_AT, ai.RandomAim (), false);
+		return Protocol.Encode (Protocol.MessageType.AIM_AT, ai.AimRandom (), false);
 	}
 
 	byte[] MakeAiGridMessage ()
