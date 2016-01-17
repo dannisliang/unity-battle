@@ -39,7 +39,7 @@ public class RocketController : MonoBehaviour
 
 		if (fizzleOutTimes == null) {
 			if (t >= 1f) {
-				Explode ();
+				BattleController.instance.Strike (atWhose, targetPosition);
 				FizzleOut (flameParticleSystem.duration);
 			}
 		}
@@ -88,14 +88,6 @@ public class RocketController : MonoBehaviour
 		Destroy (bezier.gameObject);
 		if (callback != null) {
 			callback ();
-		}
-	}
-
-	void Explode ()
-	{
-		if (atWhose == Whose.Theirs) {
-			BattleController.instance.Strike (atWhose, targetPosition);
-			RealtimeBattle.EncodeAndSendHit (targetPosition);
 		}
 	}
 

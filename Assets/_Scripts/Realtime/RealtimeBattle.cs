@@ -27,11 +27,6 @@ public class RealtimeBattle : MonoBehaviour
 		EncodeAndSend (Protocol.MESSAGE_TYPE_LAUNCH, position);
 	}
 
-	public static void EncodeAndSendHit (Position position)
-	{
-		EncodeAndSend (Protocol.MESSAGE_TYPE_SHOT, position);
-	}
-
 	public static void EncodeAndSendAim (Position position)
 	{
 		if (Time.unscaledTime < nextAimAllowed) {
@@ -92,11 +87,6 @@ public class RealtimeBattle : MonoBehaviour
 				Position targetPosition = formatter.Deserialize (stream) as Position;
 				Debug.Log ("***Received launch at " + targetPosition);
 				BattleController.instance.LaunchRocket (Whose.Ours, targetPosition, null);
-				break;
-			case Protocol.MESSAGE_TYPE_SHOT:
-				Position shotPosition = formatter.Deserialize (stream) as Position;
-				Debug.Log ("***Received shot at " + shotPosition);
-				BattleController.instance.Strike (Whose.Ours, shotPosition);
 				break;
 			default:
 				throw new NotImplementedException ("Unknown message type " + messageType);

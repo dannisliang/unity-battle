@@ -46,7 +46,6 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 		BattleController.instance.AimAt (Whose.Theirs, highlight ? positionMarkerController.position : null);
 #if UNITY_EDITOR
 		if (!tileHasBeenFiredUpon && Input.GetKey (KeyCode.X)) {
-			RealtimeBattle.EncodeAndSendHit (positionMarkerController.position);
 			StrikeResult result = BattleController.instance.Strike (Whose.Theirs, positionMarkerController.position);
 			switch (result) {
 			case StrikeResult.IGNORED_ALREADY_MISSED:
