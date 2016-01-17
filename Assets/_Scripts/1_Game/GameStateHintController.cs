@@ -10,7 +10,26 @@ public class GameStateHintController : MonoBehaviour
 	public Color identifyBackgroundColor = Color.white;
 	public Color ourColor = new Color (.91f, .55f, .22f, .65f);
 	public Color theirColor = new Color (.27f, .64f, 1f, .65f);
-	
+
+	class StrikeData
+	{
+		public Whose whose { get; private set; }
+
+		public Boat boat{ get; private set; }
+
+		public StrikeResult result{ get; private set; }
+
+		public StrikeData (Whose whose, Boat boat, StrikeResult result)
+		{
+			this.whose = whose;
+			this.boat = boat;
+			this.result = result;
+		}
+
+	}
+
+	StrikeData strikeData;
+
 	bool playing;
 	bool firing;
 	Whose? loser;
@@ -29,6 +48,8 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnGameState += UpdateGameState;
 		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
+		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred += UpdateStrikeOurs;
+		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred += UpdateStrikeTheirs;
 		Prefs.OnVrModeChanged += UpdateVrMode;
 		UpdateText ();
 	}
@@ -41,6 +62,8 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnGameState -= UpdateGameState;
 		BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
+		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= UpdateStrikeOurs;
+		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred -= UpdateStrikeTheirs;
 		Prefs.OnVrModeChanged -= UpdateVrMode;
 	}
 
@@ -65,6 +88,45 @@ public class GameStateHintController : MonoBehaviour
 	{
 		this.reticleBoatTarget = boat;
 		UpdateText ();
+	}
+
+	void UpdateStrikeOurs (Whose whose, Boat boat, StrikeResult result)
+	{
+		SetStrikeData (whose, boat, result);
+	}
+
+	void UpdateStrikeTheirs (Whose whose, Boat boat, StrikeResult result)
+	{
+		SetStrikeData (whose, boat, result);
+	}
+
+	void SetStrikeData (Whose whose, Boat boat, StrikeResult result)
+	{
+		StrikeData newStrikeData = new StrikeData (whose, boat, result);
+		this.strikeData = newStrikeData;
+		UpdateText ();
+		SceneMaster.instance.Async (delegate {
+			if (this.strikeData == newStrikeData) {
+				this.strikeData = null;
+				UpdateText ();
+			}
+		}, GetTimeout (result));
+	}
+
+	float GetTimeout (StrikeResult result)
+	{
+		switch (result) {
+		case StrikeResult.MISS:
+			return 2f;
+		case StrikeResult.IGNORED_ALREADY_MISSED:
+		case StrikeResult.IGNORED_ALREADY_HIT:
+			return 0f;
+		case StrikeResult.HIT_NOT_SUNK:
+		case StrikeResult.HIT_AND_SUNK:
+			return 5f;
+		default:
+			throw new System.NotImplementedException ();
+		}
 	}
 
 	void UpdateVrMode (bool vrMode)
@@ -97,6 +159,27 @@ public class GameStateHintController : MonoBehaviour
 		if (!playing) {
 			color = syncingBackgroundColor;
 			return "Synchronizing.\nPlease wait …";
+		}
+		if (strikeData != null) {
+			color = defaultBackgroundColor;
+			switch (strikeData.result) {
+			case StrikeResult.MISS:
+				return strikeData.whose == Whose.Theirs ? "You missed." : "Your opponent missed.";
+			case StrikeResult.IGNORED_ALREADY_MISSED:
+			case StrikeResult.IGNORED_ALREADY_HIT:
+				break;
+			case StrikeResult.HIT_NOT_SUNK:
+				return strikeData.whose == Whose.Theirs ?
+					"You hit one of your opponent's ships.\nMore hits are needed to sink it."
+					: "Your opponent hit\none of your ships.";
+			case StrikeResult.HIT_AND_SUNK:
+				return (strikeData.whose == Whose.Theirs ?
+					"You sunk your opponent's\n"
+						: "Your opponent sunk your\n")
+				+ strikeData.boat.config.designation + "!";
+			default:
+				throw new System.NotImplementedException ();
+			}
 		}
 		if (firing) {
 			color = defaultBackgroundColor;

@@ -78,9 +78,9 @@ public class Boat
 
 	public override string ToString ()
 	{
-		return (whose == Whose.Theirs ? "Your opponent's " : "Your ")
+		return (whose == Whose.Theirs ? "This is uour opponent's\n" : "This is your\n")
 		+ config.designation
-		+ (IsSunk () ? " — SUNK" : "");// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
+		+ (IsSunk () ? " — SUNK." : ".");// + " — " + positions [0] + " " + (horizontal ? "Horizontal" : "Vertical");
 	}
 
 }

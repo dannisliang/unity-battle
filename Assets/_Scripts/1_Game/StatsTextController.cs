@@ -22,7 +22,6 @@ public class StatsTextController : MonoBehaviour
 	void OnEnable ()
 	{
 		boatPlacementController.grid.OnStrikeOccurred += UpdateText;
-		UpdateText ();
 	}
 
 	void OnDisable ()
@@ -30,7 +29,7 @@ public class StatsTextController : MonoBehaviour
 		boatPlacementController.grid.OnStrikeOccurred -= UpdateText;
 	}
 
-	void UpdateText ()
+	void UpdateText (Whose whose, Boat boat, StrikeResult result)
 	{
 		text.text = GetText (boatPlacementController.grid);
 	}
