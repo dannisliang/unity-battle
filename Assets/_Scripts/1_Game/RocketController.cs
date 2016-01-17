@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-[RequireComponent (typeof(AudioSource))]
+[RequireComponent (typeof(CardboardAudioSource))]
 public class RocketController : MonoBehaviour
 {
 	const float DURATION = 3f;
@@ -10,7 +10,7 @@ public class RocketController : MonoBehaviour
 	public BezierController bezierPrefab;
 
 	ParticleSystem flameParticleSystem;
-	AudioSource source;
+	CardboardAudioSource source;
 	float[] fizzleOutTimes;
 	Action callback;
 	float t0;
@@ -21,7 +21,7 @@ public class RocketController : MonoBehaviour
 	void Awake ()
 	{
 		flameParticleSystem = GetComponentInChildren<ParticleSystem> ();
-		source = GetComponent<AudioSource> ();
+		source = GetComponent<CardboardAudioSource> ();
 
 		bezier = Instantiate (bezierPrefab);
 		bezier.name += "(" + gameObject.name + ")";

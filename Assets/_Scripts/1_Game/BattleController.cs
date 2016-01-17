@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-[RequireComponent (typeof(AudioSource))]
+[RequireComponent (typeof(CardboardAudioSource))]
 public class BattleController : MonoBehaviour
 {
 	public static BattleController instance { get; private set; }
@@ -41,7 +41,7 @@ public class BattleController : MonoBehaviour
 	bool playing;
 	bool firing;
 	Whose? loser;
-	AudioSource source;
+	CardboardAudioSource source;
 	GameObject aimReticleOurs;
 	GameObject aimReticleTheirs;
 
@@ -53,7 +53,7 @@ public class BattleController : MonoBehaviour
 		}
 		instance = this;
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
-		source = GetComponent<AudioSource> ();
+		source = GetComponent<CardboardAudioSource> ();
 		aimReticleOurs = Instantiate (markerAimReticleTheirsAtOursPrefab);
 		aimReticleTheirs = Instantiate (markerAimReticleOursAtTheirsPrefab);
 		AimAt (Whose.Theirs, null); // reticle starts disabled
