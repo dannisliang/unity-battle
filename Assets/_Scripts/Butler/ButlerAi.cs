@@ -38,7 +38,6 @@ public class ButlerAi : MonoBehaviour,IButler
 	public void NewGame ()
 	{
 		Assert.AreEqual (GameState.NEED_TO_SELECT_GAME_TYPE, gameState);
-		ai = new GameAi ();
 		SetGameState (GameState.AUTHENTICATING);
 		SetGameState (GameState.SETTING_UP_GAME);
 		SetGameState (GameState.PLAYING);
@@ -54,23 +53,29 @@ public class ButlerAi : MonoBehaviour,IButler
 		Assert.AreEqual (GameState.PLAYING, gameState);
 		SetGameState (GameState.TEARING_DOWN_GAME);
 		SetGameState (GameState.GAME_WAS_TORN_DOWN);
+		Destroy (ai);
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
+		byte[] replyData = MakeReply (reliable, data);
+		SceneMaster.instance.Async (delegate {
+			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
+		}, .1f);
+	}
+
+	byte[] MakeReply (bool reliable, byte[] data)
+	{
 		switch (Protocol.GetMessageType (data)) {
 		case Protocol.MessageType.GRID_POSITIONS:
-			data = MakeAiGridMessage ();
-			break;
+			Assert.IsNull (ai);
+			ai = gameObject.AddComponent<GameAi> ();
+			return MakeAiGridMessage ();
 		case Protocol.MessageType.ROCKET_LAUNCH:
-			data = MakeAiMoveMessage ();
-			break;
+			return MakeAiMoveMessage ();
 		default:
-			break;
+			return data;
 		}
-		SceneMaster.instance.Async (delegate {
-			Game.instance.OnRealTimeMessageReceived (reliable, "dummySenderId", data);
-		}, .1f);
 	}
 
 	byte[] MakeAiGridMessage ()

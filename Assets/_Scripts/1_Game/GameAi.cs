@@ -1,11 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GameAi
+public class GameAi :MonoBehaviour
 {
 	List<Position> emptyPositions;
 
-	public GameAi ()
+	void Start ()
+	{
+		SetupGrid ();
+	}
+
+	void OnEnable ()
+	{
+		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred += NoteStrikeResult;
+	}
+
+	void OnDisable ()
+	{
+		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= NoteStrikeResult;
+	}
+
+	void SetupGrid ()
 	{
 		emptyPositions = new List<Position> ();
 		for (int i = 0; i < Utils.GRID_SIZE; i++) {
@@ -13,6 +28,11 @@ public class GameAi
 				emptyPositions.Add (new Position (i, j));
 			}
 		}
+	}
+
+	void NoteStrikeResult (Whose whose, Boat boat, Position position, StrikeResult result)
+	{
+		Debug.Log ("***" + whose + " " + position + " is a " + result);
 	}
 
 	public Position NextMove ()

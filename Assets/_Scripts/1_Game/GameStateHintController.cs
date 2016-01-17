@@ -90,12 +90,12 @@ public class GameStateHintController : MonoBehaviour
 		UpdateText ();
 	}
 
-	void UpdateStrikeOurs (Whose whose, Boat boat, StrikeResult result)
+	void UpdateStrikeOurs (Whose whose, Boat boat, Position position, StrikeResult result)
 	{
 		SetStrikeData (whose, boat, result);
 	}
 
-	void UpdateStrikeTheirs (Whose whose, Boat boat, StrikeResult result)
+	void UpdateStrikeTheirs (Whose whose, Boat boat, Position position, StrikeResult result)
 	{
 		SetStrikeData (whose, boat, result);
 	}

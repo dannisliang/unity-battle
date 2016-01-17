@@ -7,7 +7,7 @@ public class Grid
 {
 	[System.NonSerialized] public Whose whose;
 
-	public delegate void StrikeOccurred (Whose whose, Boat boat, StrikeResult result);
+	public delegate void StrikeOccurred (Whose whose, Boat boat, Position position, StrikeResult result);
 
 	[field:System.NonSerialized] public event StrikeOccurred OnStrikeOccurred;
 
@@ -120,7 +120,7 @@ public class Grid
 				Assert.IsTrue (result == StrikeResult.HIT_AND_SUNK || result == StrikeResult.HIT_NOT_SUNK);
 				boat = boats [i];
 				if (!testOnly && OnStrikeOccurred != null) {
-					OnStrikeOccurred (whose, boats [i], result);
+					OnStrikeOccurred (whose, boats [i], position, result);
 				}
 				return result;
 			}
@@ -134,7 +134,7 @@ public class Grid
 		}
 		boat = null;
 		if (!testOnly && OnStrikeOccurred != null) {
-			OnStrikeOccurred (whose, boat, StrikeResult.MISS);
+			OnStrikeOccurred (whose, boat, position, StrikeResult.MISS);
 		}
 		return StrikeResult.MISS;
 	}

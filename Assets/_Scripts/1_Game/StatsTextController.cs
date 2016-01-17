@@ -31,7 +31,7 @@ public class StatsTextController : MonoBehaviour
 		boatPlacementController.grid.OnGridSetup -= _UpdateText;
 	}
 
-	void UpdateText (Whose whose, Boat boat, StrikeResult result)
+	void UpdateText (Whose whose, Boat boat, Position position, StrikeResult result)
 	{
 		_UpdateText ();
 	}
