@@ -145,8 +145,8 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		Debug.Log ("***PlayGamesNewGame() …");
 		Assert.AreEqual (GameState.AUTHENTICATING, gameState);
 		SetGameState (GameState.SETTING_UP_GAME);
-//		gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : 0, listener: this);
-		gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : 0, listener: this);
+//		gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : Protocol.PROTOCOL_VERSION, listener: this);
+		gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : Protocol.PROTOCOL_VERSION, listener: this);
 	}
 
 	public GameState GetGameState ()

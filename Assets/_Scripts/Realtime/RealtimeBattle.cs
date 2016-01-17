@@ -8,6 +8,7 @@ using System;
 
 public class RealtimeBattle : MonoBehaviour
 {
+
 	const float AIM_INTERVAL = .5f;
 
 	static float nextAimAllowed = 0f;
@@ -15,25 +16,20 @@ public class RealtimeBattle : MonoBehaviour
 	static int lastAimMessageSendCount = 0;
 	static int lastAimMessageReceiveCount = 0;
 	static Position unsentAimPosition;
-	
-	const byte MESSAGE_TYPE_GRID = (byte)'G';
-	const byte MESSAGE_TYPE_SHOT = (byte)'S';
-	const byte MESSAGE_TYPE_LAUNCH = (byte)'L';
-	const byte MESSAGE_TYPE_AIM = (byte)'A';
 
 	public static void EncodeAndSendGrid (Grid grid)
 	{
-		EncodeAndSend (MESSAGE_TYPE_GRID, grid);
+		EncodeAndSend (Protocol.MESSAGE_TYPE_GRID, grid);
 	}
 
 	public static void EncodeAndSendLaunch (Position position)
 	{
-		EncodeAndSend (MESSAGE_TYPE_LAUNCH, position);
+		EncodeAndSend (Protocol.MESSAGE_TYPE_LAUNCH, position);
 	}
 
 	public static void EncodeAndSendHit (Position position)
 	{
-		EncodeAndSend (MESSAGE_TYPE_SHOT, position);
+		EncodeAndSend (Protocol.MESSAGE_TYPE_SHOT, position);
 	}
 
 	public static void EncodeAndSendAim (Position position)
@@ -48,7 +44,7 @@ public class RealtimeBattle : MonoBehaviour
 			return;
 		}
 		unsentAimPosition = null;
-		EncodeAndSend (MESSAGE_TYPE_AIM, position, messageCount: lastAimMessageSendCount++);
+		EncodeAndSend (Protocol.MESSAGE_TYPE_AIM, position, messageCount: lastAimMessageSendCount++);
 		nextAimAllowed = Time.unscaledTime + AIM_INTERVAL;
 	}
 
@@ -82,22 +78,22 @@ public class RealtimeBattle : MonoBehaviour
 				lastAimMessageReceiveCount = messageCount;
 			}
 			switch (messageType) {
-			case MESSAGE_TYPE_GRID:
+			case Protocol.MESSAGE_TYPE_GRID:
 				Grid grid = formatter.Deserialize (stream) as Grid;
 				Debug.Log ("***Received other grid ");// + grid);
 				BattleController.instance.SetBoatsTheirs (grid.boats);
 				break;
-			case MESSAGE_TYPE_AIM:
+			case Protocol.MESSAGE_TYPE_AIM:
 				Position aimPosition = formatter.Deserialize (stream) as Position;
 				Debug.Log ("***Received aim at " + aimPosition);
 				BattleController.instance.AimAt (aimPosition);
 				break;
-			case MESSAGE_TYPE_LAUNCH:
+			case Protocol.MESSAGE_TYPE_LAUNCH:
 				Position targetPosition = formatter.Deserialize (stream) as Position;
 				Debug.Log ("***Received launch at " + targetPosition);
 				BattleController.instance.LaunchRocket (Whose.Ours, targetPosition, null);
 				break;
-			case MESSAGE_TYPE_SHOT:
+			case Protocol.MESSAGE_TYPE_SHOT:
 				Position shotPosition = formatter.Deserialize (stream) as Position;
 				Debug.Log ("***Received shot at " + shotPosition);
 				BattleController.instance.Strike (Whose.Ours, shotPosition);
