@@ -119,7 +119,9 @@ BaseVRDevice
   }
 
   public override void PostRender() {
+    #pragma warning disable 0618
     GL.IssuePluginEvent(kCardboardRenderEvent);
+    #pragma warning restore 0618
   }
 
   public override void OnPause(bool pause) {

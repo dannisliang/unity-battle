@@ -21,7 +21,9 @@ public class StereoRenderEffect : MonoBehaviour {
   private Material material;
 
 #if UNITY_5
+  #pragma warning disable 0109
   private new Camera camera;
+  #pragma warning restore 0109
 
   void Awake() {
     camera = GetComponent<Camera>();
