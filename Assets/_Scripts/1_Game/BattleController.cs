@@ -102,7 +102,10 @@ public class BattleController : MonoBehaviour
 
 	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
 	{
-		if (!playing || firing) {
+		if (!playing) {
+			return false;
+		}
+		if (firing && !Application.isEditor) {
 			return false;
 		}
 		if (tileHasBeenFiredUpon) {
