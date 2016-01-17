@@ -9,6 +9,7 @@ public class ButlerAi : MonoBehaviour,IButler
 	public event Game.GameStateChange OnGameStateChange;
 
 	GameState gameState = GameState.NEED_TO_SELECT_GAME_TYPE;
+	GameAi ai;
 
 	#if UNITY_EDITOR
 	void Update ()
@@ -37,6 +38,7 @@ public class ButlerAi : MonoBehaviour,IButler
 	public void NewGame ()
 	{
 		Assert.AreEqual (GameState.NEED_TO_SELECT_GAME_TYPE, gameState);
+		ai = new GameAi ();
 		SetGameState (GameState.AUTHENTICATING);
 		SetGameState (GameState.SETTING_UP_GAME);
 		SetGameState (GameState.PLAYING);
@@ -56,19 +58,32 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
-		if (Protocol.GetMessageType (data) == Protocol.MessageType.GRID_POSITIONS) {
-			data = MakeAiGrid ();
+		switch (Protocol.GetMessageType (data)) {
+		case Protocol.MessageType.GRID_POSITIONS:
+			data = MakeAiGridMessage ();
+			break;
+		case Protocol.MessageType.ROCKET_LAUNCH:
+			data = MakeAiMoveMessage ();
+			break;
+		default:
+			break;
 		}
 		SceneMaster.instance.Async (delegate {
 			Game.instance.OnRealTimeMessageReceived (reliable, "dummySenderId", data);
 		}, .1f);
 	}
 
-	byte[] MakeAiGrid ()
+	byte[] MakeAiGridMessage ()
 	{
 		Grid grid = new Grid ();
 		grid.SetBoats (Whose.Theirs, null);
 		return Protocol.Encode (Protocol.MessageType.GRID_POSITIONS, grid, true);
+	}
+
+	byte[] MakeAiMoveMessage ()
+	{
+		Position pos = ai.NextMove ();
+		return Protocol.Encode (Protocol.MessageType.ROCKET_LAUNCH, pos, true);
 	}
 
 	void SetGameState (GameState gameState)
