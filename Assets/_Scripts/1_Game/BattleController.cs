@@ -94,6 +94,9 @@ public class BattleController : MonoBehaviour
 
 	public void AimAt (Whose whose, Position position)
 	{
+		if (loser != null) {
+			return;
+		}
 		if (OnReticleAim != null) {
 			OnReticleAim (whose, position);
 		}
@@ -103,6 +106,9 @@ public class BattleController : MonoBehaviour
 	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
 	{
 		if (!playing) {
+			return false;
+		}
+		if (loser != null) {
 			return false;
 		}
 		if (firing && !Application.isEditor) {
