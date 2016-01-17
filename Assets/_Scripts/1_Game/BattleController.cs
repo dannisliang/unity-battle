@@ -154,21 +154,6 @@ public class BattleController : MonoBehaviour
 		return result;
 	}
 
-	void CheckAllBoatsSunk (Whose whose)
-	{
-		if (loser != null) {
-			return;
-		}
-		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
-		if (boatPlacementController.grid.AllBoatsSunk ()) {
-			loser = whose;
-			AnnounceGameState ();
-			SceneMaster.instance.Async (delegate {
-				Game.instance.Restart ();
-			}, Utils.RESTART_DELAY);
-		}
-	}
-
 	public StrikeResult _Strike (Whose whose, Position position)
 	{
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
@@ -199,6 +184,21 @@ public class BattleController : MonoBehaviour
 			throw new System.NotImplementedException ();
 		}
 		return result;
+	}
+
+	void CheckAllBoatsSunk (Whose whose)
+	{
+		if (loser != null) {
+			return;
+		}
+		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
+		if (boatPlacementController.grid.AllBoatsSunk ()) {
+			loser = whose;
+			AnnounceGameState ();
+			SceneMaster.instance.Async (delegate {
+				Game.instance.Restart ();
+			}, Utils.RESTART_DELAY);
+		}
 	}
 
 	void PlaceSunkBoat (Whose whose, Boat boat)
