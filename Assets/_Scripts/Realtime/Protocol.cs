@@ -30,7 +30,12 @@ public class Protocol
 		}
 	}
 
-	public static Protocol.MessageType Decode (byte[] bytes, bool reliable, out object obj, out int messageCount)
+	public static MessageType GetMessageType (byte[] bytes)
+	{
+		return (MessageType)bytes [0];
+	}
+
+	public static MessageType Decode (byte[] bytes, bool reliable, out object obj, out int messageCount)
 	{
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream (bytes)) {

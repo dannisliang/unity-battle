@@ -40,9 +40,6 @@ public class ButlerAi : MonoBehaviour,IButler
 		SetGameState (GameState.AUTHENTICATING);
 		SetGameState (GameState.SETTING_UP_GAME);
 		SetGameState (GameState.PLAYING);
-		Grid grid = new Grid ();
-		grid.SetBoats (Whose.Ours, null);
-//		RealtimeBattle.DecodeAndExecute
 	}
 
 	public GameState GetGameState ()
@@ -59,9 +56,19 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
+		if (Protocol.GetMessageType (data) == Protocol.MessageType.GRID_POSITIONS) {
+			data = MakeAiGrid ();
+		}
 		SceneMaster.instance.Async (delegate {
 			Game.instance.OnRealTimeMessageReceived (reliable, "dummySenderId", data);
-		}, data [0] == (byte)Protocol.MessageType.GRID_POSITIONS ? .1f : Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
+		}, .1f);
+	}
+
+	byte[] MakeAiGrid ()
+	{
+		Grid grid = new Grid ();
+		grid.SetBoats (Whose.Theirs, null);
+		return Protocol.Encode (Protocol.MessageType.GRID_POSITIONS, grid, true);
 	}
 
 	void SetGameState (GameState gameState)

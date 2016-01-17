@@ -28,7 +28,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		SceneMaster.instance.Async (() => {
 			roomConnecting = !Input.GetKey (KeyCode.F);
 			listener.OnRoomSetupProgress (roomConnecting ? 20 : 0);
-		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
+		}, Utils.DUMMY_PLAY_GAMES_REAL_TIME_ASYNC_DELAY);
 		SceneMaster.instance.Async (() => {
 			if (!roomConnecting || roomConnected) {
 				return;
@@ -40,7 +40,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 				participants.Add (new Participant ("other", "other43", Participant.ParticipantStatus.Joined, new Player ("other player", "player43", null), true));
 			}
 			listener.OnRoomConnected (roomConnected);
-		}, 2f * Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
+		}, 2f * Utils.DUMMY_PLAY_GAMES_REAL_TIME_ASYNC_DELAY);
 	}
 
 	public void CreateWithInvitationScreen (uint minOpponents, uint maxOppponents, uint variant, RealTimeMultiplayerListener listener)
@@ -74,7 +74,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		// simply mirror back messages with delay
 		SceneMaster.instance.Async (() => {
 			listener.OnRealTimeMessageReceived (reliable, "senderid", data);
-		}, Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
+		}, Utils.DUMMY_PLAY_GAMES_REAL_TIME_REPLAY_DELAY);
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data, int offset, int length)
@@ -119,7 +119,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 			roomConnected = false;
 			participants = null;
 			listener.OnLeftRoom ();
-		}, Utils.DUMMY_PLAY_GAMES_ASYNC_DELAY);
+		}, Utils.DUMMY_PLAY_GAMES_REAL_TIME_ASYNC_DELAY);
 	}
 
 	public bool IsRoomConnected ()
