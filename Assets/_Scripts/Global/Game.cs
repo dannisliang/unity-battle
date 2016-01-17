@@ -92,7 +92,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		Debug.Log ("===>" + state);
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
-			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
+			HardRestart ();
 			break;
 		case GameState.NEED_TO_SELECT_GAME_TYPE:
 			break;
@@ -108,6 +108,11 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
+	void HardRestart ()
+	{
+		Destroy (gameObject);
+		SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
+	}
 
 	#if UNITY_EDITOR
 	void Update ()
