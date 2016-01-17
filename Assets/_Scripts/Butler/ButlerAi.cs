@@ -59,9 +59,10 @@ public class ButlerAi : MonoBehaviour,IButler
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
 		byte[] replyData = MakeReply (reliable, data);
+		bool fast = Protocol.GetMessageType (replyData) != Protocol.MessageType.ROCKET_LAUNCH;
 		SceneMaster.instance.Async (delegate {
 			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
-		}, .1f);
+		}, fast ? .1f : Utils.AI_DELAY);
 	}
 
 	byte[] MakeReply (bool reliable, byte[] data)
