@@ -11,6 +11,10 @@ public class Grid
 
 	[field:System.NonSerialized] public event StrikeOccurred OnStrikeOccurred;
 
+	public delegate void GridSetup ();
+
+	[field:System.NonSerialized] public event GridSetup OnGridSetup;
+
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
 		new BoatConfiguration (5, "Aircraft Carrier"),
@@ -49,6 +53,9 @@ public class Grid
 				boats [i].whose = whose;
 			}
 			this.boats = boats;
+		}
+		if (OnGridSetup != null) {
+			OnGridSetup ();
 		}
 	}
 

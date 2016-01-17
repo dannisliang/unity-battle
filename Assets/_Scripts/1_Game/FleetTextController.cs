@@ -22,14 +22,21 @@ public class FleetTextController : MonoBehaviour
 	void OnEnable ()
 	{
 		boatPlacementController.grid.OnStrikeOccurred += UpdateText;
+		boatPlacementController.grid.OnGridSetup += _UpdateText;
 	}
 
 	void OnDisable ()
 	{
 		boatPlacementController.grid.OnStrikeOccurred -= UpdateText;
+		boatPlacementController.grid.OnGridSetup -= _UpdateText;
 	}
 
 	void UpdateText (Whose whose, Boat boat, StrikeResult result)
+	{
+		_UpdateText ();
+	}
+
+	void _UpdateText ()
 	{
 		text.text = GetText (boatPlacementController.grid);
 	}
