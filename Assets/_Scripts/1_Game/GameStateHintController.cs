@@ -16,6 +16,7 @@ public class GameStateHintController : MonoBehaviour
 	Whose? loser;
 	bool reticleAimingAtGrid;
 	bool vrMode;
+	int fireCount;
 
 	Image image;
 	Text text;
@@ -48,6 +49,9 @@ public class GameStateHintController : MonoBehaviour
 		this.playing = playing;
 		this.firing = firing;
 		this.loser = loser;
+		if (firing) {
+			fireCount++;
+		}
 		UpdateText ();
 	}
 
@@ -108,9 +112,23 @@ public class GameStateHintController : MonoBehaviour
 			"to target your opponent's ships.";
 		}
 		color = defaultBackgroundColor;
-		return "Missle is armed and ready.\n" + (vrMode ?
-			"Aim, then use trigger to fire." :
-			"Aim, then tap screen to fire.");
+		return GetReadyMessage ();
 	}
 
+	string GetReadyMessage ()
+	{
+		string longAimimText = vrMode ?
+			"Aim, then use trigger to fire." :
+			"Aim, then tap screen to fire.";
+		switch (fireCount) {
+		case 0:
+			return "Missle is armed and ready.\n" + longAimimText;
+		case 1:
+			return longAimimText;
+		case 2:
+			return "Aim, then fire.";
+		default:
+			return null;
+		}
+	}
 }
