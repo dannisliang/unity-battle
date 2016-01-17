@@ -100,17 +100,13 @@ public class BattleController : MonoBehaviour
 		PlaceMarker (whose, position, Marker.Aim);
 	}
 
-	public void FalseFire ()
+	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
 	{
 		if (!playing || firing) {
-			return;
+			return false;
 		}
-		source.PlayOneShot (noFireClip);
-	}
-
-	public bool FireAt (Position targetPosition)
-	{
-		if (!playing || firing) {
+		if (tileHasBeenFiredUpon) {
+			source.PlayOneShot (noFireClip);
 			return false;
 		}
 		BattleController.instance.SetIsFiring (true);

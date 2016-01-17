@@ -31,12 +31,8 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
 	public void OnPointerDown (PointerEventData eventData)
 	{
-		if (tileHasBeenFiredUpon) {
-			BattleController.instance.FalseFire ();
-			return;
-		}
 		eventData.Use ();
-		if (BattleController.instance.FireAt (positionMarkerController.position)) {
+		if (BattleController.instance.FireAt (positionMarkerController.position, tileHasBeenFiredUpon)) {
 			tileHasBeenFiredUpon = true;
 		}
 	}
