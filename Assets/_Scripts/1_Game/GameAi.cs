@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 public class GameAi :MonoBehaviour
 {
 	List<Position> emptyPositions;
+	List<Position> unidentifiedHits;
 
 	void Start ()
 	{
-		SetupGrid ();
+		Init ();
 	}
 
 	void OnEnable ()
@@ -20,7 +22,7 @@ public class GameAi :MonoBehaviour
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= NoteStrikeResult;
 	}
 
-	void SetupGrid ()
+	void Init ()
 	{
 		emptyPositions = new List<Position> ();
 		for (int i = 0; i < Utils.GRID_SIZE; i++) {
@@ -28,11 +30,30 @@ public class GameAi :MonoBehaviour
 				emptyPositions.Add (new Position (i, j));
 			}
 		}
+		unidentifiedHits = new List<Position> ();
 	}
 
 	void NoteStrikeResult (Whose whose, Boat boat, Position position, StrikeResult result)
 	{
-		Debug.Log ("***" + whose + " " + position + " is a " + result);
+		switch (result) {
+		case StrikeResult.MISS:
+		case StrikeResult.IGNORED_ALREADY_MISSED:
+		case StrikeResult.IGNORED_ALREADY_HIT:
+			return;
+		case StrikeResult.HIT_NOT_SUNK:
+			unidentifiedHits.Add (position);
+			return;
+		case StrikeResult.HIT_AND_SUNK:
+			for (int i = 0; i < boat.positions.Length; i++) {
+				Position pos = boat.GetPosition (i);
+				if (!pos.Equals (position)) {
+					Assert.IsTrue (unidentifiedHits.Remove (pos));
+				}
+			}
+			return;
+		default:
+			throw new System.NotImplementedException ();
+		}
 	}
 
 	public Position NextMove ()
