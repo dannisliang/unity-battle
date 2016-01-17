@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.Assertions;
 using GooglePlayGames.BasicApi.Multiplayer;
 
-public class ButlerDemo : MonoBehaviour,IButler
+public class ButlerAi : MonoBehaviour,IButler
 {
 
 	public event Game.GameStateChange OnGameStateChange;
@@ -40,6 +40,9 @@ public class ButlerDemo : MonoBehaviour,IButler
 		SetGameState (GameState.AUTHENTICATING);
 		SetGameState (GameState.SETTING_UP_GAME);
 		SetGameState (GameState.PLAYING);
+		Grid grid = new Grid ();
+		grid.SetBoats (Whose.Ours, null);
+//		RealtimeBattle.DecodeAndExecute
 	}
 
 	public GameState GetGameState ()
@@ -58,7 +61,7 @@ public class ButlerDemo : MonoBehaviour,IButler
 	{
 		SceneMaster.instance.Async (delegate {
 			Game.instance.OnRealTimeMessageReceived (reliable, "dummySenderId", data);
-		}, data [0] == (byte)'G' ? .1f : Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
+		}, data [0] == (byte)Protocol.MessageType.GRID_POSITIONS ? .1f : Utils.DUMMY_PLAY_GAMES_REPLAY_DELAY);
 	}
 
 	void SetGameState (GameState gameState)

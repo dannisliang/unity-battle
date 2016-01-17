@@ -48,7 +48,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 		instance = this;
 		DontDestroyOnLoad (gameObject);
-		gameObject.AddComponent<ButlerDemo> ();
+		gameObject.AddComponent<ButlerAi> ();
 		gameObject.AddComponent<ButlerPlayGames> ();
 
 //		InitNearby ();
@@ -76,7 +76,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 		switch (gameType) {
 		case GameType.ONE_PLAYER_DEMO:
-			butler = gameObject.GetComponent<ButlerDemo> ();
+			butler = gameObject.GetComponent<ButlerAi> ();
 			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
 			butler = gameObject.GetComponent<ButlerPlayGames> ();

@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
-using System.Collections;
-using System.IO;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using System;
 
 public class RealtimeBattle : MonoBehaviour
@@ -12,19 +10,17 @@ public class RealtimeBattle : MonoBehaviour
 	const float AIM_INTERVAL = .5f;
 
 	static float nextAimAllowed = 0f;
-
-	static int lastAimMessageSendCount = 0;
 	static int lastAimMessageReceiveCount = 0;
 	static Position unsentAimPosition;
 
 	public static void EncodeAndSendGrid (Grid grid)
 	{
-		EncodeAndSend (Protocol.MESSAGE_TYPE_GRID, grid);
+		EncodeAndSend (Protocol.MessageType.GRID_POSITIONS, grid, true);
 	}
 
 	public static void EncodeAndSendLaunch (Position position)
 	{
-		EncodeAndSend (Protocol.MESSAGE_TYPE_LAUNCH, position);
+		EncodeAndSend (Protocol.MessageType.ROCKET_LAUNCH, position, true);
 	}
 
 	public static void EncodeAndSendAim (Position position)
@@ -39,58 +35,48 @@ public class RealtimeBattle : MonoBehaviour
 			return;
 		}
 		unsentAimPosition = null;
-		EncodeAndSend (Protocol.MESSAGE_TYPE_AIM, position, messageCount: lastAimMessageSendCount++);
+		EncodeAndSend (Protocol.MessageType.AIM_AT, position, false);
 		nextAimAllowed = Time.unscaledTime + AIM_INTERVAL;
 	}
 
-	static void EncodeAndSend (byte messageType, System.Object obj, int messageCount = 0)
+	static void EncodeAndSend (Protocol.MessageType messageType, System.Object obj, bool reliable)
 	{
 		Debug.Log ("***EncodeAndSend() [" + Game.butler + "]");
-		bool reliable = messageCount == 0;
-		BinaryFormatter formatter = new BinaryFormatter ();
-		using (MemoryStream stream = new MemoryStream ()) {
-			stream.WriteByte (messageType);
-			if (!reliable) {
-				formatter.Serialize (stream, messageCount);
-			}
-			formatter.Serialize (stream, obj);
-			byte[] bytes = stream.ToArray ();
-			Game.instance.SendMessageToAll (reliable: reliable, data: bytes);
-		}
+		byte[] bytes = Protocol.Encode (messageType, obj, reliable);
+		Game.instance.SendMessageToAll (reliable: reliable, data: bytes);
 	}
 
 	public static void DecodeAndExecute (byte[] bytes, bool reliable)
 	{
-		BinaryFormatter formatter = new BinaryFormatter ();
-		using (MemoryStream stream = new MemoryStream (bytes)) {
-			byte messageType = (byte)stream.ReadByte ();
-			if (!reliable) {
-				int messageCount = formatter.Deserialize (stream) as int? ?? 0;
-				if (messageCount < lastAimMessageReceiveCount) {
-					Debug.LogWarning ("***Ignoring out of order uneliable message " + messageType + " #" + messageCount);
-					return;
-				}
-				lastAimMessageReceiveCount = messageCount;
+		object obj;
+		int messageCount;
+		Protocol.MessageType messageType = Protocol.Decode (bytes, reliable, out obj, out messageCount);
+
+		Execute (obj, messageCount, messageType);
+	}
+
+	static void Execute (object obj, int messageCount, Protocol.MessageType messageType)
+	{
+		switch (messageType) {
+		case Protocol.MessageType.GRID_POSITIONS:
+			Grid grid = obj as Grid;
+			BattleController.instance.SetBoatsTheirs (grid.boats);
+			break;
+		case Protocol.MessageType.AIM_AT:
+			if (messageCount < lastAimMessageReceiveCount) {
+				Debug.LogWarning ("***Ignoring out of order uneliable message " + messageType + " #" + messageCount);
+				return;
 			}
-			switch (messageType) {
-			case Protocol.MESSAGE_TYPE_GRID:
-				Grid grid = formatter.Deserialize (stream) as Grid;
-				Debug.Log ("***Received other grid ");// + grid);
-				BattleController.instance.SetBoatsTheirs (grid.boats);
-				break;
-			case Protocol.MESSAGE_TYPE_AIM:
-				Position aimPosition = formatter.Deserialize (stream) as Position;
-				Debug.Log ("***Received aim at " + aimPosition);
-				BattleController.instance.AimAt (aimPosition);
-				break;
-			case Protocol.MESSAGE_TYPE_LAUNCH:
-				Position targetPosition = formatter.Deserialize (stream) as Position;
-				Debug.Log ("***Received launch at " + targetPosition);
-				BattleController.instance.LaunchRocket (Whose.Ours, targetPosition, null);
-				break;
-			default:
-				throw new NotImplementedException ("Unknown message type " + messageType);
-			}
+			lastAimMessageReceiveCount = messageCount;
+			Position aimPosition = obj as Position;
+			BattleController.instance.AimAt (aimPosition);
+			break;
+		case Protocol.MessageType.ROCKET_LAUNCH:
+			Position targetPosition = obj as Position;
+			BattleController.instance.LaunchRocket (Whose.Ours, targetPosition, null);
+			break;
+		default:
+			throw new NotImplementedException ("Unknown message type " + messageType);
 		}
 	}
 
