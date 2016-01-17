@@ -41,6 +41,9 @@ public class RocketController : MonoBehaviour
 			if (t >= 1f) {
 				BattleController.instance.Strike (atWhose, targetPosition);
 				FizzleOut (flameParticleSystem.duration);
+				if (callback != null) {
+					callback ();
+				}
 			}
 		}
 
@@ -86,9 +89,6 @@ public class RocketController : MonoBehaviour
 			return;
 		}
 		Destroy (bezier.gameObject);
-		if (callback != null) {
-			callback ();
-		}
 	}
 
 	void FizzleOut (float duration)
