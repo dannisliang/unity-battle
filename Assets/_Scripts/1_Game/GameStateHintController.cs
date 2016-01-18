@@ -137,6 +137,9 @@ public class GameStateHintController : MonoBehaviour
 
 	void UpdateText ()
 	{
+		if (SceneMaster.quitting) {
+			return;
+		}
 		Color color;
 		string t = GetText (out color);
 		bool show = t != null;

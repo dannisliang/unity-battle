@@ -110,8 +110,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void HardRestart ()
 	{
+		Debug.Log ("***Destroying " + gameObject + " …");
 		Destroy (gameObject);
-		SceneMaster.instance.LoadAsync (SceneMaster.SCENE_MAIN_MENU);
+		SceneMaster.HardRestart ();
 	}
 
 	#if UNITY_EDITOR

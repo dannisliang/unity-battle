@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent (typeof(Button))]
 public class GameTypeButtonController : MonoBehaviour
 {
 	public GameType gameType;
@@ -20,10 +21,9 @@ public class GameTypeButtonController : MonoBehaviour
 
 	void OnDestroy ()
 	{
-		if (SceneMaster.quitting) {
-			return;
+		if (Game.instance != null) {
+			Game.instance.OnGameStateChange -= UpdateActive;
 		}
-		Game.instance.OnGameStateChange -= UpdateActive;
 	}
 
 	void UpdateActive (GameState gameState)

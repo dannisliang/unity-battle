@@ -20,10 +20,9 @@ public class QuitGameButtonController : MonoBehaviour
 
 	void OnDestroy ()
 	{
-		if (SceneMaster.quitting) {
-			return;
+		if (Game.instance != null) {
+			Game.instance.OnGameStateChange -= UpdateActive;
 		}
-		Game.instance.OnGameStateChange -= UpdateActive;
 	}
 
 	void UpdateActive (GameState state)

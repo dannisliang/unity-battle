@@ -17,7 +17,10 @@ public class SceneMaster : MonoBehaviour
 
 	public static bool sawMainMenu { get; private set; }
 
-	public static bool quitting { get; private set; }
+	static bool _quitting;
+	static bool _hardRestarting;
+
+	public static bool quitting { get { return _quitting || _hardRestarting; } }
 
 	void Awake ()
 	{
@@ -39,7 +42,16 @@ public class SceneMaster : MonoBehaviour
 
 	void OnApplicationQuit ()
 	{
-		quitting = true;
+		_quitting = true;
+	}
+
+	public static void HardRestart ()
+	{
+		_hardRestarting = true;
+		Debug.Log ("***Destroying " + instance + " …");
+		Destroy (instance);
+		Debug.Log ("***" + SceneMaster.SCENE_MAIN_MENU + " …");
+		SceneManager.LoadScene (SceneMaster.SCENE_MAIN_MENU);
 	}
 
 	public void LoadAsync (string sceneName)
