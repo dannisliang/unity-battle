@@ -80,7 +80,7 @@ public class RocketController : MonoBehaviour
 	Vector3 Deviation (Transform transform)
 	{
 		return Utils.RandomSign () * UnityEngine.Random.Range (3f, 4f) * transform.right
-		+ Utils.RandomSign () * UnityEngine.Random.Range (4f, 4f) * transform.up;
+		+ Utils.RandomSign () * UnityEngine.Random.Range (3f, 4f) * transform.up;
 	}
 
 	void OnDestroy ()
