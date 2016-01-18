@@ -39,8 +39,19 @@ public class BattleController : MonoBehaviour
 	public event ReticleAim OnReticleAim;
 
 	bool playing;
-	bool firing;
+	int _firing;
 	Whose? loser;
+
+	int firing {
+		get {
+			return _firing;
+		}
+		set {
+			_firing = value;
+			SetRocketCount ();
+		}
+	}
+
 	CardboardAudioSource source;
 	GameObject aimReticleOurs;
 	GameObject aimReticleTheirs;
@@ -81,7 +92,7 @@ public class BattleController : MonoBehaviour
 	void AnnounceGameState ()
 	{
 		if (OnGameState != null) {
-			OnGameState (playing, firing, loser);
+			OnGameState (playing, firing > 0, loser);
 		}
 	}
 
@@ -111,17 +122,17 @@ public class BattleController : MonoBehaviour
 		if (loser != null) {
 			return false;
 		}
-		if (firing && !Application.isEditor) {
+		if (firing > 0) { // && !Application.isEditor) {
 			return false;
 		}
 		if (tileHasBeenFiredUpon) {
 			source.PlayOneShot (noFireClip);
 			return false;
 		}
-		BattleController.instance.SetIsFiring (true);
+		firing++;
 		RealtimeBattle.EncodeAndSendLaunch (targetPosition);
 		LaunchRocket (Whose.Theirs, targetPosition, delegate {
-			SetIsFiring (false);
+			firing--;
 		});
 		return true;
 	}
@@ -233,11 +244,10 @@ public class BattleController : MonoBehaviour
 		}
 	}
 
-	void SetIsFiring (bool firing)
+	void SetRocketCount ()
 	{
-		this.firing = firing;
-		reticle.SetActive (!firing);
-		if (firing) {
+		reticle.SetActive (firing == 0);
+		if (firing > 0) {
 			aimReticleTheirs.SetActive (false);
 		}
 		AnnounceGameState ();
