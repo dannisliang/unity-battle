@@ -14,24 +14,24 @@ public class Position
 		this.y = y;
 	}
 
-	public Position Above ()
+	public Position Above (int count)
 	{
-		return y == 0 ? null : new Position (x, y - 1);
+		return y < count ? null : new Position (x, y - count);
 	}
 
-	public Position Below ()
+	public Position Below (int count)
 	{
-		return y == Utils.GRID_SIZE - 1 ? null : new Position (x, y + 1);
+		return y > Utils.GRID_SIZE - count - 1 ? null : new Position (x, y + count);
 	}
 
-	public Position Left ()
+	public Position Left (int count)
 	{
-		return x == 0 ? null : new Position (x - 1, y);
+		return x == count ? null : new Position (x - count, y);
 	}
 
-	public Position Right ()
+	public Position Right (int count)
 	{
-		return x == Utils.GRID_SIZE - 1 ? null : new Position (x + 1, y);
+		return x > Utils.GRID_SIZE - count - 1 ? null : new Position (x + count, y);
 	}
 
 	public Vector3 AsGridLocalPosition (Marker marker)

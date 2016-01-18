@@ -87,16 +87,19 @@ public class GameAi : MonoBehaviour
 	Position NextInLine (Position hitPos)
 	{
 		lock (_lock) {
-			return IfIsInLine (hitPos.Above (), hitPos.Above ().Above ())
-			?? IfIsInLine (hitPos.Below (), hitPos.Below ().Below ())
-			?? IfIsInLine (hitPos.Left (), hitPos.Left ().Left ())
-			?? IfIsInLine (hitPos.Right (), hitPos.Right ().Right ());
+			return IfIsInLine (hitPos.Above (1), hitPos.Above (2))
+			?? IfIsInLine (hitPos.Below (1), hitPos.Below (2))
+			?? IfIsInLine (hitPos.Left (1), hitPos.Left (2))
+			?? IfIsInLine (hitPos.Right (1), hitPos.Right (2));
 		}
 	}
 
 	Position IfIsInLine (Position checkPosition, Position candidatePosition)
 	{
 		lock (_lock) {
+			if (checkPosition == null || candidatePosition == null) {
+				return null;
+			}
 			if (_unidentifiedHits.Contains (checkPosition) && _emptyPositions.Contains (candidatePosition)) {
 				return candidatePosition;
 			}
@@ -120,10 +123,10 @@ public class GameAi : MonoBehaviour
 	Position NextEmptyPositionAround (Position hitPos)
 	{
 		lock (_lock) {
-			return IfIsOpenPosition (hitPos.Above ())
-			?? IfIsOpenPosition (hitPos.Below ())
-			?? IfIsOpenPosition (hitPos.Left ())
-			?? IfIsOpenPosition (hitPos.Right ());
+			return IfIsOpenPosition (hitPos.Above (1))
+			?? IfIsOpenPosition (hitPos.Below (1))
+			?? IfIsOpenPosition (hitPos.Left (1))
+			?? IfIsOpenPosition (hitPos.Right (1));
 		}
 	}
 
