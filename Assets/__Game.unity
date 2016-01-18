@@ -2641,6 +2641,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c4672b5c4f74744a56182932a30a88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vrCameraPosition: {x: 0, y: 5, z: -9}
+  magicWindowCameraPosition: {x: 0, y: 5, z: 0}
 --- !u!4 &1321132426
 Transform:
   m_ObjectHideFlags: 0
