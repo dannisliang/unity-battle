@@ -273,7 +273,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public override string ToString ()
 	{
-		return string.Format ("[" + name + ": gameState={0}]", gameState);
+		return string.Format ("[{0}: gameState={1}]", name, gameState);
 	}
 
 }

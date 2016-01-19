@@ -2,15 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using UnityEngine.EventSystems;
 
-public class QuitGameButtonController : MonoBehaviour
+public class QuitGameButtonController : MonoBehaviour,IPointerDownHandler
 {
 
-	void Awake ()
+	public void OnPointerDown (PointerEventData eventData)
 	{
-		GetComponent<Button> ().onClick.AddListener (delegate {
-			Game.butler.QuitGame ();
-		});
+		Game.butler.QuitGame ();
 	}
 
 	void Start ()
