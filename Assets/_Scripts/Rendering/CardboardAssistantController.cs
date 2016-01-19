@@ -17,7 +17,7 @@ public class CardboardAssistantController : MonoBehaviour
 	void Start ()
 	{
 		Cardboard.SDK.OnBackButton += BackButtonPressed;
-//		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
+		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.Off;
 //		Cardboard.SDK.ElectronicDisplayStabilization = false;
 //		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
