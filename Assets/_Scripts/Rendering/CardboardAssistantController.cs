@@ -3,6 +3,7 @@ using UnityEngine.Assertions;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System;
 
 public class CardboardAssistantController : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class CardboardAssistantController : MonoBehaviour
 
 	void Start ()
 	{
+		Cardboard.SDK.OnBackButton += BackButtonPressed;
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
 //		Cardboard.SDK.ElectronicDisplayStabilization = false;
 //		Cardboard.SDK.AutoDriftCorrection = false;
@@ -26,6 +28,26 @@ public class CardboardAssistantController : MonoBehaviour
 	void OnDestroy ()
 	{
 		Game.instance.OnGameStateChange -= UpdateGameState;
+	}
+
+	void BackButtonPressed ()
+	{
+		switch (gameState) {
+		case GameState.SELECTING_GAME_TYPE:
+		case GameState.AUTHENTICATING:
+		case GameState.GAME_WAS_TORN_DOWN:
+		case GameState.SETTING_UP_GAME:
+		case GameState.TEARING_DOWN_GAME:
+			Debug.Log ("***Application.Quit()");
+			Application.Quit ();
+			break;
+		case GameState.SELECTING_VIEW_MODE:
+		case GameState.PLAYING:
+			Game.instance.Restart ();
+			break;
+		default:
+			throw new NotImplementedException ();
+		}
 	}
 
 	void UpdateGameState (GameState state)
