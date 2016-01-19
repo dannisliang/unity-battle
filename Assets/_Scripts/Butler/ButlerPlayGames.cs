@@ -13,7 +13,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	public event Game.GameStateChange OnGameStateChange;
 
-	GameState gameState = GameState.NEED_TO_SELECT_GAME_TYPE;
+	GameState gameState = GameState.SELECTING_GAME_TYPE;
 
 	#if UNITY_EDITOR
 	void Update ()
@@ -56,7 +56,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	{
 		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
 		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
-		if (!IsRoomConnected && gameState == GameState.PLAYING) {
+		if (!IsRoomConnected && (gameState == GameState.PLAYING || gameState == GameState.SETTING_UP_GAME)) {
 			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", gameState=" + gameState + "]");
 			StopCoroutine ("Checkup");
 			WorkaroundPlayGamePauseBug ();
@@ -124,7 +124,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	void PlayGamesSignIn (Action<bool> callback)
 	{
 		Debug.Log ("***PlayGamesSignIn() …");
-		Assert.AreEqual (GameState.NEED_TO_SELECT_GAME_TYPE, gameState);
+		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
 		SetGameState (GameState.AUTHENTICATING);
 //		// check if already signed in
 //		if (gamesPlatform.IsAuthenticated ()) {
@@ -149,6 +149,12 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : Protocol.PROTOCOL_VERSION, listener: this);
 	}
 
+	public void StartGamePlay ()
+	{
+		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, gameState);
+		SetGameState (GameState.PLAYING);
+	}
+
 	public GameState GetGameState ()
 	{
 		return gameState;
@@ -163,11 +169,12 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 			break;
 		case GameState.SETTING_UP_GAME:
 		case GameState.TEARING_DOWN_GAME:
+		case GameState.SELECTING_VIEW_MODE:
 		case GameState.PLAYING:
 			PlayGamesLeaveRoom ();
 			break;
 		case GameState.GAME_WAS_TORN_DOWN:
-		case GameState.NEED_TO_SELECT_GAME_TYPE:
+		case GameState.SELECTING_GAME_TYPE:
 			break;
 		default:
 			throw new NotImplementedException ();
@@ -189,7 +196,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		if (percent == 0) {
 			SetGameState (GameState.GAME_WAS_TORN_DOWN);
 		} else if (percent == 100) {
-			SetGameState (GameState.PLAYING);
+			SetGameState (GameState.SELECTING_VIEW_MODE);
 		} else {
 			SetGameState (GameState.SETTING_UP_GAME);
 		}
@@ -199,7 +206,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public void OnRoomConnected (bool success)
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
-		SetGameState (success ? GameState.PLAYING : GameState.GAME_WAS_TORN_DOWN);
+		SetGameState (success ? GameState.SELECTING_VIEW_MODE : GameState.GAME_WAS_TORN_DOWN);
 		if (success) {
 			InvokeRepeating ("Checkup", 1f, 1f);
 		}
@@ -254,13 +261,13 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		gameState = state;
 		OnGameStateChange (gameState);
 		if (gameState == GameState.GAME_WAS_TORN_DOWN) {
-			SetGameState (GameState.NEED_TO_SELECT_GAME_TYPE);
+			SetGameState (GameState.SELECTING_GAME_TYPE);
 		}
 	}
 
 	public override string ToString ()
 	{
-		return string.Format ("[ButlerPlayGames: gameState={0}]", gameState);
+		return string.Format ("[" + name + ": gameState={0}]", gameState);
 	}
 
 }

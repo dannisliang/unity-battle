@@ -28,7 +28,7 @@ public class GameTypeButtonController : MonoBehaviour
 
 	void UpdateActive (GameState gameState)
 	{
-		gameObject.SetActive (gameState == GameState.NEED_TO_SELECT_GAME_TYPE);
+		gameObject.SetActive (gameState == GameState.SELECTING_GAME_TYPE);
 	}
 
 }

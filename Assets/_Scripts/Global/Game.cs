@@ -20,6 +20,15 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public static IButler butler { get; private set; }
 
+	public GameObject mainMenuGameObject;
+	public GameObject viewModeGameObject;
+	public GameObject viewModePlayingGameObject;
+	public GameObject playingGameObject;
+
+	GameState masterGameState = GameState.AUTHENTICATING;
+
+	public Dictionary<GameState, List<GameObject>> activationDict;
+
 	public delegate void GameStateChange (GameState state);
 
 	object GameStateChangeLock = new System.Object ();
@@ -30,7 +39,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		add {
 			lock (GameStateChangeLock) {
 				_OnGameStateChange += value;
-				value (butler == null ? GameState.NEED_TO_SELECT_GAME_TYPE : butler.GetGameState ());
+				value (butler == null ? GameState.SELECTING_GAME_TYPE : butler.GetGameState ());
 			}
 		}
 		remove {
@@ -51,9 +60,41 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		gameObject.AddComponent<ButlerAi> ();
 		gameObject.AddComponent<ButlerPlayGames> ();
 
+		MakeGameObjectsActive ();
+
 //		InitNearby ();
 
 		OnGameStateChange += HandleGameStateChanged;
+	}
+
+	void MakeGameObjectsActive ()
+	{
+		switch (masterGameState) {
+		case GameState.SELECTING_GAME_TYPE:
+		case GameState.GAME_WAS_TORN_DOWN:
+		case GameState.AUTHENTICATING:
+		case GameState.SETTING_UP_GAME:
+		case GameState.TEARING_DOWN_GAME:
+			viewModeGameObject.SetActive (false);
+			viewModePlayingGameObject.SetActive (false);
+			playingGameObject.SetActive (false);
+			mainMenuGameObject.SetActive (true);
+			break;
+		case GameState.SELECTING_VIEW_MODE:
+			mainMenuGameObject.SetActive (false);
+			playingGameObject.SetActive (false);
+			viewModeGameObject.SetActive (true);
+			viewModePlayingGameObject.SetActive (true);
+			break;
+		case GameState.PLAYING:
+			mainMenuGameObject.SetActive (false);
+			viewModeGameObject.SetActive (false);
+			viewModePlayingGameObject.SetActive (true);
+			playingGameObject.SetActive (true);
+			break;
+		default:
+			throw new NotImplementedException ();
+		}
 	}
 
 	public void Restart ()
@@ -89,23 +130,30 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void HandleGameStateChanged (GameState state)
 	{
-		Debug.Log ("===>" + state);
+		Debug.Log ("===> GameState=" + state);
+		masterGameState = state;
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
 			HardRestart ();
 			break;
-		case GameState.NEED_TO_SELECT_GAME_TYPE:
-			break;
+		case GameState.SELECTING_GAME_TYPE:
 		case GameState.AUTHENTICATING:
 		case GameState.SETTING_UP_GAME:
 		case GameState.TEARING_DOWN_GAME:
-			break;
 		case GameState.PLAYING:
-			SceneMaster.instance.LoadAsync (SceneMaster.SCENE_GAME);
+		case GameState.SELECTING_VIEW_MODE:
+			MakeGameObjectsActive ();
 			break;
 		default:
 			throw new NotImplementedException ();
 		}
+	}
+
+	public void SelectViewMode (bool vrMode)
+	{
+		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, butler.GetGameState ());
+		Prefs.VrMode = vrMode;
+		butler.StartGamePlay ();
 	}
 
 	void HardRestart ()

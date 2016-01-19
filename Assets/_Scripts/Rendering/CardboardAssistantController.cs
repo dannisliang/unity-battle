@@ -6,6 +6,7 @@ using System.Collections;
 
 public class CardboardAssistantController : MonoBehaviour
 {
+	public Camera gameCamera;
 	public Vector3 vrCameraPosition;
 	public Vector3 magicWindowCameraPosition;
 
@@ -45,7 +46,7 @@ public class CardboardAssistantController : MonoBehaviour
 		}
 		Cardboard.SDK.VRModeEnabled = vrMode;
 		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
-		Camera.main.transform.position = vrMode ? vrCameraPosition : magicWindowCameraPosition;
+		gameCamera.transform.position = (vrMode || Application.isEditor) ? vrCameraPosition : magicWindowCameraPosition;
 	}
 
 	void OnBackButton ()

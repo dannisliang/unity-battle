@@ -12,6 +12,8 @@ public interface IButler
 
 	void NewGame ();
 
+	void StartGamePlay ();
+
 	void QuitGame ();
 
 

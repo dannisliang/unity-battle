@@ -2,14 +2,15 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class HeadAttachedController : MonoBehaviour
+public class GameCameraAttachedController : MonoBehaviour
 {
+	public Camera gameCamera;
 
 	Transform targetTransform;
 
 	void Awake ()
 	{
-		targetTransform = Camera.main.transform;
+		targetTransform = gameCamera.transform;
 	}
 
 	void Update ()

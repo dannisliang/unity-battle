@@ -31,7 +31,8 @@ public class GameStateTextController : MonoBehaviour
 	string GetText (GameState state)
 	{
 		switch (state) {
-		case GameState.NEED_TO_SELECT_GAME_TYPE:
+		case GameState.SELECTING_GAME_TYPE:
+		case GameState.SELECTING_VIEW_MODE:
 			return "";
 		case GameState.AUTHENTICATING:
 			return "Signing in …";

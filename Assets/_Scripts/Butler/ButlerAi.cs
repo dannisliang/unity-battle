@@ -8,27 +8,29 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	public event Game.GameStateChange OnGameStateChange;
 
-	GameState gameState = GameState.NEED_TO_SELECT_GAME_TYPE;
+	GameState gameState = GameState.SELECTING_GAME_TYPE;
 	GameAi ai;
 
 	#if UNITY_EDITOR
 	void Update ()
 	{
-		if (gameState == GameState.PLAYING && Input.GetKeyDown (KeyCode.F)) {
-			Debug.Log ("***Simulating failure …");
-			QuitGame ();
+		if (Input.GetKeyDown (KeyCode.F)) {
+			if (gameState == GameState.SELECTING_VIEW_MODE || gameState == GameState.PLAYING) {
+				Debug.Log ("***Simulating failure …");
+				QuitGame ();
+			}
 		}
 	}
 	#endif
 
 	public int NumPlayers ()
 	{
-		return gameState == GameState.PLAYING ? 2 : 0;
+		return (gameState == GameState.SELECTING_VIEW_MODE || gameState == GameState.PLAYING) ? 2 : 0;
 	}
 
 	public string GetLocalUsername ()
 	{
-		return gameState == GameState.PLAYING ? "Ford Prefect" : "";
+		return (gameState == GameState.SELECTING_VIEW_MODE || gameState == GameState.PLAYING) ? "Ford Prefect" : "";
 	}
 
 	public void Init ()
@@ -37,9 +39,15 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	public void NewGame ()
 	{
-		Assert.AreEqual (GameState.NEED_TO_SELECT_GAME_TYPE, gameState);
+		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
 		SetGameState (GameState.AUTHENTICATING);
 		SetGameState (GameState.SETTING_UP_GAME);
+		SetGameState (GameState.SELECTING_VIEW_MODE);
+	}
+
+	public void StartGamePlay ()
+	{
+		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, gameState);
 		SetGameState (GameState.PLAYING);
 	}
 
@@ -50,10 +58,13 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	public void QuitGame ()
 	{
-		Assert.AreEqual (GameState.PLAYING, gameState);
-		SetGameState (GameState.TEARING_DOWN_GAME);
-		SetGameState (GameState.GAME_WAS_TORN_DOWN);
-		Destroy (ai);
+		if (gameState == GameState.PLAYING || gameState == GameState.SELECTING_VIEW_MODE) {
+			SetGameState (GameState.TEARING_DOWN_GAME);
+		}
+		if (gameState == GameState.TEARING_DOWN_GAME) {
+			SetGameState (GameState.GAME_WAS_TORN_DOWN);
+			Destroy (ai);
+		}
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data)
@@ -62,7 +73,7 @@ public class ButlerAi : MonoBehaviour,IButler
 		bool fast = Protocol.GetMessageType (replyData) != Protocol.MessageType.ROCKET_LAUNCH;
 		SceneMaster.instance.Async (delegate {
 			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
-		}, fast ? .1f : Utils.AI_DELAY);
+		}, fast ? 2f : Utils.AI_DELAY);
 	}
 
 	byte[] MakeReply (bool reliable, byte[] data)
@@ -104,12 +115,12 @@ public class ButlerAi : MonoBehaviour,IButler
 		this.gameState = gameState;
 		OnGameStateChange (gameState);
 		if (gameState == GameState.GAME_WAS_TORN_DOWN) {
-			SetGameState (GameState.NEED_TO_SELECT_GAME_TYPE);
+			SetGameState (GameState.SELECTING_GAME_TYPE);
 		}
 	}
 
 	public override string ToString ()
 	{
-		return string.Format ("[ButlerDemo: gameState={0}]", gameState);
+		return string.Format ("[" + name + ": gameState={0}]", gameState);
 	}
 }

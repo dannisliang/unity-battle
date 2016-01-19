@@ -3,14 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent (typeof(Button))]
-public class ViewModeButtonController : MonoBehaviour
+public class ViewModeSelectionButtonController : MonoBehaviour
 {
 	public bool vrMode;
 
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			Prefs.VrMode = vrMode;
+			Game.instance.SelectViewMode (vrMode);
 		});
 	}
 

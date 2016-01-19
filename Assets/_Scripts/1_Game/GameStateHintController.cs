@@ -30,6 +30,7 @@ public class GameStateHintController : MonoBehaviour
 
 	StrikeData strikeData;
 
+	GameState gameState;
 	bool playing;
 	bool firing;
 	Whose? loser;
@@ -45,7 +46,8 @@ public class GameStateHintController : MonoBehaviour
 	{
 		image = GetComponent<Image> ();
 		text = GetComponentInChildren<Text> ();
-		BattleController.instance.OnGameState += UpdateGameState;
+		Game.instance.OnGameStateChange += UpdateGameState;
+		BattleController.instance.OnBattleState += UpdateBattleState;
 		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred += UpdateStrikeOurs;
@@ -59,7 +61,7 @@ public class GameStateHintController : MonoBehaviour
 		if (SceneMaster.quitting) {
 			return;
 		}
-		BattleController.instance.OnGameState -= UpdateGameState;
+		BattleController.instance.OnBattleState -= UpdateBattleState;
 		BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= UpdateStrikeOurs;
@@ -67,7 +69,12 @@ public class GameStateHintController : MonoBehaviour
 		Prefs.OnVrModeChanged -= UpdateVrMode;
 	}
 
-	void UpdateGameState (bool playing, bool firing, Whose? loser)
+	void UpdateGameState (GameState state)
+	{
+		this.gameState = state;
+	}
+
+	void UpdateBattleState (bool playing, bool firing, Whose? loser)
 	{
 		this.playing = playing;
 		this.firing = firing;
@@ -160,6 +167,7 @@ public class GameStateHintController : MonoBehaviour
 				"You win! You sunk your\nopponent's entire fleet.";
 		}
 		if (!playing) {
+//		if (gameState != GameState.PLAYING) {
 			color = syncingBackgroundColor;
 			return "Synchronizing.\nPlease wait …";
 		}

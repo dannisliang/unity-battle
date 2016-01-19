@@ -27,17 +27,6 @@ public class BattleController : MonoBehaviour
 	public AudioClip shipExplosionClip;
 	public AudioClip noFireClip;
 
-	public delegate void GameState (bool playing, bool firing, Whose? loser);
-
-	public event GameState OnGameState;
-
-	public delegate void ReticleIdentify (Boat boat);
-
-	public delegate void ReticleAim (Whose whose, Position position);
-
-	public event ReticleIdentify OnReticleIdentify;
-	public event ReticleAim OnReticleAim;
-
 	bool playing;
 	int _firing;
 	Whose? loser;
@@ -51,6 +40,33 @@ public class BattleController : MonoBehaviour
 			SetRocketCount ();
 		}
 	}
+
+	object BattleStateLock = new System.Object ();
+
+	public delegate void BattleState (bool playing, bool firing, Whose? loser);
+
+	private event BattleState _OnBattleState;
+
+	public event BattleState OnBattleState {
+		add {
+			lock (BattleStateLock) {
+				_OnBattleState += value;
+				value (playing, firing > 0, loser);
+			}
+		}
+		remove {
+			lock (BattleStateLock) {
+				_OnBattleState -= value;
+			}
+		}
+	}
+
+	public delegate void ReticleIdentify (Boat boat);
+
+	public delegate void ReticleAim (Whose whose, Position position);
+
+	public event ReticleIdentify OnReticleIdentify;
+	public event ReticleAim OnReticleAim;
 
 	CardboardAudioSource source;
 	GameObject aimReticleOurs;
@@ -91,8 +107,8 @@ public class BattleController : MonoBehaviour
 
 	void AnnounceGameState ()
 	{
-		if (OnGameState != null) {
-			OnGameState (playing, firing > 0, loser);
+		if (_OnBattleState != null) {
+			_OnBattleState (playing, firing > 0, loser);
 		}
 	}
 
