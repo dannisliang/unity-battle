@@ -136,8 +136,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		masterGameState = state;
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
-			HardRestart ();
-			break;
+//			HardRestart ();
+//			break;
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.AUTHENTICATING:
 		case GameState.SETTING_UP_GAME:
@@ -163,12 +163,12 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
-	void HardRestart ()
-	{
-		Debug.Log ("***Destroying " + gameObject + " …");
-		Destroy (gameObject);
-		SceneMaster.HardRestart ();
-	}
+	//	void HardRestart ()
+	//	{
+	//		Debug.Log ("***Destroying " + gameObject + " …");
+	//		Destroy (gameObject);
+	//		SceneMaster.HardRestart ();
+	//	}
 
 	#if UNITY_EDITOR
 	void Update ()

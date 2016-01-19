@@ -54,13 +54,20 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 	void Checkup ()
 	{
+		Debug.Log ("***Checkup()");
 		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
 		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
 		if (!IsRoomConnected && (gameState == GameState.PLAYING || gameState == GameState.SETTING_UP_GAME)) {
 			Debug.Log ("************************************************\n***Checkup() [IsAuthenticated==" + IsAuthenticated + ", IsRoomConnected==" + IsRoomConnected + ", gameState=" + gameState + "]");
-			StopCoroutine ("Checkup");
+			CancelCheckup ();
 			WorkaroundPlayGamePauseBug ();
 		}
+	}
+
+	void CancelCheckup ()
+	{
+		Debug.Log ("***CancelInvoke(Checkup)");
+		CancelInvoke ("Checkup");
 	}
 
 	void WorkaroundPlayGamePauseBug ()
@@ -214,6 +221,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		SetGameState (success ? GameState.SELECTING_VIEW_MODE : GameState.GAME_WAS_TORN_DOWN);
 		if (success) {
+			Debug.Log ("***InvokeRepeating(Checkup, 1, 1)");
 			InvokeRepeating ("Checkup", 1f, 1f);
 		}
 	}
@@ -222,6 +230,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public void OnLeftRoom ()
 	{
 		Debug.Log ("***OnLeftRoom()");
+		CancelCheckup ();
 		SetGameState (GameState.GAME_WAS_TORN_DOWN);
 	}
 
@@ -229,7 +238,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public void OnParticipantLeft (Participant participant)
 	{
 		Debug.Log ("***OnParticipantLeft(" + participant + ")");
-		Debug.Log ("***Mandatory call to LeaveRoom () in order to cleanup …");
+		Debug.Log ("***OnParticipantLeft: Mandatory call to LeaveRoom () in order to cleanup …");
 		PlayGamesLeaveRoom ();
 	}
 
@@ -243,12 +252,14 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	public void OnPeersDisconnected (string[] participantIds)
 	{
 		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
-		Debug.Log ("***Mandatory call to LeaveRoom () in order to cleanup …");
+		Debug.Log ("***OnPeersDisconnected: Mandatory call to LeaveRoom () in order to cleanup …");
 		PlayGamesLeaveRoom ();
 	}
 
 	void PlayGamesLeaveRoom ()
 	{
+		Debug.Log ("***PlayGamesLeaveRoom()");
+		CancelCheckup ();
 		if (gamesPlatform.RealTime != null) {
 			gamesPlatform.RealTime.LeaveRoom ();
 		}
