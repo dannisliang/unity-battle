@@ -51,6 +51,12 @@ public class ButlerAi : MonoBehaviour,IButler
 		SetGameState (GameState.PLAYING);
 	}
 
+	public void PauseGamePlay ()
+	{
+		Assert.AreEqual (GameState.PLAYING, gameState);
+		SetGameState (GameState.SELECTING_VIEW_MODE);
+	}
+
 	public GameState GetGameState ()
 	{
 		return gameState;

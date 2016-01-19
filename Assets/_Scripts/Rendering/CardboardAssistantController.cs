@@ -42,8 +42,10 @@ public class CardboardAssistantController : MonoBehaviour
 			Application.Quit ();
 			break;
 		case GameState.SELECTING_VIEW_MODE:
-		case GameState.PLAYING:
 			Game.instance.Restart ();
+			break;
+		case GameState.PLAYING:
+			Game.instance.SelectViewMode (null);
 			break;
 		default:
 			throw new NotImplementedException ();
@@ -65,7 +67,7 @@ public class CardboardAssistantController : MonoBehaviour
 	void CheckVrMode ()
 	{
 		bool vrMode = gameState == GameState.PLAYING ? gameVrMode : false;
-		gameCamera.transform.position = (vrMode || Application.isEditor) ? vrCameraPosition : magicWindowCameraPosition;
+		gameCamera.transform.position = vrMode ? vrCameraPosition : magicWindowCameraPosition;
 		if (Cardboard.SDK.VRModeEnabled != vrMode) {
 			Cardboard.SDK.VRModeEnabled = vrMode;
 		}

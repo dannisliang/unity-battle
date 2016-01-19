@@ -151,11 +151,16 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
-	public void SelectViewMode (bool vrMode)
+	public void SelectViewMode (bool? vrMode)
 	{
-		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, butler.GetGameState ());
-		cardboardAssistantController.VrModeChanged (vrMode);
-		butler.StartGamePlay ();
+		if (vrMode == null) {
+			Assert.AreEqual (GameState.PLAYING, butler.GetGameState ());
+			butler.PauseGamePlay ();
+		} else {
+			Assert.AreEqual (GameState.SELECTING_VIEW_MODE, butler.GetGameState ());
+			cardboardAssistantController.VrModeChanged ((bool)vrMode);
+			butler.StartGamePlay ();
+		}
 	}
 
 	void HardRestart ()

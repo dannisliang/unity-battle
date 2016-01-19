@@ -155,6 +155,12 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		SetGameState (GameState.PLAYING);
 	}
 
+	public void PauseGamePlay ()
+	{
+		Assert.AreEqual (GameState.PLAYING, gameState);
+		SetGameState (GameState.SELECTING_VIEW_MODE);
+	}
+
 	public GameState GetGameState ()
 	{
 		return gameState;
