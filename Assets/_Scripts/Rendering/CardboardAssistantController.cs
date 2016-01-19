@@ -38,8 +38,8 @@ public class CardboardAssistantController : MonoBehaviour
 		case GameState.GAME_WAS_TORN_DOWN:
 		case GameState.SETTING_UP_GAME:
 		case GameState.TEARING_DOWN_GAME:
-			Debug.Log ("***Application.Quit()");
-			Application.Quit ();
+//			Debug.Log ("***Application.Quit()");
+//			Application.Quit ();
 			break;
 		case GameState.SELECTING_VIEW_MODE:
 			Game.instance.Restart ();
