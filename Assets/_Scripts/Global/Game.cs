@@ -25,6 +25,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public GameObject viewModePlayingGameObject;
 	public GameObject playingGameObject;
 
+	public CardboardAssistantController cardboardAssistantController;
+
 	GameState masterGameState = GameState.AUTHENTICATING;
 
 	public Dictionary<GameState, List<GameObject>> activationDict;
@@ -152,7 +154,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public void SelectViewMode (bool vrMode)
 	{
 		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, butler.GetGameState ());
-		Prefs.VrMode = vrMode;
+		cardboardAssistantController.VrModeChanged (vrMode);
 		butler.StartGamePlay ();
 	}
 

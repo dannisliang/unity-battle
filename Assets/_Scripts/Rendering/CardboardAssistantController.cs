@@ -10,49 +10,48 @@ public class CardboardAssistantController : MonoBehaviour
 	public Vector3 vrCameraPosition;
 	public Vector3 magicWindowCameraPosition;
 
+	GameState gameState;
+	bool gameVrMode;
+
 	void Start ()
 	{
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
-		Cardboard.SDK.OnBackButton += OnBackButton;
 //		Cardboard.SDK.ElectronicDisplayStabilization = false;
 //		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
 //		Cardboard.SDK.StereoScreenScale = Application.isEditor ? 1f : .8f;
-		VrModeChanged (Prefs.VrMode);
 		// just in case VrMode already set to default
-		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
-		Prefs.Notify ();
+//		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
+
+		Game.instance.OnGameStateChange += UpdateGameState;
 	}
 
-	void OnEnable ()
+	void OnDestroy ()
 	{
-		Prefs.OnVrModeChanged += VrModeChanged;
+		Game.instance.OnGameStateChange -= UpdateGameState;
 	}
 
-	void OnApplicationQuit ()
+	void UpdateGameState (GameState state)
 	{
-		Cardboard.SDK.OnBackButton -= OnBackButton;
-	}
-
-	void OnDisable ()
-	{
-		Prefs.OnVrModeChanged -= VrModeChanged;
+		gameState = state;
+		CheckVrMode ();
 	}
 
 	public void VrModeChanged (bool vrMode)
 	{
+		gameVrMode = vrMode;
+		CheckVrMode ();
+	}
+
+	void CheckVrMode ()
+	{
+		bool vrMode = gameState == GameState.PLAYING ? gameVrMode : false;
 		if (Cardboard.SDK.VRModeEnabled == vrMode) {
 			return;
 		}
 		Cardboard.SDK.VRModeEnabled = vrMode;
-		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
+//		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
 		gameCamera.transform.position = (vrMode || Application.isEditor) ? vrCameraPosition : magicWindowCameraPosition;
-	}
-
-	void OnBackButton ()
-	{
-		Debug.Log ("***BACK BUTTON!");
-		Prefs.VrMode = !Prefs.VrMode;
 	}
 
 }

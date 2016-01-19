@@ -52,7 +52,6 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred += UpdateStrikeOurs;
 		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred += UpdateStrikeTheirs;
-		Prefs.OnVrModeChanged += UpdateVrMode;
 		UpdateText ();
 	}
 
@@ -66,7 +65,6 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= UpdateStrikeOurs;
 		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred -= UpdateStrikeTheirs;
-		Prefs.OnVrModeChanged -= UpdateVrMode;
 	}
 
 	void UpdateGameState (GameState state)
@@ -134,12 +132,6 @@ public class GameStateHintController : MonoBehaviour
 		default:
 			throw new System.NotImplementedException ();
 		}
-	}
-
-	void UpdateVrMode (bool vrMode)
-	{
-		this.vrMode = vrMode;
-		UpdateText ();
 	}
 
 	void UpdateText ()
@@ -211,7 +203,7 @@ public class GameStateHintController : MonoBehaviour
 
 	string GetReadyMessage ()
 	{
-		string longAimimText = vrMode ?
+		string longAimimText = Cardboard.SDK.VRModeEnabled ?
 			"Aim, then use trigger to fire." :
 			"Aim, then tap screen to fire.";
 		switch (fireCount) {
