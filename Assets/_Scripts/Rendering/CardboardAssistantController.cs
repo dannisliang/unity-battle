@@ -19,9 +19,6 @@ public class CardboardAssistantController : MonoBehaviour
 //		Cardboard.SDK.ElectronicDisplayStabilization = false;
 //		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
-//		Cardboard.SDK.StereoScreenScale = Application.isEditor ? 1f : .8f;
-		// just in case VrMode already set to default
-//		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
 
 		Game.instance.OnGameStateChange += UpdateGameState;
 	}
@@ -46,12 +43,10 @@ public class CardboardAssistantController : MonoBehaviour
 	void CheckVrMode ()
 	{
 		bool vrMode = gameState == GameState.PLAYING ? gameVrMode : false;
-		if (Cardboard.SDK.VRModeEnabled == vrMode) {
-			return;
-		}
-		Cardboard.SDK.VRModeEnabled = vrMode;
-//		Camera.main.GetComponent<StereoController> ().UpdateStereoValues ();
 		gameCamera.transform.position = (vrMode || Application.isEditor) ? vrCameraPosition : magicWindowCameraPosition;
+		if (Cardboard.SDK.VRModeEnabled != vrMode) {
+			Cardboard.SDK.VRModeEnabled = vrMode;
+		}
 	}
 
 }
