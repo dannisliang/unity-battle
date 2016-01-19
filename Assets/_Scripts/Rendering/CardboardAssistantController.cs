@@ -42,7 +42,7 @@ public class CardboardAssistantController : MonoBehaviour
 //			Application.Quit ();
 			break;
 		case GameState.SELECTING_VIEW_MODE:
-			Game.instance.Restart ();
+			Game.instance.QuitGame ();
 			break;
 		case GameState.PLAYING:
 			Game.instance.SelectViewMode (null);

@@ -228,7 +228,7 @@ public class BattleController : MonoBehaviour
 			loser = whose;
 			AnnounceGameState ();
 			SceneMaster.instance.Async (delegate {
-				Game.instance.Restart ();
+				Game.instance.QuitGame ();
 			}, Utils.RESTART_DELAY);
 		}
 	}

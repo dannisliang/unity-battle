@@ -99,9 +99,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
-	public void Restart ()
+	public void QuitGame ()
 	{
-		Debug.Log ("*** ** ** ** ** ** ** Restarting game NOW ** ** ** ** ** **");
+		Debug.Log ("*** ** ** ** ** ** ** Quitting game NOW ** ** ** ** ** **");
 		butler.QuitGame ();
 	}
 
