@@ -13,7 +13,7 @@ public class Utils : MonoBehaviour
 	public const float DUMMY_PLAY_GAMES_REAL_TIME_REPLAY_DELAY = .1f;
 	public const float AI_DELAY = 5f;
 
-	public const int GRID_SIZE = 10;
+	public const int GRID_SIZE = 3;
 	public const float BOAT_HEIGHT = .01f;
 	public const float CLEARANCE_HEIGHT = .001f;
 

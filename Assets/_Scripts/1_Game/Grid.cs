@@ -17,12 +17,12 @@ public class Grid
 
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
-		new BoatConfiguration (5, "Aircraft Carrier"),
-		new BoatConfiguration (4, "Amphibious Assault"),
+//		new BoatConfiguration (5, "Aircraft Carrier"),
+//		new BoatConfiguration (4, "Amphibious Assault"),
 		new BoatConfiguration (3, "Cruiser"),
-		new BoatConfiguration (2, "Littoral Combat"),
-		new BoatConfiguration (2, "Destroyer"),
-		new BoatConfiguration (1, "Submarine"),
+//		new BoatConfiguration (2, "Littoral Combat"),
+//		new BoatConfiguration (2, "Destroyer"),
+//		new BoatConfiguration (1, "Submarine"),
 	};
 
 	public Boat[] boats;
@@ -45,6 +45,7 @@ public class Grid
 	public void SetBoats (Whose whose, Boat[] boats)
 	{
 		this.whose = whose;
+//		Debug.Log ("Grid(" + whose + ") misses = new int[" + Utils.GRID_SIZE + "," + Utils.GRID_SIZE + "]");
 		misses = new int[Utils.GRID_SIZE, Utils.GRID_SIZE];
 		if (boats == null) {
 			MakeRandomizedBoats (whose);
@@ -102,7 +103,6 @@ public class Grid
 		}
 		return true;
 	}
-
 
 	public StrikeResult FireAt (Position position, out Boat boat, bool testOnly = false)
 	{

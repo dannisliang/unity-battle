@@ -12,7 +12,7 @@ public class GridPlacementController : MonoBehaviour
 
 	float tileColliderHeight = .2f;
 
-	public void Awake ()
+	public void OnEnable ()
 	{
 		RecreateGrid ();
 	}
@@ -33,7 +33,7 @@ public class GridPlacementController : MonoBehaviour
 				pos.x = x + .5f;
 				pos.y = Utils.GRID_SIZE - z - .5f;
 
-				GameObject clone = Instantiate (tilePrefab) as GameObject;
+				GameObject clone = Game.instance.InstantiateTemp (tilePrefab);
 				clone.transform.SetParent (transform, false);
 				clone.transform.localPosition = pos;
 				clone.transform.localScale = scale;
@@ -41,7 +41,7 @@ public class GridPlacementController : MonoBehaviour
 				PositionMarkerController markerController = clone.GetComponent<PositionMarkerController> ();
 				markerController.position = position;
 
-				Utils.SetNoSaveNoEditHideFlags (clone.transform);
+				//Utils.SetNoSaveNoEditHideFlags (clone.transform);
 #if UNITY_EDITOR
 				Undo.RegisterCreatedObjectUndo (clone, "Create " + clone);
 #endif

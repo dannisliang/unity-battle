@@ -9,14 +9,10 @@ public class GameAi : MonoBehaviour
 	List<Position> _emptyPositions;
 	List<Position> _unidentifiedHits;
 
-	void Start ()
-	{
-		Init ();
-	}
-
 	void OnEnable ()
 	{
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred += NoteStrikeResult;
+		Init ();
 	}
 
 	void OnDisable ()

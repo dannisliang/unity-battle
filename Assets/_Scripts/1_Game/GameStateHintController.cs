@@ -25,12 +25,13 @@ public class GameStateHintController : MonoBehaviour
 			this.boat = boat;
 			this.result = result;
 		}
-
 	}
 
-	StrikeData strikeData;
+	Image image;
+	Text text;
 
-	GameState gameState;
+	Boat reticleBoatTarget;
+	StrikeData strikeData;
 	bool playing;
 	bool firing;
 	Whose? loser;
@@ -38,15 +39,21 @@ public class GameStateHintController : MonoBehaviour
 	bool vrMode;
 	int fireCount;
 
-	Image image;
-	Text text;
-	Boat reticleBoatTarget;
 
 	void OnEnable ()
 	{
+		Debug.Log ("***" + name + ".OnEnable()");
+		reticleBoatTarget = null;
+		strikeData = null;
+		playing = false;
+		firing = false;
+		loser = null;
+		reticleAimingAtGrid = false;
+		//vrMode=false;
+		fireCount = 0;
+
 		image = GetComponent<Image> ();
 		text = GetComponentInChildren<Text> ();
-		Game.instance.OnGameStateChange += UpdateGameState;
 		BattleController.instance.OnBattleState += UpdateBattleState;
 		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
@@ -65,11 +72,6 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= UpdateStrikeOurs;
 		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred -= UpdateStrikeTheirs;
-	}
-
-	void UpdateGameState (GameState state)
-	{
-		this.gameState = state;
 	}
 
 	void UpdateBattleState (bool playing, bool firing, Whose? loser)
@@ -141,6 +143,7 @@ public class GameStateHintController : MonoBehaviour
 		}
 		Color color;
 		string t = GetText (out color);
+//		Debug.Log ("***" + name + ".text => " + t);
 		bool show = t != null;
 		image.enabled = show;
 		text.enabled = show;

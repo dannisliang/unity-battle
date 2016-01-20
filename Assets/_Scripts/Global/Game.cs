@@ -24,6 +24,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public GameObject viewModeGameObject;
 	public GameObject viewModePlayingGameObject;
 	public GameObject playingGameObject;
+	public ButlerAi butlerAi;
+	public ButlerPlayGames butlerPlayGames;
+
 
 	public CardboardAssistantController cardboardAssistantController;
 
@@ -36,6 +39,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	object GameStateChangeLock = new System.Object ();
 
 	private event GameStateChange _OnGameStateChange;
+
 
 	public event GameStateChange OnGameStateChange {
 		add {
@@ -51,6 +55,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
+	List<GameObject> tempObjects;
+
 	void Awake ()
 	{
 		if (instance != null && instance != this) {
@@ -59,14 +65,20 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 		instance = this;
 		DontDestroyOnLoad (gameObject);
-		gameObject.AddComponent<ButlerAi> ();
-		gameObject.AddComponent<ButlerPlayGames> ();
+		tempObjects = new List<GameObject> ();
 
 		MakeGameObjectsActive ();
 
 //		InitNearby ();
 
 		OnGameStateChange += HandleGameStateChanged;
+	}
+
+	public GameObject InstantiateTemp (UnityEngine.Object original)
+	{
+		GameObject go = Instantiate (original) as GameObject;
+		tempObjects.Add (go);
+		return go;
 	}
 
 	void MakeGameObjectsActive ()
@@ -119,10 +131,10 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 		switch (gameType) {
 		case GameType.ONE_PLAYER_DEMO:
-			butler = gameObject.GetComponent<ButlerAi> ();
+			butler = butlerAi;
 			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
-			butler = gameObject.GetComponent<ButlerPlayGames> ();
+			butler = butlerPlayGames;
 			break;
 		default:
 			throw new NotImplementedException ();
@@ -136,8 +148,10 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		masterGameState = state;
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
-//			HardRestart ();
-//			break;
+			foreach (GameObject go in tempObjects) {
+				Destroy (go);
+			}
+			break;
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.AUTHENTICATING:
 		case GameState.SETTING_UP_GAME:

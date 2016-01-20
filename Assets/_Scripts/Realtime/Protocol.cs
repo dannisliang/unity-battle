@@ -19,7 +19,9 @@ public class Protocol
 
 	public static byte[] Encode (MessageType messageType, System.Object obj, bool reliable)
 	{
-		Debug.Log ("***Encode() [" + Game.butler + "]");
+		if (!Application.isEditor && messageType != MessageType.AIM_AT) {
+			Debug.Log ("***Encode() [" + Game.butler + "]");
+		}
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {
 			stream.WriteByte ((byte)messageType);
@@ -48,7 +50,7 @@ public class Protocol
 				break;
 			case Protocol.MessageType.AIM_AT:
 				obj = formatter.Deserialize (stream) as Position;
-				Debug.Log ("***Received aim at " + obj);
+//				Debug.Log ("***Received aim at " + obj);
 				break;
 			case Protocol.MessageType.ROCKET_LAUNCH:
 				obj = formatter.Deserialize (stream) as Position;

@@ -3,6 +3,7 @@ using UnityEngine.Assertions;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 [RequireComponent (typeof(CardboardAudioSource))]
 public class BattleController : MonoBehaviour
@@ -30,9 +31,6 @@ public class BattleController : MonoBehaviour
 	bool playing;
 	int _firing;
 	Whose? loser;
-
-	GameObject markerHolderOurs;
-	GameObject markerHolderTheirs;
 
 	int firing {
 		get {
@@ -90,27 +88,12 @@ public class BattleController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		Reset ();
-	}
+		playing = false;
+		loser = null;
+		_firing = 0;
 
-	public void Reset ()
-	{
-		if (markerHolderOurs != null) {
-			Destroy (markerHolderOurs);
-		}
-		if (markerHolderTheirs != null) {
-			Destroy (markerHolderTheirs);
-		}
-		markerHolderOurs = new GameObject ();
-		markerHolderTheirs = new GameObject ();
-		markerHolderOurs.transform.SetParent (gridOurs.transform, false);
-		markerHolderTheirs.transform.SetParent (gridTheirs.transform, false);
 		AimAt (Whose.Theirs, null); // reticle starts disabled
 		AimAt (Whose.Ours, null); // reticle starts disabled
-	}
-
-	void Start ()
-	{
 		boatsOursPlacementController.RecreateBoats ();
 		SendOurBoatPositions ();
 	}
@@ -154,13 +137,7 @@ public class BattleController : MonoBehaviour
 
 	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
 	{
-		if (!playing) {
-			return false;
-		}
-		if (loser != null) {
-			return false;
-		}
-		if (firing > 0) { // && !Application.isEditor) {
+		if (!IsGridReady ()) {
 			return false;
 		}
 		if (tileHasBeenFiredUpon) {
@@ -175,9 +152,23 @@ public class BattleController : MonoBehaviour
 		return true;
 	}
 
+	public bool IsGridReady ()
+	{
+		if (!playing) {
+			return false;
+		}
+		if (loser != null) {
+			return false;
+		}
+		if (firing > 0) { // && !Application.isEditor) {
+			return false;
+		}
+		return true;
+	}
+
 	public void LaunchRocket (Whose atWhose, Position targetPosition, Action callback)
 	{
-		GameObject rocket = Instantiate (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
+		GameObject rocket = Game.instance.InstantiateTemp (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
 		Vector3 localPos = targetPosition.AsGridLocalPosition (Marker.Aim);
 		
 		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
@@ -268,13 +259,14 @@ public class BattleController : MonoBehaviour
 			go = whose == Whose.Theirs ? aimReticleTheirs : aimReticleOurs;
 			break;
 		case Marker.Hit:
-			go = Instantiate (markerHitPrefab);
+			go = Game.instance.InstantiateTemp (markerHitPrefab);
 			break;
 		case Marker.Miss:
-			go = Instantiate (markerMissPrefab);
+			go = Game.instance.InstantiateTemp (markerMissPrefab);
 			break;
 		}
-		go.transform.SetParent (whose == Whose.Theirs ? markerHolderTheirs.transform : markerHolderOurs.transform, false);
+		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
+
 		if (marker == Marker.Aim) {
 			go.GetComponent<AimReticleController> ().SetTargetPosition (position);
 		} else {

@@ -41,7 +41,9 @@ public class RealtimeBattle : MonoBehaviour
 
 	static void EncodeAndSend (Protocol.MessageType messageType, System.Object obj, bool reliable)
 	{
-		Debug.Log ("***EncodeAndSend() [" + Game.butler + "]");
+		if (!Application.isEditor && messageType != Protocol.MessageType.AIM_AT) {
+			Debug.Log ("***EncodeAndSend() [" + Game.butler + "]");
+		}
 		byte[] bytes = Protocol.Encode (messageType, obj, reliable);
 		Game.instance.SendMessageToAll (reliable: reliable, data: bytes);
 	}

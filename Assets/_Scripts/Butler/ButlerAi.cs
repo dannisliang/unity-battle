@@ -2,9 +2,11 @@
 using System.Collections;
 using UnityEngine.Assertions;
 using GooglePlayGames.BasicApi.Multiplayer;
+using System;
 
 public class ButlerAi : MonoBehaviour,IButler
 {
+	static int gameCount;
 
 	public event Game.GameStateChange OnGameStateChange;
 
@@ -39,6 +41,7 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	public void NewGame ()
 	{
+		gameCount++;
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
 		SetGameState (GameState.AUTHENTICATING);
 		SetGameState (GameState.SETTING_UP_GAME);
@@ -49,6 +52,10 @@ public class ButlerAi : MonoBehaviour,IButler
 	{
 		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, gameState);
 		SetGameState (GameState.PLAYING);
+		if (ai != null) {
+			Destroy (ai);
+		}
+		ai = gameObject.AddComponent<GameAi> ();
 	}
 
 	public void PauseGamePlay ()
@@ -77,10 +84,22 @@ public class ButlerAi : MonoBehaviour,IButler
 	{
 		byte[] replyData = MakeReply (reliable, data);
 		bool fast = Protocol.GetMessageType (replyData) != Protocol.MessageType.ROCKET_LAUNCH;
-		SceneMaster.instance.Async (delegate {
+		int coroutineGameCount = gameCount;
+		StartCoroutine (Do (delegate {
+			if (coroutineGameCount != gameCount) {
+				Debug.Log ("***Abandoning async call due to new game");
+				return;
+			}
 			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
-		}, fast ? 2f : Utils.AI_DELAY);
+		}, fast ? 2f : Utils.AI_DELAY));
 	}
+
+	IEnumerator Do (Action action, float delay)
+	{
+		yield return new WaitForSeconds (delay);
+		action ();
+	}
+
 
 	byte[] MakeReply (bool reliable, byte[] data)
 	{
@@ -88,8 +107,6 @@ public class ButlerAi : MonoBehaviour,IButler
 		case Protocol.MessageType.AIM_AT:
 			return MakeAimMessage ();
 		case Protocol.MessageType.GRID_POSITIONS:
-			Assert.IsNull (ai);
-			ai = gameObject.AddComponent<GameAi> ();
 			return MakeAiGridMessage ();
 		case Protocol.MessageType.ROCKET_LAUNCH:
 			return MakeAiMoveMessage ();

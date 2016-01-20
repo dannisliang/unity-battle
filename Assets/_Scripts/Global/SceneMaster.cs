@@ -13,10 +13,7 @@ public class SceneMaster : MonoBehaviour
 		"Assets/" + SCENE_GAME + ".unity",
 	};
 
-	static bool _quitting;
-	static bool _hardRestarting;
-
-	public static bool quitting { get { return _quitting || _hardRestarting; } }
+	public static bool quitting { get; private set; }
 
 	void Awake ()
 	{
@@ -29,14 +26,7 @@ public class SceneMaster : MonoBehaviour
 
 	void OnApplicationQuit ()
 	{
-		_quitting = true;
-	}
-
-	public static void HardRestart ()
-	{
-		_hardRestarting = true;
-		Debug.Log ("***LoadScene(0) …");
-		SceneManager.LoadScene (0);
+		quitting = true;
 	}
 
 	public void Async (Action action, float delay = 0f)
