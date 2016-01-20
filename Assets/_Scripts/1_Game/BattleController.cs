@@ -31,6 +31,9 @@ public class BattleController : MonoBehaviour
 	int _firing;
 	Whose? loser;
 
+	GameObject markerHolderOurs;
+	GameObject markerHolderTheirs;
+
 	int firing {
 		get {
 			return _firing;
@@ -83,6 +86,25 @@ public class BattleController : MonoBehaviour
 		source = GetComponent<CardboardAudioSource> ();
 		aimReticleOurs = Instantiate (markerAimReticleTheirsAtOursPrefab);
 		aimReticleTheirs = Instantiate (markerAimReticleOursAtTheirsPrefab);
+	}
+
+	void OnEnable ()
+	{
+		Reset ();
+	}
+
+	public void Reset ()
+	{
+		if (markerHolderOurs != null) {
+			Destroy (markerHolderOurs);
+		}
+		if (markerHolderTheirs != null) {
+			Destroy (markerHolderTheirs);
+		}
+		markerHolderOurs = new GameObject ();
+		markerHolderTheirs = new GameObject ();
+		markerHolderOurs.transform.SetParent (gridOurs.transform, false);
+		markerHolderTheirs.transform.SetParent (gridTheirs.transform, false);
 		AimAt (Whose.Theirs, null); // reticle starts disabled
 		AimAt (Whose.Ours, null); // reticle starts disabled
 	}
@@ -252,7 +274,7 @@ public class BattleController : MonoBehaviour
 			go = Instantiate (markerMissPrefab);
 			break;
 		}
-		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
+		go.transform.SetParent (whose == Whose.Theirs ? markerHolderTheirs.transform : markerHolderOurs.transform, false);
 		if (marker == Marker.Aim) {
 			go.GetComponent<AimReticleController> ().SetTargetPosition (position);
 		} else {
