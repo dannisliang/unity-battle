@@ -105,9 +105,7 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	byte[] MakeAiGridMessage ()
 	{
-		Grid grid = new Grid ();
-		grid.SetBoats (Whose.Theirs, null);
-		return Protocol.Encode (Protocol.MessageType.GRID_POSITIONS, grid, true);
+		return Protocol.Encode (Protocol.MessageType.GRID_POSITIONS, new Grid (), true);
 	}
 
 	byte[] MakeAiMoveMessage ()
