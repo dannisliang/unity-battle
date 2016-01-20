@@ -34,7 +34,6 @@ public class Boat
 				}
 				if (!testOnly) {
 					hits [i]++;
-					Debug.Log ("***Boat " + whose + " hits[" + i + "=" + positions [i] + "]++  ==> " + hits [i]);
 				}
 				return IsSunk () ? StrikeResult.HIT_AND_SUNK : StrikeResult.HIT_NOT_SUNK;
 			}

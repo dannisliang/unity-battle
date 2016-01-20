@@ -204,7 +204,9 @@ public class BattleController : MonoBehaviour
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		Boat boat;
 		StrikeResult result = boatPlacementController.grid.FireAt (position, out boat);
-		Debug.Log ("***Strike(" + position + ") -> " + result);
+		if (!Application.isEditor) {
+			Debug.Log ("***Strike(" + position + ") -> " + result);
+		}
 		switch (result) {
 		case StrikeResult.IGNORED_ALREADY_MISSED:
 			source.PlayOneShot (waterPlopClip);

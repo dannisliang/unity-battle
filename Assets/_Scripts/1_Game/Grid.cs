@@ -17,12 +17,12 @@ public class Grid
 
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
-//		new BoatConfiguration (5, "Aircraft Carrier"),
-//		new BoatConfiguration (4, "Amphibious Assault"),
+		new BoatConfiguration (5, "Aircraft Carrier"),
+		new BoatConfiguration (4, "Amphibious Assault"),
 		new BoatConfiguration (3, "Cruiser"),
-//		new BoatConfiguration (2, "Littoral Combat"),
-//		new BoatConfiguration (2, "Destroyer"),
-//		new BoatConfiguration (1, "Submarine"),
+		new BoatConfiguration (2, "Littoral Combat"),
+		new BoatConfiguration (2, "Destroyer"),
+		new BoatConfiguration (1, "Submarine"),
 	};
 
 	public Boat[] boats;

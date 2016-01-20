@@ -82,6 +82,10 @@ public class ButlerAi : MonoBehaviour,IButler
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
+		if (!enabled) {
+			Debug.Log ("***INGORING SendMessageToAll() as " + name + " is disabled");
+			return;
+		}
 		byte[] replyData = MakeReply (reliable, data);
 		bool fast = Protocol.GetMessageType (replyData) != Protocol.MessageType.ROCKET_LAUNCH;
 		int coroutineGameCount = gameCount;
