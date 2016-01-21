@@ -6,11 +6,12 @@ using System.Collections;
 public class GameTypeButtonController : MonoBehaviour
 {
 	public GameType gameType;
+    public KeyCode keyCode;
 
 	void Awake ()
 	{
 		GetComponent<Button> ().onClick.AddListener (delegate {
-			Game.instance.NewGame (gameType);
+            StartNewGame();
 		});
 	}
 
@@ -18,6 +19,16 @@ public class GameTypeButtonController : MonoBehaviour
 	{
 		Game.instance.OnGameStateChange += UpdateActive;
 	}
+
+    void Update() {
+        if (Input.GetKeyDown(keyCode)) {
+            StartNewGame();
+        }
+    }
+
+    void StartNewGame() {
+        Game.instance.NewGame (gameType);
+    }
 
 	void OnDestroy ()
 	{
