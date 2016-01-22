@@ -16,6 +16,7 @@ public class BattleController : MonoBehaviour
 	public GameObject rocketTheirsPrefab;
 	public GameObject markerAimReticleTheirsAtOursPrefab;
 	public GameObject markerAimReticleOursAtTheirsPrefab;
+	public GameObject markerTargetReticleOursAtTheirsPrefab;
 	public GameObject markerHitPrefab;
 	public GameObject markerMissPrefab;
 	public GameObject reticle;
@@ -72,6 +73,7 @@ public class BattleController : MonoBehaviour
 	CardboardAudioSource source;
 	GameObject aimReticleOurs;
 	GameObject aimReticleTheirs;
+	GameObject targetReticleOurs;
 
 	void Awake ()
 	{
@@ -82,6 +84,7 @@ public class BattleController : MonoBehaviour
 		instance = this;
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		source = GetComponent<CardboardAudioSource> ();
+		targetReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
 		aimReticleOurs = Instantiate (markerAimReticleTheirsAtOursPrefab);
 		aimReticleTheirs = Instantiate (markerAimReticleOursAtTheirsPrefab);
 	}
@@ -94,6 +97,7 @@ public class BattleController : MonoBehaviour
 
 		AimAt (Whose.Theirs, null); // reticle starts disabled
 		AimAt (Whose.Ours, null); // reticle starts disabled
+		TargetAt (null); // reticle starts disabled
 		boatsOursPlacementController.RecreateBoats ();
 		SendOurBoatPositions ();
 	}
@@ -145,9 +149,11 @@ public class BattleController : MonoBehaviour
 			return false;
 		}
 		firing++;
+		TargetAt (targetPosition);
 		RealtimeBattle.EncodeAndSendLaunch (targetPosition);
 		LaunchRocket (Whose.Theirs, targetPosition, delegate {
 			firing--;
+			TargetAt (null);
 		});
 		return true;
 	}
@@ -190,6 +196,11 @@ public class BattleController : MonoBehaviour
 	public void AimAt (Position position)
 	{
 		PlaceMarker (Whose.Ours, position, Marker.Aim);
+	}
+
+	public void TargetAt (Position position)
+	{
+		PlaceMarker (Whose.Theirs, position, Marker.Target);
 	}
 
 	public StrikeResult Strike (Whose whose, Position position)
@@ -257,6 +268,9 @@ public class BattleController : MonoBehaviour
 	{
 		GameObject go = null;
 		switch (marker) {
+		case Marker.Target:
+			go = targetReticleOurs;
+			break;
 		case Marker.Aim:
 			go = whose == Whose.Theirs ? aimReticleTheirs : aimReticleOurs;
 			break;
@@ -271,6 +285,8 @@ public class BattleController : MonoBehaviour
 
 		if (marker == Marker.Aim) {
 			go.GetComponent<AimReticleController> ().SetTargetPosition (position);
+		} else if (marker == Marker.Target) {
+			go.GetComponent<TargetReticleController> ().SetTargetPosition (position);
 		} else {
 			go.transform.localPosition = position.AsGridLocalPosition (marker);
 		}

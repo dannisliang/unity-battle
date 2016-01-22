@@ -3321,6 +3321,8 @@ MonoBehaviour:
     type: 2}
   markerAimReticleOursAtTheirsPrefab: {fileID: 179534, guid: 81529f106172d40b7bb1a05b9ba360bb,
     type: 2}
+  markerTargetReticleOursAtTheirsPrefab: {fileID: 131044, guid: adb276b35ed3241ecb745d1ec016280a,
+    type: 2}
   markerHitPrefab: {fileID: 101766, guid: eeb0ce773684e49f5adf381f6ba475a5, type: 2}
   markerMissPrefab: {fileID: 101766, guid: 656114f2302be40ea9196aef325ebbbf, type: 2}
   reticle: {fileID: 2056223767}

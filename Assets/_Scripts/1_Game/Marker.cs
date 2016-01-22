@@ -1,6 +1,7 @@
 ﻿public enum Marker
 {
-	Hit,
-	Miss,
 	Aim,
+	Target,
+	Miss,
+	Hit,
 }

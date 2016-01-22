@@ -43,6 +43,7 @@ public class Position
 	{
 		switch (marker) {
 		case Marker.Aim:
+		case Marker.Target:
 			return -Utils.BOAT_HEIGHT - 2f * Utils.CLEARANCE_HEIGHT;
 		case Marker.Hit:
 			return -.5f * Utils.BOAT_HEIGHT - Utils.CLEARANCE_HEIGHT;
