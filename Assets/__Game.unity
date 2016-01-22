@@ -1126,7 +1126,7 @@ GameObject:
   - 222: {fileID: 214881459}
   - 114: {fileID: 214881458}
   m_Layer: 5
-  m_Name: Stereoscopie Nexus5 Outline
+  m_Name: Stereoscopic Nexus5 Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1687,7 +1687,7 @@ GameObject:
   - 222: {fileID: 468601247}
   - 114: {fileID: 468601246}
   m_Layer: 5
-  m_Name: Monoscopie Nexus5 Outline
+  m_Name: Monoscopic Nexus5 Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
