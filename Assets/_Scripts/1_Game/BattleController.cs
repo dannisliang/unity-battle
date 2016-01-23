@@ -25,8 +25,6 @@ public class BattleController : MonoBehaviour
 	public GameObject rocketOriginTheirs;
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
-	public AudioClip waterPlopClip;
-	public AudioClip shipExplosionClip;
 	public AudioClip noFireClip;
 
 	bool playing;
@@ -220,23 +218,17 @@ public class BattleController : MonoBehaviour
 		}
 		switch (result) {
 		case StrikeResult.IGNORED_ALREADY_MISSED:
-			source.PlayOneShot (waterPlopClip);
-			break;
 		case StrikeResult.IGNORED_ALREADY_HIT:
-			source.PlayOneShot (shipExplosionClip);
 			break;
 		case StrikeResult.MISS:
 			PlaceMarker (whose, position, Marker.Miss);
-			source.PlayOneShot (waterPlopClip);
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
-			source.PlayOneShot (shipExplosionClip);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
 			PlaceSunkBoat (whose, boat);
-			source.PlayOneShot (shipExplosionClip);
 			break;
 		default:
 			throw new System.NotImplementedException ();

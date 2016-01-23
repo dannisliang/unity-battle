@@ -26,6 +26,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 451500}
   - 114: {fileID: 11418212}
+  - 114: {fileID: 11439748}
   m_Layer: 10
   m_Name: Marker Miss
   m_TagString: Untagged
@@ -102,6 +103,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whose: 0
+  highlightMaterial: {fileID: 0}
+--- !u!114 &11439748
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 101766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dbca64e524ea44f9b26142ec59aca8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  directivityAlpha: 0
+  directivitySharpness: 1
+  gainDb: 0
+  occlusionEnabled: 0
+  playOnAwake: 1
+  rolloffMode: 0
+  sourceClip: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
+  sourceLoop: 0
+  sourceMute: 0
+  sourcePitch: 1
+  sourceVolume: 1
+  sourceMaxDistance: 500
+  sourceMinDistance: 0
+  hrtfEnabled: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -137,6 +165,10 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 0}
+      propertyPath: sourceClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 242f4c1feb91a425dbcd46ffbc4510b3, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 101766}
