@@ -6524,7 +6524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalGainDb: 0
   worldScale: 10
-  quality: 1
+  quality: 2
 --- !u!1 &1587594832
 GameObject:
   m_ObjectHideFlags: 0

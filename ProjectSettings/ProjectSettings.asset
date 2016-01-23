@@ -97,7 +97,7 @@ PlayerSettings:
   xboxOneDisableKinectGpuReservation: 0
   virtualRealitySupported: 0
   productGUID: 2851111e1e11e434d8d2a9c9b7068c8c
-  AndroidBundleVersionCode: 24
+  AndroidBundleVersionCode: 26
   AndroidMinSdkVersion: 14
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -173,7 +173,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: be84aaf3751d844f4ba092e96ee5ac82, type: 3}
+      m_Icon: {fileID: 2800000, guid: 61927acd834f04d0b82f3df480ec653d, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
