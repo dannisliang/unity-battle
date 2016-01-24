@@ -224,8 +224,8 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		SetGameState (success ? GameState.SELECTING_VIEW_MODE : GameState.GAME_WAS_TORN_DOWN);
 		if (success) {
-			Debug.Log ("***InvokeRepeating(Checkup, 1, 1)");
-			InvokeRepeating ("Checkup", 1f, 1f);
+			Debug.Log ("***InvokeRepeating(Checkup, 3, 3)");
+			InvokeRepeating ("Checkup", 3f, 3f);
 		}
 	}
 
