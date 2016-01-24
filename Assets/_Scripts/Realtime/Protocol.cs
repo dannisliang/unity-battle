@@ -54,7 +54,7 @@ public class Protocol
 				break;
 			case Protocol.MessageType.ROCKET_LAUNCH:
 				obj = formatter.Deserialize (stream) as Position;
-				Debug.Log ("***Received launch at " + obj);
+//				Debug.Log ("***Received launch at " + obj);
 				break;
 			default:
 				throw new NotImplementedException ("Unknown message type " + messageType);

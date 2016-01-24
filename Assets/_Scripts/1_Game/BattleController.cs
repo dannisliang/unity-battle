@@ -83,8 +83,8 @@ public class BattleController : MonoBehaviour
 		layerTileTheirs = new LayerInfo ("Tile Theirs");
 		source = GetComponent<CardboardAudioSource> ();
 		targetReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
-		aimReticleOurs = Instantiate (markerAimReticleTheirsAtOursPrefab);
-		aimReticleTheirs = Instantiate (markerAimReticleOursAtTheirsPrefab);
+		aimReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
+		aimReticleTheirs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
 	}
 
 	void OnEnable ()
@@ -276,9 +276,9 @@ public class BattleController : MonoBehaviour
 		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
 
 		if (marker == Marker.Aim) {
-			go.GetComponent<AimReticleController> ().SetTargetPosition (position);
+			go.GetComponent<TargetReticleController> ().SetTargetPosition (position, false);
 		} else if (marker == Marker.Target) {
-			go.GetComponent<TargetReticleController> ().SetTargetPosition (position);
+			go.GetComponent<TargetReticleController> ().SetTargetPosition (position, true);
 		} else {
 			go.transform.localPosition = position.AsGridLocalPosition (marker);
 		}
