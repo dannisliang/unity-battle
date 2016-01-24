@@ -11,6 +11,9 @@ public class GameStateHintController : MonoBehaviour
 	public Color ourColor = new Color (.91f, .55f, .22f, .65f);
 	public Color theirColor = new Color (.27f, .64f, 1f, .65f);
 
+	int vrModeFontSize = 6;
+	int magicWindowFontSize = 16;
+
 	class StrikeData
 	{
 		public Whose whose { get; private set; }
@@ -42,7 +45,6 @@ public class GameStateHintController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		Debug.Log ("***" + name + ".OnEnable()");
 		reticleBoatTarget = null;
 		strikeData = null;
 		playing = false;
@@ -54,6 +56,7 @@ public class GameStateHintController : MonoBehaviour
 
 		image = GetComponent<Image> ();
 		text = GetComponentInChildren<Text> ();
+		Game.instance.OnGameStateChange += UpdateGameState;
 		BattleController.instance.OnBattleState += UpdateBattleState;
 		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
@@ -67,11 +70,19 @@ public class GameStateHintController : MonoBehaviour
 		if (SceneMaster.quitting) {
 			return;
 		}
+		Game.instance.OnGameStateChange -= UpdateGameState;
 		BattleController.instance.OnBattleState -= UpdateBattleState;
 		BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
 		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= UpdateStrikeOurs;
 		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred -= UpdateStrikeTheirs;
+	}
+
+	void UpdateGameState (GameState state)
+	{
+		if (state == GameState.PLAYING) {
+			UpdateText ();
+		}
 	}
 
 	void UpdateBattleState (bool playing, bool firing, Whose? loser)
@@ -149,6 +160,7 @@ public class GameStateHintController : MonoBehaviour
 		text.enabled = show;
 		if (show) {
 			text.text = t;
+			text.fontSize = Cardboard.SDK.VRModeEnabled ? vrModeFontSize : magicWindowFontSize;
 			image.color = color;
 		}
 	}
