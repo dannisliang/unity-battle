@@ -14,12 +14,9 @@ public class BattleController : MonoBehaviour
 
 	public GameObject rocketOursPrefab;
 	public GameObject rocketTheirsPrefab;
-	public GameObject markerAimReticleTheirsAtOursPrefab;
-	public GameObject markerAimReticleOursAtTheirsPrefab;
 	public GameObject markerTargetReticleOursAtTheirsPrefab;
 	public GameObject markerHitPrefab;
 	public GameObject markerMissPrefab;
-	public GameObject reticle;
 	public GameObject gridOurs;
 	public GameObject gridTheirs;
 	public GameObject rocketOriginTheirs;
@@ -286,7 +283,6 @@ public class BattleController : MonoBehaviour
 
 	void SetRocketCount ()
 	{
-		reticle.SetActive (firing == 0);
 		if (firing > 0) {
 			aimReticleTheirs.SetActive (false);
 		}
