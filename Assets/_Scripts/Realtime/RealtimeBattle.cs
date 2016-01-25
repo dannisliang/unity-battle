@@ -54,10 +54,10 @@ public class RealtimeBattle : MonoBehaviour
 		int messageCount;
 		Protocol.MessageType messageType = Protocol.Decode (bytes, reliable, out obj, out messageCount);
 
-		Execute (obj, messageCount, messageType);
+		ExecuteDecodedMessage (obj, messageCount, messageType);
 	}
 
-	static void Execute (object obj, int messageCount, Protocol.MessageType messageType)
+	static void ExecuteDecodedMessage (object obj, int messageCount, Protocol.MessageType messageType)
 	{
 		switch (messageType) {
 		case Protocol.MessageType.GRID_POSITIONS:
