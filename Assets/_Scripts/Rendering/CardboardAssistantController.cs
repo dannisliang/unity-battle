@@ -18,8 +18,8 @@ public class CardboardAssistantController : MonoBehaviour
 	{
 		Cardboard.SDK.OnBackButton += BackButtonPressed;
 		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.Off;
-//		Cardboard.SDK.ElectronicDisplayStabilization = false;
-//		Cardboard.SDK.AutoDriftCorrection = false;
+		Cardboard.SDK.ElectronicDisplayStabilization = false;
+		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
 
 		Game.instance.OnGameStateChange += UpdateGameState;
