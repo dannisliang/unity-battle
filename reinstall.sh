@@ -87,5 +87,7 @@ done
 
 for pid in $pids
 do
-  wait $pid
+  wait $pid || true
 done
+
+echo ""
