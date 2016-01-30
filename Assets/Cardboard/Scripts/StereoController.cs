@@ -259,9 +259,9 @@ public class StereoController : MonoBehaviour {
 #if UNITY_EDITOR
     // Member variable 'cam' not always initialized when this method called in Editor.
     // So, we'll just make a local of the same name.
-    #pragma warning disable 0168
+    #pragma warning disable 0168, 0219
     var cam = GetComponent<Camera>();
-    #pragma warning restore 0168
+    #pragma warning restore 0168, 0219
 #endif
 
     // Simplistic test if rig already exists.
