@@ -18,13 +18,14 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public static Game instance;
 
-	public static IButler butler { get; private set; }
+	public static BaseButler butler { get; private set; }
 
 	public GameObject mainMenuGameObject;
 	public GameObject viewModeGameObject;
 	public GameObject viewModePlayingGameObject;
 	public GameObject playingGameObject;
 	public ButlerAi butlerAi;
+	public ButlerFirebase butlerFirebase;
 	public ButlerPlayGames butlerPlayGames;
 
 
@@ -115,6 +116,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	{
 		Debug.Log ("*** ** ** ** ** ** ** Quitting game NOW ** ** ** ** ** **");
 		butler.QuitGame ();
+		Assert.IsTrue (butler.enabled);
+		butler.enabled = false;
 	}
 
 	void HandleButlerGameStateChange (GameState state)
@@ -134,7 +137,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			butler = butlerAi;
 			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
-			butler = butlerPlayGames;
+			butler = butlerFirebase;
 			break;
 		default:
 			throw new NotImplementedException ();
@@ -246,7 +249,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public void NewGame (GameType gameType)
 	{
 		SetActiveButler (gameType);
-		butler.Init ();
+		Assert.IsFalse (butler.enabled);
+		butler.enabled = true;
 		butler.NewGame ();
 	}
 

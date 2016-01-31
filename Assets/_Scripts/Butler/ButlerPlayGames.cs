@@ -7,13 +7,9 @@ using GooglePlayGames;
 using System;
 
 
-public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
+public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 {
 	IPlayGamesPlatform gamesPlatform;
-
-	public event Game.GameStateChange OnGameStateChange;
-
-	GameState gameState = GameState.SELECTING_GAME_TYPE;
 
 	#if UNITY_EDITOR
 	void Update ()
@@ -29,12 +25,12 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	}
 	#endif
 
-	public int NumPlayers ()
+	public override int NumPlayers ()
 	{
 		return gamesPlatform.RealTime.GetConnectedParticipants ().Count;
 	}
 
-	public string GetLocalUsername ()
+	public override string GetLocalUsername ()
 	{
 		return gamesPlatform.localUser.userName;
 	}
@@ -86,7 +82,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 
 
 
-	public void Init ()
+	void OnEnable ()
 	{
 		if (gamesPlatform != null) {
 			return;
@@ -118,7 +114,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		}
 	}
 
-	public void NewGame ()
+	public override void NewGame ()
 	{
 		Debug.Log ("***NewGame() …");
 		PlayGamesSignIn ((bool success) => {
@@ -159,24 +155,19 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : Protocol.PROTOCOL_VERSION, listener: this);
 	}
 
-	public void StartGamePlay ()
+	public override void StartGamePlay ()
 	{
 		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, gameState);
 		SetGameState (GameState.PLAYING);
 	}
 
-	public void PauseGamePlay ()
+	public override void PauseGamePlay ()
 	{
 		Assert.AreEqual (GameState.PLAYING, gameState);
 		SetGameState (GameState.SELECTING_VIEW_MODE);
 	}
 
-	public GameState GetGameState ()
-	{
-		return gameState;
-	}
-
-	public void QuitGame ()
+	public override void QuitGame ()
 	{
 		Debug.Log ("***QuitGame() …");
 		switch (gameState) {
@@ -198,7 +189,7 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 	}
 
 
-	public void SendMessageToAll (bool reliable, byte[] data)
+	public override void SendMessageToAll (bool reliable, byte[] data)
 	{
 		gamesPlatform.RealTime.SendMessageToAll (reliable, data);
 	}
@@ -276,10 +267,10 @@ public class ButlerPlayGames : MonoBehaviour,IButler,RealTimeMultiplayerListener
 		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
 	}
 
-	void SetGameState (GameState state)
+	public override void SetGameState (GameState gameState)
 	{
-		gameState = state;
-		OnGameStateChange (gameState);
+		base.SetGameState (gameState);
+
 		if (gameState == GameState.GAME_WAS_TORN_DOWN) {
 			SetGameState (GameState.SELECTING_GAME_TYPE);
 		}

@@ -4,13 +4,10 @@ using UnityEngine.Assertions;
 using GooglePlayGames.BasicApi.Multiplayer;
 using System;
 
-public class ButlerAi : MonoBehaviour,IButler
+public class ButlerAi : BaseButler
 {
 	static int gameCount;
 
-	public event Game.GameStateChange OnGameStateChange;
-
-	GameState gameState = GameState.SELECTING_GAME_TYPE;
 	GameAi ai;
 
 	#if UNITY_EDITOR
@@ -25,21 +22,17 @@ public class ButlerAi : MonoBehaviour,IButler
 	}
 	#endif
 
-	public int NumPlayers ()
+	public override int NumPlayers ()
 	{
 		return (gameState == GameState.SELECTING_VIEW_MODE || gameState == GameState.PLAYING) ? 2 : 0;
 	}
 
-	public string GetLocalUsername ()
+	public override string GetLocalUsername ()
 	{
 		return (gameState == GameState.SELECTING_VIEW_MODE || gameState == GameState.PLAYING) ? "Ford Prefect" : "";
 	}
 
-	public void Init ()
-	{
-	}
-
-	public void NewGame ()
+	public override void NewGame ()
 	{
 		gameCount++;
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
@@ -48,7 +41,7 @@ public class ButlerAi : MonoBehaviour,IButler
 		SetGameState (GameState.SELECTING_VIEW_MODE);
 	}
 
-	public void StartGamePlay ()
+	public override void StartGamePlay ()
 	{
 		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, gameState);
 		SetGameState (GameState.PLAYING);
@@ -58,18 +51,13 @@ public class ButlerAi : MonoBehaviour,IButler
 		ai = gameObject.AddComponent<GameAi> ();
 	}
 
-	public void PauseGamePlay ()
+	public override void PauseGamePlay ()
 	{
 		Assert.AreEqual (GameState.PLAYING, gameState);
 		SetGameState (GameState.SELECTING_VIEW_MODE);
 	}
 
-	public GameState GetGameState ()
-	{
-		return gameState;
-	}
-
-	public void QuitGame ()
+	public override void QuitGame ()
 	{
 		if (gameState == GameState.PLAYING || gameState == GameState.SELECTING_VIEW_MODE) {
 			SetGameState (GameState.TEARING_DOWN_GAME);
@@ -80,7 +68,7 @@ public class ButlerAi : MonoBehaviour,IButler
 		}
 	}
 
-	public void SendMessageToAll (bool reliable, byte[] data)
+	public override void SendMessageToAll (bool reliable, byte[] data)
 	{
 		if (!enabled) {
 			Debug.Log ("***INGORING SendMessageToAll() as " + name + " is disabled");
@@ -137,10 +125,9 @@ public class ButlerAi : MonoBehaviour,IButler
 		return Protocol.Encode (Protocol.MessageType.ROCKET_LAUNCH, pos, true);
 	}
 
-	void SetGameState (GameState gameState)
+	public override void SetGameState (GameState gameState)
 	{
-		this.gameState = gameState;
-		OnGameStateChange (gameState);
+		base.SetGameState (gameState);
 		if (gameState == GameState.GAME_WAS_TORN_DOWN) {
 			SetGameState (GameState.SELECTING_GAME_TYPE);
 		}

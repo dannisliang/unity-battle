@@ -46,7 +46,7 @@ public class Protocol
 			switch (messageType) {
 			case Protocol.MessageType.GRID_POSITIONS:
 				obj = formatter.Deserialize (stream) as Grid;
-				Debug.Log ("***Received other grid ");// + grid);
+//				Debug.Log ("***Received other grid ");// + grid);
 				break;
 			case Protocol.MessageType.AIM_AT:
 				obj = formatter.Deserialize (stream) as Position;
