@@ -9,7 +9,7 @@ public class QuitGameButtonController : MonoBehaviour,IPointerDownHandler
 
 	public void OnPointerDown (PointerEventData eventData)
 	{
-		Game.butler.QuitGame ();
+		QuitGame ();
 	}
 
 	void Start ()
@@ -17,11 +17,23 @@ public class QuitGameButtonController : MonoBehaviour,IPointerDownHandler
 		Game.instance.OnGameStateChange += UpdateActive;
 	}
 
+	void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			QuitGame ();
+		}
+	}
+
 	void OnDestroy ()
 	{
 		if (Game.instance != null) {
 			Game.instance.OnGameStateChange -= UpdateActive;
 		}
+	}
+
+	void QuitGame ()
+	{
+		Game.butler.QuitGame ();
 	}
 
 	void UpdateActive (GameState state)

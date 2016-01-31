@@ -116,8 +116,6 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	{
 		Debug.Log ("*** ** ** ** ** ** ** Quitting game NOW ** ** ** ** ** **");
 		butler.QuitGame ();
-		Assert.IsTrue (butler.enabled);
-		butler.enabled = false;
 	}
 
 	void HandleButlerGameStateChange (GameState state)
@@ -151,6 +149,11 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		masterGameState = state;
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
+			if (butler != null) {
+				Assert.IsTrue (butler.enabled);
+				butler.enabled = false;
+				butler = null;
+			}
 			foreach (GameObject go in tempObjects) {
 				Destroy (go);
 			}

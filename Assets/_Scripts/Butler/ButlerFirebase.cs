@@ -47,8 +47,8 @@ public class ButlerFirebase : BaseButler
 		//		ours.ChildAdded += OpponentSentUsMove;
 		//		ours.ChildChanged += OpponentSentUsMove;
 
-		StartCoroutine (ConnectWithOpponent ());
-		StartCoroutine (AiCoroutine ());
+		StartCoroutine ("ConnectWithOpponent");
+//		StartCoroutine ("AiCoroutine");
 	}
 
 	void OnDisable ()
@@ -57,20 +57,19 @@ public class ButlerFirebase : BaseButler
 			return;
 		}
 
-		playersInLobby = null;
-		incomingInvites = null;
-
-		StopCoroutine ("ConnectWithOpponent");
 		StopCoroutine ("AiCoroutine");
+		StopCoroutine ("ConnectWithOpponent");
 
-	
 		lobby.ChildRemoved -= LobbyChildRemoved;
 		lobby.ChildAdded -= LobbyChildAdded;
 		Debug.Log (lobby.Key + "/" + uniqueId + "/Invites.ChildAdded -= InviteReceived");
 		lobby.Child (uniqueId).Child ("Invites").ChildAdded -= InviteReceived;
-	
+		
 		ClearPlayerData (uniqueId);
 		ClearPlayerData ("ai");
+
+		playersInLobby = null;
+		incomingInvites = null;
 	}
 
 	void InviteReceived (object sender, ChangedEventArgs e)
@@ -142,29 +141,41 @@ public class ButlerFirebase : BaseButler
 	IEnumerator ConnectWithOpponent ()
 	{
 		while (opponentId == null) {
-//			Debug.Log ("WaitForSeconds(.5f)");
 			yield return new WaitForSeconds (.5f);
 			if (incomingInvites.Count > 0) {
 				string id = incomingInvites [0];
 				incomingInvites.Remove (id);
-				Debug.Log ("Using invite " + id);
+				Debug.Log ("Entertaining invite from " + id);
 
 				if (playersInLobby.Remove (id)) {
-					Debug.Log ("Sending counter invite to " + id);
+					Debug.Log ("Sending counter (RSVP) invite to " + id);
 					lobby.Child (id).Child ("Invites").Child (uniqueId).SetValue ("Let's play");
-
-//					float expirationTime = Time.unscaledTime + 10f;
-//					while (Time.unscaledTime < expirationTime && !incomingInvites.Contains (id)) {
-//						Debug.Log ("Waiting for incomingInvites to contain " + id);
-//						yield return new WaitForSeconds (1f);
-//					}
 					opponentId = id;
 				} else {
 					Debug.Log ("Ignoring invite from player not in lobby: " + id);
 				}
+			} else if (playersInLobby.Count > 0) {
+				string id = playersInLobby [0];
+				playersInLobby.Remove (id);
+				Debug.Log ("Extending new invite to " + id);
+				lobby.Child (id).Child ("Invites").Child (uniqueId).SetValue ("Let's play");
+
+				float expirationTime = Time.unscaledTime + 5f;
+				while (Time.unscaledTime < expirationTime) {
+					if (incomingInvites.Contains (id)) {
+						opponentId = id;
+					}
+//					Debug.Log ("(Still) waiting for incomingInvites to contain " + id);
+					yield return new WaitForSeconds (1f);
+				}
+				if (opponentId == null) {
+					Debug.Log ("Recinding invite to " + id);
+					lobby.Child (id).Child ("Invites").Child (uniqueId).SetValue ((string)null);
+				}
 			}
 		}
 
+		Debug.Log ("opponentId = " + opponentId);
 
 //		game.Child (uniqueId).Child ("Grid").SetValue (BattleController.instance.boatsOursPlacementController.grid.ToString ());
 
@@ -209,11 +220,11 @@ public class ButlerFirebase : BaseButler
 //		Debug.Log ("AI sending invite: " + lobby.Key + "/" + uniqueId + "/ZZZ=0");
 //		lobby.Child (uniqueId).Child ("Invites").Child ("ZZZ").SetValue (0);
 
-		yield return new WaitForSeconds (5f);
+		yield return new WaitForSeconds (1f);
 		ClearPlayerData ("ai");
 
 		lobby.Child ("ai").Child ("GameState").SetValue (GameState.SETTING_UP_GAME.ToString ());
-		yield return new WaitForSeconds (5f);
+		yield return new WaitForSeconds (1f);
 
 		Debug.Log ("AI sending invite: " + lobby.Key + "/" + uniqueId + "/ai=Let's play");
 		lobby.Child (uniqueId).Child ("Invites").Child ("ai").SetValue ("Let's play");
@@ -227,7 +238,7 @@ public class ButlerFirebase : BaseButler
 //		lobby.Child (uniqueId).Child ("Invites").Child ("bar").SetValue (0);
 
 
-		yield return new WaitForSeconds (5f);
+		yield return new WaitForSeconds (1f);
 		Debug.Log ("AI view mode -> SELECTING");
 		lobby.Child ("ai").Child ("GameState").SetValue (GameState.SELECTING_VIEW_MODE.ToString ());
 
@@ -262,7 +273,7 @@ public class ButlerFirebase : BaseButler
 
 	public override void QuitGame ()
 	{
-		if (gameState == GameState.PLAYING || gameState == GameState.SELECTING_VIEW_MODE) {
+		if (gameState == GameState.SETTING_UP_GAME || gameState == GameState.PLAYING || gameState == GameState.SELECTING_VIEW_MODE) {
 			SetGameState (GameState.TEARING_DOWN_GAME);
 		}
 		if (gameState == GameState.TEARING_DOWN_GAME) {
@@ -282,7 +293,10 @@ public class ButlerFirebase : BaseButler
 
 	public override void SendMessageToAll (bool reliable, byte[] data)
 	{
-		Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", data);
+		var encoded = Convert.ToBase64String (data);
+		players.Child (uniqueId).Push ().SetValue (encoded);
+		Debug.Log ("SendMessageToAll: " + (char)data [0] + " " + encoded);
+		Game.instance.OnRealTimeMessageReceived (reliable, "firebaseAiSenderId", data);
 	}
 
 	public override void SetGameState (GameState gameState)
