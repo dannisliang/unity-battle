@@ -72,7 +72,15 @@ do
     #user_count=$(( $( adb shell pm list users | grep UserInfo | wc -l ) ))
     #user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo.([0-9]+).*/\1/' )
     adb_args=$( cat android-serial.txt | grep $ANDROID_SERIAL | cut -d' ' -f2- )
-    install_pkg -r -g $adb_args $apk ||
+
+    # adb install
+    #   -l: forward lock application
+    #   -r: replace existing application
+    #   -t: allow test packages
+    #   -s: install application on sdcard
+    #   -d: allow version code downgrade
+    #   -g: grant all runtime permissions
+    install_pkg -r -d -g $adb_args $apk ||
     (
       echo " and reinstalling on $serial"
       uninstall_pkg $pkg \
