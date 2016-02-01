@@ -13,6 +13,8 @@ public class ButlerFirebase : BaseButler
 	IFirebase lobby;
 	IFirebase players;
 	IFirebase game;
+	IFirebase ourInvites;
+	IFirebase opponentMovesRef;
 
 	List<string> playersInLobby;
 	List<string> incomingInvites;
@@ -32,6 +34,8 @@ public class ButlerFirebase : BaseButler
 	
 			lobby = firebase.Child ("Lobby");
 			players = firebase.Child ("Players");
+
+			ourInvites = lobby.Child (uniqueId).Child ("Invites");
 	
 			initialized = true;
 		}
@@ -60,11 +64,17 @@ public class ButlerFirebase : BaseButler
 		lobby.ChildAdded -= LobbyChildAdded;
 
 		Debug.Log (lobby.Key + "/" + uniqueId + "/Invites.ChildAdded -= InviteReceived");
-		lobby.Child (uniqueId).Child ("Invites").ChildAdded -= InviteReceived;
+//		lobby.Child (uniqueId).Child ("Invites").ChildAdded -= InviteReceived;
+		ourInvites.ChildAdded -= InviteReceived;
+
+
+		if (opponentMovesRef != null) {
+			Debug.Log (players.Key + "/" + opponentId + ".ChildAdded -= OpponentMoved");
+//			players.Child (opponentId).ChildAdded -= OpponentMoved;
+			opponentMovesRef.ChildAdded -= OpponentMoved;
+		}
 
 		if (opponentId != null) {
-			Debug.Log (players.Key + "/" + opponentId + ".ChildAdded -= OpponentMoved");
-			players.Child (opponentId).ChildAdded -= OpponentMoved;
 			opponentId = null;
 		}
 
@@ -164,7 +174,9 @@ public class ButlerFirebase : BaseButler
 		SetGameState (GameState.SELECTING_VIEW_MODE);
 
 		Debug.Log (players.Key + "/" + opponentId + ".ChildAdded += OpponentMoved");
-		players.Child (opponentId).ChildAdded += OpponentMoved;
+//		players.Child (opponentId).ChildAdded += OpponentMoved;
+		opponentMovesRef = players.Child (opponentId);
+		opponentMovesRef.ChildAdded += OpponentMoved;
 
 		while (true) {
 			if (opponentMoves.Count > 0) {
@@ -282,10 +294,9 @@ public class ButlerFirebase : BaseButler
 			lobby.Child (uniqueId).Child ("GameState").SetValue (gameState.ToString ());
 
 			Debug.Log (lobby.Key + "/" + uniqueId + "/Invites.ChildAdded += InviteReceived");
-			lobby.Child (uniqueId).Child ("Invites").ChildAdded += InviteReceived;
-			lobby.Child (uniqueId).Child ("Invites").Error += (object sender, ErrorEventArgs e) => {
-				Debug.Log ("Invites Error: " + e.Error);
-			};
+//			lobby.Child (uniqueId).Child ("Invites").ChildAdded += InviteReceived;
+			ourInvites.ChildAdded += InviteReceived;
+
 			break;
 		case GameState.TEARING_DOWN_GAME:
 		case GameState.AUTHENTICATING:
