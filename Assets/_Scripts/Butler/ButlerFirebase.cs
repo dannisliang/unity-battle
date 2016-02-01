@@ -30,7 +30,7 @@ public class ButlerFirebase : BaseButler
 			uniqueId = SystemInfo.deviceUniqueIdentifier;
 	
 			firebase = Firebase.CreateNew (FIREBASE_URL);
-			firebase.Error += OnError;
+			firebase.Error += OnError; // note: handler is never unregistered
 	
 			lobby = firebase.Child ("Lobby");
 			players = firebase.Child ("Players");
@@ -64,13 +64,11 @@ public class ButlerFirebase : BaseButler
 		lobby.ChildAdded -= LobbyChildAdded;
 
 		Debug.Log (lobby.Key + "/" + uniqueId + "/Invites.ChildAdded -= InviteReceived");
-//		lobby.Child (uniqueId).Child ("Invites").ChildAdded -= InviteReceived;
 		ourInvites.ChildAdded -= InviteReceived;
 
 
 		if (opponentMovesRef != null) {
 			Debug.Log (players.Key + "/" + opponentId + ".ChildAdded -= OpponentMoved");
-//			players.Child (opponentId).ChildAdded -= OpponentMoved;
 			opponentMovesRef.ChildAdded -= OpponentMoved;
 		}
 
@@ -134,7 +132,7 @@ public class ButlerFirebase : BaseButler
 	IEnumerator ConnectWithOpponent ()
 	{
 		while (opponentId == null) {
-			yield return new WaitForSeconds (.5f);
+			yield return new WaitForEndOfFrame ();
 			if (incomingInvites.Count > 0) {
 				string id = incomingInvites [0];
 				incomingInvites.Remove (id);
@@ -159,7 +157,7 @@ public class ButlerFirebase : BaseButler
 						opponentId = id;
 					}
 //					Debug.Log ("(Still) waiting for incomingInvites to contain " + id);
-					yield return new WaitForSeconds (1f);
+					yield return new WaitForEndOfFrame ();
 				}
 				if (opponentId == null) {
 					Debug.Log ("Recinding invite to " + id);
@@ -174,9 +172,9 @@ public class ButlerFirebase : BaseButler
 		SetGameState (GameState.SELECTING_VIEW_MODE);
 
 		Debug.Log (players.Key + "/" + opponentId + ".ChildAdded += OpponentMoved");
-//		players.Child (opponentId).ChildAdded += OpponentMoved;
 		opponentMovesRef = players.Child (opponentId);
 		opponentMovesRef.ChildAdded += OpponentMoved;
+
 
 		while (true) {
 			if (opponentMoves.Count > 0) {
@@ -294,7 +292,6 @@ public class ButlerFirebase : BaseButler
 			lobby.Child (uniqueId).Child ("GameState").SetValue (gameState.ToString ());
 
 			Debug.Log (lobby.Key + "/" + uniqueId + "/Invites.ChildAdded += InviteReceived");
-//			lobby.Child (uniqueId).Child ("Invites").ChildAdded += InviteReceived;
 			ourInvites.ChildAdded += InviteReceived;
 
 			break;
