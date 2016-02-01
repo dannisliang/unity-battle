@@ -80,14 +80,16 @@ do
     )
     echo
     echo "$ANDROID_SERIAL Launching $pkg/$activity"
-    adb shell am start $adb_args -n $pkg/$activity | grep -v 'Starting: Intent'
+    adb shell am start $adb_args -n $pkg/$activity | ( grep -v 'Starting: Intent' || true )
   ) &
-  pids="$pids $!"
+  pid=$!
+  echo "$ANDROID_SERIAL PID $pid"
+  pids="$pids $pid"
 done
 
 for pid in $pids
 do
-  wait $pid || true
+  wait $pid || echo "ERROR PID $pid failed!"
 done
 
 echo ""
