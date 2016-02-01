@@ -5,7 +5,7 @@ using System;
 #if UNITY_ANDROID
 internal class QueryAndroidImpl : IQuery {
 	AndroidJavaObject queryRef;
-	EventHandler<ChangedEventArgs> valueUpdatedEvent, childAddedEvent, 
+	EventHandler<ChangedEventArgs> valueUpdatedEvent, childAddedEvent,
 									childRemovedEvent, childChangedEvent, childMovedEvent;
 	ValueEventListener valueupdateListener;
 	ChildEventListener childListener;
@@ -15,7 +15,7 @@ internal class QueryAndroidImpl : IQuery {
 	protected QueryAndroidImpl(AndroidJavaObject nativeReference) {
 		queryRef = nativeReference;
 	}
-	
+
 	protected AndroidJavaObject GetJavaObject() {
 		return queryRef;
 	}
@@ -38,41 +38,41 @@ internal class QueryAndroidImpl : IQuery {
 	public event EventHandler<ChangedEventArgs> ValueUpdated {
 		add {
 			valueUpdatedEvent += value;
-			
+
 			if (valueupdateListener == null) {
 				valueupdateListener = new ValueEventListener(this);
 				GetJavaObject().Call<AndroidJavaObject>("addValueEventListener", valueupdateListener);
 			}
-			
+
 		}
 		remove {
 			valueUpdatedEvent -= value;
-			
+
 			if (valueUpdatedEvent == null) {
-				
-				GetJavaObject().Call<AndroidJavaObject>("removeEventListener", valueupdateListener);
+
+				GetJavaObject().Call("removeEventListener", valueupdateListener);
 				valueupdateListener = null;
 			}
-			
+
 		}
 	}
 
 	public event EventHandler<ChangedEventArgs> ChildAdded {
 		add {
 			childAddedEvent += value;
-			
+
 			if (childListener == null) {
 				childListener = new ChildEventListener(this);
 				GetJavaObject().Call<AndroidJavaObject>("addChildEventListener", childListener);
 			}
-			
+
 		}
 		remove {
 			childAddedEvent -= value;
-			
+
 			if (childAddedEvent == null && childRemovedEvent == null
 			    && childChangedEvent == null && childMovedEvent == null) {
-				GetJavaObject().Call<AndroidJavaObject>("removeEventListener", childListener);
+				GetJavaObject().Call("removeEventListener", childListener);
 				childListener = null;
 			}
 		}
@@ -81,19 +81,19 @@ internal class QueryAndroidImpl : IQuery {
 	public event EventHandler<ChangedEventArgs> ChildRemoved {
 		add {
 			childRemovedEvent += value;
-			
+
 			if (childListener == null) {
 				childListener = new ChildEventListener(this);
 				GetJavaObject().Call<AndroidJavaObject>("addChildEventListener", childListener);
 			}
-			
+
 		}
 		remove {
 			childRemovedEvent -= value;
-			
+
 			if (childAddedEvent == null && childRemovedEvent == null
 			    && childChangedEvent == null && childMovedEvent == null) {
-				GetJavaObject().Call<AndroidJavaObject>("removeEventListener", childListener);
+				GetJavaObject().Call("removeEventListener", childListener);
 				childListener = null;
 			}
 		}
@@ -102,19 +102,19 @@ internal class QueryAndroidImpl : IQuery {
 	public event EventHandler<ChangedEventArgs> ChildChanged {
 		add {
 			childChangedEvent += value;
-			
+
 			if (childListener == null) {
 				childListener = new ChildEventListener(this);
 				GetJavaObject().Call<AndroidJavaObject>("addChildEventListener", childListener);
 			}
-			
+
 		}
 		remove {
 			childChangedEvent -= value;
-			
+
 			if (childAddedEvent == null && childRemovedEvent == null
 			    && childChangedEvent == null && childMovedEvent == null) {
-				GetJavaObject().Call<AndroidJavaObject>("removeEventListener", childListener);
+				GetJavaObject().Call("removeEventListener", childListener);
 				childListener = null;
 			}
 		}
@@ -123,26 +123,26 @@ internal class QueryAndroidImpl : IQuery {
 	public event EventHandler<ChangedEventArgs> ChildMoved {
 		add {
 			childMovedEvent += value;
-			
+
 			if (childListener == null) {
 				childListener = new ChildEventListener(this);
 				GetJavaObject().Call<AndroidJavaObject>("addChildEventListener", childListener);
 			}
-			
+
 		}
 		remove {
 			childMovedEvent -= value;
-			
+
 			if (childAddedEvent == null && childRemovedEvent == null
 			    && childChangedEvent == null && childMovedEvent == null) {
-				GetJavaObject().Call<AndroidJavaObject>("removeEventListener", childListener);
+				GetJavaObject().Call("removeEventListener", childListener);
 				childListener = null;
 			}
 		}
 	}
 
 	public event EventHandler<ErrorEventArgs> Error;
-	
+
 	void OnValueUpdated(DataSnapshotAndroidImpl snapshot) {
 		EventHandler<ChangedEventArgs> handler = valueUpdatedEvent;
 		if (handler != null)
@@ -182,34 +182,34 @@ internal class QueryAndroidImpl : IQuery {
 			handler(this, new ChangedEventArgs() { DataSnapshot = snapshot });
 		}
 	}
-	
+
 	class ValueEventListener : AndroidJavaProxy {
 		QueryAndroidImpl parent;
-		
+
 		public ValueEventListener(QueryAndroidImpl parent)
 			:base("com.firebase.client.ValueEventListener")
 		{
 			this.parent = parent;
 		}
-		
+
 		void onDataChange(AndroidJavaObject dataSnapshot) {
 			parent.OnValueUpdated (new DataSnapshotAndroidImpl (dataSnapshot));
 		}
-		
+
 		void onCancelled(AndroidJavaObject error) {
 			FirebaseErrorAndroidImpl errorImpl = new FirebaseErrorAndroidImpl (error);
 			EventHandler<ErrorEventArgs> handler = parent.Error;
 			if (handler != null) {
-				handler(this, new ErrorEventArgs() { 
+				handler(this, new ErrorEventArgs() {
 					Error = new FirebaseError(errorImpl.Code, errorImpl.Message,  errorImpl.Details)
 				});
-			}		
+			}
 		}
 	}
 
 	class ChildEventListener : AndroidJavaProxy {
 		QueryAndroidImpl parent;
-		
+
 		public ChildEventListener(QueryAndroidImpl parent)
 			:base("com.firebase.client.ChildEventListener")
 		{
@@ -237,12 +237,21 @@ internal class QueryAndroidImpl : IQuery {
 			parent.OnChildChanged (new DataSnapshotAndroidImpl (snapshot));
 		}
 
+		void onChildChanged(AndroidJavaObject snapshot, AndroidJavaObject previousChildName) {
+			parent.OnChildChanged (new DataSnapshotAndroidImpl (snapshot));
+		}
+
 		void onChildMoved(AndroidJavaObject snapshot, string previousChildName) {
 			parent.OnChildMoved (new DataSnapshotAndroidImpl (snapshot));
 		}
 
 		void onChildRemoved(AndroidJavaObject snapshot) {
 			parent.OnChildRemoved (new DataSnapshotAndroidImpl (snapshot));
+		}
+
+		bool equals (AndroidJavaObject other)
+		{
+			return other.Equals (this);
 		}
 	}
 }
