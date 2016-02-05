@@ -22,9 +22,9 @@
             android:value="\ 406476638518" />
         <meta-data android:name="com.google.android.gms.appstate.APP_ID"
             android:value="\ 406476638518" />
-        <meta-data android:name="com.google.android.gms.version"
+<!--         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
+ -->
         <activity android:name="com.google.games.bridge.NativeBridgeActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
     </application>
