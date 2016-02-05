@@ -182,14 +182,10 @@ public class GameStateHintController : MonoBehaviour
 			color = defaultBackgroundColor;
 			switch (strikeData.result) {
 			case StrikeResult.MISS:
-				return strikeData.whose == Whose.Theirs ? "You missed." : "Your opponent missed.";
 			case StrikeResult.IGNORED_ALREADY_MISSED:
 			case StrikeResult.IGNORED_ALREADY_HIT:
-				break;
 			case StrikeResult.HIT_NOT_SUNK:
-				return strikeData.whose == Whose.Theirs ?
-					"You hit one of your opponent's ships.\nMore hits are needed to sink it."
-					: "Your opponent hit\none of your ships.";
+				break;
 			case StrikeResult.HIT_AND_SUNK:
 				return (strikeData.whose == Whose.Theirs ?
 					"You sunk your opponent's\n"
