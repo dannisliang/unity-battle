@@ -176,7 +176,7 @@ public class ButlerFirebase : BaseButler
 		opponentMovesRef.ChildAdded += OpponentMoved;
 
 
-		while (true) {
+		while (opponentId != null) {
 			if (opponentMoves.Count > 0) {
 				string encoded = opponentMoves.Dequeue ();
 				byte[] data = Convert.FromBase64String (encoded);
