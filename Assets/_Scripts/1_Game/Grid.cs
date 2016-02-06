@@ -20,9 +20,9 @@ public class Grid
 		new BoatConfiguration (5, "Aircraft Carrier"),
 		new BoatConfiguration (4, "Amphibious Assault"),
 		new BoatConfiguration (3, "Cruiser"),
-		new BoatConfiguration (2, "Littoral Combat"),
+		new BoatConfiguration (3, "Littoral Combat"),
 		new BoatConfiguration (2, "Destroyer"),
-		new BoatConfiguration (1, "Submarine"),
+		new BoatConfiguration (2, "Submarine"),
 	};
 
 	public Boat[] boats;
