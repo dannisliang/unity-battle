@@ -8,8 +8,6 @@ using System;
 public class CardboardAssistantController : MonoBehaviour
 {
 	public Camera gameCamera;
-	public Vector3 vrCameraPosition;
-	public Vector3 magicWindowCameraPosition;
 
 	GameState gameState;
 	bool gameVrMode;
@@ -68,7 +66,6 @@ public class CardboardAssistantController : MonoBehaviour
 	void CheckVrMode ()
 	{
 		bool vrMode = gameState == GameState.PLAYING ? gameVrMode : false;
-		gameCamera.transform.position = vrMode ? vrCameraPosition : magicWindowCameraPosition;
 		if (Cardboard.SDK.VRModeEnabled != vrMode) {
 			Cardboard.SDK.VRModeEnabled = vrMode;
 		}
