@@ -10,7 +10,7 @@ public class BattleController : MonoBehaviour
 {
 	public static BattleController instance { get; private set; }
 
-	public static LayerInfo layerTileTheirs;
+	public static LayerInfo layerGridTheirs;
 
 	public GameObject rocketOursPrefab;
 	public GameObject rocketTheirsPrefab;
@@ -77,7 +77,7 @@ public class BattleController : MonoBehaviour
 			return;
 		}
 		instance = this;
-		layerTileTheirs = new LayerInfo ("Tile Theirs");
+		layerGridTheirs = new LayerInfo ("Grid Theirs");
 		source = GetComponent<CardboardAudioSource> ();
 		targetReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
 		aimReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);

@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - Tile Ours
-  - Tile Theirs
+  - Grid Ours
+  - Grid Theirs
   - Boat Sunk
   - Boat Normal
   - Rocket
