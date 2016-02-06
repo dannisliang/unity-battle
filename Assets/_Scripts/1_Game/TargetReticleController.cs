@@ -9,9 +9,6 @@ public class TargetReticleController : MonoBehaviour
 
 	void Update ()
 	{
-		if (targetPos == null) {
-			return;
-		}
 		transform.localPosition = Vector3.Lerp (transform.localPosition, targetPos, Time.deltaTime * velocity);
 	}
 
