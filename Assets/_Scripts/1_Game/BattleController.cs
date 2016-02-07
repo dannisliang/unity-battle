@@ -36,7 +36,10 @@ public class BattleController : MonoBehaviour
 		}
 		set {
 			_firing = value;
-			SetRocketCount ();
+			if (firing > 0) {
+				aimReticleAtTheirs.SetActive (false);
+			}
+			AnnounceGameState ();
 		}
 	}
 
@@ -68,8 +71,8 @@ public class BattleController : MonoBehaviour
 	public event ReticleAim OnReticleAim;
 
 	CardboardAudioSource source;
-	GameObject aimReticleOurs;
-	GameObject aimReticleTheirs;
+	GameObject aimReticleAtOurs;
+	GameObject aimReticleAtTheirs;
 	GameObject targetReticleOurs;
 
 	void Awake ()
@@ -81,9 +84,15 @@ public class BattleController : MonoBehaviour
 		instance = this;
 		layerGridTheirs = new LayerInfo ("Grid Theirs");
 		source = GetComponent<CardboardAudioSource> ();
+
 		targetReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
-		aimReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
-		aimReticleTheirs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
+		targetReticleOurs.name += " targetReticleOurs";
+
+		aimReticleAtOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
+		aimReticleAtOurs.name += " aimReticleAtOurs";
+
+		aimReticleAtTheirs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
+		aimReticleAtTheirs.name += " aimReticleAtTheirs";
 	}
 
 	void OnEnable ()
@@ -131,10 +140,16 @@ public class BattleController : MonoBehaviour
 		if (loser != null) {
 			return;
 		}
+		if (firing > 0) {
+			return;
+		}
+		if (whoseTurn != Whose.Ours) {
+			return;
+		}
+		PlaceMarker (whose, position, Marker.Aim);
 		if (OnReticleAim != null) {
 			OnReticleAim (whose, position);
 		}
-		PlaceMarker (whose, position, Marker.Aim);
 	}
 
 	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
@@ -275,7 +290,7 @@ public class BattleController : MonoBehaviour
 			go = targetReticleOurs;
 			break;
 		case Marker.Aim:
-			go = whose == Whose.Theirs ? aimReticleTheirs : aimReticleOurs;
+			go = whose == Whose.Theirs ? aimReticleAtTheirs : aimReticleAtOurs;
 			break;
 		case Marker.Hit:
 			go = Game.instance.InstantiateTemp (markerHitPrefab);
@@ -293,14 +308,6 @@ public class BattleController : MonoBehaviour
 		} else {
 			go.transform.localPosition = position.AsGridLocalPosition (marker);
 		}
-	}
-
-	void SetRocketCount ()
-	{
-		if (firing > 0) {
-			aimReticleTheirs.SetActive (false);
-		}
-		AnnounceGameState ();
 	}
 
 }
