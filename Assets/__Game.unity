@@ -2738,7 +2738,7 @@ GameObject:
   - 222: {fileID: 468269942}
   - 114: {fileID: 468269941}
   m_Layer: 5
-  m_Name: Stereoscopic Phone Mono Image
+  m_Name: Monoscopic Phone Mono Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3183,6 +3183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vrMode: 1
+  keyCode: 0
 --- !u!222 &494051374
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3495,7 +3496,7 @@ GameObject:
   - 222: {fileID: 532300731}
   - 114: {fileID: 532300730}
   m_Layer: 5
-  m_Name: Monoscopie Nexus5 Cardboard Stereo Mask
+  m_Name: Stereoscopic Nexus5 Cardboard Stereo Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5943,6 +5944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vrMode: 1
+  keyCode: 0
 --- !u!114 &894629878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6023,6 +6025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vrMode: 0
+  keyCode: 49
 --- !u!222 &900228668
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7053,6 +7056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vrMode: 1
+  keyCode: 50
 --- !u!222 &1049539532
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10021,6 +10025,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 1464738054}
   - 222: {fileID: 1464738058}
+  - 114: {fileID: 1464738055}
   m_Layer: 5
   m_Name: Monoscopic Panel
   m_TagString: Untagged
@@ -10047,6 +10052,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1464738055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1464738053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec76912dc18a040e19974d27041e6af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vrMode: 0
+  keyCode: 0
 --- !u!222 &1464738058
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12981,6 +12999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vrMode: 0
+  keyCode: 0
 --- !u!114 &1843392803
 MonoBehaviour:
   m_ObjectHideFlags: 0
