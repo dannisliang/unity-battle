@@ -181,7 +181,7 @@ public class BattleController : MonoBehaviour
 		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
 		PosRot start = new PosRot (FirePos (originTransform), originTransform.rotation);
 
-		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirs : gridOurs).transform;
+		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirs : gridOurs).transform.parent;
 		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localPos);
 		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
