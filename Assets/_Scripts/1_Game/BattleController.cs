@@ -24,6 +24,7 @@ public class BattleController : MonoBehaviour
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip noFireClip;
+	public MissleWarningController missleWarning;
 
 	bool playing;
 	int _firing;
@@ -202,6 +203,9 @@ public class BattleController : MonoBehaviour
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
 
 		rocket.GetComponent<RocketController> ().Launch (atWhose, targetPosition, start, end, callback);
+		if (atWhose == Whose.Ours) {
+			missleWarning.IssueWarning (.5f, 2f);
+		}
 	}
 
 	Vector3 FirePos (Transform originTransform)
@@ -211,7 +215,9 @@ public class BattleController : MonoBehaviour
 
 	public void AimAt (Position position)
 	{
-		PlaceMarker (Whose.Ours, position, Marker.Aim);
+		if (whoseTurn == Whose.Ours && firing == 0) {
+			PlaceMarker (Whose.Ours, position, Marker.Aim);
+		}
 	}
 
 	public void TargetAt (Position position)
