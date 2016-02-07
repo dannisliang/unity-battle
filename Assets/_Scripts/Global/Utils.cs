@@ -8,12 +8,13 @@ using UnityEditor;
 
 public class Utils : MonoBehaviour
 {
+	public static Position GRID_SIZE = new Position (12, 10);
+
 	public const float RESTART_DELAY = 10f;
 	public const float DUMMY_PLAY_GAMES_REAL_TIME_ASYNC_DELAY = .1f;
 	public const float DUMMY_PLAY_GAMES_REAL_TIME_REPLAY_DELAY = .1f;
 	public const float AI_DELAY = 5f;
 
-	public const int GRID_SIZE = 10;
 	public const float BOAT_HEIGHT = .01f;
 	public const float CLEARANCE_HEIGHT = .001f;
 

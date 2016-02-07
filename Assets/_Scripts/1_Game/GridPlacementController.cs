@@ -27,11 +27,11 @@ public class GridPlacementController : MonoBehaviour
 	{
 		Vector3 pos = new Vector3 (0f, 0f, .5f * tileColliderHeight);
 		Vector3 scale = new Vector3 (1f, 1f, tileColliderHeight);
-		for (int x = 0; x < Utils.GRID_SIZE; x++) {
-			for (int z = 0; z < Utils.GRID_SIZE; z++) {
+		for (int x = 0; x < Utils.GRID_SIZE.x; x++) {
+			for (int z = 0; z < Utils.GRID_SIZE.y; z++) {
 				Position position = new Position (x, z);
 				pos.x = x + .5f;
-				pos.y = Utils.GRID_SIZE - z - .5f;
+				pos.y = Utils.GRID_SIZE.y - z - .5f;
 
 				GameObject clone = Game.instance.InstantiateTemp (tilePrefab);
 				clone.transform.SetParent (transform, false);

@@ -24,8 +24,8 @@ public class GameAi : MonoBehaviour
 	{
 		lock (_lock) {
 			_emptyPositions = new List<Position> ();
-			for (int i = 0; i < Utils.GRID_SIZE; i++) {
-				for (int j = 0; j < Utils.GRID_SIZE; j++) {
+			for (int i = 0; i < Utils.GRID_SIZE.x; i++) {
+				for (int j = 0; j < Utils.GRID_SIZE.y; j++) {
 					_emptyPositions.Add (new Position (i, j));
 				}
 			}
@@ -144,6 +144,9 @@ public class GameAi : MonoBehaviour
 	public Position AimRandom ()
 	{
 		lock (_lock) {
+			if (_emptyPositions.Count == 0) {
+				return new Position (0, 0);
+			}
 			var index = Random.Range (0, _emptyPositions.Count - 1);
 			Position pos = _emptyPositions [index];
 			return pos;

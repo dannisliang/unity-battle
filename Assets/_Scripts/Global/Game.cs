@@ -193,6 +193,10 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	#if UNITY_EDITOR
 	void Update ()
 	{
+		if (Input.GetKeyDown (KeyCode.Alpha0)) {
+			Time.timeScale = Time.timeScale > 5f ? 1f : 10f;
+			Debug.Log ("Time.timeScale -> " + Time.timeScale);
+		}
 		if (Input.GetKeyDown (KeyCode.S) && Input.GetKey (KeyCode.RightShift)) {
 			int scale = 2;
 			string filename = PlayerSettings.bundleIdentifier + "-" + (Screen.width * scale) + "x" + (Screen.height * scale) + "-" + DateTime.Now.ToString ("yyyy-MM-dd-HH-mm-ss") + ".png";

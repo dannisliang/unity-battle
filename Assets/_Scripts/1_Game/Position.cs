@@ -21,7 +21,7 @@ public class Position
 
 	public Position Below (int count)
 	{
-		return y > Utils.GRID_SIZE - count - 1 ? null : new Position (x, y + count);
+		return y > Utils.GRID_SIZE.y - count - 1 ? null : new Position (x, y + count);
 	}
 
 	public Position Left (int count)
@@ -31,12 +31,12 @@ public class Position
 
 	public Position Right (int count)
 	{
-		return x > Utils.GRID_SIZE - count - 1 ? null : new Position (x + count, y);
+		return x > Utils.GRID_SIZE.x - count - 1 ? null : new Position (x + count, y);
 	}
 
 	public Vector3 AsGridLocalPosition (Marker marker)
 	{
-		return new Vector3 (x, Utils.GRID_SIZE - 1f - y, GetZ (marker));
+		return new Vector3 (x, Utils.GRID_SIZE.y - 1f - y, GetZ (marker));
 	}
 
 	float GetZ (Marker marker)

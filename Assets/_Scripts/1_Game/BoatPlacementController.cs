@@ -14,6 +14,8 @@ public class BoatPlacementController : MonoBehaviour
 
 	public Grid grid { get; private set; }
 
+	BoatController boatController;
+
 	void Awake ()
 	{
 		grid = new Grid ();

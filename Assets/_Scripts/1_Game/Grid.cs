@@ -32,8 +32,8 @@ public class Grid
 	public int getMisses ()
 	{
 		int m = 0;
-		for (int i = 0; i < Utils.GRID_SIZE; i++) {
-			for (int j = 0; j < Utils.GRID_SIZE; j++) {
+		for (int i = 0; i < Utils.GRID_SIZE.x; i++) {
+			for (int j = 0; j < Utils.GRID_SIZE.y; j++) {
 				if (misses [i, j] > 0) {
 					m++;
 				}
@@ -46,7 +46,7 @@ public class Grid
 	{
 		this.whose = whose;
 //		Debug.Log ("Grid(" + whose + ") misses = new int[" + Utils.GRID_SIZE + "," + Utils.GRID_SIZE + "]");
-		misses = new int[Utils.GRID_SIZE, Utils.GRID_SIZE];
+		misses = new int[Utils.GRID_SIZE.x, Utils.GRID_SIZE.y];
 		if (boats == null) {
 			MakeRandomizedBoats (whose);
 		} else {

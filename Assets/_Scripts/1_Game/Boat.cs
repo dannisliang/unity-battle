@@ -17,9 +17,9 @@ public class Boat
 	public Boat (Whose whose, BoatConfiguration config)
 	{
 		this.config = config;
-		horizontal = Random.value > .5f;
-		int u = Random.Range (0, Utils.GRID_SIZE - config.size + 1);
-		int v = Random.Range (0, Utils.GRID_SIZE);
+		horizontal = config.size > Utils.GRID_SIZE.y || Random.value > .5f;
+		int u = Random.Range (0, (horizontal ? Utils.GRID_SIZE.x : Utils.GRID_SIZE.y) - config.size + 1);
+		int v = Random.Range (0, horizontal ? Utils.GRID_SIZE.y : Utils.GRID_SIZE.x);
 
 		positions = MakeBoatPositions (u, v, config.size, horizontal);
 		hits = new int[config.size];
