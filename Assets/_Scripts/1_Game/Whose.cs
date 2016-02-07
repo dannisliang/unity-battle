@@ -1,6 +1,7 @@
 ﻿public enum Whose
 {
-	Ours,
-	Theirs,
+	Nobody = 0,
+	Ours = 1,
+	Theirs = 2,
 }
 

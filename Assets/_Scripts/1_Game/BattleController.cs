@@ -12,6 +12,7 @@ public class BattleController : MonoBehaviour
 
 	public static LayerInfo layerGridTheirs;
 
+	public Animator whoseTurnAnimator;
 	public GameObject rocketOursPrefab;
 	public GameObject rocketTheirsPrefab;
 	public GameObject markerTargetReticleOursAtTheirsPrefab;
@@ -27,6 +28,7 @@ public class BattleController : MonoBehaviour
 	bool playing;
 	int _firing;
 	Whose? loser;
+	Whose whoseTurn = Whose.Ours;
 
 	int firing {
 		get {
@@ -95,6 +97,7 @@ public class BattleController : MonoBehaviour
 		TargetAt (null); // reticle starts disabled
 		boatsOursPlacementController.RecreateBoats ();
 		SendOurBoatPositions ();
+		StartCoroutine (SetTurn (Whose.Ours));
 	}
 
 	void SendOurBoatPositions ()
@@ -164,6 +167,9 @@ public class BattleController : MonoBehaviour
 		if (firing > 0) { // && !Application.isEditor) {
 			return false;
 		}
+		if (whoseTurn != Whose.Ours) {
+			return false;
+		}
 		return true;
 	}
 
@@ -198,9 +204,17 @@ public class BattleController : MonoBehaviour
 		PlaceMarker (Whose.Theirs, position, Marker.Target);
 	}
 
+	IEnumerator SetTurn (Whose whose)
+	{
+		whoseTurn = whose;
+		yield return new WaitForSeconds (1.5f);
+		whoseTurnAnimator.SetInteger ("WhoseTurnInt", (int)whose);
+	}
+
 	public StrikeResult Strike (Whose whose, Position position)
 	{
 		StrikeResult result = _Strike (whose, position);
+		StartCoroutine (SetTurn (whose));
 		CheckAllBoatsSunk (whose);
 		return result;
 	}
