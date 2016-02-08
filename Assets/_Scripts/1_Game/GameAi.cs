@@ -11,13 +11,13 @@ public class GameAi : MonoBehaviour
 
 	void OnEnable ()
 	{
-		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred += NoteStrikeResult;
+		BattleController.instance.OnStrikeOccurred += NoteStrikeResult;
 		Init ();
 	}
 
 	void OnDisable ()
 	{
-		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= NoteStrikeResult;
+		BattleController.instance.OnStrikeOccurred -= NoteStrikeResult;
 	}
 
 	void Init ()

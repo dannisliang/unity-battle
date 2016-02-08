@@ -2,43 +2,28 @@
 using UnityEngine.UI;
 using System.Collections;
 
-[RequireComponent (typeof(Text))]
 public class StatsTextController : MonoBehaviour
 {
 	public BoatPlacementController boatPlacementController;
 
-	Text text;
-
-	void Awake ()
-	{
-		text = GetComponent<Text> ();
-	}
+	public Text text;
 
 	void Start ()
 	{
-		GetComponent<Text> ().text = GetText (boatPlacementController.grid);
-	}
-
-	void OnEnable ()
-	{
-		boatPlacementController.grid.OnStrikeOccurred += UpdateText;
-		boatPlacementController.grid.OnGridSetup += _UpdateText;
+		BattleController.instance.OnBattleState += UpdateSelf;
 	}
 
 	void OnDisable ()
 	{
-		boatPlacementController.grid.OnStrikeOccurred -= UpdateText;
-		boatPlacementController.grid.OnGridSetup -= _UpdateText;
+		BattleController.instance.OnBattleState -= UpdateSelf;
 	}
 
-	void UpdateText (Whose whose, Boat boat, Position position, StrikeResult result)
+	void UpdateSelf (bool playing, bool firing, Whose? loser)
 	{
-		_UpdateText ();
-	}
-
-	void _UpdateText ()
-	{
-		text.text = GetText (boatPlacementController.grid);
+		text.enabled = playing;
+		if (playing) {
+			text.text = GetText (boatPlacementController.grid);
+		}
 	}
 
 	string GetText (Grid grid)

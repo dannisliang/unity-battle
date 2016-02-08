@@ -2,43 +2,28 @@
 using UnityEngine.UI;
 using System.Collections;
 
-[RequireComponent (typeof(Text))]
 public class FleetTextController : MonoBehaviour
 {
 	public BoatPlacementController boatPlacementController;
 
-	Text text;
-
-	void Awake ()
-	{
-		text = GetComponent<Text> ();
-	}
+	public Text text;
 
 	void Start ()
 	{
-		GetComponent<Text> ().text = GetText (boatPlacementController.grid);
-	}
-
-	void OnEnable ()
-	{
-		boatPlacementController.grid.OnStrikeOccurred += UpdateText;
-		boatPlacementController.grid.OnGridSetup += _UpdateText;
+		BattleController.instance.OnBattleState += UpdateSelf;
 	}
 
 	void OnDisable ()
 	{
-		boatPlacementController.grid.OnStrikeOccurred -= UpdateText;
-		boatPlacementController.grid.OnGridSetup -= _UpdateText;
+		BattleController.instance.OnBattleState -= UpdateSelf;
 	}
 
-	void UpdateText (Whose whose, Boat boat, Position position, StrikeResult result)
+	void UpdateSelf (bool playing, bool firing, Whose? loser)
 	{
-		_UpdateText ();
-	}
-
-	void _UpdateText ()
-	{
-		text.text = GetText (boatPlacementController.grid);
+		text.enabled = playing;
+		if (playing) {
+			text.text = GetText (boatPlacementController.grid);
+		}
 	}
 
 	string GetText (Grid grid)
@@ -48,7 +33,12 @@ public class FleetTextController : MonoBehaviour
 		if (boats != null) {
 			for (int i = 0; i < boats.Length; i++) {
 				BoatConfiguration config = boats [i].config;
-				t += config.designation + "\n<size=32>" + new string (boats [i].IsSunk () ? '▩' : '▢', boats [i].Size ()) + "</size>";
+				string color = boats [i].IsSunk () ? "#000" : "#999";
+				t += config.designation + "\n<size=32><color=" + color + ">";
+				for (int j = 0; j < boats [i].Size (); j++) {
+					t += "▆ ";
+				}
+				t += "</color></size>";
 				if (boats [i].IsSunk ()) {
 					t += " <color='#f00'>(SUNK)</color>";
 				}

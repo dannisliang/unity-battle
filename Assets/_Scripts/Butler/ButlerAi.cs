@@ -83,7 +83,7 @@ public class ButlerAi : BaseButler
 				return;
 			}
 			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
-		}, fast ? 1f : Utils.AI_DELAY));
+		}, fast ? 2f : Utils.AI_DELAY));
 	}
 
 	IEnumerator Do (Action action, float delay)
@@ -114,7 +114,7 @@ public class ButlerAi : BaseButler
 
 	byte[] MakeAiGridMessage ()
 	{
-		var grid = new Grid ();
+		var grid = new Grid (typeof(ButlerAi).Name);
 		grid.SetBoats (Whose.Ours, null);
 		return Protocol.Encode (Protocol.MessageType.GRID_POSITIONS, grid, true);
 	}

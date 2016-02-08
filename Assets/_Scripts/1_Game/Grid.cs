@@ -7,10 +7,6 @@ public class Grid
 {
 	[System.NonSerialized] public Whose whose;
 
-	public delegate void StrikeOccurred (Whose whose, Boat boat, Position position, StrikeResult result);
-
-	[field:System.NonSerialized] public event StrikeOccurred OnStrikeOccurred;
-
 	public delegate void GridSetup ();
 
 	[field:System.NonSerialized] public event GridSetup OnGridSetup;
@@ -28,6 +24,13 @@ public class Grid
 	public Boat[] boats;
 
 	[System.NonSerialized] int[,] misses;
+
+	public string playerUniqueId { get; private set; }
+
+	public Grid (string playerUniqueId)
+	{
+		this.playerUniqueId = playerUniqueId;
+	}
 
 	public int getMisses ()
 	{
@@ -119,9 +122,6 @@ public class Grid
 			} else {
 				Assert.IsTrue (result == StrikeResult.HIT_AND_SUNK || result == StrikeResult.HIT_NOT_SUNK);
 				boat = boats [i];
-				if (!testOnly && OnStrikeOccurred != null) {
-					OnStrikeOccurred (whose, boats [i], position, result);
-				}
 				return result;
 			}
 		}
@@ -133,9 +133,6 @@ public class Grid
 			misses [position.x, position.y]++;
 		}
 		boat = null;
-		if (!testOnly && OnStrikeOccurred != null) {
-			OnStrikeOccurred (whose, boat, position, StrikeResult.MISS);
-		}
 		return StrikeResult.MISS;
 	}
 

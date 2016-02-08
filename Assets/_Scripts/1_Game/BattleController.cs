@@ -66,10 +66,15 @@ public class BattleController : MonoBehaviour
 
 	public delegate void ReticleIdentify (Boat boat);
 
+	public event ReticleIdentify OnReticleIdentify;
+
 	public delegate void ReticleAim (Whose whose, Position position);
 
-	public event ReticleIdentify OnReticleIdentify;
 	public event ReticleAim OnReticleAim;
+
+	public delegate void StrikeOccurred (Whose whose, Boat boat, Position position, StrikeResult result);
+
+	public event StrikeOccurred OnStrikeOccurred;
 
 	CardboardAudioSource source;
 	GameObject aimReticleAtOurs;
@@ -105,9 +110,8 @@ public class BattleController : MonoBehaviour
 		AimAt (Whose.Theirs, null); // reticle starts disabled
 		AimAt (Whose.Ours, null); // reticle starts disabled
 		TargetAt (null); // reticle starts disabled
-		boatsOursPlacementController.RecreateBoats ();
+		boatsOursPlacementController.RecreateBoats (SystemInfo.deviceUniqueIdentifier);
 		SendOurBoatPositions ();
-		StartCoroutine (SetTurn (Whose.Ours));
 	}
 
 	void SendOurBoatPositions ()
@@ -115,10 +119,11 @@ public class BattleController : MonoBehaviour
 		RealtimeBattle.EncodeAndSendGrid (boatsOursPlacementController.grid);
 	}
 
-	public void SetBoatsTheirs (Boat[] boats)
+	public void SetBoatsTheirs (string playerUniqueId, Boat[] boats)
 	{
 		playing = true;
-		boatsTheirsPlacementController.SetBoats (boats);
+		StartCoroutine (SetTurn (playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs));
+		boatsTheirsPlacementController.SetBoats (playerUniqueId, boats);
 		AnnounceGameState ();
 	}
 
@@ -257,15 +262,24 @@ public class BattleController : MonoBehaviour
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
+			AnnounceStrike (whose, boat, position, result);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
 			PlaceMarker (whose, position, Marker.Hit);
 			PlaceSunkBoat (whose, boat);
+			AnnounceStrike (whose, boat, position, result);
 			break;
 		default:
 			throw new System.NotImplementedException ();
 		}
 		return result;
+	}
+
+	void AnnounceStrike (Whose whose, Boat boat, Position position, StrikeResult result)
+	{
+		if (OnStrikeOccurred != null) {
+			OnStrikeOccurred (whose, boat, position, result);
+		}
 	}
 
 	void CheckAllBoatsSunk (Whose whose)

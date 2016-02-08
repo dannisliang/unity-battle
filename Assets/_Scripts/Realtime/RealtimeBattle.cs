@@ -62,7 +62,7 @@ public class RealtimeBattle : MonoBehaviour
 		switch (messageType) {
 		case Protocol.MessageType.GRID_POSITIONS:
 			Grid grid = obj as Grid;
-			BattleController.instance.SetBoatsTheirs (grid.boats);
+			BattleController.instance.SetBoatsTheirs (grid.playerUniqueId, grid.boats);
 			break;
 		case Protocol.MessageType.AIM_AT:
 			if (messageCount < lastAimMessageReceiveCount) {

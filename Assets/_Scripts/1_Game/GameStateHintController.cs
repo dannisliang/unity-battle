@@ -43,7 +43,7 @@ public class GameStateHintController : MonoBehaviour
 	int fireCount;
 
 
-	void OnEnable ()
+	void Start ()
 	{
 		reticleBoatTarget = null;
 		strikeData = null;
@@ -60,8 +60,6 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnBattleState += UpdateBattleState;
 		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
-		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred += UpdateStrikeOurs;
-		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred += UpdateStrikeTheirs;
 		UpdateText ();
 	}
 
@@ -74,8 +72,6 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnBattleState -= UpdateBattleState;
 		BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
-		BattleController.instance.boatsOursPlacementController.grid.OnStrikeOccurred -= UpdateStrikeOurs;
-		BattleController.instance.boatsTheirsPlacementController.grid.OnStrikeOccurred -= UpdateStrikeTheirs;
 	}
 
 	void UpdateGameState (GameState state)
@@ -93,6 +89,11 @@ public class GameStateHintController : MonoBehaviour
 		if (firing) {
 			fireCount++;
 		}
+		if (playing) {
+			BattleController.instance.OnStrikeOccurred += UpdateStrikeOccurred;
+		} else {
+			BattleController.instance.OnStrikeOccurred -= UpdateStrikeOccurred;
+		}
 		UpdateText ();
 	}
 
@@ -108,12 +109,7 @@ public class GameStateHintController : MonoBehaviour
 		UpdateText ();
 	}
 
-	void UpdateStrikeOurs (Whose whose, Boat boat, Position position, StrikeResult result)
-	{
-		SetStrikeData (whose, boat, result);
-	}
-
-	void UpdateStrikeTheirs (Whose whose, Boat boat, Position position, StrikeResult result)
+	void UpdateStrikeOccurred (Whose whose, Boat boat, Position position, StrikeResult result)
 	{
 		SetStrikeData (whose, boat, result);
 	}
@@ -205,8 +201,7 @@ public class GameStateHintController : MonoBehaviour
 		}
 		if (!reticleAimingAtGrid) {
 			color = defaultBackgroundColor;
-			return "Locate the upper game grid\n" +
-			"to target your opponent's ships.";
+			return null; // "Locate the upper game grid\nto target your opponent's ships."
 		}
 		color = defaultBackgroundColor;
 		return GetReadyMessage ();

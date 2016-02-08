@@ -17,7 +17,7 @@ public class BoatPlacementEditor : Editor
 
 		if (GUI.changed) {
 			Undo.SetCurrentGroupName ("Recreate " + controller.name);
-			controller.RecreateBoats ();
+			controller.RecreateBoats (typeof(BoatPlacementEditor).Name);
 			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
 		}
 
