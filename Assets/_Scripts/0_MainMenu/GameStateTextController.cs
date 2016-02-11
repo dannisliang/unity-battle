@@ -37,7 +37,7 @@ public class GameStateTextController : MonoBehaviour
 		case GameState.AUTHENTICATING:
 			return "Signing in …";
 		case GameState.SETTING_UP_GAME:
-			return "Setting up new game …";
+			return "Searching for a second player …";
 		case GameState.TEARING_DOWN_GAME:
 			return "Game is ending.";
 		case GameState.GAME_WAS_TORN_DOWN:
