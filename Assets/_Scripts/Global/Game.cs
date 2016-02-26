@@ -135,7 +135,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			butler = butlerAi;
 			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
-			butler = butlerFirebase;
+//			butler = butlerFirebase;
+			butler = butlerPlayGames;
 			break;
 		default:
 			throw new NotImplementedException ();
