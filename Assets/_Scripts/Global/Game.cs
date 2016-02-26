@@ -68,7 +68,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		DontDestroyOnLoad (gameObject);
 		tempObjects = new List<GameObject> ();
 
-		MakeGameObjectsActive ();
+		StartCoroutine ("MakeGameObjectsActive");
 
 //		InitNearby ();
 
@@ -82,7 +82,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		return go;
 	}
 
-	void MakeGameObjectsActive ()
+	IEnumerator MakeGameObjectsActive ()
 	{
 		switch (masterGameState) {
 		case GameState.SELECTING_GAME_TYPE:
@@ -93,18 +93,24 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			viewModeGameObject.SetActive (false);
 			viewModePlayingGameObject.SetActive (false);
 			playingGameObject.SetActive (false);
+			yield return null;
 			mainMenuGameObject.SetActive (true);
 			break;
 		case GameState.SELECTING_VIEW_MODE:
 			mainMenuGameObject.SetActive (false);
+			yield return null;
 			playingGameObject.SetActive (false);
+			yield return null;
 			viewModeGameObject.SetActive (true);
+			yield return null;
 			viewModePlayingGameObject.SetActive (true);
 			break;
 		case GameState.PLAYING:
 			mainMenuGameObject.SetActive (false);
 			viewModeGameObject.SetActive (false);
+			yield return null;
 			viewModePlayingGameObject.SetActive (true);
+			yield return null;
 			playingGameObject.SetActive (true);
 			break;
 		default:
@@ -168,7 +174,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		case GameState.TEARING_DOWN_GAME:
 		case GameState.PLAYING:
 		case GameState.SELECTING_VIEW_MODE:
-			MakeGameObjectsActive ();
+			StartCoroutine ("MakeGameObjectsActive");
 			break;
 		default:
 			throw new NotImplementedException ();
