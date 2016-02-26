@@ -146,6 +146,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void HandleGameStateChanged (GameState state)
 	{
+		if (masterGameState == state) {
+			return;
+		}
 		Debug.Log ("===> GameState=" + state);
 		masterGameState = state;
 		switch (state) {
