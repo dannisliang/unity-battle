@@ -2,6 +2,7 @@
 using System.Collections;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.Multiplayer;
+using System;
 
 public class DummyPlayGamesClient : IPlayGamesClient
 {
@@ -58,9 +59,14 @@ public class DummyPlayGamesClient : IPlayGamesClient
 		return "DummyAccessToken";
 	}
 
-	public string GetIdToken ()
+	public void GetServerAuthCode (string serverClientId, Action<CommonStatusCodes, string> callback)
 	{
-		return "DummyIdToken";
+		throw new NotImplementedException ();
+	}
+
+	public void GetIdToken (Action<string> idTokenCallback)
+	{
+		throw new NotImplementedException ();
 	}
 
 	public string GetUserEmail ()
@@ -73,7 +79,7 @@ public class DummyPlayGamesClient : IPlayGamesClient
 		return null;
 	}
 
-	public void GetPlayerStats (System.Action<CommonStatusCodes, GooglePlayGames.PlayGamesLocalUser.PlayerStats> callback)
+	public void GetPlayerStats (System.Action<CommonStatusCodes, PlayerStats> callback)
 	{
 		throw new System.NotImplementedException ();
 	}

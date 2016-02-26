@@ -190,13 +190,14 @@ public class DummyPlayGamesPlatform : IPlayGamesPlatform,ISocialPlatform
 		return mClient.GetUserId ();
 	}
 
-	public string GetIdToken ()
+	public void GetIdToken (Action<string> idTokenCallback)
 	{
-		if (mClient != null) {
-			return mClient.GetIdToken ();
-		}
+		throw new NotImplementedException ();
+	}
 
-		return null;
+	public void GetServerAuthCode (Action<CommonStatusCodes, string> callback)
+	{
+		throw new NotImplementedException ();
 	}
 
 	public string GetAccessToken ()
@@ -217,7 +218,7 @@ public class DummyPlayGamesPlatform : IPlayGamesPlatform,ISocialPlatform
 		return null;
 	}
 
-	public void GetPlayerStats (Action<CommonStatusCodes, PlayGamesLocalUser.PlayerStats> callback)
+	public void GetPlayerStats (Action<CommonStatusCodes, PlayerStats> callback)
 	{
 		if (mClient != null && mClient.IsAuthenticated ()) {
 			mClient.GetPlayerStats (callback);

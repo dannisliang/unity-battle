@@ -13,6 +13,7 @@
 //  See the License for the specific language governing permissions and
 //    limitations under the License.
 // </copyright>
+#if (UNITY_ANDROID || (UNITY_IPHONE && !NO_GPGS))
 
 namespace GooglePlayGames {
     ///
@@ -34,11 +35,17 @@ namespace GooglePlayGames {
         private const string UnescapedIosClientId = "IOS_CLIENTID";
         private const string UnescapedWebClientId = "WEB_CLIENTID";
         private const string UnescapedNearbyServiceId = "NEARBY_SERVICE_ID";
+        private const string UnescapedRequireGooglePlus = "REQUIRE_GOOGLE_PLUS";
 
         public const string ApplicationId = "406476638518"; // Filled in automatically
         public const string IosClientId = ""; // Filled in automatically
         public const string WebClientId = ""; // Filled in automatically
         public const string NearbyConnectionServiceId = "sauer.battle";
+
+        public static bool RequireGooglePlus()
+        {
+            return "false" == "true";
+        }
 
         public static bool ApplicationIdInitialized() {
             return !string.IsNullOrEmpty(ApplicationId) && !ApplicationId.Equals(ToEscapedToken(UnescapedApplicationId));
@@ -67,3 +74,4 @@ namespace GooglePlayGames {
         }
     }
 }
+#endif

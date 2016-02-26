@@ -25,13 +25,15 @@ public interface IPlayGamesPlatform : ISocialPlatform
 
 	string GetUserId ();
 
-	string GetIdToken ();
+	void GetIdToken (Action<string> idTokenCallback);
 
 	string GetAccessToken ();
 
+	void GetServerAuthCode (Action<CommonStatusCodes, string> callback);
+
 	string GetUserEmail ();
 
-	void GetPlayerStats (Action<CommonStatusCodes, PlayGamesLocalUser.PlayerStats> callback);
+	void GetPlayerStats (Action<CommonStatusCodes, PlayerStats> callback);
 
 	Achievement GetAchievement (string achievementId);
 

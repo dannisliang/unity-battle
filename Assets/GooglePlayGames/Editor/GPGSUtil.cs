@@ -13,8 +13,11 @@
 //  See the License for the specific language governing permissions and
 //    limitations under the License.
 // </copyright>
+// Keep this even if NO_GPGS is defined so we can clean up the project
+// post build.
+#if (UNITY_ANDROID || UNITY_IPHONE)
 
-namespace GooglePlayGames
+namespace GooglePlayGames.Editor
 {
     using System;
     using System.Collections;
@@ -29,6 +32,9 @@ namespace GooglePlayGames
     /// </summary>
     public static class GPGSUtil
     {
+        /// <summary>Property key for project requiring G+ access
+        public const string REQUIREGOOGLEPLUSKEY = "proj.requireGPlus";
+
         /// <summary>Property key for project settings.</summary>
         public const string SERVICEIDKEY = "App.NearbdServiceId";
 
@@ -65,6 +71,9 @@ namespace GooglePlayGames
         /// <summary>Property key for project settings.</summary>
         public const string IOSSETUPDONEKEY = "ios.SetupDone";
 
+        /// <summary>Property key for nearby settings done.</summary>
+        public const string NEARBYSETUPDONEKEY = "android.NearbySetupDone";
+
         /// <summary>Property key for project settings.</summary>
         public const string LASTUPGRADEKEY = "lastUpgrade";
 
@@ -88,6 +97,9 @@ namespace GooglePlayGames
 
         /// <summary>Constant for token replacement</summary>
         private const string TOKENPERMISSIONSHOLDER = "__TOKEN_PERMISSIONS__";
+
+        /// <summary>Constant for require google plus token replacement</summary>
+        private const string REQUIREGOOGLEPLUSPLACEHOLDER = "__REQUIRE_GOOGLE_PLUS__";
 
         /// <summary>Property key for project settings.</summary>
         private const string TOKENPERMISSIONKEY = "proj.tokenPermissions";
@@ -127,7 +139,8 @@ namespace GooglePlayGames
                 { WEBCLIENTIDPLACEHOLDER, WEBCLIENTIDKEY },
                 { IOSCLIENTIDPLACEHOLDER, IOSCLIENTIDKEY },
                 { IOSBUNDLEIDPLACEHOLDER, IOSBUNDLEIDKEY },
-                { TOKENPERMISSIONSHOLDER, TOKENPERMISSIONKEY }
+                { TOKENPERMISSIONSHOLDER, TOKENPERMISSIONKEY },
+                { REQUIREGOOGLEPLUSPLACEHOLDER, REQUIREGOOGLEPLUSKEY }
             };
 
         /// <summary>
@@ -434,105 +447,6 @@ namespace GooglePlayGames
         }
 
         /// <summary>
-        /// Copies the Android support libs to this project.  Not needed
-        /// for unity 5+.
-        /// </summary>
-        public static void CopySupportLibs()
-        {
-            // Post version 5 this method is not needed.
-            if (GetUnityMajorVersion() >= 5)
-            {
-                return;
-            }
-
-            string sdkPath = GetAndroidSdkPath();
-            string supportJarPath = sdkPath +
-                                    GPGSUtil.SlashesToPlatformSeparator(
-                                        "/extras/android/support/v4/android-support-v4.jar");
-            string supportJarDest =
-                GPGSUtil.SlashesToPlatformSeparator("Assets/Plugins/Android/libs/android-support-v4.jar");
-
-            string libProjPath = sdkPath +
-                                 GPGSUtil.SlashesToPlatformSeparator(
-                                     "/extras/google/google_play_services/libproject/google-play-services_lib");
-
-            string libProjAM =
-                libProjPath + GPGSUtil.SlashesToPlatformSeparator("/AndroidManifest.xml");
-            string libProjDestDir = GPGSUtil.SlashesToPlatformSeparator(
-                                        "Assets/Plugins/Android/google-play-services_lib");
-
-            // check that the Google Play Services lib project is there
-            if (!Directory.Exists(libProjPath) || !File.Exists(libProjAM))
-            {
-                Debug.LogError("Google Play Services lib project not found at: " + libProjPath);
-                EditorUtility.DisplayDialog(
-                    GPGSStrings.AndroidSetup.LibProjNotFound,
-                    GPGSStrings.AndroidSetup.LibProjNotFoundBlurb,
-                    GPGSStrings.Ok);
-                return;
-            }
-
-            // check version
-            int version = GetGPSVersion(libProjPath);
-            if (version < 0)
-            {
-                Debug.LogError("Google Play Services lib version cannot be found!");
-            }
-
-            if (version < PluginVersion.MinGmsCoreVersionCode)
-            {
-                if (!EditorUtility.DisplayDialog(
-                        string.Format(
-                            GPGSStrings.AndroidSetup.LibProjVerTooOld,
-                            version,
-                            PluginVersion.MinGmsCoreVersionCode),
-                        GPGSStrings.Ok,
-                        GPGSStrings.Cancel))
-                {
-                    Debug.LogError("Google Play Services lib is too old! " +
-                        " Found version " +
-                        version + " require at least version " +
-                        PluginVersion.MinGmsCoreVersionCode);
-                    return;
-                }
-
-                Debug.Log("Ignoring the version mismatch and continuing the build.");
-            }
-
-            // clear out the destination library project
-            GPGSUtil.DeleteDirIfExists(libProjDestDir);
-
-            // Copy Google Play Services library
-            FileUtil.CopyFileOrDirectory(libProjPath, libProjDestDir);
-
-            if (!System.IO.File.Exists(supportJarPath))
-            {
-                // check for the new location
-                supportJarPath = sdkPath + GPGSUtil.SlashesToPlatformSeparator(
-                    "/extras/android/support/v7/appcompat/libs/android-support-v4.jar");
-                Debug.LogError("Android support library v4 not found at: " + supportJarPath);
-                if (!System.IO.File.Exists(supportJarPath))
-                {
-                    EditorUtility.DisplayDialog(
-                        GPGSStrings.AndroidSetup.SupportJarNotFound,
-                        GPGSStrings.AndroidSetup.SupportJarNotFoundBlurb,
-                        GPGSStrings.Ok);
-                    return;
-                }
-            }
-
-            // create needed directories
-            GPGSUtil.EnsureDirExists("Assets/Plugins");
-            GPGSUtil.EnsureDirExists("Assets/Plugins/Android");
-
-            // Clear out any stale version of the support jar.
-            File.Delete(supportJarDest);
-
-            // Copy Android Support Library
-            FileUtil.CopyFileOrDirectory(supportJarPath, supportJarDest);
-        }
-
-        /// <summary>
         /// Checks for the android manifest file exsistance.
         /// </summary>
         /// <returns><c>true</c>, if the file exists <c>false</c> otherwise.</returns>
@@ -727,3 +641,4 @@ namespace GooglePlayGames
         }
     }
 }
+#endif
