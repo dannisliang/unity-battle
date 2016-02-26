@@ -263,7 +263,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
-		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + "," + (char)data [0] + "-" + data.Length + ")");
+		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + ",'" + (char)data [0] + "':" + data.Length + "bytes)");
 		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
 	}
 

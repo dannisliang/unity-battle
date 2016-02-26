@@ -70,7 +70,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 
 	public void SendMessageToAll (bool reliable, byte[] data)
 	{
-		Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + "," + (char)data [0] + "-" + data.Length + ")");
+		Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + ",'" + (char)data [0] + "': " + data.Length + "bytes)");
 		// simply mirror back messages with delay
 		SceneMaster.instance.Async (() => {
 			listener.OnRealTimeMessageReceived (reliable, "senderid", data);
