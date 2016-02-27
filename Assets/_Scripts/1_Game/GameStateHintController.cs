@@ -214,7 +214,8 @@ public class GameStateHintController : MonoBehaviour
 			"Aim, then tap screen to fire.";
 		switch (fireCount) {
 		case 0:
-			return "Missle is armed and ready.\n" + longAimimText;
+			//return "Missle is armed and ready.\n" + longAimimText;
+			return longAimimText;
 		case 1:
 			return longAimimText;
 		case 2:
