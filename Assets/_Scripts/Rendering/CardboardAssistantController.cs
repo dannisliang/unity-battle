@@ -23,9 +23,23 @@ public class CardboardAssistantController : MonoBehaviour
 		Game.instance.OnGameStateChange += UpdateGameState;
 	}
 
+	#if UNITY_EDITOR || !UNITY_ANDROID
+	void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.R)) {
+			Recenter ();
+		}
+	}
+	#endif
+
 	void OnDestroy ()
 	{
 		Game.instance.OnGameStateChange -= UpdateGameState;
+	}
+
+	public void Recenter ()
+	{
+		Cardboard.SDK.Recenter ();
 	}
 
 	void BackButtonPressed ()

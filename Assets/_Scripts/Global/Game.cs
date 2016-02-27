@@ -104,6 +104,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			viewModeGameObject.SetActive (true);
 			yield return null;
 			viewModePlayingGameObject.SetActive (true);
+			yield return null;
+			cardboardAssistantController.Recenter ();
 			break;
 		case GameState.PLAYING:
 			mainMenuGameObject.SetActive (false);
@@ -112,6 +114,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			viewModePlayingGameObject.SetActive (true);
 			yield return null;
 			playingGameObject.SetActive (true);
+			yield return null;
+			cardboardAssistantController.Recenter ();
 			break;
 		default:
 			throw new NotImplementedException ();
