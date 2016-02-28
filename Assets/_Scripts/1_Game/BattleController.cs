@@ -76,6 +76,10 @@ public class BattleController : MonoBehaviour
 
 	public event StrikeOccurred OnStrikeOccurred;
 
+	public delegate void WhoseTurn (Whose whoseTurn);
+
+	public event WhoseTurn OnWhoseTurn;
+
 	CardboardAudioSource source;
 	GameObject aimReticleAtOurs;
 	GameObject aimReticleAtTheirs;
@@ -235,6 +239,9 @@ public class BattleController : MonoBehaviour
 		whoseTurn = whose;
 		yield return new WaitForSeconds (1.5f);
 		whoseTurnAnimator.SetInteger ("WhoseTurnInt", (int)whose);
+		if (OnWhoseTurn != null) {
+			OnWhoseTurn (whose);
+		}
 	}
 
 	public StrikeResult Strike (Whose whose, Position position)
