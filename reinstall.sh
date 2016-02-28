@@ -68,8 +68,15 @@ do
   export ANDROID_SERIAL=$serial
   device_num=$(( $device_num + 1))
   (
+    # Send ESC to keep alive after idle
+    adb shell input keyevent 111
+
+    # Home screen launcher
     adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null
+
+    # Kill app if running in background
     adb shell am force-stop $pkg
+
     #user_count=$(( $( adb shell pm list users | grep UserInfo | wc -l ) ))
     #user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo.([0-9]+).*/\1/' )
     adb_args=$( cat android-serial.txt | grep $ANDROID_SERIAL | cut -d' ' -f2- )
