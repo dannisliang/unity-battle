@@ -127,8 +127,8 @@ public class BattleController : MonoBehaviour
 	public void SetBoatsTheirs (string playerUniqueId, Boat[] boats)
 	{
 		playing = true;
-		Whose whoseStarts = playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs;
-		Debug.Log ("***FIRST TURN: " + whoseStarts);
+		Whose whoseStarts = playerUniqueId.Equals (Utils.AI_PLAYER_ID) || playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs;
+//		Debug.Log ("***FIRST TURN: " + whoseStarts + " playerUniqueId=" + playerUniqueId + " deviceUniqueIdentifier=" + SystemInfo.deviceUniqueIdentifier);
 		StartCoroutine (SetTurn (whoseStarts));
 		boatsTheirsPlacementController.SetBoats (playerUniqueId, boats);
 		AnnounceGameState ();

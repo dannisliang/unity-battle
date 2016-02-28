@@ -10,6 +10,8 @@ public class Utils : MonoBehaviour
 {
 	public static Position GRID_SIZE = new Position (12, 10);
 
+	public const string AI_PLAYER_ID = "AI";
+
 	public const float RESTART_DELAY = 10f;
 	public const float DUMMY_PLAY_GAMES_REAL_TIME_ASYNC_DELAY = .1f;
 	public const float DUMMY_PLAY_GAMES_REAL_TIME_REPLAY_DELAY = .1f;

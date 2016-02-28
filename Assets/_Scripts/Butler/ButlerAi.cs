@@ -114,7 +114,7 @@ public class ButlerAi : BaseButler
 
 	byte[] MakeAiGridMessage ()
 	{
-		var grid = new Grid (typeof(ButlerAi).Name);
+		var grid = new Grid (Utils.AI_PLAYER_ID);
 		grid.SetBoats (Whose.Ours, null);
 		return Protocol.Encode (Protocol.MessageType.GRID_POSITIONS, grid, true);
 	}
