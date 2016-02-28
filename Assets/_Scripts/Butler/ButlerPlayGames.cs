@@ -53,7 +53,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void Checkup ()
 	{
-		Debug.Log ("***Checkup()");
+//		Debug.Log ("***Checkup()");
 		bool IsAuthenticated = gamesPlatform.IsAuthenticated ();
 		bool IsRoomConnected = IsAuthenticated && gamesPlatform.RealTime.IsRoomConnected ();
 		if (!IsRoomConnected && (gameState == GameState.SELECTING_VIEW_MODE || gameState == GameState.PLAYING || gameState == GameState.SETTING_UP_GAME)) {
