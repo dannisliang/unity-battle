@@ -83,6 +83,7 @@ public class GameStateHintController : MonoBehaviour
 
 	void UpdateBattleState (bool playing, bool firing, Whose? loser)
 	{
+//		Debug.Log ("UpdateBattleState(playing=" + playing + ", firing=\"+firing+\", loser=\"+loser+\")");
 		this.playing = playing;
 		this.firing = firing;
 		this.loser = loser;
