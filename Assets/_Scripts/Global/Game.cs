@@ -27,7 +27,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public ButlerAi butlerAi;
 	public ButlerFirebase butlerFirebase;
 	public ButlerPlayGames butlerPlayGames;
-
+	public GameStateTextController gameStateTextController;
 
 	public CardboardAssistantController cardboardAssistantController;
 
@@ -273,6 +273,11 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		Assert.IsFalse (butler.enabled);
 		butler.enabled = true;
 		butler.NewGame ();
+	}
+
+	public void SetErrorFailureReasonText (string failureReasonText)
+	{
+		gameStateTextController.SetFailureReasonText (failureReasonText);
 	}
 
 

@@ -161,7 +161,7 @@ GameObject:
   - 114: {fileID: 17266812}
   - 114: {fileID: 17266811}
   m_Layer: 5
-  m_Name: Game State Text
+  m_Name: View Mode Game State Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1646,7 +1646,7 @@ GameObject:
   - 114: {fileID: 249172759}
   - 114: {fileID: 249172758}
   m_Layer: 5
-  m_Name: Game State Text
+  m_Name: Main Menu Game State Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4295,7 +4295,7 @@ GameObject:
   - 222: {fileID: 572943763}
   - 114: {fileID: 572943762}
   m_Layer: 5
-  m_Name: Game State Panel
+  m_Name: Main Menu Game State Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5023,7 +5023,7 @@ GameObject:
   - 222: {fileID: 670310887}
   - 114: {fileID: 670310886}
   m_Layer: 5
-  m_Name: Game State Panel
+  m_Name: View Mode Game State Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6119,6 +6119,7 @@ MonoBehaviour:
   butlerAi: {fileID: 511485780}
   butlerFirebase: {fileID: 1432915539}
   butlerPlayGames: {fileID: 1892473894}
+  gameStateTextController: {fileID: 249172758}
   cardboardAssistantController: {fileID: 1321132425}
 --- !u!4 &854977909
 Transform:

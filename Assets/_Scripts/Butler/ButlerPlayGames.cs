@@ -116,12 +116,18 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	public override void NewGame ()
 	{
-		Debug.Log ("***NewGame() …");
+		Debug.Log ("***NewGame()");
+		if (Application.internetReachability == NetworkReachability.NotReachable) {
+			Game.instance.SetErrorFailureReasonText ("— No internet connection —");
+			SetGameState (GameState.GAME_WAS_TORN_DOWN);
+			return;
+		}
 		PlayGamesSignIn ((bool success) => {
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 			if (success) {
 				PlayGamesNewGame ();
 			} else {
+				Game.instance.SetErrorFailureReasonText ("— Google Play Games failed to Sign In —");
 				SetGameState (GameState.GAME_WAS_TORN_DOWN);
 			}
 		});
