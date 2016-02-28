@@ -2885,7 +2885,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '2 Players
+  m_Text: 'Play with a Friend
 
     (Online)'
 --- !u!222 &453179482
@@ -13333,7 +13333,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 1 Player
+  m_Text: Single Player
 --- !u!222 &1824015253
 CanvasRenderer:
   m_ObjectHideFlags: 0
