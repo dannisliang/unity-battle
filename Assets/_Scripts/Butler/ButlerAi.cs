@@ -75,7 +75,7 @@ public class ButlerAi : BaseButler
 			return;
 		}
 		byte[] replyData = MakeReply (reliable, data);
-		bool fast = Protocol.GetMessageType (replyData) != Protocol.MessageType.ROCKET_LAUNCH;
+		bool rocketLaunch = Protocol.GetMessageType (replyData) == Protocol.MessageType.ROCKET_LAUNCH;
 		int coroutineGameCount = gameCount;
 		StartCoroutine (Do (delegate {
 			if (coroutineGameCount != gameCount) {
@@ -83,7 +83,7 @@ public class ButlerAi : BaseButler
 				return;
 			}
 			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
-		}, fast ? 2f : Utils.AI_DELAY));
+		}, rocketLaunch ? 10f : 2f));
 	}
 
 	IEnumerator Do (Action action, float delay)

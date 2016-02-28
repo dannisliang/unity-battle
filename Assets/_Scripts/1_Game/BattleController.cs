@@ -24,7 +24,7 @@ public class BattleController : MonoBehaviour
 	public BoatPlacementController boatsOursPlacementController;
 	public BoatPlacementController boatsTheirsPlacementController;
 	public AudioClip noFireClip;
-	public MissleWarningController missleWarning;
+	public CenterPanelController centerPanelController;
 
 	bool playing;
 	int _firing;
@@ -107,6 +107,7 @@ public class BattleController : MonoBehaviour
 
 	void OnEnable ()
 	{
+		Debug.Log ("***" + typeof(BattleController) + ".OnEnable()");
 		playing = false;
 		loser = null;
 		_firing = 0;
@@ -126,7 +127,9 @@ public class BattleController : MonoBehaviour
 	public void SetBoatsTheirs (string playerUniqueId, Boat[] boats)
 	{
 		playing = true;
-		StartCoroutine (SetTurn (playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs));
+		Whose whoseStarts = playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs;
+		Debug.Log ("***FIRST TURN: " + whoseStarts);
+		StartCoroutine (SetTurn (whoseStarts));
 		boatsTheirsPlacementController.SetBoats (playerUniqueId, boats);
 		AnnounceGameState ();
 	}
@@ -213,7 +216,7 @@ public class BattleController : MonoBehaviour
 
 		rocket.GetComponent<RocketController> ().Launch (atWhose, targetPosition, start, end, callback);
 		if (atWhose == Whose.Ours) {
-			missleWarning.IssueWarning (.5f, 2f);
+			centerPanelController.IssueWarning (.5f, 2f);
 		}
 	}
 
