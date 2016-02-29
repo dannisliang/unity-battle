@@ -195,6 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635f48d421f10419b9eb8c5f26ae2c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  errorTextColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &17266812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,6 +1681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635f48d421f10419b9eb8c5f26ae2c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  errorTextColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &249172759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2885,9 +2887,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Play with a Friend
-
-    (Online)'
+  m_Text: Online with a Friend
 --- !u!222 &453179482
 CanvasRenderer:
   m_ObjectHideFlags: 0
