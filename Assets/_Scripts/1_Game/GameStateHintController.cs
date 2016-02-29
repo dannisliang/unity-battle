@@ -33,11 +33,12 @@ public class GameStateHintController : MonoBehaviour
 	Image image;
 	Text text;
 
+	GameState state;
 	Boat reticleBoatTarget;
 	StrikeData strikeData;
-	bool playing;
+	Whose whoseTurn;
 	bool firing;
-	Whose? loser;
+	Whose loser;
 	bool reticleAimingAtGrid;
 	bool vrMode;
 	int fireCount;
@@ -47,9 +48,9 @@ public class GameStateHintController : MonoBehaviour
 	{
 		reticleBoatTarget = null;
 		strikeData = null;
-		playing = false;
+		whoseTurn = Whose.Nobody;
 		firing = false;
-		loser = null;
+		loser = Whose.Nobody;
 		reticleAimingAtGrid = false;
 		//vrMode=false;
 		fireCount = 0;
@@ -76,21 +77,20 @@ public class GameStateHintController : MonoBehaviour
 
 	void UpdateGameState (GameState state)
 	{
-		if (state == GameState.PLAYING) {
-			UpdateText ();
-		}
+		this.state = state;
+		UpdateText ();
 	}
 
-	void UpdateBattleState (bool playing, bool firing, Whose? loser)
+	void UpdateBattleState (Whose whoseTurn, bool firing, Whose loser)
 	{
-//		Debug.Log ("UpdateBattleState(playing=" + playing + ", firing=\"+firing+\", loser=\"+loser+\")");
-		this.playing = playing;
+//		Debug.Log ("UpdateBattleState(whoseTurn=" + whoseTurn + ", firing=\"+firing+\", loser=\"+loser+\")");
+		this.whoseTurn = whoseTurn;
 		this.firing = firing;
 		this.loser = loser;
 		if (firing) {
 			fireCount++;
 		}
-		if (playing) {
+		if (whoseTurn != Whose.Nobody) {
 			BattleController.instance.OnStrikeOccurred += UpdateStrikeOccurred;
 		} else {
 			BattleController.instance.OnStrikeOccurred -= UpdateStrikeOccurred;
@@ -164,14 +164,17 @@ public class GameStateHintController : MonoBehaviour
 
 	string GetText (out Color color)
 	{
-		if (loser != null) {
+		if (state != GameState.PLAYING) {
+			color = defaultBackgroundColor;
+			return null;
+		}
+		if (loser != Whose.Nobody) {
 			color = loser == Whose.Ours ? theirColor : ourColor;
 			return loser == Whose.Ours ?
 				"Your entire fleet was sunk.\nYour opponent has won." :
 				"You win! You sunk your\nopponent's entire fleet.";
 		}
-		if (!playing) {
-//		if (gameState != GameState.PLAYING) {
+		if (whoseTurn == Whose.Nobody) {
 			color = syncingBackgroundColor;
 			return "Synchronizing.\nPlease wait …";
 		}

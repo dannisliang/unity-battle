@@ -7,9 +7,8 @@ public class CenterPanelController : MonoBehaviour
 	[Range (0f, 1f)]
 	public float volume;
 
-	bool playing;
 	bool firing;
-	Whose? loser;
+	Whose loser;
 	Whose whoseTurn;
 
 	void OnDidApplyAnimationProperties ()
@@ -61,9 +60,9 @@ public class CenterPanelController : MonoBehaviour
 		BattleController.instance.OnWhoseTurn -= UpdateWhoseTurn;
 	}
 
-	void UpdateBattleState (bool playing, bool firing, Whose? loser)
+	void UpdateBattleState (Whose whoseTurn, bool firing, Whose loser)
 	{
-		this.playing = playing;
+		this.whoseTurn = whoseTurn;
 		this.firing = firing;
 		this.loser = loser;
 		UpdateWaitingForOpponent ();
@@ -77,7 +76,7 @@ public class CenterPanelController : MonoBehaviour
 
 	void UpdateWaitingForOpponent ()
 	{
-		animator.SetBool ("WaitingForOpponent", playing && !firing && loser == null && whoseTurn == Whose.Theirs);
+		animator.SetBool ("WaitingForOpponent", whoseTurn == Whose.Theirs && !firing && loser == Whose.Nobody);
 	}
 
 }

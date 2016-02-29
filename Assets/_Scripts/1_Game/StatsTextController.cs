@@ -18,10 +18,10 @@ public class StatsTextController : MonoBehaviour
 		BattleController.instance.OnBattleState -= UpdateSelf;
 	}
 
-	void UpdateSelf (bool playing, bool firing, Whose? loser)
+	void UpdateSelf (Whose whoseTurn, bool firing, Whose loser)
 	{
-		text.enabled = playing;
-		if (playing) {
+		text.enabled = whoseTurn != Whose.Nobody;
+		if (whoseTurn != Whose.Nobody) {
 			text.text = GetText (boatPlacementController.grid);
 		}
 	}

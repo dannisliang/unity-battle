@@ -26,10 +26,9 @@ public class BattleController : MonoBehaviour
 	public AudioClip noFireClip;
 	public CenterPanelController centerPanelController;
 
-	bool playing;
 	int _firing;
-	Whose? loser;
-	Whose whoseTurn = Whose.Ours;
+	Whose loser;
+	Whose whoseTurn = Whose.Nobody;
 
 	int firing {
 		get {
@@ -46,7 +45,7 @@ public class BattleController : MonoBehaviour
 
 	object BattleStateLock = new System.Object ();
 
-	public delegate void BattleState (bool playing, bool firing, Whose? loser);
+	public delegate void BattleState (Whose whoseTurn, bool firing, Whose loser);
 
 	private event BattleState _OnBattleState;
 
@@ -54,7 +53,7 @@ public class BattleController : MonoBehaviour
 		add {
 			lock (BattleStateLock) {
 				_OnBattleState += value;
-				value (playing, firing > 0, loser);
+				value (whoseTurn, firing > 0, loser);
 			}
 		}
 		remove {
@@ -108,8 +107,8 @@ public class BattleController : MonoBehaviour
 	void OnEnable ()
 	{
 		Debug.Log ("***" + typeof(BattleController) + ".OnEnable()");
-		playing = false;
-		loser = null;
+		whoseTurn = Whose.Nobody;
+		loser = Whose.Nobody;
 		_firing = 0;
 
 		AimAt (Whose.Theirs, null); // reticle starts disabled
@@ -126,7 +125,6 @@ public class BattleController : MonoBehaviour
 
 	public void SetBoatsTheirs (string playerUniqueId, Boat[] boats)
 	{
-		playing = true;
 		Whose whoseStarts = playerUniqueId.Equals (Utils.AI_PLAYER_ID) || playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs;
 //		Debug.Log ("***FIRST TURN: " + whoseStarts + " playerUniqueId=" + playerUniqueId + " deviceUniqueIdentifier=" + SystemInfo.deviceUniqueIdentifier);
 		StartCoroutine (SetTurn (whoseStarts));
@@ -137,7 +135,7 @@ public class BattleController : MonoBehaviour
 	void AnnounceGameState ()
 	{
 		if (_OnBattleState != null) {
-			_OnBattleState (playing, firing > 0, loser);
+			_OnBattleState (whoseTurn, firing > 0, loser);
 		}
 	}
 
@@ -150,7 +148,7 @@ public class BattleController : MonoBehaviour
 
 	public void AimAt (Whose whose, Position position)
 	{
-		if (loser != null) {
+		if (loser != Whose.Nobody) {
 			return;
 		}
 		if (firing > 0) {
@@ -186,10 +184,10 @@ public class BattleController : MonoBehaviour
 
 	public bool IsGridReady ()
 	{
-		if (!playing) {
+		if (whoseTurn == Whose.Nobody) {
 			return false;
 		}
-		if (loser != null) {
+		if (loser != Whose.Nobody) {
 			return false;
 		}
 		if (firing > 0) { // && !Application.isEditor) {
@@ -245,6 +243,7 @@ public class BattleController : MonoBehaviour
 		if (OnWhoseTurn != null) {
 			OnWhoseTurn (whose);
 		}
+		AnnounceGameState ();
 	}
 
 	public StrikeResult Strike (Whose whose, Position position)
@@ -294,7 +293,7 @@ public class BattleController : MonoBehaviour
 
 	void CheckAllBoatsSunk (Whose whose)
 	{
-		if (loser != null) {
+		if (loser != Whose.Nobody) {
 			return;
 		}
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
