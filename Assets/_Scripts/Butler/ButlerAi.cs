@@ -83,7 +83,7 @@ public class ButlerAi : BaseButler
 				return;
 			}
 			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
-		}, rocketLaunch ? 10f : 2f));
+		}, rocketLaunch ? 7f : 2f));
 	}
 
 	IEnumerator Do (Action action, float delay)
