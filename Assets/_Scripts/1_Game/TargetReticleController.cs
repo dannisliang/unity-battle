@@ -14,6 +14,7 @@ public class TargetReticleController : MonoBehaviour
 	{
 		animator = GetComponent<Animator> ();
 		audioSource = GetComponent<CardboardAudioSource> ();
+		gameObject.SetActive (false);
 	}
 
 	void Update ()
