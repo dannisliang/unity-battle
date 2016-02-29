@@ -238,7 +238,9 @@ public class BattleController : MonoBehaviour
 	IEnumerator SetTurn (Whose whose)
 	{
 		whoseTurn = whose;
-		yield return new WaitForSeconds (1.5f);
+		if (whose != Whose.Nobody) {
+			yield return new WaitForSeconds (1.5f);
+		}
 		whoseTurnAnimator.SetInteger ("WhoseTurnInt", (int)whose);
 		if (OnWhoseTurn != null) {
 			OnWhoseTurn (whose);
@@ -249,8 +251,8 @@ public class BattleController : MonoBehaviour
 	public StrikeResult Strike (Whose whose, Position position)
 	{
 		StrikeResult result = _Strike (whose, position);
-		StartCoroutine (SetTurn (whose));
-		CheckAllBoatsSunk (whose);
+		Whose nextTurn = CheckAllBoatsSunk (whose);
+		StartCoroutine (SetTurn (nextTurn));
 		return result;
 	}
 
@@ -291,10 +293,10 @@ public class BattleController : MonoBehaviour
 		}
 	}
 
-	void CheckAllBoatsSunk (Whose whose)
+	Whose CheckAllBoatsSunk (Whose whose)
 	{
 		if (loser != Whose.Nobody) {
-			return;
+			return Whose.Nobody;
 		}
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		if (boatPlacementController.grid.AllBoatsSunk ()) {
@@ -303,7 +305,9 @@ public class BattleController : MonoBehaviour
 			SceneMaster.instance.Async (delegate {
 				Game.instance.QuitGame ();
 			}, Utils.RESTART_DELAY);
+			return Whose.Nobody;
 		}
+		return whose;
 	}
 
 	void PlaceSunkBoat (Whose whose, Boat boat)
