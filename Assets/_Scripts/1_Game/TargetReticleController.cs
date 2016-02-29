@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof(Animator))]
+[RequireComponent (typeof(Animator), typeof(CardboardAudioSource))]
 public class TargetReticleController : MonoBehaviour
 {
 	const float velocity = 8f;
 
 	Animator animator;
+	CardboardAudioSource audioSource;
 	Vector3 targetPos;
 
 	void Awake ()
 	{
 		animator = GetComponent<Animator> ();
+		audioSource = GetComponent<CardboardAudioSource> ();
 	}
 
 	void Update ()
@@ -25,7 +27,7 @@ public class TargetReticleController : MonoBehaviour
 		if (position != null) {
 			targetPos = position.AsGridLocalPosition (Marker.Target);
 			if (lockOnTarget) {
-				GetComponent<AudioSource> ().Play ();
+				audioSource.Play ();
 				animator.SetTrigger ("LockOnTarget");
 			}
 		}
