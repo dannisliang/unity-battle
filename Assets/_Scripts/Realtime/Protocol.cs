@@ -20,7 +20,7 @@ public class Protocol
 	public static byte[] Encode (MessageType messageType, System.Object obj, bool reliable)
 	{
 		if (!Application.isEditor && messageType != MessageType.AIM_AT) {
-			Debug.Log ("***Encode() [" + Game.butler + "]");
+			Debug.Log ("***Encode(" + messageType + ")");
 		}
 		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {

@@ -33,7 +33,7 @@ public class QuitGameButtonController : MonoBehaviour,IPointerDownHandler
 
 	void QuitGame ()
 	{
-		Game.butler.QuitGame ();
+		Game.instance.QuitGame ();
 	}
 
 	void UpdateActive (GameState state)

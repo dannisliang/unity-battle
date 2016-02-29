@@ -18,8 +18,6 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public static Game instance;
 
-	public static BaseButler butler { get; private set; }
-
 	public GameObject mainMenuGameObject;
 	public GameObject viewModeGameObject;
 	public GameObject viewModePlayingGameObject;
@@ -28,8 +26,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public ButlerFirebase butlerFirebase;
 	public ButlerPlayGames butlerPlayGames;
 	public GameStateTextController gameStateTextController;
-
 	public CardboardAssistantController cardboardAssistantController;
+
+	BaseButler butler;
 
 	GameState masterGameState = GameState.AUTHENTICATING;
 
@@ -84,6 +83,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void MakeGameObjectsActive ()
 	{
+		Debug.Log ("***MakeGameObjectsActive() masterGameState=" + masterGameState);
 		switch (masterGameState) {
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.GAME_WAS_TORN_DOWN:
@@ -261,6 +261,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void NewGame (GameType gameType)
 	{
+		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, masterGameState);
 		SetActiveButler (gameType);
 		Assert.IsFalse (butler.enabled);
 		butler.enabled = true;
