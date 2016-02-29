@@ -2,6 +2,7 @@
 
 set -ue
 
+ANDROID_SERIAL_FILE=android-serial.txt
 MANIFEST_PATH=Assets/Plugins/Android/AndroidManifest.xml
 
 activity=com.unity3d.player.UnityPlayerActivity
@@ -80,7 +81,7 @@ do
 
     #user_count=$(( $( adb shell pm list users | grep UserInfo | wc -l ) ))
     #user=$( adb shell pm list users | grep UserInfo | awk "NR == $device_num % ($user_count + 1)" | sed -E 's/.*UserInfo.([0-9]+).*/\1/' )
-    adb_args=$( cat android-serial.txt | grep $ANDROID_SERIAL | cut -d' ' -f2- )
+    adb_args=$( cat $ANDROID_SERIAL_FILE | grep $ANDROID_SERIAL | cut -d' ' -f2- )
 
     if [ "${1:-}" != "-n" ]
     then
