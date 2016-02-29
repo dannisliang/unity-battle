@@ -70,6 +70,7 @@ do
   (
     # Send ESC to keep alive after idle
     adb shell input keyevent 111
+    adb shell input keyevent 111
 
     # Home screen launcher
     adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null
