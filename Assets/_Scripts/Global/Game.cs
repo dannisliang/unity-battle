@@ -276,6 +276,10 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
+		if (masterGameState != GameState.SELECTING_VIEW_MODE && masterGameState != GameState.PLAYING) {
+			Debug.Log ("***Ingoring '" + Convert.ToChar (data [0]) + "' real time message received due to game state " + masterGameState);
+			return;
+		}
 		RealtimeBattle.DecodeAndExecute (data, isReliable);
 	}
 
