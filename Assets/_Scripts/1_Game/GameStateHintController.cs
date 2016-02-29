@@ -44,7 +44,13 @@ public class GameStateHintController : MonoBehaviour
 	int fireCount;
 
 
-	void Start ()
+	void Awake ()
+	{
+		image = GetComponent<Image> ();
+		text = GetComponentInChildren<Text> ();
+	}
+
+	void OnEnable ()
 	{
 		reticleBoatTarget = null;
 		strikeData = null;
@@ -52,15 +58,13 @@ public class GameStateHintController : MonoBehaviour
 		firing = false;
 		loser = Whose.Nobody;
 		reticleAimingAtGrid = false;
-		//vrMode=false;
 		fireCount = 0;
-
-		image = GetComponent<Image> ();
-		text = GetComponentInChildren<Text> ();
+		
 		Game.instance.OnGameStateChange += UpdateGameState;
 		BattleController.instance.OnBattleState += UpdateBattleState;
 		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
+		BattleController.instance.OnStrikeOccurred += UpdateStrikeOccurred;
 		UpdateText ();
 	}
 
@@ -73,27 +77,24 @@ public class GameStateHintController : MonoBehaviour
 		BattleController.instance.OnBattleState -= UpdateBattleState;
 		BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
 		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
+		BattleController.instance.OnStrikeOccurred -= UpdateStrikeOccurred;
 	}
 
 	void UpdateGameState (GameState state)
 	{
+//		Debug.Log ("UpdateGameState(state=" + state + ")");
 		this.state = state;
 		UpdateText ();
 	}
 
 	void UpdateBattleState (Whose whoseTurn, bool firing, Whose loser)
 	{
-//		Debug.Log ("UpdateBattleState(whoseTurn=" + whoseTurn + ", firing=\"+firing+\", loser=\"+loser+\")");
+//		Debug.Log ("UpdateBattleState(whoseTurn=" + whoseTurn + ", firing=" + firing + ", loser=" + loser + ")");
 		this.whoseTurn = whoseTurn;
 		this.firing = firing;
 		this.loser = loser;
 		if (firing) {
 			fireCount++;
-		}
-		if (whoseTurn != Whose.Nobody) {
-			BattleController.instance.OnStrikeOccurred += UpdateStrikeOccurred;
-		} else {
-			BattleController.instance.OnStrikeOccurred -= UpdateStrikeOccurred;
 		}
 		UpdateText ();
 	}
@@ -213,6 +214,9 @@ public class GameStateHintController : MonoBehaviour
 
 	string GetReadyMessage ()
 	{
+		if (whoseTurn != Whose.Ours) {
+			return null;
+		}
 		string longAimimText = Cardboard.SDK.VRModeEnabled ?
 			"Aim, then use trigger to fire." :
 			"Aim, then tap screen to fire.";
