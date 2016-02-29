@@ -23,6 +23,16 @@ public abstract  class BaseButler : MonoBehaviour
 		OnGameStateChange (gameState);
 	}
 
+	protected void CheckInternetReachability ()
+	{
+		Game.instance.SetErrorFailureReasonText (null);
+		if (Application.internetReachability == NetworkReachability.NotReachable) {
+			Game.instance.SetErrorFailureReasonText ("— No internet connection —");
+			SetGameState (GameState.GAME_WAS_TORN_DOWN);
+			return;
+		}
+	}
+
 	public abstract void NewGame ();
 
 	public abstract void StartGamePlay ();

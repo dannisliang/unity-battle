@@ -205,11 +205,7 @@ public class ButlerFirebase : BaseButler
 
 	public override void NewGame ()
 	{
-		if (Application.internetReachability == NetworkReachability.NotReachable) {
-			Game.instance.SetErrorFailureReasonText ("— No internet connection —");
-			SetGameState (GameState.GAME_WAS_TORN_DOWN);
-			return;
-		}
+		CheckInternetReachability ();
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
 		SetGameState (GameState.AUTHENTICATING);
 		SetGameState (GameState.SETTING_UP_GAME);

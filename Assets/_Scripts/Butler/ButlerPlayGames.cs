@@ -117,11 +117,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	public override void NewGame ()
 	{
 		Debug.Log ("***NewGame()");
-		if (Application.internetReachability == NetworkReachability.NotReachable) {
-			Game.instance.SetErrorFailureReasonText ("— No internet connection —");
-			SetGameState (GameState.GAME_WAS_TORN_DOWN);
-			return;
-		}
+		CheckInternetReachability ();
 		PlayGamesSignIn ((bool success) => {
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 			if (success) {

@@ -5,15 +5,18 @@ using System;
 
 public class GameStateTextController : MonoBehaviour
 {
+	public Color errorTextColor = Color.red;
 
 	Text text;
 
 	GameState state;
 	string failureReasonText;
+	Color normalTextColor;
 
 	void Awake ()
 	{
 		text = GetComponent<Text> ();
+		normalTextColor = text.color;
 	}
 
 	void OnEnable ()
@@ -49,8 +52,10 @@ public class GameStateTextController : MonoBehaviour
 	string GetText (GameState state)
 	{
 		if (failureReasonText != null) {
+			text.color = errorTextColor;
 			return failureReasonText;
 		}
+		text.color = normalTextColor;
 		switch (state) {
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.SELECTING_VIEW_MODE:
