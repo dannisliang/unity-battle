@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent (typeof(Animator))]
 public class TargetReticleController : MonoBehaviour
 {
 	const float velocity = 8f;
 
+	Animator animator;
 	Vector3 targetPos;
+
+	void Awake ()
+	{
+		animator = GetComponent<Animator> ();
+	}
 
 	void Update ()
 	{
@@ -19,6 +26,7 @@ public class TargetReticleController : MonoBehaviour
 			targetPos = position.AsGridLocalPosition (Marker.Target);
 			if (lockOnTarget) {
 				GetComponent<AudioSource> ().Play ();
+				animator.SetTrigger ("LockOnTarget");
 			}
 		}
 		GetComponent<Animator> ().enabled = lockOnTarget;
