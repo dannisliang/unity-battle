@@ -104,9 +104,9 @@ public class BattleController : MonoBehaviour
 		aimReticleAtTheirs.name += " aimReticleAtTheirs";
 	}
 
-	void OnEnable ()
+	public void Init ()
 	{
-		Debug.Log ("***" + typeof(BattleController) + ".OnEnable()");
+		Debug.Log ("***" + typeof(BattleController) + ".Init()");
 		whoseTurn = Whose.Nobody;
 		loser = Whose.Nobody;
 		_firing = 0;
@@ -114,6 +114,10 @@ public class BattleController : MonoBehaviour
 		AimAt (Whose.Theirs, null); // reticle starts disabled
 		AimAt (Whose.Ours, null); // reticle starts disabled
 		TargetAt (null); // reticle starts disabled
+		// tell everyone to reset state
+		AnnounceGameState ();
+
+		// initiate new game
 		boatsOursPlacementController.RecreateBoats (SystemInfo.deviceUniqueIdentifier);
 		SendOurBoatPositions ();
 	}

@@ -9,6 +9,22 @@ public class ButlerAi : BaseButler
 	static int gameCount;
 
 	GameAi ai;
+	Whose loser;
+
+	void OnEnable ()
+	{
+		BattleController.instance.OnBattleState += UpdateBattleState;
+	}
+
+	void OnDisable ()
+	{
+		BattleController.instance.OnBattleState -= UpdateBattleState;
+	}
+
+	void UpdateBattleState (Whose whoseTurn, bool firing, Whose loser)
+	{
+		this.loser = loser;
+	}
 
 	#if UNITY_EDITOR
 	void Update ()
@@ -74,10 +90,18 @@ public class ButlerAi : BaseButler
 			Debug.Log ("***INGORING SendMessageToAll() as " + name + " is disabled");
 			return;
 		}
+		if (loser != Whose.Nobody) {
+			Debug.Log ("***INGORING SendMessageToAll() due to loser=" + loser);
+			return;
+		}
 		byte[] replyData = MakeReply (reliable, data);
 		bool rocketLaunch = Protocol.GetMessageType (replyData) == Protocol.MessageType.ROCKET_LAUNCH;
 		int coroutineGameCount = gameCount;
 		StartCoroutine (Do (delegate {
+			if (loser != Whose.Nobody) {
+				Debug.Log ("***Abandoning async call due to loser=" + loser);
+				return;
+			}
 			if (coroutineGameCount != gameCount) {
 				Debug.Log ("***Abandoning async call due to new game");
 				return;

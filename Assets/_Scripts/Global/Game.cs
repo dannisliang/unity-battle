@@ -266,6 +266,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		Assert.IsFalse (butler.enabled);
 		butler.enabled = true;
 		butler.NewGame ();
+		BattleController.instance.Init ();
 	}
 
 	public void SetErrorFailureReasonText (string failureReasonText)

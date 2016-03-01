@@ -7,11 +7,6 @@ public abstract  class BaseButler : MonoBehaviour
 
 	public event Game.GameStateChange OnGameStateChange;
 
-	void Awake ()
-	{
-		enabled = false;
-	}
-
 	public GameState GetGameState ()
 	{
 		return gameState;

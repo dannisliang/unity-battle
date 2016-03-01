@@ -87,7 +87,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		if (gamesPlatform != null) {
 			return;
 		}
-		Debug.Log ("***Init() …");
+		Debug.Log ("***Initialize Play Games …");
 		if (Application.isEditor) {
 			gamesPlatform = new DummyPlayGamesPlatform ();
 		} else {
