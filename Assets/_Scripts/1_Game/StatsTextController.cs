@@ -8,7 +8,7 @@ public class StatsTextController : MonoBehaviour
 
 	public Text text;
 
-	void Start ()
+	void OnEnable ()
 	{
 		BattleController.instance.OnBattleState += UpdateSelf;
 	}
@@ -20,8 +20,8 @@ public class StatsTextController : MonoBehaviour
 
 	void UpdateSelf (Whose whoseTurn, bool firing, Whose loser)
 	{
-		text.enabled = whoseTurn != Whose.Nobody;
-		if (whoseTurn != Whose.Nobody) {
+		text.enabled = boatPlacementController.grid != null;
+		if (text.enabled) {
 			text.text = GetText (boatPlacementController.grid);
 		}
 	}

@@ -114,11 +114,13 @@ public class BattleController : MonoBehaviour
 		AimAt (Whose.Theirs, null); // reticle starts disabled
 		AimAt (Whose.Ours, null); // reticle starts disabled
 		TargetAt (null); // reticle starts disabled
+		// reset grids
+		boatsOursPlacementController.RecreateBoats (SystemInfo.deviceUniqueIdentifier);
+		boatsTheirsPlacementController.RecreateBoats (null);
 		// tell everyone to reset state
 		AnnounceGameState ();
 
 		// initiate new game
-		boatsOursPlacementController.RecreateBoats (SystemInfo.deviceUniqueIdentifier);
 		SendOurBoatPositions ();
 	}
 

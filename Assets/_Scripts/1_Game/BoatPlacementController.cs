@@ -19,13 +19,15 @@ public class BoatPlacementController : MonoBehaviour
 	public void RecreateBoats (string playerUniqueId)
 	{
 		SetBoats (playerUniqueId, null);
-		CreateBoats ();
+		if (whose == Whose.Ours) {
+			CreateBoats ();
+		}
 	}
 
 	public void SetBoats (string playerUniqueId, Boat[] boats)
 	{
 		grid = new Grid (playerUniqueId);
-		this.grid.SetBoats (whose, boats);
+		grid.SetBoats (whose, boats);
 		DestroyBoats ();
 	}
 
