@@ -23,7 +23,6 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public GameObject viewModePlayingGameObject;
 	public GameObject playingGameObject;
 	public ButlerAi butlerAi;
-	public ButlerFirebase butlerFirebase;
 	public ButlerPlayGames butlerPlayGames;
 	public GameStateTextController gameStateTextController;
 	public CardboardAssistantController cardboardAssistantController;
