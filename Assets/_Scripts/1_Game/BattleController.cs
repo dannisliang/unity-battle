@@ -176,13 +176,9 @@ public class BattleController : MonoBehaviour
 			source.PlayOneShot (noFireClip);
 			return false;
 		}
-		firing++;
 		TargetAt (targetPosition);
 		RealtimeBattle.EncodeAndSendLaunch (targetPosition);
-		LaunchRocket (Whose.Theirs, targetPosition, delegate {
-			firing--;
-			TargetAt (null);
-		});
+		LaunchRocket (Whose.Theirs, targetPosition);
 		return true;
 	}
 
@@ -203,7 +199,7 @@ public class BattleController : MonoBehaviour
 		return true;
 	}
 
-	public void LaunchRocket (Whose atWhose, Position targetPosition, Action callback)
+	public void LaunchRocket (Whose atWhose, Position targetPosition)
 	{
 		GameObject rocket = Game.instance.InstantiateTemp (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
 		Vector3 localPos = targetPosition.AsGridLocalPosition (Marker.Aim);
@@ -216,7 +212,10 @@ public class BattleController : MonoBehaviour
 		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
 
-		rocket.GetComponent<RocketController> ().Launch (atWhose, targetPosition, start, end, callback);
+		firing++;
+		rocket.GetComponent<RocketController> ().Launch (atWhose, targetPosition, start, end, delegate {
+			firing--;
+		});
 		if (atWhose == Whose.Ours) {
 			centerPanelController.IssueWarning (.5f, 2f);
 		}
@@ -229,7 +228,7 @@ public class BattleController : MonoBehaviour
 
 	public void AimAt (Position position)
 	{
-		if (whoseTurn == Whose.Ours && firing == 0) {
+		if (firing == 0) {
 			PlaceMarker (Whose.Ours, position, Marker.Aim);
 		}
 	}

@@ -75,7 +75,7 @@ public class RealtimeBattle : MonoBehaviour
 			break;
 		case Protocol.MessageType.ROCKET_LAUNCH:
 			Position targetPosition = obj as Position;
-			BattleController.instance.LaunchRocket (Whose.Ours, targetPosition, null);
+			BattleController.instance.LaunchRocket (Whose.Ours, targetPosition);
 			break;
 		default:
 			throw new NotImplementedException ("Unknown message type " + messageType);

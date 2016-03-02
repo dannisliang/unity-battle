@@ -9,6 +9,9 @@ public class ButlerAi : BaseButler
 	static int gameCount;
 
 	GameAi ai;
+
+	//	Whose whoseTurn;
+	//	bool firing;
 	Whose loser;
 
 	void OnEnable ()
@@ -23,6 +26,8 @@ public class ButlerAi : BaseButler
 
 	void UpdateBattleState (Whose whoseTurn, bool firing, Whose loser)
 	{
+//		this.whoseTurn = whoseTurn;
+//		this.firing = firing;
 		this.loser = loser;
 	}
 
@@ -65,6 +70,7 @@ public class ButlerAi : BaseButler
 			Destroy (ai);
 		}
 		ai = gameObject.AddComponent<GameAi> ();
+//		StartCoroutine (KeepOnAiming ());
 	}
 
 	public override void PauseGamePlay ()
@@ -82,7 +88,18 @@ public class ButlerAi : BaseButler
 			SetGameState (GameState.GAME_WAS_TORN_DOWN);
 			Destroy (ai);
 		}
+//		StopCoroutine (KeepOnAiming ());
 	}
+
+	//	IEnumerator KeepOnAiming ()
+	//	{
+	//		while (true) {
+	//			if (whoseTurn == Whose.Theirs) {
+	//				SendNow (false, MakeAimMessage ());
+	//			}
+	//			yield return new WaitForSeconds (.8f);
+	//		}
+	//	}
 
 	public override void SendMessageToAll (bool reliable, byte[] data)
 	{
@@ -94,8 +111,20 @@ public class ButlerAi : BaseButler
 			Debug.Log ("***INGORING SendMessageToAll() due to loser=" + loser);
 			return;
 		}
-		byte[] replyData = MakeReply (reliable, data);
-		bool rocketLaunch = Protocol.GetMessageType (replyData) == Protocol.MessageType.ROCKET_LAUNCH;
+		switch (Protocol.GetMessageType (data)) {
+		case Protocol.MessageType.GRID_POSITIONS:
+			DelayedSend (reliable, MakeAiGridMessage ());
+			break;
+		case Protocol.MessageType.ROCKET_LAUNCH:
+			DelayedSend (reliable, MakeAiLaunchMessage ());
+			break;
+		default:
+			break;
+		}
+	}
+
+	void DelayedSend (bool reliable, byte[] data)
+	{
 		int coroutineGameCount = gameCount;
 		StartCoroutine (Do (delegate {
 			if (loser != Whose.Nobody) {
@@ -106,29 +135,19 @@ public class ButlerAi : BaseButler
 				Debug.Log ("***Abandoning async call due to new game");
 				return;
 			}
-			Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", replyData);
-		}, rocketLaunch ? 7f : 2f));
+			SendNow (reliable, data);
+		}, Protocol.GetMessageType (data) == Protocol.MessageType.ROCKET_LAUNCH ? 7f : 2f));
+	}
+
+	void SendNow (bool reliable, byte[] data)
+	{
+		Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", data);
 	}
 
 	IEnumerator Do (Action action, float delay)
 	{
 		yield return new WaitForSeconds (delay);
 		action ();
-	}
-
-
-	byte[] MakeReply (bool reliable, byte[] data)
-	{
-		switch (Protocol.GetMessageType (data)) {
-		case Protocol.MessageType.AIM_AT:
-			return MakeAimMessage ();
-		case Protocol.MessageType.GRID_POSITIONS:
-			return MakeAiGridMessage ();
-		case Protocol.MessageType.ROCKET_LAUNCH:
-			return MakeAiMoveMessage ();
-		default:
-			return data;
-		}
 	}
 
 	byte[] MakeAimMessage ()
@@ -143,7 +162,7 @@ public class ButlerAi : BaseButler
 		return Protocol.Encode (Protocol.MessageType.GRID_POSITIONS, grid, true);
 	}
 
-	byte[] MakeAiMoveMessage ()
+	byte[] MakeAiLaunchMessage ()
 	{
 		Position pos = ai.NextMove ();
 		return Protocol.Encode (Protocol.MessageType.ROCKET_LAUNCH, pos, true);
