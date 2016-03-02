@@ -39,7 +39,7 @@ public class BattleController : MonoBehaviour
 			if (firing > 0) {
 				aimReticleAtTheirs.SetActive (false);
 			}
-			AnnounceGameState ();
+			AnnounceBattleState ();
 		}
 	}
 
@@ -104,6 +104,36 @@ public class BattleController : MonoBehaviour
 		aimReticleAtTheirs.name += " aimReticleAtTheirs";
 	}
 
+	void OnEnable ()
+	{
+		Game.instance.OnGameStateChange += GameStateChanged;
+	}
+
+	void OnDiable ()
+	{
+		Game.instance.OnGameStateChange -= GameStateChanged;
+	}
+
+	void GameStateChanged (GameState state)
+	{
+		switch (state) {
+		case GameState.SETTING_UP_GAME:
+			Init ();
+			break;
+		case GameState.PLAYING:
+			SendOurBoatPositions ();
+			break;
+		case GameState.SELECTING_GAME_TYPE:
+		case GameState.AUTHENTICATING:
+		case GameState.TEARING_DOWN_GAME:
+		case GameState.GAME_WAS_TORN_DOWN:
+		case GameState.SELECTING_VIEW_MODE:
+			break;
+		default:
+			throw new NotImplementedException ();
+		}
+	}
+
 	public void Init ()
 	{
 		Debug.Log ("***" + typeof(BattleController) + ".Init()");
@@ -118,10 +148,7 @@ public class BattleController : MonoBehaviour
 		boatsOursPlacementController.RecreateBoats (SystemInfo.deviceUniqueIdentifier);
 		boatsTheirsPlacementController.RecreateBoats (null);
 		// tell everyone to reset state
-		AnnounceGameState ();
-
-		// initiate new game
-		SendOurBoatPositions ();
+		AnnounceBattleState ();
 	}
 
 	void SendOurBoatPositions ()
@@ -135,10 +162,10 @@ public class BattleController : MonoBehaviour
 //		Debug.Log ("***FIRST TURN: " + whoseStarts + " playerUniqueId=" + playerUniqueId + " deviceUniqueIdentifier=" + SystemInfo.deviceUniqueIdentifier);
 		StartCoroutine (SetTurn (whoseStarts));
 		boatsTheirsPlacementController.SetBoats (playerUniqueId, boats);
-		AnnounceGameState ();
+		AnnounceBattleState ();
 	}
 
-	void AnnounceGameState ()
+	void AnnounceBattleState ()
 	{
 		if (_OnBattleState != null) {
 			_OnBattleState (whoseTurn, firing > 0, loser);
@@ -250,7 +277,7 @@ public class BattleController : MonoBehaviour
 		if (OnWhoseTurn != null) {
 			OnWhoseTurn (whose);
 		}
-		AnnounceGameState ();
+		AnnounceBattleState ();
 	}
 
 	public StrikeResult Strike (Whose whose, Position position)
@@ -306,7 +333,7 @@ public class BattleController : MonoBehaviour
 		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		if (boatPlacementController.grid.AllBoatsSunk ()) {
 			loser = whose;
-			AnnounceGameState ();
+			AnnounceBattleState ();
 			SceneMaster.instance.Async (delegate {
 				Game.instance.QuitGame ();
 			}, Utils.RESTART_DELAY);

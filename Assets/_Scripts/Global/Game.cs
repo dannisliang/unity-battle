@@ -148,9 +148,10 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	void HandleGameStateChanged (GameState state)
 	{
 		if (masterGameState == state) {
+			Debug.Log ("*** ignoring GameState switch as we're already in " + masterGameState);
 			return;
 		}
-		Debug.Log ("===> GameState=" + state);
+		Debug.Log ("***===> GameState=" + state + " (was " + masterGameState + ")");
 		masterGameState = state;
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
@@ -265,7 +266,6 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		Assert.IsFalse (butler.enabled);
 		butler.enabled = true;
 		butler.NewGame ();
-		BattleController.instance.Init ();
 	}
 
 	public void SetErrorFailureReasonText (string failureReasonText)
