@@ -82,7 +82,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void MakeGameObjectsActive ()
 	{
-		Debug.Log ("***MakeGameObjectsActive() masterGameState=" + masterGameState);
+//		Debug.Log ("***MakeGameObjectsActive() masterGameState=" + masterGameState);
 		switch (masterGameState) {
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.GAME_WAS_TORN_DOWN:
@@ -151,7 +151,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			Debug.Log ("*** ignoring GameState switch as we're already in " + masterGameState);
 			return;
 		}
-		Debug.Log ("***===> GameState=" + state + " (was " + masterGameState + ")");
+		Debug.Log ("===> GameState: " + masterGameState + " --> " + state);
 		masterGameState = state;
 		switch (state) {
 		case GameState.GAME_WAS_TORN_DOWN:
