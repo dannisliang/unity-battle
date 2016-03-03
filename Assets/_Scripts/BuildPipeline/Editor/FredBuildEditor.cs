@@ -6,9 +6,25 @@ using System;
 using System.Threading;
 using System.IO;
 
+[InitializeOnLoad]
 public class FredBuildEditor
 {
 	static bool executing;
+
+	static FredBuildEditor ()
+	{
+		CheckPasswords ();
+	}
+
+	static void CheckPasswords ()
+	{
+		if (PlayerSettings.keystorePass.Length == 0 || PlayerSettings.keyaliasPass.Length == 0) {
+			string path = System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments) + "/.fred-build-info";
+			string password = File.ReadAllText (path);
+			PlayerSettings.keystorePass = password;
+			PlayerSettings.keyaliasPass = password;
+		}
+	}
 
 	[MenuItem ("FRED/Build %&b")]
 	public static void BuildGame ()
@@ -18,10 +34,7 @@ public class FredBuildEditor
 			return;
 		}
 
-		if (PlayerSettings.keystorePass.Length == 0 || PlayerSettings.keyaliasPass.Length == 0) {
-			UnityEngine.Debug.LogError ("Need keystore and key alias passwords !!");
-			return;
-		}
+		CheckPasswords ();
 
 		executing = true;
 		ClearLog ();
