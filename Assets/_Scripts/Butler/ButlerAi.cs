@@ -139,7 +139,7 @@ public class ButlerAi : BaseButler
 		}, GetMessageDelay (Protocol.GetMessageType (data))));
 	}
 
-	float GetMessageDelay (Protocol.MessageType messageType)
+	public static float GetMessageDelay (Protocol.MessageType messageType)
 	{
 		switch (messageType) {
 		case Protocol.MessageType.AIM_AT:

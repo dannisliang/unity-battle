@@ -80,7 +80,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		}
 		SceneMaster.instance.Async (() => {
 			listener.OnRealTimeMessageReceived (reliable, Utils.AI_PLAYER_ID, data);
-		}, Utils.DUMMY_PLAY_GAMES_REAL_TIME_REPLAY_DELAY);
+		}, ButlerAi.GetMessageDelay (Protocol.GetMessageType (data)));
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data, int offset, int length)
