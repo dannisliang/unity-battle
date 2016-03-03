@@ -208,8 +208,6 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 			SetGameState (GameState.GAME_WAS_TORN_DOWN);
 		} else if (percent == 100) {
 			SetGameState (GameState.SELECTING_VIEW_MODE);
-		} else {
-			SetGameState (GameState.SETTING_UP_GAME);
 		}
 	}
 
