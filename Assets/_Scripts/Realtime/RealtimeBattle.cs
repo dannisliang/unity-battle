@@ -42,7 +42,7 @@ public class RealtimeBattle : MonoBehaviour
 	static void EncodeAndSend (Protocol.MessageType messageType, System.Object obj, bool reliable)
 	{
 		byte[] bytes = Protocol.Encode (messageType, obj, reliable);
-		if (!Application.isEditor && messageType != Protocol.MessageType.AIM_AT) {
+		if (!Application.isEditor || messageType == Protocol.MessageType.GRID_POSITIONS) {
 			Debug.Log ("***EncodeAndSend(" + (reliable ? "RELIABLE " : "") + "'" + messageType + "':" + bytes.Length + "bytes)");
 		}
 		Game.instance.SendMessageToAll (reliable: reliable, data: bytes);
