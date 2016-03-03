@@ -136,7 +136,21 @@ public class ButlerAi : BaseButler
 				return;
 			}
 			SendNow (reliable, data);
-		}, Protocol.GetMessageType (data) == Protocol.MessageType.ROCKET_LAUNCH ? 7f : 2f));
+		}, GetMessageDelay (Protocol.GetMessageType (data))));
+	}
+
+	float GetMessageDelay (Protocol.MessageType messageType)
+	{
+		switch (messageType) {
+		case Protocol.MessageType.AIM_AT:
+			return 2f;
+		case Protocol.MessageType.GRID_POSITIONS:
+			return .2f;
+		case Protocol.MessageType.ROCKET_LAUNCH:
+			return 7f;
+		default:
+			throw new NotImplementedException ();
+		}
 	}
 
 	void SendNow (bool reliable, byte[] data)
