@@ -117,7 +117,9 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	public override void NewGame ()
 	{
 		Debug.Log ("***NewGame()");
+		#if !UNITY_EDITOR
 		CheckInternetReachability ();
+		#endif
 		PlayGamesSignIn ((bool success) => {
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 			if (success) {
