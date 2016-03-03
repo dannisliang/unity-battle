@@ -267,7 +267,9 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRealTimeMessageReceived (bool isReliable, string senderId, byte[] data)
 	{
+		#if !UNITY_EDITOR
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + ",'" + (char)data [0] + "':" + data.Length + "bytes)");
+		#endif
 		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
 	}
 
