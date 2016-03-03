@@ -169,7 +169,7 @@ public class ButlerAi : BaseButler
 		return Protocol.Encode (Protocol.MessageType.AIM_AT, ai.AimRandom (), false);
 	}
 
-	byte[] MakeAiGridMessage ()
+	public static byte[] MakeAiGridMessage ()
 	{
 		var grid = new Grid (Utils.AI_PLAYER_ID);
 		grid.SetBoats (Whose.Ours, null);
