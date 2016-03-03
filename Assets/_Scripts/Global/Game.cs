@@ -148,7 +148,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	void HandleGameStateChanged (GameState state)
 	{
 		if (masterGameState == state) {
-			Debug.Log ("*** ignoring GameState switch as we're already in " + masterGameState);
+			Debug.Log ("*** Ignoring GameState switch as we're already in " + masterGameState);
 			return;
 		}
 		Debug.Log ("===> GameState: " + masterGameState + " --> " + state);
