@@ -82,8 +82,10 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 
 
-	void OnEnable ()
+	override protected void OnEnable ()
 	{
+		base.OnEnable ();
+
 		if (gamesPlatform != null) {
 			return;
 		}
@@ -126,7 +128,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 				PlayGamesNewGame ();
 			} else {
 				Game.instance.SetErrorFailureReasonText ("— Google Play Games failed to Sign In —");
-				SetGameState (GameState.GAME_WAS_TORN_DOWN);
+				Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
 			}
 		});
 	}
@@ -135,7 +137,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***PlayGamesSignIn() …");
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
-		SetGameState (GameState.AUTHENTICATING);
+		Game.instance.SetGameState (GameState.AUTHENTICATING);
 //		// check if already signed in
 //		if (gamesPlatform.IsAuthenticated ()) {
 //			callback (true);
@@ -154,21 +156,9 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***PlayGamesNewGame() …");
 		Assert.AreEqual (GameState.AUTHENTICATING, gameState);
-		SetGameState (GameState.SETTING_UP_GAME);
+		Game.instance.SetGameState (GameState.SETTING_UP_GAME);
 //		gamesPlatform.RealTime.CreateWithInvitationScreen (minOpponents: 1, maxOppponents : 1, variant : Protocol.PROTOCOL_VERSION, listener: this);
 		gamesPlatform.RealTime.CreateQuickGame (minOpponents: 1, maxOpponents : 1, variant : Protocol.PROTOCOL_VERSION, listener: this);
-	}
-
-	public override void StartGamePlay ()
-	{
-		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, gameState);
-		SetGameState (GameState.PLAYING);
-	}
-
-	public override void PauseGamePlay ()
-	{
-		Assert.AreEqual (GameState.PLAYING, gameState);
-		SetGameState (GameState.SELECTING_VIEW_MODE);
 	}
 
 	public override void QuitGame ()
@@ -205,9 +195,9 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnRoomSetupProgress(" + percent + ")");
 		if (percent == 0) {
-			SetGameState (GameState.GAME_WAS_TORN_DOWN);
+			Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
 		} else if (percent == 100) {
-			SetGameState (GameState.SELECTING_VIEW_MODE);
+			Game.instance.SetGameState (GameState.SELECTING_VIEW_MODE);
 		}
 	}
 
@@ -215,7 +205,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	public void OnRoomConnected (bool success)
 	{
 		Debug.Log ("***OnRoomConnected(" + success + ")");
-		SetGameState (success ? GameState.SELECTING_VIEW_MODE : GameState.GAME_WAS_TORN_DOWN);
+		Game.instance.SetGameState (success ? GameState.SELECTING_VIEW_MODE : GameState.GAME_WAS_TORN_DOWN);
 		if (success) {
 			Debug.Log ("***InvokeRepeating(Checkup, 3, 3)");
 			InvokeRepeating ("Checkup", 3f, 3f);
@@ -227,7 +217,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	{
 		Debug.Log ("***OnLeftRoom()");
 		CancelCheckup ();
-		SetGameState (GameState.GAME_WAS_TORN_DOWN);
+		Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
 	}
 
 	// RealTimeMultiplayerListener
@@ -259,7 +249,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		if (gamesPlatform.RealTime != null) {
 			gamesPlatform.RealTime.LeaveRoom ();
 		}
-		SetGameState (GameState.GAME_WAS_TORN_DOWN);
+		Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
 	}
 
 	// RealTimeMultiplayerListener
@@ -269,15 +259,6 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + ",'" + (char)data [0] + "':" + data.Length + "bytes)");
 		#endif
 		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
-	}
-
-	public override void SetGameState (GameState gameState)
-	{
-		base.SetGameState (gameState);
-
-		if (gameState == GameState.GAME_WAS_TORN_DOWN) {
-			SetGameState (GameState.SELECTING_GAME_TYPE);
-		}
 	}
 
 	public override string ToString ()

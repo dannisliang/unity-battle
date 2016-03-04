@@ -124,9 +124,11 @@ public class BattleController : MonoBehaviour
 			SendOurBoatPositions ();
 			break;
 		case GameState.SELECTING_GAME_TYPE:
-		case GameState.AUTHENTICATING:
 		case GameState.TEARING_DOWN_GAME:
 		case GameState.GAME_WAS_TORN_DOWN:
+			StopAllCoroutines ();
+			break;
+		case GameState.AUTHENTICATING:
 		case GameState.SELECTING_VIEW_MODE:
 			break;
 		default:

@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Assertions;
 
 public abstract  class BaseButler : MonoBehaviour
 {
-	public GameState gameState { get; private set; }
+	protected GameState gameState;
 
-	public event Game.GameStateChange OnGameStateChange;
-
-	public GameState GetGameState ()
+	virtual protected void OnEnable ()
 	{
-		return gameState;
+		Game.instance.OnGameStateChange += UpdateGameState;
 	}
 
-	public virtual void SetGameState (GameState gameState)
+	virtual protected void OnDisable ()
 	{
-		this.gameState = gameState;
-		OnGameStateChange (gameState);
+		Game.instance.OnGameStateChange -= UpdateGameState;
+	}
+
+	void UpdateGameState (GameState state)
+	{
+		gameState = state;
 	}
 
 	protected void CheckInternetReachability ()
@@ -23,16 +26,12 @@ public abstract  class BaseButler : MonoBehaviour
 		Game.instance.SetErrorFailureReasonText (null);
 		if (Application.internetReachability == NetworkReachability.NotReachable) {
 			Game.instance.SetErrorFailureReasonText ("— No internet connection —");
-			SetGameState (GameState.GAME_WAS_TORN_DOWN);
+			Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
 			return;
 		}
 	}
 
 	public abstract void NewGame ();
-
-	public abstract void StartGamePlay ();
-
-	public abstract void PauseGamePlay ();
 
 	public abstract void QuitGame ();
 

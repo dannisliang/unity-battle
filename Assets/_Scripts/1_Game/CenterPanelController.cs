@@ -35,18 +35,7 @@ public class CenterPanelController : MonoBehaviour
 	{
 		animator.SetBool ("WaitingForOpponent", false);
 		animator.SetTrigger ("MissleWarning");
-//		source.Play ();
-//		StartCoroutine (PlayFor (delay, duration));
 	}
-
-	//	IEnumerator PlayFor (float delay, float duration)
-	//	{
-	//		yield return new WaitForSeconds (delay);
-	//		animator.SetBool ("WaitingForOpponent", false);
-	//		animator.SetTrigger ("MissleWarning");
-	//		source.Play ();
-	//		yield return new WaitForSeconds (duration);
-	//	}
 
 	void OnEnable ()
 	{

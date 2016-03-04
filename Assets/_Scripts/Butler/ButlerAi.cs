@@ -14,13 +14,17 @@ public class ButlerAi : BaseButler
 	//	bool firing;
 	Whose loser;
 
-	void OnEnable ()
+	override protected void OnEnable ()
 	{
+		base.OnEnable ();
+
 		BattleController.instance.OnBattleState += UpdateBattleState;
 	}
 
-	void OnDisable ()
+	override protected void OnDisable ()
 	{
+		base.OnDisable ();
+
 		BattleController.instance.OnBattleState -= UpdateBattleState;
 	}
 
@@ -57,15 +61,9 @@ public class ButlerAi : BaseButler
 	{
 		gameCount++;
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
-		SetGameState (GameState.AUTHENTICATING);
-		SetGameState (GameState.SETTING_UP_GAME);
-		SetGameState (GameState.SELECTING_VIEW_MODE);
-	}
-
-	public override void StartGamePlay ()
-	{
-		Assert.AreEqual (GameState.SELECTING_VIEW_MODE, gameState);
-		SetGameState (GameState.PLAYING);
+		Game.instance.SetGameState (GameState.AUTHENTICATING);
+		Game.instance.SetGameState (GameState.SETTING_UP_GAME);
+		Game.instance.SetGameState (GameState.SELECTING_VIEW_MODE);
 		if (ai != null) {
 			Destroy (ai);
 		}
@@ -73,22 +71,16 @@ public class ButlerAi : BaseButler
 //		StartCoroutine (KeepOnAiming ());
 	}
 
-	public override void PauseGamePlay ()
-	{
-		Assert.AreEqual (GameState.PLAYING, gameState);
-		SetGameState (GameState.SELECTING_VIEW_MODE);
-	}
-
 	public override void QuitGame ()
 	{
+		StopAllCoroutines ();
 		if (gameState == GameState.PLAYING || gameState == GameState.SELECTING_VIEW_MODE) {
-			SetGameState (GameState.TEARING_DOWN_GAME);
+			Game.instance.SetGameState (GameState.TEARING_DOWN_GAME);
 		}
 		if (gameState == GameState.TEARING_DOWN_GAME) {
-			SetGameState (GameState.GAME_WAS_TORN_DOWN);
+			Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
 			Destroy (ai);
 		}
-//		StopCoroutine (KeepOnAiming ());
 	}
 
 	//	IEnumerator KeepOnAiming ()
@@ -180,14 +172,6 @@ public class ButlerAi : BaseButler
 	{
 		Position pos = ai.NextMove ();
 		return Protocol.Encode (Protocol.MessageType.ROCKET_LAUNCH, pos, true);
-	}
-
-	public override void SetGameState (GameState gameState)
-	{
-		base.SetGameState (gameState);
-		if (gameState == GameState.GAME_WAS_TORN_DOWN) {
-			SetGameState (GameState.SELECTING_GAME_TYPE);
-		}
 	}
 
 	public override string ToString ()

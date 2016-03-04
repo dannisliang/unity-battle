@@ -29,7 +29,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	BaseButler butler;
 
-	GameState masterGameState = GameState.AUTHENTICATING;
+	GameState masterGameState = GameState.SELECTING_GAME_TYPE;
 
 	public Dictionary<GameState, List<GameObject>> activationDict;
 
@@ -44,7 +44,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		add {
 			lock (GameStateChangeLock) {
 				_OnGameStateChange += value;
-				value (butler == null ? GameState.SELECTING_GAME_TYPE : butler.GetGameState ());
+				value (masterGameState);
 			}
 		}
 		remove {
@@ -119,30 +119,33 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		butler.QuitGame ();
 	}
 
-	void HandleButlerGameStateChange (GameState state)
+	bool changingState = false;
+
+	public void SetGameState (GameState state)
 	{
-		if (_OnGameStateChange != null) {
-			_OnGameStateChange (state);
+		if (_OnGameStateChange == null) {
+			return;
 		}
+		if (changingState == true) {
+			throw new Exception ("Changing state while changing state");
+		}
+		changingState = true;
+		_OnGameStateChange (state);
+		changingState = false;
 	}
 
 	void SetActiveButler (GameType gameType)
 	{
-		if (butler != null) {
-			butler.OnGameStateChange -= HandleButlerGameStateChange;
-		}
 		switch (gameType) {
 		case GameType.ONE_PLAYER_DEMO:
 			butler = butlerAi;
 			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
-//			butler = butlerFirebase;
 			butler = butlerPlayGames;
 			break;
 		default:
 			throw new NotImplementedException ();
 		}
-		butler.OnGameStateChange += HandleButlerGameStateChange;
 	}
 
 	void HandleGameStateChanged (GameState state)
@@ -163,6 +166,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			foreach (GameObject go in tempObjects) {
 				Destroy (go);
 			}
+			SceneMaster.instance.StopAllCoroutines ();
+			StartCoroutine (NextFrameChangeGameState (GameState.GAME_WAS_TORN_DOWN, GameState.SELECTING_GAME_TYPE));
 			break;
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.AUTHENTICATING:
@@ -177,24 +182,24 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
+	IEnumerator NextFrameChangeGameState (GameState fromState, GameState toState)
+	{
+		yield return new WaitForEndOfFrame ();
+		Assert.AreEqual (fromState, masterGameState);
+		SetGameState (toState);
+	}
+
 	public void SelectViewMode (bool? vrMode)
 	{
 		if (vrMode == null) {
-			Assert.AreEqual (GameState.PLAYING, butler.GetGameState ());
-			butler.PauseGamePlay ();
+			Assert.AreEqual (GameState.PLAYING, masterGameState);
+			_OnGameStateChange (GameState.SELECTING_VIEW_MODE);
 		} else {
-			Assert.AreEqual (GameState.SELECTING_VIEW_MODE, butler.GetGameState ());
+			Assert.AreEqual (GameState.SELECTING_VIEW_MODE, masterGameState);
 			cardboardAssistantController.VrModeChanged ((bool)vrMode);
-			butler.StartGamePlay ();
+			_OnGameStateChange (GameState.PLAYING);
 		}
 	}
-
-	//	void HardRestart ()
-	//	{
-	//		Debug.Log ("***Destroying " + gameObject + " …");
-	//		Destroy (gameObject);
-	//		SceneMaster.HardRestart ();
-	//	}
 
 	#if UNITY_EDITOR
 	void Update ()
