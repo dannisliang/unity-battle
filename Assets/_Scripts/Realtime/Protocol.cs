@@ -6,7 +6,7 @@ using System;
 
 public class Protocol
 {
-	public const int PROTOCOL_VERSION = 2;
+	public const int PROTOCOL_VERSION = 3;
 
 	static int sendMessageCount = 0;
 
