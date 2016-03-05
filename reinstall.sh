@@ -8,10 +8,17 @@ MANIFEST_PATH=Assets/Plugins/Android/AndroidManifest.xml
 activity=com.unity3d.player.UnityPlayerActivity
 root=$( dirname $0 )
 
-devices=$(adb devices | sort | grep device\$ | cut -f1 | tr '\n' ' ')
-
 # Determine Android package name
 pkg=$( grep bundleIdentifier ProjectSettings/ProjectSettings.asset | sed 's/ //g' | cut -d: -f2 )
+
+devices=$(adb devices | sort | grep device\$ | cut -f1 | tr '\n' ' ')
+
+if [ -z "$devices" ]
+then
+  echo
+  echo "ERROR: no adb devices"
+  exit 1
+fi
 
 # Determine APK filename
 apk="$pkg.apk"
@@ -111,7 +118,7 @@ done
 
 for pid in $pids
 do
-  wait $pid || echo "ERROR PID $pid failed!"
+  wait $pid || echo "ERROR: PID $pid failed!"
 done
 
 echo ""
