@@ -13,6 +13,13 @@ pkg=$( grep bundleIdentifier ProjectSettings/ProjectSettings.asset | sed 's/ //g
 
 devices=$(adb devices | sort | grep device\$ | cut -f1 | tr '\n' ' ')
 
+if [ ! -r "$ANDROID_SERIAL_FILE" ]
+then
+  echo
+  echo "ERROR: Missing $ANDROID_SERIAL_FILE"
+  exit 1
+fi
+
 if [ -z "$devices" ]
 then
   echo
