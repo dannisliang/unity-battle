@@ -167,6 +167,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		switch (gameState) {
 		case GameState.AUTHENTICATING:
 			PlayGamesSignOut ();
+			PlayGamesLeaveRoom ();
 			break;
 		case GameState.SETTING_UP_GAME:
 		case GameState.TEARING_DOWN_GAME:
