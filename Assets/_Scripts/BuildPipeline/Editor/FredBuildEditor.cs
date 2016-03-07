@@ -5,59 +5,72 @@ using System.Reflection;
 using System;
 using System.Threading;
 using System.IO;
+using System.Text.RegularExpressions;
 
 [InitializeOnLoad]
-public class FredBuildEditor
+public class FredBuildEditor : EditorWindow
 {
-	static bool executing;
+	static string TWO_LINES = ".*\n.*\n";
+
+	static bool executing = false;
 
 	static FredBuildEditor ()
 	{
 		CheckPasswords ();
 	}
 
-	static void CheckPasswords ()
+	[MenuItem ("FRED/Build %&b")]
+	static void BuildGame ()
 	{
-		if (PlayerSettings.keystorePass.Length == 0 || PlayerSettings.keyaliasPass.Length == 0) {
-			string path = System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments) + "/.fred-build-info";
-			string password = File.ReadAllText (path);
-			PlayerSettings.keystorePass = password;
-			PlayerSettings.keyaliasPass = password;
-		}
+		DoBuildGame ();
+//		ClearLog ();
+//		UnityEngine.Debug.Log ("Build window ready\n");
+//		EditorWindow.GetWindow (typeof(FredBuildEditor));
 	}
 
-	[MenuItem ("FRED/Build %&b")]
-	public static void BuildGame ()
+	//	void OnGUI ()
+	//	{
+	//		GUILayout.Label ("Building is fun!");
+	//
+	//		GUI.SetNextControlName ("build_button");
+	//		if (GUILayout.Button ("Build it!")) {
+	//			GUILayout.Label ("Executing!");
+	//			DoBuildGame ();
+	//			Close ();
+	//		}
+	//		GUI.FocusControl ("build_button");
+	//	}
+
+	static void DoBuildGame ()
 	{
 		if (executing) {
-			UnityEngine.Debug.LogError ("ALREADY EXECUTING !!");
+			UnityEngine.Debug.LogError ("Already executing !!");
 			return;
 		}
 
+		ClearLog ();
 		CheckPasswords ();
 
-		executing = true;
-		ClearLog ();
-		UnityEngine.Debug.Log ("===================== CUSTOM BUILD =====================\n");
-
 		string apk = PlayerSettings.bundleIdentifier + ".apk";
+		DateTime creationTime = File.GetCreationTime (apk);
 
-		if (File.Exists (apk)) {
-			File.Delete (apk);
-		}
+		executing = true;
 		BuildPipeline.BuildPlayer (SceneMaster.buildLevels, apk, BuildTarget.Android, BuildOptions.None);
 
-		if (File.Exists (apk)) {
-			PostBuild ();
-//			new Thread (new ThreadStart (PostBuild)).Start ();
+		if (File.GetCreationTime (apk).Equals (creationTime)) {
+			UnityEngine.Debug.LogError ("Failed to build " + apk);
+			executing = false;
+			return;
 		}
+
+		// InstallApk responsible for setting executing = false
+		new Thread (new ThreadStart (InstallApk)).Start ();
 	}
 
-	static void PostBuild ()
+	static void InstallApk ()
 	{
-		UnityEngine.Debug.Log ("Installing on devices …");
+		UnityEngine.Debug.Log ("$ ./reinstall.sh");
 		Execute ("/bin/bash", "-lc", "./reinstall.sh");
-		UnityEngine.Debug.Log ("===================== CUSTOM BUILD DONE =====================");
 	}
 
 	static int Execute (string cmd, params string[] args)
@@ -65,11 +78,12 @@ public class FredBuildEditor
 		string joinedArgs = string.Join (" ", args);
 		Process proc = new Process ();
 		proc.StartInfo.UseShellExecute = false;
-		proc.StartInfo.CreateNoWindow = false;
-		proc.StartInfo.ErrorDialog = true;
+		proc.StartInfo.CreateNoWindow = true;
+		proc.StartInfo.ErrorDialog = false;
 		proc.StartInfo.RedirectStandardError = true;
-		proc.StartInfo.RedirectStandardInput = true;
 		proc.StartInfo.RedirectStandardOutput = true;
+		proc.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
+		proc.StartInfo.StandardErrorEncoding = System.Text.Encoding.UTF8;
 		proc.StartInfo.FileName = cmd;
 		proc.StartInfo.Arguments = joinedArgs;
 
@@ -77,29 +91,51 @@ public class FredBuildEditor
 		string output = "";
 		proc.OutputDataReceived += new DataReceivedEventHandler (
 			(sender, evt) => {
-				if (evt.Data != null && evt.Data.Length > 0) {
-					if (output != null) {
-						UnityEngine.Debug.Log (output + "\n" + evt.Data);
-						output = null;
-					} else {
-						output = evt.Data;
+				if (evt.Data != null) {
+					output += evt.Data + "\n";
+					output = StripEmptyLines (output);
+					// log two lines at a time
+					foreach (Match match in Regex.Matches (output, TWO_LINES, RegexOptions.Multiline)) {
+						UnityEngine.Debug.Log (PrefixOutput (match.Value));
+						output = output.Substring (match.Value.Length);
 					}
 				}
 			}
 		);
+
+		// Show two output lines at a time in Editor
+		string error = "";
+		proc.ErrorDataReceived += new DataReceivedEventHandler (
+			(sender, evt) => {
+				if (evt.Data != null) {
+					error += evt.Data + "\n";
+					error = StripEmptyLines (error);
+					// log two lines at a time
+					foreach (Match match in Regex.Matches (error, TWO_LINES, RegexOptions.Multiline)) {
+						UnityEngine.Debug.LogError (PrefixOutput (match.Value));
+						error = error.Substring (match.Value.Length);
+					}
+				}
+			}
+		);
+
 		proc.Start ();
 		proc.BeginOutputReadLine ();
-		var error = proc.StandardError.ReadToEnd ();
-
+		proc.BeginErrorReadLine ();
 		proc.WaitForExit ();
 
 		var exitCode = proc.ExitCode;
 
-		if (output != null) {
-			UnityEngine.Debug.Log (output);
+		// log any remaining output
+		output = StripEmptyLines (output);
+		if (output.Length > 0) {
+			UnityEngine.Debug.Log (PrefixOutput (output));
 		}
+
+		// log any remaining error
+		error = StripEmptyLines (error);
 		if (error.Length > 0) {
-			UnityEngine.Debug.LogError (error);
+			UnityEngine.Debug.LogError (PrefixOutput (error));
 		}
 
 		if (exitCode == 0) {
@@ -112,6 +148,18 @@ public class FredBuildEditor
 		return exitCode;
 	}
 
+	static string StripEmptyLines (string output)
+	{
+		output = Regex.Replace (output, "^\n+", "", RegexOptions.Multiline);
+		output = Regex.Replace (output, "\n+", "\n", RegexOptions.Multiline);
+		return output;
+	}
+
+	static object PrefixOutput (string output)
+	{
+		return ">  " + Regex.Replace (output, "\n", "\n>  ", RegexOptions.Multiline);
+	}
+		
 	// Since UnityEngine.Debug.ClearDeveloperConsole() doesn't work
 	static void ClearLog ()
 	{
@@ -119,6 +167,16 @@ public class FredBuildEditor
 		Type type = assembly.GetType ("UnityEditorInternal.LogEntries");
 		MethodInfo method = type.GetMethod ("Clear");
 		method.Invoke (new object (), null);
+	}
+
+	static void CheckPasswords ()
+	{
+		if (PlayerSettings.keystorePass.Length == 0 || PlayerSettings.keyaliasPass.Length == 0) {
+			string path = System.Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments) + "/.fred-build-info";
+			string password = File.ReadAllText (path);
+			PlayerSettings.keystorePass = password;
+			PlayerSettings.keyaliasPass = password;
+		}
 	}
 
 }
