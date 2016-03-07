@@ -39,6 +39,12 @@ public class BoatController : MonoBehaviour
 		meshChild.localPosition = new Vector3 (boat.horizontal ? boat.Size () / 2f : .5f, boat.horizontal ? .5f : 1f - len / 2f, height);
 		meshChild.localScale = new Vector3 ((boat.horizontal ? len : 1f) - .15f, (boat.horizontal ? 1f : len) - .15f, 1f);
 
+		Transform shipChild = transform.GetChild (1);
+		shipChild.name += boatSuffix;
+		shipChild.localPosition = new Vector3 (boat.horizontal ? 0f : 1f, boat.horizontal ? 0f : 1f - len, height);
+		shipChild.localScale = new Vector3 (len / 5f, 1f, 1f);
+		shipChild.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, boat.horizontal ? 0f : 90f));
+
 		for (int i = 0; i < boat.Size (); i++) {
 			GameObject child = new GameObject ();
 			child.name = name + " Collider " + boat.positions [i];
