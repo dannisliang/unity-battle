@@ -15,15 +15,13 @@ devices=$(adb devices | sort | grep device\$ | cut -f1 | tr '\n' ' ')
 
 if [ ! -r "$ANDROID_SERIAL_FILE" ]
 then
-  echo
-  echo "ERROR: Missing $ANDROID_SERIAL_FILE"
+  echo "ERROR: Missing $ANDROID_SERIAL_FILE" 1>&2
   exit 1
 fi
 
 if [ -z "$devices" ]
 then
-  echo
-  echo "ERROR: no adb devices"
+  echo "ERROR: no adb devices" 1>&2
   exit 1
 fi
 
@@ -44,12 +42,10 @@ fi
 # Determine overriding Android activity name from AndroidManifest.xml
 if [ -f "$MANIFEST_PATH" ]
 then
-  echo
   echo "Extracting activity name from $MANIFEST_PATH"
   activity=$( grep '<activity android:name="' "$MANIFEST_PATH" | cut -d '"' -f 2 )
 fi
 
-echo ""
 echo "Using:"
 echo "- Package identifier: $pkg"
 echo "- APK filename      : $apk"
@@ -58,7 +54,6 @@ for device in $devices
 do
 echo "- Device            : $device"
 done
-echo
 
 uninstall_pkg()
 {
@@ -69,7 +64,6 @@ uninstall_pkg()
 
 install_pkg()
 {
-  echo
   echo "$ANDROID_SERIAL adb install $*"
   output=$( adb install $* 2>&1 | grep -v 'KB/s' | grep -v 'pkg:' | grep -v 'Success' )
   [ -z "$output" ]
@@ -114,7 +108,6 @@ do
       )
     fi
 
-    echo
     echo "$ANDROID_SERIAL Launching $pkg/$activity"
     adb shell am start $adb_args -n $pkg/$activity | ( grep -v 'Starting: Intent' || true )
   ) &
@@ -123,9 +116,8 @@ do
   pids="$pids $pid"
 done
 
+echo "Waiting for PIDS $pids"
 for pid in $pids
 do
-  wait $pid || echo "ERROR: PID $pid failed!"
+  wait $pid || echo "ERROR: PID $pid failed!" 1>&2
 done
-
-echo ""
