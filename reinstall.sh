@@ -116,8 +116,10 @@ do
   pids="$pids $pid"
 done
 
-echo "Waiting for PIDS $pids"
+echo "Waiting for PIDS $pids …"
 for pid in $pids
 do
   wait $pid || echo "ERROR: PID $pid failed!" 1>&2
 done
+
+echo "DONE"

@@ -22,26 +22,24 @@ public class FredBuildEditor : EditorWindow
 	[MenuItem ("FRED/Build %&b")]
 	static void BuildGame ()
 	{
-		DoBuildGame ();
-//		ClearLog ();
-//		UnityEngine.Debug.Log ("Build window ready\n");
-//		EditorWindow.GetWindow (typeof(FredBuildEditor));
+		ClearLog ();
+
+		CheckPasswords ();
+
+		string apk = PlayerSettings.bundleIdentifier + ".apk";
+		DateTime creationTime = File.GetCreationTime (apk);
+
+		BuildPipeline.BuildPlayer (SceneMaster.buildLevels, apk, BuildTarget.Android, BuildOptions.None);
+		
+		if (File.GetCreationTime (apk).Equals (creationTime)) {
+			UnityEngine.Debug.LogError ("Failed to build " + apk);
+		} else {
+			UnityEngine.Debug.Log ("Successfully built " + apk);
+		}
 	}
 
-	//	void OnGUI ()
-	//	{
-	//		GUILayout.Label ("Building is fun!");
-	//
-	//		GUI.SetNextControlName ("build_button");
-	//		if (GUILayout.Button ("Build it!")) {
-	//			GUILayout.Label ("Executing!");
-	//			DoBuildGame ();
-	//			Close ();
-	//		}
-	//		GUI.FocusControl ("build_button");
-	//	}
-
-	static void DoBuildGame ()
+	[MenuItem ("FRED/Build %&i")]
+	static void ReinstallGame ()
 	{
 		if (executing) {
 			UnityEngine.Debug.LogError ("Already executing !!");
@@ -49,28 +47,15 @@ public class FredBuildEditor : EditorWindow
 		}
 
 		ClearLog ();
-		CheckPasswords ();
-
-		string apk = PlayerSettings.bundleIdentifier + ".apk";
-		DateTime creationTime = File.GetCreationTime (apk);
-
-		executing = true;
-		BuildPipeline.BuildPlayer (SceneMaster.buildLevels, apk, BuildTarget.Android, BuildOptions.None);
-
-		if (File.GetCreationTime (apk).Equals (creationTime)) {
-			UnityEngine.Debug.LogError ("Failed to build " + apk);
-			executing = false;
-			return;
-		}
-
-		// InstallApk responsible for setting executing = false
 		new Thread (new ThreadStart (InstallApk)).Start ();
 	}
 
 	static void InstallApk ()
 	{
+		executing = true;
 		UnityEngine.Debug.Log ("$ ./reinstall.sh");
 		Execute ("/bin/bash", "-lc", "./reinstall.sh");
+		executing = false;
 	}
 
 	static int Execute (string cmd, params string[] args)
@@ -144,7 +129,6 @@ public class FredBuildEditor : EditorWindow
 			UnityEngine.Debug.LogError ("$ " + cmd + " " + joinedArgs + "\n==> " + exitCode);
 		}
 
-		executing = false;
 		return exitCode;
 	}
 
