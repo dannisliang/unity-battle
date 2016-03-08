@@ -41,6 +41,6 @@ public abstract  class BaseButler : MonoBehaviour
 	public abstract string GetLocalUsername ();
 
 
-	public abstract void SendMessageToAll (bool reliable, byte[] data);
+	public abstract void SendMessageToAll (bool reliable, ref byte[] data);
 
 }

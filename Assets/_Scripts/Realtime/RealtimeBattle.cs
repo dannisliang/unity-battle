@@ -45,14 +45,14 @@ public class RealtimeBattle : MonoBehaviour
 		if (!Application.isEditor || messageType == Protocol.MessageType.GRID_POSITIONS) {
 			Debug.Log ("***EncodeAndSend(" + (reliable ? "RELIABLE " : "") + "'" + messageType + "':" + bytes.Length + "bytes)");
 		}
-		Game.instance.SendMessageToAll (reliable: reliable, data: bytes);
+		Game.instance.SendMessageToAll (reliable, ref bytes);
 	}
 
-	public static void DecodeAndExecute (byte[] bytes, bool reliable)
+	public static void DecodeAndExecute (ref byte[] bytes, bool reliable)
 	{
 		object obj;
 		int messageCount;
-		Protocol.MessageType messageType = Protocol.Decode (bytes, reliable, out obj, out messageCount);
+		Protocol.MessageType messageType = Protocol.Decode (ref bytes, reliable, out obj, out messageCount);
 
 		ExecuteDecodedMessage (obj, messageCount, messageType);
 	}

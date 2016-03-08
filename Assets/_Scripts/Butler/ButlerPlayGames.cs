@@ -184,7 +184,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	}
 
 
-	public override void SendMessageToAll (bool reliable, byte[] data)
+	public override void SendMessageToAll (bool reliable, ref byte[] data)
 	{
 		gamesPlatform.RealTime.SendMessageToAll (reliable, data);
 	}
@@ -259,7 +259,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		#if !UNITY_EDITOR
 		Debug.Log ("***OnRealTimeMessageReceived(" + isReliable + "," + senderId + ",'" + (char)data [0] + "':" + data.Length + "bytes)");
 		#endif
-		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, data);
+		Game.instance.OnRealTimeMessageReceived (isReliable, senderId, ref data);
 	}
 
 	public override string ToString ()

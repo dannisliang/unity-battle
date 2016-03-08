@@ -93,7 +93,7 @@ public class ButlerAi : BaseButler
 	//		}
 	//	}
 
-	public override void SendMessageToAll (bool reliable, byte[] data)
+	public override void SendMessageToAll (bool reliable, ref byte[] data)
 	{
 		if (!enabled) {
 			Debug.Log ("***INGORING SendMessageToAll() as " + name + " is disabled");
@@ -103,20 +103,23 @@ public class ButlerAi : BaseButler
 			Debug.Log ("***INGORING SendMessageToAll() due to loser=" + loser);
 			return;
 		}
-		switch (Protocol.GetMessageType (data)) {
+		switch (Protocol.GetMessageType (ref data)) {
 		case Protocol.MessageType.GRID_POSITIONS:
-			DelayedSend (reliable, MakeAiGridMessage ());
+			byte[] gridMessage = MakeAiGridMessage ();
+			DelayedSend (reliable, ref gridMessage);
 			break;
 		case Protocol.MessageType.ROCKET_LAUNCH:
-			DelayedSend (reliable, MakeAiLaunchMessage ());
+			byte[] launchMessage = MakeAiLaunchMessage ();
+			DelayedSend (reliable, ref launchMessage);
 			break;
 		default:
 			break;
 		}
 	}
 
-	void DelayedSend (bool reliable, byte[] data)
+	void DelayedSend (bool reliable, ref byte[] data)
 	{
+		byte[] clone = (byte[])data.Clone ();
 		int coroutineGameCount = gameCount;
 		StartCoroutine (Do (delegate {
 			if (loser != Whose.Nobody) {
@@ -127,8 +130,8 @@ public class ButlerAi : BaseButler
 				Debug.Log ("***Abandoning async call due to new game");
 				return;
 			}
-			SendNow (reliable, data);
-		}, GetMessageDelay (Protocol.GetMessageType (data))));
+			SendNow (reliable, ref clone);
+		}, GetMessageDelay (Protocol.GetMessageType (ref data))));
 	}
 
 	public static float GetMessageDelay (Protocol.MessageType messageType)
@@ -145,9 +148,9 @@ public class ButlerAi : BaseButler
 		}
 	}
 
-	void SendNow (bool reliable, byte[] data)
+	void SendNow (bool reliable, ref byte[] data)
 	{
-		Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", data);
+		Game.instance.OnRealTimeMessageReceived (reliable, "aiSenderId", ref data);
 	}
 
 	IEnumerator Do (Action action, float delay)

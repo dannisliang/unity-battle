@@ -73,14 +73,15 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 //		if (Protocol.GetMessageType (data) != Protocol.MessageType.AIM_AT) {
 //			Debug.Log ("***PRETENDING SendMessageToAll(" + reliable + ",'" + (char)data [0] + "': " + data.Length + "bytes)");
 //		}
-		if (Protocol.GetMessageType (data) == Protocol.MessageType.GRID_POSITIONS) {
+		if (Protocol.GetMessageType (ref data) == Protocol.MessageType.GRID_POSITIONS) {
 			data = ButlerAi.MakeAiGridMessage ();
 		} else {
 			// simply mirror back messages with delay
 		}
+		byte[] clone = (byte[])data.Clone ();
 		SceneMaster.instance.Async (() => {
-			listener.OnRealTimeMessageReceived (reliable, Utils.AI_PLAYER_ID, data);
-		}, ButlerAi.GetMessageDelay (Protocol.GetMessageType (data)));
+			listener.OnRealTimeMessageReceived (reliable, Utils.AI_PLAYER_ID, clone);
+		}, ButlerAi.GetMessageDelay (Protocol.GetMessageType (ref data)));
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data, int offset, int length)
