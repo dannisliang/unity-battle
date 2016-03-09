@@ -1,28 +1,60 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
+using System.IO;
 
-[System.Serializable]
-public class Boat
+public class Boat : IBattleSerializable
 {
-	[System.NonSerialized] public Whose whose;
+	public Whose whose;
 
 	public bool horizontal{ get; private set; }
 
 	public Position[] positions{ get; private set; }
 
-	public BoatConfiguration config { get; private set; }
+	public int boatConfigurationIndex { get; private set; }
 
-	//[System.NonSerialized]
 	int[] hits;
 
-	public Boat (Whose whose, BoatConfiguration config)
-	{
-		this.config = config;
-		horizontal = config.size > Utils.GRID_SIZE.y || Random.value > .5f;
-		int u = Random.Range (0, (horizontal ? Utils.GRID_SIZE.x : Utils.GRID_SIZE.y) - config.size + 1);
-		int v = Random.Range (0, horizontal ? Utils.GRID_SIZE.y : Utils.GRID_SIZE.x);
+	public BoatConfiguration config { get; private set; }
 
-		positions = MakeBoatPositions (u, v, config.size, horizontal);
+	public Boat ()
+	{
+	}
+
+	public static Boat RandomBoat (Whose whose, int boatConfigurationIndex)
+	{
+		Boat boat = new Boat ();
+		boat.boatConfigurationIndex = boatConfigurationIndex;
+		boat.config = Grid.fleet [boatConfigurationIndex];
+		boat.horizontal = boat.config.size > Utils.GRID_SIZE.y || Random.value > .5f;
+		int u = Random.Range (0, (boat.horizontal ? Utils.GRID_SIZE.x : Utils.GRID_SIZE.y) - boat.config.size + 1);
+		int v = Random.Range (0, boat.horizontal ? Utils.GRID_SIZE.y : Utils.GRID_SIZE.x);
+
+		boat.positions = MakeBoatPositions (u, v, boat.config.size, boat.horizontal);
+		boat.hits = new int[boat.config.size];
+		return boat;
+	}
+
+	public void Serialize (BinaryWriter writer)
+	{
+		writer.Write ((int)whose);
+		writer.Write (boatConfigurationIndex);
+		writer.Write (horizontal);
+		positions [0].Serialize (writer);
+	}
+
+	public void Deserialize (BinaryReader reader)
+	{	
+		whose = (Whose)reader.ReadInt32 ();
+
+		boatConfigurationIndex = reader.ReadInt32 ();
+		config = Grid.fleet [boatConfigurationIndex];
 		hits = new int[config.size];
+
+		horizontal = reader.ReadBoolean ();
+		Position position = new Position ();
+		position.Deserialize (reader);
+
+		positions = MakeBoatPositions (horizontal ? position.x : position.y, horizontal ? position.y : position.x, config.size, horizontal);
 	}
 
 	public StrikeResult FireAt (Position position, bool testOnly = false)

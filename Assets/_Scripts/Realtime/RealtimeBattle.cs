@@ -39,7 +39,7 @@ public class RealtimeBattle : MonoBehaviour
 		nextAimAllowed = Time.unscaledTime + AIM_INTERVAL;
 	}
 
-	static void EncodeAndSend (Protocol.MessageType messageType, System.Object obj, bool reliable)
+	static void EncodeAndSend (Protocol.MessageType messageType, IBattleSerializable obj, bool reliable)
 	{
 		byte[] bytes = Protocol.Encode (messageType, obj, reliable);
 		if (!Application.isEditor || messageType == Protocol.MessageType.GRID_POSITIONS) {
@@ -50,7 +50,7 @@ public class RealtimeBattle : MonoBehaviour
 
 	public static void DecodeAndExecute (ref byte[] bytes, bool reliable)
 	{
-		object obj;
+		IBattleSerializable obj;
 		int messageCount;
 		Protocol.MessageType messageType = Protocol.Decode (ref bytes, reliable, out obj, out messageCount);
 

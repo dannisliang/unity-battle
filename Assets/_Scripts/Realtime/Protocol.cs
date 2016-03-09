@@ -6,7 +6,7 @@ using System;
 
 public class Protocol
 {
-	public const int PROTOCOL_VERSION = 3;
+	public const int PROTOCOL_VERSION = 4;
 
 	static int sendMessageCount = 0;
 
@@ -17,18 +17,19 @@ public class Protocol
 		AIM_AT = (byte)'A',
 	}
 
-	public static byte[] Encode (MessageType messageType, System.Object obj, bool reliable)
+	public static byte[] Encode (MessageType messageType, IBattleSerializable obj, bool reliable)
 	{
 		if (!Application.isEditor && messageType != MessageType.AIM_AT) {
 			Debug.Log ("***Encode(" + messageType + ")");
 		}
-		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream ()) {
-			stream.WriteByte ((byte)messageType);
-			formatter.Serialize (stream, sendMessageCount);
-			formatter.Serialize (stream, obj);
-			sendMessageCount++;
-			return stream.ToArray ();
+			using (BinaryWriter writer = new BinaryWriter (stream)) {
+				writer.Write ((byte)messageType);
+				writer.Write (sendMessageCount);
+				obj.Serialize (writer);
+				sendMessageCount++;
+				return stream.ToArray ();
+			}
 		}
 	}
 
@@ -37,29 +38,33 @@ public class Protocol
 		return (MessageType)bytes [0];
 	}
 
-	public static MessageType Decode (ref byte[] bytes, bool reliable, out object obj, out int messageCount)
+	public static MessageType Decode (ref byte[] bytes, bool reliable, out IBattleSerializable obj, out int messageCount)
 	{
-		BinaryFormatter formatter = new BinaryFormatter ();
 		using (MemoryStream stream = new MemoryStream (bytes)) {
-			MessageType messageType = (MessageType)stream.ReadByte ();
-			messageCount = formatter.Deserialize (stream) as int? ?? -1;
-			switch (messageType) {
-			case Protocol.MessageType.GRID_POSITIONS:
-				obj = formatter.Deserialize (stream) as Grid;
-//				Debug.Log ("***Received other grid ");// + grid);
-				break;
-			case Protocol.MessageType.AIM_AT:
-				obj = formatter.Deserialize (stream) as Position;
-//				Debug.Log ("***Received aim at " + obj);
-				break;
-			case Protocol.MessageType.ROCKET_LAUNCH:
-				obj = formatter.Deserialize (stream) as Position;
-//				Debug.Log ("***Received launch at " + obj);
-				break;
-			default:
-				throw new NotImplementedException ("Unknown message type " + messageType);
+			using (BinaryReader reader = new BinaryReader (stream)) {
+				MessageType messageType = (MessageType)stream.ReadByte ();
+				messageCount = reader.ReadInt32 ();
+				switch (messageType) {
+				case Protocol.MessageType.GRID_POSITIONS:
+					obj = new Grid ();
+					obj.Deserialize (reader);
+//					Debug.Log ("***Received other grid ");// + obj);
+					break;
+				case Protocol.MessageType.AIM_AT:
+					obj = new Position ();
+					obj.Deserialize (reader);
+//					Debug.Log ("***Received aim at " + obj);
+					break;
+				case Protocol.MessageType.ROCKET_LAUNCH:
+					obj = new Position ();
+					obj.Deserialize (reader);
+//					Debug.Log ("***Received launch at " + obj);
+					break;
+				default:
+					throw new NotImplementedException ("Unknown message type " + messageType);
+				}
+				return messageType;
 			}
-			return messageType;
 		}
 	}
 

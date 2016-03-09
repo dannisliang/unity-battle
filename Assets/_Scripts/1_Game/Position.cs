@@ -1,12 +1,29 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.Assertions;
+using System.IO;
 
-[System.Serializable]
-public class Position
+public class Position : IBattleSerializable
 {
 	public int x { get; private set; }
 
 	public int y { get; private set; }
+
+	public Position ()
+	{
+	}
+
+	public void Serialize (BinaryWriter writer)
+	{	
+		writer.Write (x);
+		writer.Write (y);
+	}
+
+	public void Deserialize (BinaryReader reader)
+	{
+		x = reader.ReadInt32 ();
+		y = reader.ReadInt32 ();
+	}
 
 	public Position (int x, int y)
 	{

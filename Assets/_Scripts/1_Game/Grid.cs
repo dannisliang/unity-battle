@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
+using System;
+using System.IO;
 
-[System.Serializable]
-public class Grid
+public class Grid : IBattleSerializable
 {
-	[System.NonSerialized] public Whose whose;
+	public Whose whose;
 
 	public delegate void GridSetup ();
 
-	[field:System.NonSerialized] public event GridSetup OnGridSetup;
+	public event GridSetup OnGridSetup;
 
 	// http://www.navy.mil/navydata/our_ships.asp
 	public static BoatConfiguration[] fleet = {
@@ -23,13 +24,38 @@ public class Grid
 
 	public Boat[] boats;
 
-	[System.NonSerialized] int[,] misses;
+	int[,] misses;
 
 	public string playerUniqueId { get; private set; }
+
+	public Grid ()
+	{
+	}
 
 	public Grid (string playerUniqueId)
 	{
 		this.playerUniqueId = playerUniqueId;
+	}
+
+	public void Serialize (BinaryWriter writer)
+	{
+		writer.Write ((int)whose);
+		writer.Write (playerUniqueId);
+		for (int i = 0; i < fleet.Length; i++) {
+			boats [i].Serialize (writer);
+		}
+	}
+
+	public void Deserialize (BinaryReader reader)
+	{
+		whose = (Whose)reader.ReadInt32 ();
+		playerUniqueId = reader.ReadString ();
+
+		boats = new Boat[fleet.Length];
+		for (int i = 0; i < fleet.Length; i++) {
+			boats [i] = new Boat ();
+			boats [i].Deserialize (reader);
+		}
 	}
 
 	public int getMisses ()
@@ -69,7 +95,7 @@ public class Grid
 		for (int i = 0; i < fleet.Length; i++) {
 			bool conflict = true;
 			while (conflict) {
-				Boat boat = new Boat (whose, fleet [i]);
+				Boat boat = Boat.RandomBoat (whose, i);
 
 				conflict = false;
 				for (int j = 0; j < boat.positions.Length && !conflict; j++) {
