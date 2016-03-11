@@ -35,6 +35,7 @@ public class FredBuildEditor : EditorWindow
 			UnityEngine.Debug.LogError ("Failed to build " + apk);
 		} else {
 			UnityEngine.Debug.Log ("Successfully built " + apk);
+			UnityEngine.Debug.LogWarning ("Don't forget to use ALT-CMD-I to install.");
 		}
 	}
 
