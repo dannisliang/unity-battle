@@ -6,6 +6,7 @@ using System;
 using System.Threading;
 using System.IO;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 [InitializeOnLoad]
 public class FredBuildEditor : EditorWindow
@@ -29,7 +30,7 @@ public class FredBuildEditor : EditorWindow
 		string apk = PlayerSettings.bundleIdentifier + ".apk";
 		DateTime creationTime = File.GetCreationTime (apk);
 
-		BuildPipeline.BuildPlayer (SceneMaster.buildLevels, apk, BuildTarget.Android, BuildOptions.None);
+		BuildPipeline.BuildPlayer (GetSceneNames (), apk, BuildTarget.Android, BuildOptions.None);
 		
 		if (File.GetCreationTime (apk).Equals (creationTime)) {
 			UnityEngine.Debug.LogError ("Failed to build " + apk);
@@ -37,6 +38,16 @@ public class FredBuildEditor : EditorWindow
 			UnityEngine.Debug.Log ("Successfully built " + apk);
 			UnityEngine.Debug.LogWarning ("Don't forget to use ALT-CMD-I to install.");
 		}
+	}
+
+	static string[] GetSceneNames ()
+	{
+		string[] names = new string[SceneManager.sceneCount];
+		for (int i = 0; i < SceneManager.sceneCount; i++) {
+			names [i] = SceneManager.GetSceneAt (i).path;
+			UnityEngine.Debug.Log (names [i]);
+		}
+		return names;
 	}
 
 	[MenuItem ("FRED/Build %&i")]

@@ -8,11 +8,6 @@ public class SceneMaster : MonoBehaviour
 {
 	public static SceneMaster instance { get; private set; }
 
-	public const string SCENE_GAME = "__Game";
-	public static readonly string[] buildLevels = {
-		"Assets/" + SCENE_GAME + ".unity",
-	};
-
 	public static bool quitting { get; private set; }
 
 	void Awake ()
