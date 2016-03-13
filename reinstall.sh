@@ -4,12 +4,19 @@ set -ue
 
 ANDROID_SERIAL_FILE=android-serial.txt
 MANIFEST_PATH=Assets/Plugins/Android/AndroidManifest.xml
+PROJECT_SETTINGS=ProjectSettings/ProjectSettings.asset
 
 activity=com.unity3d.player.UnityPlayerActivity
 root=$( dirname $0 )
 
 # Determine Android package name
-pkg=$( grep bundleIdentifier ProjectSettings/ProjectSettings.asset | sed 's/ //g' | cut -d: -f2 )
+if [ -n "$( grep bundleIdentifier $PROJECT_SETTINGS | egrep 'Binary file .* matches' )" ]
+then
+  echo "ERROR: $PROJECT_SETTINGS is binary" 1>&2
+  exit 1
+fi
+
+pkg=$( grep bundleIdentifier $PROJECT_SETTINGS | sed 's/ //g' | cut -d: -f2 )
 
 devices=$(adb devices | sort | grep device\$ | cut -f1 | tr '\n' ' ')
 
