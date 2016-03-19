@@ -3,6 +3,8 @@
 
 set -ue
 
+$( dirname $0 )/version-check.sh
+
 dir="Assets/Plugins"
 
 commits=$(

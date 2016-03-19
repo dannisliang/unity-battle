@@ -2,6 +2,9 @@
 
 set -ue
 
+$( dirname $0 )/version-check.sh
+
+
 MANIFEST_PATH=Assets/Plugins/Android/AndroidManifest.xml
 
 activity=com.unity3d.player.UnityPlayerActivity
