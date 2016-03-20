@@ -891,7 +891,7 @@ Light:
   serializedVersion: 6
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 3
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -12692,7 +12692,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatPlacementController: {fileID: 1403814449}
   shipPrefab: {fileID: 132408, guid: 9cf413434e23343959a13210d2bab8b4, type: 2}
-  text: {fileID: 0}
 --- !u!1 &1577756694
 GameObject:
   m_ObjectHideFlags: 0
@@ -13135,7 +13134,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatPlacementController: {fileID: 1601558864}
   shipPrefab: {fileID: 132408, guid: 9cf413434e23343959a13210d2bab8b4, type: 2}
-  text: {fileID: 0}
 --- !u!114 &1587065916
 MonoBehaviour:
   m_ObjectHideFlags: 0
