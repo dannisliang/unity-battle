@@ -3,14 +3,14 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Collections;
 
-[CustomEditor (typeof(GridPlacementController))]
+[CustomEditor (typeof(GridTileController))]
 [CanEditMultipleObjects]
-public class GridHolderEditor : Editor
+public class GridTileEditor : Editor
 {
 
 	public override void OnInspectorGUI ()
 	{
-		GridPlacementController controller = (GridPlacementController)target;
+		GridTileController controller = (GridTileController)target;
 
 		GUILayout.Button ("RECREATE GRID");
 		DrawDefaultInspector ();

@@ -6,7 +6,7 @@ using System.Collections;
 using UnityEditor;
 #endif
 
-public class GridPlacementController : MonoBehaviour
+public class GridTileController : MonoBehaviour
 {
 	public GameObject tilePrefab;
 
@@ -33,7 +33,7 @@ public class GridPlacementController : MonoBehaviour
 				pos.x = x + .5f;
 				pos.y = Utils.GRID_SIZE.y - z - .5f;
 
-				GameObject clone = Game.instance.InstantiateTemp (tilePrefab);
+				GameObject clone = Application.isEditor ? Instantiate (tilePrefab) : Game.instance.InstantiateTemp (tilePrefab);
 				clone.transform.SetParent (transform, false);
 				clone.transform.localPosition = pos;
 				clone.transform.localScale = scale;
