@@ -27,8 +27,10 @@ public class FleetPanelController : MonoBehaviour
 			ships [i].transform.position = startPos - (2f + i * 1.4f) * transform.up;
 			ships [i].transform.rotation = Quaternion.FromToRotation (-ships [i].transform.forward, -transform.forward);
 			ships [i].transform.localScale = new Vector3 ((float)Grid.fleet [i].size / 5f, 1f, 1f);
+			
+			ParticleSystem.ShapeModule shape = ships [i].transform.GetComponentInChildren<ParticleSystem> ().shape;
+			shape.box = new Vector3 (2f * Grid.fleet [i].size, 2f, 0f);
 		}
-//		neutral = ships [0].gameObject.GetComponentInChildren<MeshRenderer> ().material.color;
 	}
 
 	void OnEnable ()
