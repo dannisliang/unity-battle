@@ -7,8 +7,9 @@ public class FleetPanelController : MonoBehaviour
 	public BoatPlacementController boatPlacementController;
 	public GameObject shipPrefab;
 
-	Color neutral;
-	Color red = Color.red;
+	public Color neutral;
+	public Color oneHit;
+	public Color nMinusOneHit;
 
 	GameObject[] ships;
 	Vector3 startPos;
@@ -27,7 +28,7 @@ public class FleetPanelController : MonoBehaviour
 			ships [i].transform.rotation = Quaternion.FromToRotation (-ships [i].transform.forward, -transform.forward);
 			ships [i].transform.localScale = new Vector3 ((float)Grid.fleet [i].size / 5f, 1f, 1f);
 		}
-		neutral = ships [0].gameObject.GetComponentInChildren<MeshRenderer> ().material.color;
+//		neutral = ships [0].gameObject.GetComponentInChildren<MeshRenderer> ().material.color;
 	}
 
 	void OnEnable ()
@@ -56,8 +57,12 @@ public class FleetPanelController : MonoBehaviour
 		if (hits == size) {
 			return Color.black;
 		}
+
+		if (hits == 0) {
+			return neutral;
+		}
 		float damage = (float)hits / (size - 1);
-		return Color.Lerp (neutral, red, damage);
+		return Color.Lerp (oneHit, nMinusOneHit, damage);
 	}
 
 }
