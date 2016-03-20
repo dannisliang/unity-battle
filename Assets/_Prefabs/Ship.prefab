@@ -25,6 +25,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433596}
+  - 114: {fileID: 11497612}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -120,6 +121,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 102948}
   m_Mesh: {fileID: 4300002, guid: b572a29c1bd2d4998a09944da0aa1256, type: 3}
+--- !u!114 &11497612
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b9218cd75061418594bcbb109f69770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neutral: {r: 0, g: 0, b: 0, a: 0}
+  oneHit: {r: 1, g: 0, b: 0, a: 0}
+  nMinusOneHit: {r: 0.94482756, g: 1, b: 0, a: 0}
 --- !u!198 &19819394
 ParticleSystem:
   m_ObjectHideFlags: 1

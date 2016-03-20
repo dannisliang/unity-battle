@@ -12754,9 +12754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatPlacementController: {fileID: 1403814449}
   shipPrefab: {fileID: 132408, guid: 9cf413434e23343959a13210d2bab8b4, type: 2}
-  neutral: {r: 0.27058825, g: 0.63529414, b: 1, a: 0.40784314}
-  oneHit: {r: 0.5955882, g: 0.5955882, b: 0.5955882, a: 0}
-  nMinusOneHit: {r: 1, g: 0, b: 0, a: 0}
+  shipColor: {r: 0.27058825, g: 0.63529414, b: 1, a: 0.40784314}
 --- !u!1 &1577756694
 GameObject:
   m_ObjectHideFlags: 0
@@ -13199,9 +13197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatPlacementController: {fileID: 1601558864}
   shipPrefab: {fileID: 132408, guid: 9cf413434e23343959a13210d2bab8b4, type: 2}
-  neutral: {r: 0.7019608, g: 0.42352942, b: 0.17254902, a: 0.7529412}
-  oneHit: {r: 0.5921569, g: 0.5921569, b: 0.5921569, a: 0}
-  nMinusOneHit: {r: 1, g: 0, b: 0, a: 0}
+  shipColor: {r: 0.7019608, g: 0.42352942, b: 0.17254902, a: 0.7529412}
 --- !u!114 &1587065916
 MonoBehaviour:
   m_ObjectHideFlags: 0

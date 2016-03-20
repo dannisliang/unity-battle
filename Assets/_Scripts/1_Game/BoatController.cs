@@ -46,6 +46,9 @@ public class BoatController : MonoBehaviour
 			shipChild.localPosition = new Vector3 (boat.horizontal ? 0f : 1f, boat.horizontal ? 0f : 1f - len, height);
 			shipChild.localScale = new Vector3 (len / 5f, 1f, 1f);
 			shipChild.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, boat.horizontal ? 0f : 90f));
+
+			ShipController shipController = shipChild.GetComponent<ShipController> ();
+			shipController.SetDamage (0, boat.Size ());
 		}
 
 		for (int i = 0; i < boat.Size (); i++) {
