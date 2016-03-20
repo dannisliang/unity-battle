@@ -26,10 +26,8 @@ public class FleetPanelController : MonoBehaviour
 			ships [i] = Instantiate (shipPrefab);
 			ships [i].transform.position = startPos - (2f + i * 1.4f) * transform.up;
 			ships [i].transform.rotation = Quaternion.FromToRotation (-ships [i].transform.forward, -transform.forward);
-			ships [i].transform.localScale = new Vector3 ((float)Grid.fleet [i].size / 5f, 1f, 1f);
-			
-			ParticleSystem.ShapeModule shape = ships [i].transform.GetComponentInChildren<ParticleSystem> ().shape;
-			shape.box = new Vector3 (2f * Grid.fleet [i].size, 2f, 0f);
+			ships [i].transform.localScale = new Vector3 ((float)Grid.fleet [i].size / 5f, 1f, 1f);			
+			ships [i].GetComponentInChildren<ParticleSystem> ().Clear ();
 		}
 	}
 
@@ -48,8 +46,19 @@ public class FleetPanelController : MonoBehaviour
 		Boat[] boats = boatPlacementController.grid.boats;
 		if (boats != null) {
 			for (int i = 0; i < boats.Length; i++) {
-				Color color = GetColor (boats [i].HitCount (), boats [i].Size ());
+				var hits = boats [i].HitCount ();
+				var size = boats [i].Size ();
+				Color color = GetColor (hits, size);
 				ships [i].gameObject.GetComponentInChildren<MeshRenderer> ().material.color = color;
+
+				ParticleSystem ps = ships [i].transform.GetComponentInChildren<ParticleSystem> ();
+				if (hits == 0 || hits == size) {
+					ps.Stop ();
+				} else {
+					ParticleSystem.ShapeModule shape = ps.shape;
+					shape.box = new Vector3 (2f * hits, 0f, 0f);
+					ps.Play ();
+				}
 			}
 		}
 	}
@@ -59,7 +68,6 @@ public class FleetPanelController : MonoBehaviour
 		if (hits == size) {
 			return Color.black;
 		}
-
 		if (hits == 0) {
 			return neutral;
 		}
