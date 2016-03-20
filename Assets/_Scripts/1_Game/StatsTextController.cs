@@ -4,7 +4,7 @@ using System.Collections;
 
 public class StatsTextController : MonoBehaviour
 {
-	public BoatPlacementController boatPlacementController;
+	public GridController boatPlacementController;
 
 	public Text text;
 

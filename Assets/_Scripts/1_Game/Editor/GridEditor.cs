@@ -3,21 +3,21 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Collections;
 
-[CustomEditor (typeof(BoatPlacementController))]
+[CustomEditor (typeof(GridController))]
 [CanEditMultipleObjects]
-public class BoatPlacementEditor : Editor
+public class GridEditor : Editor
 {
 
 	public override void OnInspectorGUI ()
 	{
-		BoatPlacementController controller = (BoatPlacementController)target;
+		GridController controller = (GridController)target;
 
 		GUILayout.Button ("RECREATE BOATS");
 		DrawDefaultInspector ();
 
 		if (GUI.changed) {
 			Undo.SetCurrentGroupName ("Recreate " + controller.name);
-			controller.RecreateBoats (typeof(BoatPlacementEditor).Name);
+			controller.RecreateBoats (typeof(GridEditor).Name);
 			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
 		}
 

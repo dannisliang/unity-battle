@@ -4,7 +4,7 @@ using System.Collections;
 
 public class FleetPanelController : MonoBehaviour
 {
-	public BoatPlacementController boatPlacementController;
+	public GridController boatPlacementController;
 	public GameObject shipPrefab;
 	public Color shipColor;
 

@@ -21,8 +21,8 @@ public class BattleController : MonoBehaviour
 	public GameObject gridOurs;
 	public GameObject gridTheirs;
 	public GameObject rocketOriginTheirs;
-	public BoatPlacementController boatsOursPlacementController;
-	public BoatPlacementController boatsTheirsPlacementController;
+	public GridController boatsOursPlacementController;
+	public GridController boatsTheirsPlacementController;
 	public AudioClip noFireClip;
 	public CenterPanelController centerPanelController;
 
@@ -292,7 +292,7 @@ public class BattleController : MonoBehaviour
 
 	public StrikeResult _Strike (Whose whose, Position position)
 	{
-		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
+		GridController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		Boat boat;
 		StrikeResult result = boatPlacementController.grid.FireAt (position, out boat);
 		if (!Application.isEditor) {
@@ -332,7 +332,7 @@ public class BattleController : MonoBehaviour
 		if (loser != Whose.Nobody) {
 			return Whose.Nobody;
 		}
-		BoatPlacementController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
+		GridController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		if (boatPlacementController.grid.AllBoatsSunk ()) {
 			loser = whose;
 			AnnounceBattleState ();

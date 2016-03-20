@@ -6,11 +6,12 @@ using System.Collections;
 using UnityEditor;
 #endif
 
-public class BoatPlacementController : MonoBehaviour
+public class GridController : MonoBehaviour
 {
 	public Whose whose;
 	public GameObject boatNormalPrefab;
 	public GameObject boatSunkPrefab;
+	public GameObject boatHolder;
 
 	public Grid grid { get; private set; }
 
@@ -33,7 +34,7 @@ public class BoatPlacementController : MonoBehaviour
 
 	public void DestroyBoats ()
 	{
-		Utils.DestroyChildren (transform);
+		Utils.DestroyChildren (boatHolder.transform);
 	}
 
 	void CreateBoats ()
@@ -47,7 +48,7 @@ public class BoatPlacementController : MonoBehaviour
 	{
 		GameObject prefab = sunk ? boatSunkPrefab : boatNormalPrefab;
 		GameObject clone = Application.isPlaying ? Instantiate (prefab) : Game.instance.InstantiateTemp (prefab);
-		clone.transform.SetParent (transform, false);
+		clone.transform.SetParent (boatHolder.transform, false);
 
 		BoatController boatController = clone.GetComponent<BoatController> ();
 		boatController.Configure (boat, sunk);
