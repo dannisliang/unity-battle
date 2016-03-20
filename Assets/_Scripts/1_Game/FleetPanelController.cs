@@ -22,7 +22,7 @@ public class FleetPanelController : MonoBehaviour
 		for (int i = 0; i < ships.Length; i++) {
 			ships [i] = Instantiate (shipPrefab);
 			ships [i].transform.position = startPos - (2f + i * 1.4f) * transform.up;
-			ships [i].transform.rotation = Quaternion.FromToRotation (ships [i].transform.up, -Vector3.forward);
+			ships [i].transform.rotation = Quaternion.FromToRotation (Vector3.up, -transform.forward);
 			ships [i].transform.localScale = new Vector3 ((float)Grid.fleet [i].size / 5f, 1f, 1f);
 			ships [i].transform.GetComponentInChildren<ShipController> ().neutral = shipColor;
 		}

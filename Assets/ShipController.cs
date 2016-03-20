@@ -19,6 +19,9 @@ public class ShipController : MonoBehaviour
 
 	public void SetDamage (int hits, int size)
 	{
+		if (!Application.isPlaying) {
+			return;
+		}
 		Color color = GetColor (hits, size);
 		meshRenderer = GetComponentInChildren<MeshRenderer> ();
 		meshRenderer.material.color = color;

@@ -45,7 +45,8 @@ public class BoatPlacementController : MonoBehaviour
 
 	public void PlaceBoat (Boat boat, bool sunk)
 	{
-		GameObject clone = Game.instance.InstantiateTemp (sunk ? boatSunkPrefab : boatNormalPrefab);
+		GameObject prefab = sunk ? boatSunkPrefab : boatNormalPrefab;
+		GameObject clone = Application.isPlaying ? Instantiate (prefab) : Game.instance.InstantiateTemp (prefab);
 		clone.transform.SetParent (transform, false);
 
 		BoatController boatController = clone.GetComponent<BoatController> ();
