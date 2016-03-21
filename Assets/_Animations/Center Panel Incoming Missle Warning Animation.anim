@@ -120,12 +120,12 @@ AnimationClip:
         outSlope: 0
         tangentMode: 0
       - time: 0.41666666
-        value: 0.15
+        value: 0.4
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       - time: 0.5833333
-        value: 0.15
+        value: 0.4
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -310,12 +310,12 @@ AnimationClip:
         outSlope: 0
         tangentMode: 0
       - time: 0.41666666
-        value: 0.15
+        value: 0.4
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       - time: 0.5833333
-        value: 0.15
+        value: 0.4
         inSlope: 0
         outSlope: 0
         tangentMode: 0
