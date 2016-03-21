@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 132408, guid: 9cf413434e23343959a13210d2bab8b4, type: 2}
   whose: 0
   highlightMaterial: {fileID: 2100000, guid: 8075b132fa3804826b68b7e086c61185, type: 2}
 --- !u!1001 &100100000

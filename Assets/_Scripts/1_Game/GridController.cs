@@ -113,6 +113,11 @@ public class GridController : MonoBehaviour
 		default:
 			throw new System.NotImplementedException ();
 		}
+		if (boatControllers [0] != null) {
+			for (int i = 0; i < grid.boats.Length; i++) {
+				boatControllers [i].UpdateDamage ();
+			}
+		}
 		return result;
 	}
 

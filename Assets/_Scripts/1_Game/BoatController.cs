@@ -6,12 +6,14 @@ public class BoatController : MonoBehaviour
 	[HideInInspector]
 	public Boat boat { get; private set; }
 
+	public GameObject shipPrefab;
 	public Whose whose;
 
 	public Material highlightMaterial;
 
 	MeshRenderer meshRenderer;
 	Material initialMaterial;
+	GameObject ship;
 
 	void Awake ()
 	{
@@ -36,19 +38,20 @@ public class BoatController : MonoBehaviour
 		transform.localPosition = new Vector3 (boat.GetPosition (0).x, Utils.GRID_SIZE.y - 1 - boat.GetPosition (0).y, 0f);
 		Transform meshChild = transform.GetChild (0);
 		meshChild.name += boatSuffix;
-		meshChild.localPosition = new Vector3 (boat.horizontal ? boat.Size () / 2f : .5f, boat.horizontal ? .5f : 1f - len / 2f, height);
+		meshChild.localPosition = new Vector3 (boat.horizontal ? .5f * boat.Size () : .5f, boat.horizontal ? .5f : 1f - .5f * len, height);
 		meshChild.localScale = new Vector3 ((boat.horizontal ? len : 1f) - .15f, (boat.horizontal ? 1f : len) - .15f, 1f);
 
 		// only normal (not sunk) boats have a ship child
-		if (transform.childCount > 1) {
-			Transform shipChild = transform.GetChild (1);
+		if (shipPrefab != null) {
+			ship = Game.InstantiateTemp (shipPrefab, transform);
+			ShipController shipController = GetShipController ();
+			Transform shipChild = shipController.transform;
 			shipChild.name += boatSuffix;
-			shipChild.localPosition = new Vector3 (boat.horizontal ? 0f : 1f, boat.horizontal ? 0f : 1f - len, height);
+			shipChild.localPosition = new Vector3 (boat.horizontal ? .5f * len : .5f, boat.horizontal ? .5f : 1f - .5f * len, height);
 			shipChild.localScale = new Vector3 (len / 5f, 1f, 1f);
-			shipChild.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, boat.horizontal ? 0f : 90f));
-
-			ShipController shipController = shipChild.GetComponent<ShipController> ();
-			shipController.SetDamage (0, boat.Size ());
+			shipChild.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, boat.horizontal ? 0f : 90f)) * Quaternion.FromToRotation (Vector3.forward, Vector3.up);
+			// reset damage
+			UpdateDamage ();
 		}
 
 		for (int i = 0; i < boat.Size (); i++) {
@@ -68,5 +71,14 @@ public class BoatController : MonoBehaviour
 			collider.transform.localScale = new Vector3 (1f, 1f, 0f);
 		}
 	}
-	
+
+	ShipController GetShipController ()
+	{
+		return ship != null ? ship.transform.GetComponent<ShipController> () : null;
+	}
+
+	public void UpdateDamage ()
+	{
+		GetShipController ().SetDamage (boat.HitCount (), boat.Size ());
+	}
 }

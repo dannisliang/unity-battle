@@ -132,9 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9218cd75061418594bcbb109f69770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neutral: {r: 0, g: 0, b: 0, a: 0}
-  oneHit: {r: 1, g: 0, b: 0, a: 0}
-  nMinusOneHit: {r: 0.94482756, g: 1, b: 0, a: 0}
+  neutral: {r: 0.39705884, g: 0.39705884, b: 0.39705884, a: 0}
+  oneHit: {r: 0.36764705, g: 0.16490053, b: 0.16490053, a: 0}
+  nMinusOneHit: {r: 1, g: 0, b: 0, a: 0}
 --- !u!198 &19819394
 ParticleSystem:
   m_ObjectHideFlags: 1
