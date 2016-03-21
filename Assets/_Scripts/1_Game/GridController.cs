@@ -14,16 +14,19 @@ public class GridController : MonoBehaviour
 	public GameObject reticlePrefab;
 	public GameObject markerHitPrefab;
 	public GameObject markerMissPrefab;
+	public GameObject rocketPrefab;
 	public GameObject boatHolder;
+	public GameObject rocketOrigin;
 
 	public Grid grid { get; private set; }
 
-	BoatController boatController;
+	BoatController[] boatControllers;
 	GameObject aimReticle;
 	GameObject targetReticle;
 
 	public void Init (string playerUniqueId)
 	{
+		boatControllers = new BoatController[Grid.fleet.Length];
 		CreateReticles ();
 		SetBoats (playerUniqueId, null);
 		if (whose == Whose.Ours) {
@@ -49,7 +52,7 @@ public class GridController : MonoBehaviour
 		DestroyBoats ();
 	}
 
-	public void DestroyBoats ()
+	void DestroyBoats ()
 	{
 		Utils.DestroyChildren (boatHolder.transform);
 	}
@@ -57,23 +60,20 @@ public class GridController : MonoBehaviour
 	void CreateBoats ()
 	{
 		for (int i = 0; i < grid.boats.Length; i++) {
-			PlaceBoat (grid.boats [i], false);
+			boatControllers [i] = PlaceBoat (grid.boats [i], false);
 		}
 	}
 
-	public void PlaceBoat (Boat boat, bool sunk)
+	public RocketController MakeRocket ()
 	{
-		GameObject prefab = sunk ? boatSunkPrefab : boatNormalPrefab;
-		GameObject clone = Game.InstantiateTemp (prefab);
-		clone.transform.SetParent (boatHolder.transform, false);
+		GameObject rocket = Game.InstantiateTemp (rocketPrefab, rocketOrigin.transform);
+		rocket.transform.position = MakeFirePos (rocketOrigin.transform);
+		return rocket.GetComponent<RocketController> ();
+	}
 
-		BoatController boatController = clone.GetComponent<BoatController> ();
-		boatController.Configure (boat, sunk);
-
-		//Utils.SetNoSaveNoEditHideFlags (clone.transform);
-#if UNITY_EDITOR
-		Undo.RegisterCreatedObjectUndo (clone, "Create " + boat);
-#endif
+	Vector3 MakeFirePos (Transform originTransform)
+	{
+		return originTransform.position + Utils.RandomSign () * originTransform.right;
 	}
 
 	public void HideAimReticle ()
@@ -93,10 +93,49 @@ public class GridController : MonoBehaviour
 		aimReticle.GetComponent<TargetReticleController> ().SetTargetPosition (position, false);
 	}
 
-	public void SetMarker (Position position, Marker marker)
+	public StrikeResult Strike (Position position, out Boat boat)
+	{
+		StrikeResult result = grid.FireAt (position, out boat);
+		switch (result) {
+		case StrikeResult.IGNORED_ALREADY_MISSED:
+		case StrikeResult.IGNORED_ALREADY_HIT:
+			break;
+		case StrikeResult.MISS:
+			SetMarker (position, Marker.Miss);
+			break;
+		case StrikeResult.HIT_NOT_SUNK:
+			SetMarker (position, Marker.Hit);
+			break;
+		case StrikeResult.HIT_AND_SUNK:
+			SetMarker (position, Marker.Hit);
+			PlaceBoat (boat, true);
+			break;
+		default:
+			throw new System.NotImplementedException ();
+		}
+		return result;
+	}
+
+	void SetMarker (Position position, Marker marker)
 	{
 		GameObject go = Game.InstantiateTemp (marker == Marker.Hit ? markerHitPrefab : markerMissPrefab, transform);
 		go.transform.localPosition = position.AsGridLocalPosition (marker);
+	}
+
+	BoatController PlaceBoat (Boat boat, bool sunk)
+	{
+		GameObject prefab = sunk ? boatSunkPrefab : boatNormalPrefab;
+		GameObject clone = Game.InstantiateTemp (prefab);
+		clone.transform.SetParent (boatHolder.transform, false);
+
+		BoatController boatController = clone.GetComponent<BoatController> ();
+		boatController.Configure (boat, sunk);
+
+		//Utils.SetNoSaveNoEditHideFlags (clone.transform);
+		#if UNITY_EDITOR
+		Undo.RegisterCreatedObjectUndo (clone, "Create " + boat);
+		#endif
+		return boatController;
 	}
 
 }

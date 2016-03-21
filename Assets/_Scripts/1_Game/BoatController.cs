@@ -4,7 +4,7 @@ using System.Collections;
 public class BoatController : MonoBehaviour
 {
 	[HideInInspector]
-	public Boat boat{ get; private set; }
+	public Boat boat { get; private set; }
 
 	public Whose whose;
 

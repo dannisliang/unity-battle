@@ -13,9 +13,6 @@ public class BattleController : MonoBehaviour
 	public static LayerInfo layerGridTheirs;
 
 	public Animator whoseTurnAnimator;
-	public GameObject rocketOursPrefab;
-	public GameObject rocketTheirsPrefab;
-	public GameObject rocketOriginTheirs;
 	public GridController gridOursController;
 	public GridController gridTheirsController;
 	public AudioClip noFireClip;
@@ -213,29 +210,23 @@ public class BattleController : MonoBehaviour
 
 	public void LaunchRocket (Whose atWhose, Position targetPosition)
 	{
-		GameObject rocket = Game.InstantiateTemp (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
-		Vector3 localPos = targetPosition.AsGridLocalPosition (Marker.Aim);
+		RocketController rocketController = GetGridController (atWhose).MakeRocket ();
+		Vector3 localTargetPos = targetPosition.AsGridLocalPosition (Marker.Aim);
 		
-		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
-		PosRot start = new PosRot (FirePos (originTransform), originTransform.rotation);
+		PosRot start = new PosRot (rocketController.transform);
 
-		Transform targetGridTransform = GetGridController (atWhose).transform.parent;
-		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localPos);
+		Transform targetGridTransform = GetGridController (atWhose).transform;
+		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localTargetPos);
 		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
 
 		firing++;
-		rocket.GetComponent<RocketController> ().Launch (atWhose, targetPosition, start, end, delegate {
+		rocketController.Launch (atWhose, targetPosition, start, end, delegate {
 			firing--;
 		});
 		if (atWhose == Whose.Ours) {
 			centerPanelController.IssueWarning (.5f, 2f);
 		}
-	}
-
-	Vector3 FirePos (Transform originTransform)
-	{
-		return originTransform.position + Utils.RandomSign () * originTransform.right;
 	}
 
 	IEnumerator SetTurn (Whose whose)
@@ -262,24 +253,17 @@ public class BattleController : MonoBehaviour
 	public StrikeResult _Strike (Whose whose, Position position)
 	{
 		Boat boat;
-		StrikeResult result = GetGridController (whose).grid.FireAt (position, out boat);
+		StrikeResult result = GetGridController (whose).Strike (position, out boat);
 		if (!Application.isEditor) {
 			Debug.Log ("***Strike(" + position + ") -> " + result);
 		}
 		switch (result) {
 		case StrikeResult.IGNORED_ALREADY_MISSED:
 		case StrikeResult.IGNORED_ALREADY_HIT:
-			break;
 		case StrikeResult.MISS:
-			GetGridController (whose).SetMarker (position, Marker.Miss);
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
-			GetGridController (whose).SetMarker (position, Marker.Hit);
-			AnnounceStrike (whose, boat, position, result);
-			break;
 		case StrikeResult.HIT_AND_SUNK:
-			GetGridController (whose).SetMarker (position, Marker.Hit);
-			GetGridController (whose).PlaceBoat (boat, true);
 			AnnounceStrike (whose, boat, position, result);
 			break;
 		default:
