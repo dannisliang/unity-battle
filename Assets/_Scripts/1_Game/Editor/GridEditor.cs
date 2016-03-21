@@ -17,7 +17,7 @@ public class GridEditor : Editor
 
 		if (GUI.changed) {
 			Undo.SetCurrentGroupName ("Recreate " + controller.name);
-			controller.RecreateBoats (typeof(GridEditor).Name);
+			controller.Init (typeof(GridEditor).Name);
 			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
 		}
 

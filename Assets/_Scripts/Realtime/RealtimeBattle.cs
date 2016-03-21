@@ -71,7 +71,7 @@ public class RealtimeBattle : MonoBehaviour
 			}
 			lastAimMessageReceiveCount = messageCount;
 			Position aimPosition = obj as Position;
-			BattleController.instance.AimAt (aimPosition);
+			BattleController.instance.AimAt (Whose.Ours, aimPosition);
 			break;
 		case Protocol.MessageType.ROCKET_LAUNCH:
 			Position targetPosition = obj as Position;

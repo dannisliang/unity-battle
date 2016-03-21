@@ -33,7 +33,7 @@ public class GridTileController : MonoBehaviour
 				pos.x = x + .5f;
 				pos.y = Utils.GRID_SIZE.y - z - .5f;
 
-				GameObject clone = Application.isEditor ? Instantiate (tilePrefab) : Game.instance.InstantiateTemp (tilePrefab);
+				GameObject clone = Game.InstantiateTemp (tilePrefab);
 				clone.transform.SetParent (transform, false);
 				clone.transform.localPosition = pos;
 				clone.transform.localScale = scale;

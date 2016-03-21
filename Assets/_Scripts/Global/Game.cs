@@ -73,10 +73,15 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		OnGameStateChange += HandleGameStateChanged;
 	}
 
-	public GameObject InstantiateTemp (UnityEngine.Object original)
+	public static GameObject InstantiateTemp (UnityEngine.Object original, Transform parent = null)
 	{
 		GameObject go = Instantiate (original) as GameObject;
-		tempObjects.Add (go);
+		if (parent != null) {
+			go.transform.SetParent (parent, false);
+		}
+		if (Application.isPlaying) {
+			instance.tempObjects.Add (go);
+		}
 		return go;
 	}
 

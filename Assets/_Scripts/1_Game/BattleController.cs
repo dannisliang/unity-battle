@@ -15,14 +15,9 @@ public class BattleController : MonoBehaviour
 	public Animator whoseTurnAnimator;
 	public GameObject rocketOursPrefab;
 	public GameObject rocketTheirsPrefab;
-	public GameObject markerTargetReticleOursAtTheirsPrefab;
-	public GameObject markerHitPrefab;
-	public GameObject markerMissPrefab;
-	public GameObject gridOurs;
-	public GameObject gridTheirs;
 	public GameObject rocketOriginTheirs;
-	public GridController boatsOursPlacementController;
-	public GridController boatsTheirsPlacementController;
+	public GridController gridOursController;
+	public GridController gridTheirsController;
 	public AudioClip noFireClip;
 	public CenterPanelController centerPanelController;
 
@@ -37,7 +32,8 @@ public class BattleController : MonoBehaviour
 		set {
 			_firing = value;
 			if (firing > 0) {
-				aimReticleAtTheirs.SetActive (false);
+				gridOursController.HideAimReticle ();
+				gridTheirsController.HideAimReticle ();
 			}
 			AnnounceBattleState ();
 		}
@@ -80,9 +76,6 @@ public class BattleController : MonoBehaviour
 	public event WhoseTurn OnWhoseTurn;
 
 	CardboardAudioSource source;
-	GameObject aimReticleAtOurs;
-	GameObject aimReticleAtTheirs;
-	GameObject targetReticleOurs;
 
 	void Awake ()
 	{
@@ -93,15 +86,6 @@ public class BattleController : MonoBehaviour
 		instance = this;
 		layerGridTheirs = new LayerInfo ("Grid Theirs");
 		source = GetComponent<CardboardAudioSource> ();
-
-		targetReticleOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
-		targetReticleOurs.name += " targetReticleOurs";
-
-		aimReticleAtOurs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
-		aimReticleAtOurs.name += " aimReticleAtOurs";
-
-		aimReticleAtTheirs = Instantiate (markerTargetReticleOursAtTheirsPrefab);
-		aimReticleAtTheirs.name += " aimReticleAtTheirs";
 	}
 
 	void OnEnable ()
@@ -143,19 +127,16 @@ public class BattleController : MonoBehaviour
 		loser = Whose.Nobody;
 		_firing = 0;
 
-		AimAt (Whose.Theirs, null); // reticle starts disabled
-		AimAt (Whose.Ours, null); // reticle starts disabled
-		TargetAt (null); // reticle starts disabled
 		// reset grids
-		boatsOursPlacementController.RecreateBoats (SystemInfo.deviceUniqueIdentifier);
-		boatsTheirsPlacementController.RecreateBoats (null);
+		gridOursController.Init (SystemInfo.deviceUniqueIdentifier);
+		gridTheirsController.Init (null);
 		// tell everyone to reset state
 		AnnounceBattleState ();
 	}
 
 	void SendOurBoatPositions ()
 	{
-		RealtimeBattle.EncodeAndSendGrid (boatsOursPlacementController.grid);
+		RealtimeBattle.EncodeAndSendGrid (gridOursController.grid);
 	}
 
 	public void SetBoatsTheirs (string playerUniqueId, Boat[] boats)
@@ -163,7 +144,7 @@ public class BattleController : MonoBehaviour
 		Whose whoseStarts = playerUniqueId.Equals (Utils.AI_PLAYER_ID) || playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs;
 //		Debug.Log ("***FIRST TURN: " + whoseStarts + " playerUniqueId=" + playerUniqueId + " deviceUniqueIdentifier=" + SystemInfo.deviceUniqueIdentifier);
 		StartCoroutine (SetTurn (whoseStarts));
-		boatsTheirsPlacementController.SetBoats (playerUniqueId, boats);
+		gridTheirsController.SetBoats (playerUniqueId, boats);
 		AnnounceBattleState ();
 	}
 
@@ -192,10 +173,20 @@ public class BattleController : MonoBehaviour
 		if (whoseTurn != Whose.Ours) {
 			return;
 		}
-		PlaceMarker (whose, position, Marker.Aim);
+		GetGrid (whose).SetAimPosition (position);
 		if (OnReticleAim != null) {
 			OnReticleAim (whose, position);
 		}
+	}
+
+	public void TargetAt (Whose whose, Position position)
+	{
+		GetGrid (whose).SetTargetPosition (position);
+	}
+
+	GridController GetGrid (Whose whose)
+	{
+		return whose == Whose.Theirs ? gridTheirsController : gridOursController;
 	}
 
 	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
@@ -207,7 +198,7 @@ public class BattleController : MonoBehaviour
 			source.PlayOneShot (noFireClip);
 			return false;
 		}
-		TargetAt (targetPosition);
+		TargetAt (Whose.Theirs, targetPosition);
 		RealtimeBattle.EncodeAndSendLaunch (targetPosition);
 		LaunchRocket (Whose.Theirs, targetPosition);
 		return true;
@@ -232,13 +223,13 @@ public class BattleController : MonoBehaviour
 
 	public void LaunchRocket (Whose atWhose, Position targetPosition)
 	{
-		GameObject rocket = Game.instance.InstantiateTemp (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
+		GameObject rocket = Game.InstantiateTemp (atWhose == Whose.Theirs ? rocketOursPrefab : rocketTheirsPrefab);
 		Vector3 localPos = targetPosition.AsGridLocalPosition (Marker.Aim);
 		
 		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
 		PosRot start = new PosRot (FirePos (originTransform), originTransform.rotation);
 
-		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirs : gridOurs).transform.parent;
+		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirsController : gridOursController).transform.parent;
 		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localPos);
 		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
@@ -255,18 +246,6 @@ public class BattleController : MonoBehaviour
 	Vector3 FirePos (Transform originTransform)
 	{
 		return originTransform.position + Utils.RandomSign () * originTransform.right;
-	}
-
-	public void AimAt (Position position)
-	{
-		if (firing == 0) {
-			PlaceMarker (Whose.Ours, position, Marker.Aim);
-		}
-	}
-
-	public void TargetAt (Position position)
-	{
-		PlaceMarker (Whose.Theirs, position, Marker.Target);
 	}
 
 	IEnumerator SetTurn (Whose whose)
@@ -292,9 +271,8 @@ public class BattleController : MonoBehaviour
 
 	public StrikeResult _Strike (Whose whose, Position position)
 	{
-		GridController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
 		Boat boat;
-		StrikeResult result = boatPlacementController.grid.FireAt (position, out boat);
+		StrikeResult result = GetGrid (whose).grid.FireAt (position, out boat);
 		if (!Application.isEditor) {
 			Debug.Log ("***Strike(" + position + ") -> " + result);
 		}
@@ -303,14 +281,14 @@ public class BattleController : MonoBehaviour
 		case StrikeResult.IGNORED_ALREADY_HIT:
 			break;
 		case StrikeResult.MISS:
-			PlaceMarker (whose, position, Marker.Miss);
+			GetGrid (whose).SetMarker (position, Marker.Miss);
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
-			PlaceMarker (whose, position, Marker.Hit);
+			GetGrid (whose).SetMarker (position, Marker.Hit);
 			AnnounceStrike (whose, boat, position, result);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
-			PlaceMarker (whose, position, Marker.Hit);
+			GetGrid (whose).SetMarker (position, Marker.Hit);
 			PlaceSunkBoat (whose, boat);
 			AnnounceStrike (whose, boat, position, result);
 			break;
@@ -332,8 +310,7 @@ public class BattleController : MonoBehaviour
 		if (loser != Whose.Nobody) {
 			return Whose.Nobody;
 		}
-		GridController boatPlacementController = whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController;
-		if (boatPlacementController.grid.AllBoatsSunk ()) {
+		if (GetGrid (whose).grid.AllBoatsSunk ()) {
 			loser = whose;
 			AnnounceBattleState ();
 			SceneMaster.instance.Async (delegate {
@@ -346,35 +323,7 @@ public class BattleController : MonoBehaviour
 
 	void PlaceSunkBoat (Whose whose, Boat boat)
 	{
-		(whose == Whose.Theirs ? boatsTheirsPlacementController : boatsOursPlacementController).PlaceBoat (boat, true);
-	}
-
-	void PlaceMarker (Whose whose, Position position, Marker marker)
-	{
-		GameObject go = null;
-		switch (marker) {
-		case Marker.Target:
-			go = targetReticleOurs;
-			break;
-		case Marker.Aim:
-			go = whose == Whose.Theirs ? aimReticleAtTheirs : aimReticleAtOurs;
-			break;
-		case Marker.Hit:
-			go = Game.instance.InstantiateTemp (markerHitPrefab);
-			break;
-		case Marker.Miss:
-			go = Game.instance.InstantiateTemp (markerMissPrefab);
-			break;
-		}
-		go.transform.SetParent (whose == Whose.Theirs ? gridTheirs.transform : gridOurs.transform, false);
-
-		if (marker == Marker.Aim) {
-			go.GetComponent<TargetReticleController> ().SetTargetPosition (position, false);
-		} else if (marker == Marker.Target) {
-			go.GetComponent<TargetReticleController> ().SetTargetPosition (position, true);
-		} else {
-			go.transform.localPosition = position.AsGridLocalPosition (marker);
-		}
+		(whose == Whose.Theirs ? gridTheirsController : gridOursController).PlaceBoat (boat, true);
 	}
 
 }

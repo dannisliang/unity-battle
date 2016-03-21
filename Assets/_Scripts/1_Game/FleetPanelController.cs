@@ -4,7 +4,7 @@ using System.Collections;
 
 public class FleetPanelController : MonoBehaviour
 {
-	public GridController boatPlacementController;
+	public GridController gridController;
 	public GameObject shipPrefab;
 	public Color shipColor;
 
@@ -40,7 +40,7 @@ public class FleetPanelController : MonoBehaviour
 
 	void UpdateSelf (Whose whoseTurn, bool firing, Whose loser)
 	{
-		Boat[] boats = boatPlacementController.grid.boats;
+		Boat[] boats = gridController.grid.boats;
 		if (boats != null) {
 			for (int i = 0; i < boats.Length; i++) {
 				var hits = boats [i].HitCount ();

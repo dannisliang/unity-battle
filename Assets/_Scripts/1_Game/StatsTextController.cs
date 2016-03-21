@@ -4,7 +4,7 @@ using System.Collections;
 
 public class StatsTextController : MonoBehaviour
 {
-	public GridController boatPlacementController;
+	public GridController gridController;
 
 	public Text text;
 
@@ -20,9 +20,9 @@ public class StatsTextController : MonoBehaviour
 
 	void UpdateSelf (Whose whoseTurn, bool firing, Whose loser)
 	{
-		text.enabled = boatPlacementController.grid != null;
+		text.enabled = gridController.grid != null;
 		if (text.enabled) {
-			text.text = GetText (boatPlacementController.grid);
+			text.text = GetText (gridController.grid);
 		}
 	}
 
