@@ -1529,7 +1529,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 275339446}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1189004293}
@@ -2733,6 +2733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 0}
   whose: 0
   highlightMaterial: {fileID: 2100000, guid: 8075b132fa3804826b68b7e086c61185, type: 2}
 --- !u!1 &570944920
@@ -12363,6 +12364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 0}
   whose: 0
   highlightMaterial: {fileID: 2100000, guid: 8075b132fa3804826b68b7e086c61185, type: 2}
 --- !u!1 &990118241
@@ -16088,6 +16090,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 0}
   whose: 0
   highlightMaterial: {fileID: 2100000, guid: 8075b132fa3804826b68b7e086c61185, type: 2}
 --- !u!1 &1748099132
@@ -16136,6 +16139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 0}
   whose: 0
   highlightMaterial: {fileID: 2100000, guid: 8075b132fa3804826b68b7e086c61185, type: 2}
 --- !u!1 &1767158053
@@ -17136,6 +17140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 0}
   whose: 0
   highlightMaterial: {fileID: 2100000, guid: 8075b132fa3804826b68b7e086c61185, type: 2}
 --- !u!1 &1924503969
@@ -19782,6 +19787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123502fe654224ebaaca648541a5a93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 0}
   whose: 0
   highlightMaterial: {fileID: 2100000, guid: 8075b132fa3804826b68b7e086c61185, type: 2}
 --- !u!1 &2123681823
