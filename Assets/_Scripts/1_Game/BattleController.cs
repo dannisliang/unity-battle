@@ -173,20 +173,10 @@ public class BattleController : MonoBehaviour
 		if (whoseTurn != Whose.Ours) {
 			return;
 		}
-		GetGrid (whose).SetAimPosition (position);
+		GetGridController (whose).SetAimPosition (position);
 		if (OnReticleAim != null) {
 			OnReticleAim (whose, position);
 		}
-	}
-
-	public void TargetAt (Whose whose, Position position)
-	{
-		GetGrid (whose).SetTargetPosition (position);
-	}
-
-	GridController GetGrid (Whose whose)
-	{
-		return whose == Whose.Theirs ? gridTheirsController : gridOursController;
 	}
 
 	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
@@ -198,7 +188,7 @@ public class BattleController : MonoBehaviour
 			source.PlayOneShot (noFireClip);
 			return false;
 		}
-		TargetAt (Whose.Theirs, targetPosition);
+		GetGridController (Whose.Theirs).SetTargetPosition (targetPosition);
 		RealtimeBattle.EncodeAndSendLaunch (targetPosition);
 		LaunchRocket (Whose.Theirs, targetPosition);
 		return true;
@@ -229,7 +219,7 @@ public class BattleController : MonoBehaviour
 		Transform originTransform = (atWhose == Whose.Theirs ? Camera.main.transform : rocketOriginTheirs.transform);
 		PosRot start = new PosRot (FirePos (originTransform), originTransform.rotation);
 
-		Transform targetGridTransform = (atWhose == Whose.Theirs ? gridTheirsController : gridOursController).transform.parent;
+		Transform targetGridTransform = GetGridController (atWhose).transform.parent;
 		Vector3 pos = targetGridTransform.position + (targetGridTransform.rotation * localPos);
 		pos += targetGridTransform.right * .5f + targetGridTransform.up * .5f;
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
@@ -272,7 +262,7 @@ public class BattleController : MonoBehaviour
 	public StrikeResult _Strike (Whose whose, Position position)
 	{
 		Boat boat;
-		StrikeResult result = GetGrid (whose).grid.FireAt (position, out boat);
+		StrikeResult result = GetGridController (whose).grid.FireAt (position, out boat);
 		if (!Application.isEditor) {
 			Debug.Log ("***Strike(" + position + ") -> " + result);
 		}
@@ -281,15 +271,15 @@ public class BattleController : MonoBehaviour
 		case StrikeResult.IGNORED_ALREADY_HIT:
 			break;
 		case StrikeResult.MISS:
-			GetGrid (whose).SetMarker (position, Marker.Miss);
+			GetGridController (whose).SetMarker (position, Marker.Miss);
 			break;
 		case StrikeResult.HIT_NOT_SUNK:
-			GetGrid (whose).SetMarker (position, Marker.Hit);
+			GetGridController (whose).SetMarker (position, Marker.Hit);
 			AnnounceStrike (whose, boat, position, result);
 			break;
 		case StrikeResult.HIT_AND_SUNK:
-			GetGrid (whose).SetMarker (position, Marker.Hit);
-			PlaceSunkBoat (whose, boat);
+			GetGridController (whose).SetMarker (position, Marker.Hit);
+			GetGridController (whose).PlaceBoat (boat, true);
 			AnnounceStrike (whose, boat, position, result);
 			break;
 		default:
@@ -310,7 +300,7 @@ public class BattleController : MonoBehaviour
 		if (loser != Whose.Nobody) {
 			return Whose.Nobody;
 		}
-		if (GetGrid (whose).grid.AllBoatsSunk ()) {
+		if (GetGridController (whose).grid.AllBoatsSunk ()) {
 			loser = whose;
 			AnnounceBattleState ();
 			SceneMaster.instance.Async (delegate {
@@ -321,9 +311,9 @@ public class BattleController : MonoBehaviour
 		return whose;
 	}
 
-	void PlaceSunkBoat (Whose whose, Boat boat)
+	GridController GetGridController (Whose whose)
 	{
-		(whose == Whose.Theirs ? gridTheirsController : gridOursController).PlaceBoat (boat, true);
+		return whose == Whose.Theirs ? gridTheirsController : gridOursController;
 	}
 
 }
