@@ -56,10 +56,6 @@ public class BattleController : MonoBehaviour
 		}
 	}
 
-	public delegate void ReticleIdentify (Boat boat);
-
-	public event ReticleIdentify OnReticleIdentify;
-
 	public delegate void ReticleAim (Whose whose, Position position);
 
 	public event ReticleAim OnReticleAim;
@@ -149,13 +145,6 @@ public class BattleController : MonoBehaviour
 	{
 		if (_OnBattleState != null) {
 			_OnBattleState (whoseTurn, firing > 0, loser);
-		}
-	}
-
-	public void Identify (Boat boat, Position position)
-	{
-		if (OnReticleIdentify != null) {
-			OnReticleIdentify.Invoke (boat);
 		}
 	}
 

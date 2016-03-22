@@ -34,7 +34,6 @@ public class GameStateHintController : MonoBehaviour
 	Text text;
 
 	GameState state;
-	Boat reticleBoatTarget;
 	StrikeData strikeData;
 	Whose whoseTurn;
 	bool firing;
@@ -52,7 +51,6 @@ public class GameStateHintController : MonoBehaviour
 
 	void OnEnable ()
 	{
-		reticleBoatTarget = null;
 		strikeData = null;
 		whoseTurn = Whose.Nobody;
 		firing = false;
@@ -63,7 +61,6 @@ public class GameStateHintController : MonoBehaviour
 		Game.instance.OnGameStateChange += UpdateGameState;
 		BattleController.instance.OnBattleState += UpdateBattleState;
 		BattleController.instance.OnReticleAim += UpdateAimAtGrid;
-		BattleController.instance.OnReticleIdentify += UpdateAimAtBoat;
 		BattleController.instance.OnStrikeOccurred += UpdateStrikeOccurred;
 		UpdateText ();
 	}
@@ -76,7 +73,6 @@ public class GameStateHintController : MonoBehaviour
 		Game.instance.OnGameStateChange -= UpdateGameState;
 		BattleController.instance.OnBattleState -= UpdateBattleState;
 		BattleController.instance.OnReticleAim -= UpdateAimAtGrid;
-		BattleController.instance.OnReticleIdentify -= UpdateAimAtBoat;
 		BattleController.instance.OnStrikeOccurred -= UpdateStrikeOccurred;
 	}
 
@@ -102,12 +98,6 @@ public class GameStateHintController : MonoBehaviour
 	void UpdateAimAtGrid (Whose whose, Position position)
 	{
 		this.reticleAimingAtGrid = position != null;
-		UpdateText ();
-	}
-
-	void UpdateAimAtBoat (Boat boat)
-	{
-		this.reticleBoatTarget = boat;
 		UpdateText ();
 	}
 
@@ -199,10 +189,6 @@ public class GameStateHintController : MonoBehaviour
 		if (firing) {
 			color = defaultBackgroundColor;
 			return null; // "Firing missle …";
-		}
-		if (reticleBoatTarget != null) {
-			color = identifyBackgroundColor;
-			return reticleBoatTarget.ToString ();
 		}
 		if (!reticleAimingAtGrid) {
 			color = defaultBackgroundColor;

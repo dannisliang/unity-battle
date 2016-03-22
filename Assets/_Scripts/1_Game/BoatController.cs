@@ -11,21 +11,7 @@ public class BoatController : MonoBehaviour
 
 	public Material highlightMaterial;
 
-	MeshRenderer meshRenderer;
-	Material initialMaterial;
 	GameObject ship;
-
-	void Awake ()
-	{
-		meshRenderer = gameObject.GetComponentInChildren<MeshRenderer> ();
-		initialMaterial = meshRenderer.material;
-	}
-
-	public void Identify (bool highlight, Position position)
-	{
-		meshRenderer.material = highlight ? highlightMaterial : initialMaterial;
-		BattleController.instance.Identify (highlight ? boat : null, highlight ? position : null);
-	}
 
 	public void Configure (Boat boat, bool aboveMarkers)
 	{
@@ -61,9 +47,6 @@ public class BoatController : MonoBehaviour
 			child.layer = gameObject.layer;
 			PositionMarkerController positionMakerController = child.AddComponent<PositionMarkerController> ();
 			positionMakerController.position = boat.GetPosition (i);
-
-			// add after PositionMarkerController
-			child.AddComponent<BoatIdentificationController> ();
 
 			BoxCollider collider = child.AddComponent<BoxCollider> ();
 			collider.isTrigger = true;
