@@ -246,18 +246,7 @@ public class BattleController : MonoBehaviour
 		if (!Application.isEditor) {
 			Debug.Log ("***Strike(" + position + ") -> " + result);
 		}
-		switch (result) {
-		case StrikeResult.IGNORED_ALREADY_MISSED:
-		case StrikeResult.IGNORED_ALREADY_HIT:
-		case StrikeResult.MISS:
-			break;
-		case StrikeResult.HIT_NOT_SUNK:
-		case StrikeResult.HIT_AND_SUNK:
-			AnnounceStrike (whose, boat, position, result);
-			break;
-		default:
-			throw new System.NotImplementedException ();
-		}
+		AnnounceStrike (whose, boat, position, result);
 		return result;
 	}
 
