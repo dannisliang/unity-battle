@@ -15,7 +15,7 @@ public class CardboardAssistantController : MonoBehaviour
 	void Start ()
 	{
 		Cardboard.SDK.OnBackButton += BackButtonPressed;
-		Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.Off;
+		Cardboard.SDK.TapIsTrigger = false;
 		Cardboard.SDK.ElectronicDisplayStabilization = false;
 		Cardboard.SDK.AutoDriftCorrection = false;
 		Cardboard.SDK.EnableSettingsButton = true;
@@ -65,9 +65,25 @@ public class CardboardAssistantController : MonoBehaviour
 		}
 	}
 
-	void UpdateGameState (GameState state)
+	void UpdateGameState (GameState gameState)
 	{
-		gameState = state;
+		this.gameState = gameState;
+		switch (gameState) {
+		case GameState.SELECTING_GAME_TYPE:
+		case GameState.AUTHENTICATING:
+		case GameState.GAME_WAS_TORN_DOWN:
+		case GameState.SETTING_UP_GAME:
+		case GameState.TEARING_DOWN_GAME:
+			Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.Off;
+			break;
+		case GameState.SELECTING_VIEW_MODE:
+		case GameState.PLAYING:
+			Cardboard.SDK.BackButtonMode = Cardboard.BackButtonModes.On;
+			break;
+		default:
+			throw new NotImplementedException ();
+		}
+
 		CheckVrMode ();
 	}
 
