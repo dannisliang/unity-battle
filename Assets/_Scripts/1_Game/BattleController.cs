@@ -8,6 +8,8 @@ using System.Collections.Generic;
 [RequireComponent (typeof(CardboardAudioSource))]
 public class BattleController : MonoBehaviour
 {
+	static string CATEGORY = typeof(BattleController).Name;
+
 	public static BattleController instance { get; private set; }
 
 	public static LayerInfo layerGridTheirs;
@@ -18,6 +20,7 @@ public class BattleController : MonoBehaviour
 	public AudioClip noFireClip;
 	public CenterPanelController centerPanelController;
 
+	GoogleAnalyticsV4 gav4;
 	int _firing;
 	Whose loser;
 	Whose whoseTurn = Whose.Nobody;
@@ -72,6 +75,7 @@ public class BattleController : MonoBehaviour
 
 	void Awake ()
 	{
+		gav4 = AnalyticsAssistant.gav4;
 		if (instance != null && instance != this) {
 			Destroy (gameObject);
 			return;
@@ -83,11 +87,13 @@ public class BattleController : MonoBehaviour
 
 	void OnEnable ()
 	{
+		gav4.LogEvent (CATEGORY, "OnEnable", null, 0);
 		Game.instance.OnGameStateChange += GameStateChanged;
 	}
 
 	void OnDiable ()
 	{
+		gav4.LogEvent (CATEGORY, "OnDisable", null, 0);
 		Game.instance.OnGameStateChange -= GameStateChanged;
 	}
 
@@ -115,6 +121,7 @@ public class BattleController : MonoBehaviour
 
 	public void Init ()
 	{
+		gav4.LogEvent (CATEGORY, "Init", null, 0);
 		Debug.Log ("***" + typeof(BattleController) + ".Init()");
 		whoseTurn = Whose.Nobody;
 		loser = Whose.Nobody;
@@ -129,11 +136,13 @@ public class BattleController : MonoBehaviour
 
 	void SendOurBoatPositions ()
 	{
+		gav4.LogEvent (CATEGORY, "SendOurBoatPositions", null, 0);
 		RealtimeBattle.EncodeAndSendGrid (gridOursController.grid);
 	}
 
 	public void SetBoatsTheirs (string playerUniqueId, Boat[] boats)
 	{
+		gav4.LogEvent (CATEGORY, "SetBoatsTheirs", null, 0);
 		Whose whoseStarts = playerUniqueId.Equals (Utils.AI_PLAYER_ID) || playerUniqueId.CompareTo (SystemInfo.deviceUniqueIdentifier) > 0 ? Whose.Ours : Whose.Theirs;
 //		Debug.Log ("***FIRST TURN: " + whoseStarts + " playerUniqueId=" + playerUniqueId + " deviceUniqueIdentifier=" + SystemInfo.deviceUniqueIdentifier);
 		StartCoroutine (SetTurn (whoseStarts));
@@ -167,6 +176,7 @@ public class BattleController : MonoBehaviour
 
 	public bool FireAt (Position targetPosition, bool tileHasBeenFiredUpon)
 	{
+		gav4.LogEvent (CATEGORY, "FireAt", tileHasBeenFiredUpon.ToString (), 0);
 		if (!IsGridReady ()) {
 			return false;
 		}
@@ -199,9 +209,10 @@ public class BattleController : MonoBehaviour
 
 	public void LaunchRocket (Whose atWhose, Position targetPosition)
 	{
+		gav4.LogEvent (CATEGORY, "LaunchRocket", atWhose.ToString (), 0);
 		RocketController rocketController = GetGridController (atWhose).MakeRocket ();
 		Vector3 localTargetPos = targetPosition.AsGridLocalPosition (Marker.Aim);
-		
+
 		PosRot start = new PosRot (rocketController.transform);
 
 		Transform targetGridTransform = GetGridController (atWhose).transform;
@@ -233,6 +244,7 @@ public class BattleController : MonoBehaviour
 
 	public StrikeResult Strike (Whose whose, Position position)
 	{
+		gav4.LogEvent (CATEGORY, "Strike", null, 0);
 		StrikeResult result = _Strike (whose, position);
 		Whose nextTurn = CheckAllBoatsSunk (whose);
 		StartCoroutine (SetTurn (nextTurn));

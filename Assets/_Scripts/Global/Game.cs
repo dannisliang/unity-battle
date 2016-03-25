@@ -15,6 +15,7 @@ using UnityEditor;
 
 public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 {
+	static string CATEGORY = typeof(Game).Name;
 
 	public static Game instance;
 
@@ -27,8 +28,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public GameStateTextController gameStateTextController;
 	public CardboardAssistantController cardboardAssistantController;
 
+	GoogleAnalyticsV4 gav4;
 	BaseButler butler;
-
 	GameState masterGameState = GameState.SELECTING_GAME_TYPE;
 
 	public Dictionary<GameState, List<GameObject>> activationDict;
@@ -58,6 +59,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void Awake ()
 	{
+		gav4 = AnalyticsAssistant.gav4;
 		if (instance != null && instance != this) {
 			Destroy (gameObject);
 			return;
@@ -120,6 +122,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void QuitGame ()
 	{
+		gav4.LogEvent (CATEGORY, "QuitGame", null, 0);
 		Debug.Log ("*** ** ** ** ** ** ** Quitting game NOW ** ** ** ** ** **");
 		butler.QuitGame ();
 	}
@@ -141,6 +144,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void SetActiveButler (GameType gameType)
 	{
+		gav4.LogEvent (CATEGORY, "SetActiveButler", gameType.ToString (), 0);
 		switch (gameType) {
 		case GameType.ONE_PLAYER_DEMO:
 			butler = butlerAi;
@@ -159,6 +163,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 			Debug.Log ("*** Ignoring GameState switch as we're already in " + masterGameState);
 			return;
 		}
+		gav4.LogScreen (state.ToString ());
 		Debug.Log ("===> GameState: " + masterGameState + " --> " + state);
 		masterGameState = state;
 		switch (state) {
@@ -196,6 +201,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void SelectViewMode (bool? vrMode)
 	{
+		gav4.LogEvent (CATEGORY, "SelectViewMode", Convert.ToString (vrMode), 0);
 		if (vrMode == null) {
 			Assert.AreEqual (GameState.PLAYING, masterGameState);
 			_OnGameStateChange (GameState.SELECTING_VIEW_MODE);
@@ -271,6 +277,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void NewGame (GameType gameType)
 	{
+		gav4.LogEvent (CATEGORY, "NewGame", Convert.ToString (gameType), 0);
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, masterGameState);
 		SetActiveButler (gameType);
 		Assert.IsFalse (butler.enabled);
@@ -280,6 +287,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void SetErrorFailureReasonText (string failureReasonText)
 	{
+		gav4.LogEvent (CATEGORY, "SetErrorFailureReasonText", failureReasonText, 0);
 		gameStateTextController.SetFailureReasonText (failureReasonText);
 	}
 
@@ -320,7 +328,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		Debug.Log ("***Nearby sending connection request …");
 		PlayGamesPlatform.Nearby.SendConnectionRequest (
 			"Local Game player",  // the user-friendly name
-			remote.EndpointId,  // the discovered endpoint  
+			remote.EndpointId,  // the discovered endpoint
 			System.Text.Encoding.UTF8.GetBytes ("hello, neighbor"), // byte[] of data
 			(response) => {
 				Debug.Log ("***Nearby connection response: ResponseStatus" +

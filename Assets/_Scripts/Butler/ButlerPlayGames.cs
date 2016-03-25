@@ -9,7 +9,15 @@ using System;
 
 public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 {
+	static string CATEGORY = typeof(ButlerPlayGames).Name;
+
+	GoogleAnalyticsV4 gav4;
 	IPlayGamesPlatform gamesPlatform;
+
+	void Awake ()
+	{
+		gav4 = AnalyticsAssistant.gav4;
+	}
 
 	#if UNITY_EDITOR
 	void Update ()
@@ -37,6 +45,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void OnApplicationPause (bool pause)
 	{
+		gav4.LogEvent (CATEGORY, "OnApplicationPause", Convert.ToString (pause), 0);
 		if (Time.frameCount <= 1) {
 			return;
 		}
@@ -71,6 +80,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void WorkaroundPlayGamePauseBug ()
 	{
+		gav4.LogEvent (CATEGORY, "WorkaroundPlayGamePauseBug", null, 0);
 		Debug.Log ("***Workaround: Google Play Games bug which doesn't fire the OnLeftRoom() callback by calling LeaveRoom() / OnLeftRoom() manually …");
 		if (gamesPlatform.RealTime != null) {
 			Debug.Log ("***Workaround: Calling LeaveRoom() …");
@@ -84,6 +94,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	override protected void OnEnable ()
 	{
+		gav4.LogEvent (CATEGORY, "OnEnable", null, 0);
 		base.OnEnable ();
 
 		if (gamesPlatform != null) {
@@ -116,8 +127,15 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		}
 	}
 
+	override protected void OnDisable ()
+	{
+		gav4.LogEvent (CATEGORY, "OnDisable", null, 0);
+		base.OnDisable ();
+	}
+
 	public override void NewGame ()
 	{
+		gav4.LogEvent (CATEGORY, "NewGame", null, 0);
 		Debug.Log ("***NewGame()");
 		#if !UNITY_EDITOR
 		CheckInternetReachability ();
@@ -135,6 +153,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void PlayGamesSignIn (Action<bool> callback)
 	{
+		gav4.LogEvent (CATEGORY, "PlayGamesSignIn", null, 0);
 		Debug.Log ("***PlayGamesSignIn() …");
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
 		Game.instance.SetGameState (GameState.AUTHENTICATING);
@@ -148,12 +167,14 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void PlayGamesSignOut ()
 	{
+		gav4.LogEvent (CATEGORY, "PlayGamesSignOut", null, 0);
 		Debug.Log ("***SignOut() …");
 		gamesPlatform.SignOut ();
 	}
 
 	void PlayGamesNewGame ()
 	{
+		gav4.LogEvent (CATEGORY, "PlayGamesNewGame", null, 0);
 		Debug.Log ("***PlayGamesNewGame() …");
 		Assert.AreEqual (GameState.AUTHENTICATING, gameState);
 		Game.instance.SetGameState (GameState.SETTING_UP_GAME);
@@ -163,6 +184,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	public override void QuitGame ()
 	{
+		gav4.LogEvent (CATEGORY, "QuitGame", Convert.ToString (gameState), 0);
 		Debug.Log ("***QuitGame() …");
 		switch (gameState) {
 		case GameState.AUTHENTICATING:
@@ -194,6 +216,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRoomSetupProgress (float percent)
 	{
+		gav4.LogEvent (CATEGORY, "OnRoomSetupProgress", Convert.ToString (percent), 0);
 		Debug.Log ("***OnRoomSetupProgress(" + percent + ")");
 		if (percent == 0) {
 			Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
@@ -205,6 +228,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRoomConnected (bool success)
 	{
+		gav4.LogEvent (CATEGORY, "OnRoomConnected", Convert.ToString (success), 0);
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		Game.instance.SetGameState (success ? GameState.SELECTING_VIEW_MODE : GameState.GAME_WAS_TORN_DOWN);
 		if (success) {
@@ -216,6 +240,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnLeftRoom ()
 	{
+		gav4.LogEvent (CATEGORY, "OnLeftRoom", null, 0);
 		Debug.Log ("***OnLeftRoom()");
 		CancelCheckup ();
 		Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
@@ -224,6 +249,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnParticipantLeft (Participant participant)
 	{
+		gav4.LogEvent (CATEGORY, "OnParticipantLeft", null, 0);
 		Debug.Log ("***OnParticipantLeft(" + participant + ")");
 		Debug.Log ("***OnParticipantLeft: Mandatory call to LeaveRoom () in order to cleanup …");
 		PlayGamesLeaveRoom ();
@@ -232,12 +258,14 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnPeersConnected (string[] participantIds)
 	{
+		gav4.LogEvent (CATEGORY, "OnPeersConnected", null, participantIds.Length);
 		Debug.Log ("***OnPeersConnected(" + string.Join (",", participantIds) + ")");
 	}
 
 	// RealTimeMultiplayerListener
 	public void OnPeersDisconnected (string[] participantIds)
 	{
+		gav4.LogEvent (CATEGORY, "OnPeersDisconnected", null, participantIds.Length);
 		Debug.Log ("***OnPeersDisconnected(" + string.Join (",", participantIds) + ")");
 		Debug.Log ("***OnPeersDisconnected: Mandatory call to LeaveRoom () in order to cleanup …");
 		PlayGamesLeaveRoom ();
@@ -245,6 +273,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void PlayGamesLeaveRoom ()
 	{
+		gav4.LogEvent (CATEGORY, "PlayGamesLeaveRoom", null, 0);
 		Debug.Log ("***PlayGamesLeaveRoom()");
 		CancelCheckup ();
 		if (gamesPlatform.RealTime != null) {
