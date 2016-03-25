@@ -61,6 +61,12 @@ namespace GooglePlayGames.Editor
             svcSupport.DependOn("com.android.support",
                 "support-v4",
                 "23.1.0+");
+
+
+            // GA
+            svcSupport.DependOn("com.google.android.gms",
+                "play-services-analytics",
+                PluginVersion.PlayServicesVersionConstraint);
         }
     }
 }
