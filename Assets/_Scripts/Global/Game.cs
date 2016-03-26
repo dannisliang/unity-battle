@@ -123,9 +123,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 		}
 	}
 
-	public void QuitGame ()
+	public void QuitGame (string reason)
 	{
-		gav4.LogEvent (CATEGORY, "QuitGame", null, 0);
+		gav4.LogEvent (CATEGORY, "QuitGame-" + reason, null, 0);
 		Debug.Log ("*** ** ** ** ** ** ** Quitting game NOW ** ** ** ** ** **");
 		butler.QuitGame ();
 	}
@@ -147,9 +147,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	void SetActiveButler (GameType gameType)
 	{
-		gav4.LogEvent (CATEGORY, "SetActiveButler", gameType.ToString (), 0);
+//		gav4.LogEvent (CATEGORY, "SetActiveButler", gameType.ToString (), 0);
 		switch (gameType) {
-		case GameType.ONE_PLAYER_DEMO:
+		case GameType.ONE_PLAYER_AI:
 			butler = butlerAi;
 			break;
 		case GameType.TWO_PLAYER_PLAY_GAMES:
@@ -206,7 +206,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void SelectViewMode (bool? vrMode)
 	{
-		gav4.LogEvent (CATEGORY, "SelectViewMode", Convert.ToString (vrMode), 0);
+		if (vrMode != null) {
+			gav4.LogEvent (CATEGORY, "SelectViewMode-" + (vrMode == true ? "VR" : "MagicWindow"), null, 0);
+		}
 		if (vrMode == null) {
 			Assert.AreEqual (GameState.PLAYING, masterGameState);
 			_OnGameStateChange (GameState.SELECTING_VIEW_MODE);
@@ -282,7 +284,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void NewGame (GameType gameType)
 	{
-		gav4.LogEvent (CATEGORY, "NewGame", Convert.ToString (gameType), 0);
+//		gav4.LogEvent (CATEGORY, "NewGame", Convert.ToString (gameType), 0);
+		gav4.LogEvent (CATEGORY, "NewGame-" + Convert.ToString (gameType), null, 0);
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, masterGameState);
 		SetActiveButler (gameType);
 		Assert.IsFalse (butler.enabled);
@@ -292,7 +295,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void SetErrorFailureReasonText (string failureReasonText)
 	{
-		gav4.LogEvent (CATEGORY, "SetErrorFailureReasonText", failureReasonText, 0);
+		gav4.LogEvent (CATEGORY, "SetErrorFailureReasonText-" + failureReasonText, null, 0);
 		gameStateTextController.SetFailureReasonText (failureReasonText);
 	}
 

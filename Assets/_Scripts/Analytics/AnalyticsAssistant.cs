@@ -1,9 +1,15 @@
 ﻿using UnityEngine;
+using System;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 using System.Collections;
 
 public class AnalyticsAssistant : MonoBehaviour
 {
-	static string CATEGORY = typeof(AnalyticsAssistant).Name;
+	//	static string CATEGORY = typeof(AnalyticsAssistant).Name;
 
 	public static AnalyticsAssistant INSTANCE { get; private set; }
 
@@ -29,11 +35,21 @@ public class AnalyticsAssistant : MonoBehaviour
 		gav4.logLevel = GoogleAnalyticsV4.DebugMode.WARNING;
 		Debug.Log ("gav4.logLevel = " + gav4.logLevel);
 
+		#if UNITY_EDITOR
 		if (Application.isEditor) {
 			gav4.SetOnTracker (Fields.CLIENT_ID, "EDITOR");
 		}
 
-		gav4.SetOnTracker (Fields.APP_VERSION, gav4.bundleVersion + "-" + (debug ? "debug" : "prod"));
+		if (!gav4.bundleVersion.Equals (PlayerSettings.bundleVersion)) {
+			throw new Exception (
+				typeof(AnalyticsAssistant).Name + ".bundleVersion (" + gav4.bundleVersion + ") " +
+				"!= " + typeof(PlayerSettings).Name + ".bundleVersion (" + PlayerSettings.bundleVersion + ")" +
+				"\nExit play mode, click on " + typeof(AnalyticsAssistant).Name + " game object, then save scene to fix this");
+		}
+		#endif
+		var bundleVersion = gav4.bundleVersion + "-" + (debug ? "debug" : "prod");
+		gav4.SetOnTracker (Fields.APP_VERSION, bundleVersion);
+		Debug.Log ("bundleVersion=" + bundleVersion);
 
 		if (debug) {
 			gav4.SetOnTracker (Fields.DEVELOPER_ID, "fredsa");
@@ -42,8 +58,6 @@ public class AnalyticsAssistant : MonoBehaviour
 		if (!Application.isEditor) {
 			gav4.SetOnTracker (Fields.SCREEN_RESOLUTION, Screen.width + "x" + Screen.height + " " + Screen.dpi + "DPI");
 		}
-
-		gav4.LogEvent (CATEGORY, "Init", null, 0);
 	}
 
 }

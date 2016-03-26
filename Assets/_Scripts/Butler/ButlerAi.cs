@@ -6,24 +6,24 @@ using System;
 
 public class ButlerAi : BaseButler
 {
-	static string CATEGORY = typeof(ButlerAi).Name;
+	//	static string CATEGORY = typeof(ButlerAi).Name;
 	static int gameCount;
 
-	GoogleAnalyticsV4 gav4;
+	//	GoogleAnalyticsV4 gav4;
 	GameAi ai;
 
 	//	Whose whoseTurn;
 	//	bool firing;
 	Whose loser;
 
-	void Awake ()
-	{
-		gav4 = AnalyticsAssistant.gav4;
-	}
+	//	void Awake ()
+	//	{
+	//		gav4 = AnalyticsAssistant.gav4;
+	//	}
 
 	override protected void OnEnable ()
 	{
-		gav4.LogEvent (CATEGORY, "OnEnable", null, 0);
+//		gav4.LogEvent (CATEGORY, "OnEnable", null, 0);
 		base.OnEnable ();
 
 		BattleController.instance.OnBattleState += UpdateBattleState;
@@ -31,7 +31,7 @@ public class ButlerAi : BaseButler
 
 	override protected void OnDisable ()
 	{
-		gav4.LogEvent (CATEGORY, "OnDisable", null, 0);
+//		gav4.LogEvent (CATEGORY, "OnDisable", null, 0);
 		base.OnDisable ();
 
 		BattleController.instance.OnBattleState -= UpdateBattleState;
@@ -68,7 +68,7 @@ public class ButlerAi : BaseButler
 
 	public override void NewGame ()
 	{
-		gav4.LogEvent (CATEGORY, "NewGame", null, 0);
+//		gav4.LogEvent (CATEGORY, "NewGame", null, 0);
 		gameCount++;
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
 		Game.instance.SetGameState (GameState.AUTHENTICATING);
@@ -83,7 +83,7 @@ public class ButlerAi : BaseButler
 
 	public override void QuitGame ()
 	{
-		gav4.LogEvent (CATEGORY, "QuitGame", null, 0);
+//		gav4.LogEvent (CATEGORY, "QuitGame", null, 0);
 		StopAllCoroutines ();
 		if (gameState == GameState.PLAYING || gameState == GameState.SELECTING_VIEW_MODE) {
 			Game.instance.SetGameState (GameState.TEARING_DOWN_GAME);

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Assertions;
 
-public abstract  class BaseButler : MonoBehaviour
+public abstract class BaseButler : MonoBehaviour
 {
 	protected GameState gameState;
 

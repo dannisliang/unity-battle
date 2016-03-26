@@ -13,6 +13,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	GoogleAnalyticsV4 gav4;
 	IPlayGamesPlatform gamesPlatform;
+	float applicationPausedTime;
 
 	void Awake ()
 	{
@@ -45,7 +46,13 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void OnApplicationPause (bool pause)
 	{
-		gav4.LogEvent (CATEGORY, "OnApplicationPause", Convert.ToString (pause), 0);
+		if (pause) {
+			applicationPausedTime = Time.unscaledTime;
+		} else {
+			gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - applicationPausedTime) * 1000L, "ApplicationPauseDuration", null);
+		}
+
+		gav4.LogEvent (CATEGORY, "OnApplicationPause-" + (pause ? "Pause" : "Resume"), null, 0);
 		if (Time.frameCount <= 1) {
 			return;
 		}
@@ -94,7 +101,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	override protected void OnEnable ()
 	{
-		gav4.LogEvent (CATEGORY, "OnEnable", null, 0);
+//		gav4.LogEvent (CATEGORY, "OnEnable", null, 0);
 		base.OnEnable ();
 
 		if (gamesPlatform != null) {
@@ -104,6 +111,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		if (Application.isEditor) {
 			gamesPlatform = new DummyPlayGamesPlatform ();
 		} else {
+			float startTime = Time.unscaledTime;
 			// https://github.com/playgameservices/play-games-plugin-for-unity
 			PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ()
 			                                      // enables saving game progress.
@@ -123,24 +131,29 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 			Debug.Log ("***PlayGamesPlatform.Activate() …");
 			PlayGamesPlatform.Activate ();
+			gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - startTime) * 1000L, "PlayGamesPlatform-Activate", null);
+
 			gamesPlatform = PlayGamesPlatform.Instance;
 		}
 	}
 
 	override protected void OnDisable ()
 	{
-		gav4.LogEvent (CATEGORY, "OnDisable", null, 0);
+//		gav4.LogEvent (CATEGORY, "OnDisable", null, 0);
 		base.OnDisable ();
 	}
 
 	public override void NewGame ()
 	{
-		gav4.LogEvent (CATEGORY, "NewGame", null, 0);
+//		gav4.LogEvent (CATEGORY, "NewGame", null, 0);
 		Debug.Log ("***NewGame()");
 		#if !UNITY_EDITOR
 		CheckInternetReachability ();
 		#endif
+		float startTime = Time.unscaledTime;
 		PlayGamesSignIn ((bool success) => {
+			gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - startTime) * 1000L, "PlayGamesSignIn-" + (success ? "Success" : "Fail"), null);
+			gav4.LogEvent (CATEGORY, "PlayGamesSignIn-" + (success ? "Success" : "Fail"), null, 0);
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 			if (success) {
 				PlayGamesNewGame ();
@@ -153,7 +166,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	void PlayGamesSignIn (Action<bool> callback)
 	{
-		gav4.LogEvent (CATEGORY, "PlayGamesSignIn", null, 0);
+//		gav4.LogEvent (CATEGORY, "PlayGamesSignIn", null, 0);
 		Debug.Log ("***PlayGamesSignIn() …");
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, gameState);
 		Game.instance.SetGameState (GameState.AUTHENTICATING);
@@ -184,7 +197,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 	public override void QuitGame ()
 	{
-		gav4.LogEvent (CATEGORY, "QuitGame", Convert.ToString (gameState), 0);
+//		gav4.LogEvent (CATEGORY, "QuitGame", Convert.ToString (gameState), 0);
 		Debug.Log ("***QuitGame() …");
 		switch (gameState) {
 		case GameState.AUTHENTICATING:
@@ -216,7 +229,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRoomSetupProgress (float percent)
 	{
-		gav4.LogEvent (CATEGORY, "OnRoomSetupProgress", Convert.ToString (percent), 0);
+		gav4.LogEvent (CATEGORY, "OnRoomSetupProgress", "OnRoomSetupProgress-" + Convert.ToString (percent), 0);
 		Debug.Log ("***OnRoomSetupProgress(" + percent + ")");
 		if (percent == 0) {
 			Game.instance.SetGameState (GameState.GAME_WAS_TORN_DOWN);
@@ -228,7 +241,8 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 	// RealTimeMultiplayerListener
 	public void OnRoomConnected (bool success)
 	{
-		gav4.LogEvent (CATEGORY, "OnRoomConnected", Convert.ToString (success), 0);
+//		gav4.LogEvent (CATEGORY, "OnRoomConnected", Convert.ToString (success), 0);
+		gav4.LogEvent (CATEGORY, "OnRoomConnected-" + (success ? "Success" : "Fail"), null, 0);
 		Debug.Log ("***OnRoomConnected(" + success + ")");
 		Game.instance.SetGameState (success ? GameState.SELECTING_VIEW_MODE : GameState.GAME_WAS_TORN_DOWN);
 		if (success) {

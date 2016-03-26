@@ -52,7 +52,7 @@ public class GameTimer : MonoBehaviour
 		if (gameStartTime == 0f) {
 			return;
 		}
-		gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - gameStartTime), "GamePlayTime", null);
+		gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - gameStartTime) * 1000L, "GamePlayTime", null);
 		gameStartTime = 0f;
 	}
 
