@@ -39,7 +39,9 @@ public class AnalyticsAssistant : MonoBehaviour
 			gav4.SetOnTracker (Fields.DEVELOPER_ID, "fredsa");
 		}
 
-		gav4.SetOnTracker (Fields.SCREEN_RESOLUTION, Screen.width + "x" + Screen.height + " " + Screen.dpi + "DPI");
+		if (!Application.isEditor) {
+			gav4.SetOnTracker (Fields.SCREEN_RESOLUTION, Screen.width + "x" + Screen.height + " " + Screen.dpi + "DPI");
+		}
 
 		gav4.LogEvent (CATEGORY, "Init", null, 0);
 	}
