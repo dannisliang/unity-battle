@@ -208,6 +208,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	{
 		if (vrMode != null) {
 			gav4.LogEvent (CATEGORY, "SelectViewMode-" + (vrMode == true ? "VR" : "MagicWindow"), null, 0);
+			gav4.LogEvent (CATEGORY, "SelectViewMode", vrMode == true ? "VR" : "MagicWindow", 0);
 		}
 		if (vrMode == null) {
 			Assert.AreEqual (GameState.PLAYING, masterGameState);
