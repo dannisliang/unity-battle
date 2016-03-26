@@ -30,7 +30,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	GoogleAnalyticsV4 gav4;
 	BaseButler butler;
-	GameState masterGameState = GameState.SELECTING_GAME_TYPE;
+	GameState masterGameState = GameState.INITIALIZING_APP;
 
 	public Dictionary<GameState, List<GameObject>> activationDict;
 
@@ -73,6 +73,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 //		InitNearby ();
 
 		OnGameStateChange += HandleGameStateChanged;
+		SetGameState (GameState.SELECTING_GAME_TYPE);
 	}
 
 	public static GameObject InstantiateTemp (UnityEngine.Object original, Transform parent = null)
@@ -91,6 +92,8 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	{
 //		Debug.Log ("***MakeGameObjectsActive() masterGameState=" + masterGameState);
 		switch (masterGameState) {
+		case GameState.INITIALIZING_APP:
+			break;
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.GAME_WAS_TORN_DOWN:
 		case GameState.AUTHENTICATING:
@@ -160,7 +163,9 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	void HandleGameStateChanged (GameState state)
 	{
 		if (masterGameState == state) {
-			Debug.Log ("*** Ignoring GameState switch as we're already in " + masterGameState);
+			if (masterGameState != GameState.INITIALIZING_APP) {
+				Debug.Log ("*** Ignoring GameState switch as we're already in " + masterGameState);
+			}
 			return;
 		}
 		gav4.LogScreen (state.ToString ());
