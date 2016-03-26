@@ -276,6 +276,7 @@ public class BattleController : MonoBehaviour
 		}
 		if (GetGridController (whose).grid.AllBoatsSunk ()) {
 			loser = whose;
+			gav4.LogEvent (CATEGORY, "AnnounceLoser", loser.ToString (), 0);
 			AnnounceBattleState ();
 			SceneMaster.instance.Async (delegate {
 				Game.instance.QuitGame ();
