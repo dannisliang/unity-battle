@@ -2790,7 +2790,7 @@ MonoBehaviour:
   otherTrackingCode: UA-75513401-1
   productName: Battle Grid
   bundleIdentifier: sauer.battle
-  bundleVersion: 0.9.1
+  bundleVersion: 0.9.7
   dispatchPeriod: 5
   sampleFrequency: 100
   logLevel: 1
