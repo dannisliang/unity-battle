@@ -7,14 +7,25 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	PositionMarkerController positionMarkerController;
 
 	bool tileHasBeenFiredUpon;
+	BoxCollider boxCollider;
+	Vector3 initialScale;
+	Vector3 growScale;
 
 	void Awake ()
 	{
+		boxCollider = GetComponent<BoxCollider> ();
 		positionMarkerController = GetComponent<PositionMarkerController> ();
+	}
+
+	void Start ()
+	{
+		initialScale = boxCollider.transform.localScale;
+		growScale = initialScale * 1.5f;
 	}
 
 	public void OnPointerEnter (PointerEventData eventData)
 	{
+		boxCollider.transform.localScale = growScale;
 		eventData.Use ();
 		Highlight (true);
 		RealtimeBattle.EncodeAndSendAim (positionMarkerController.position);
@@ -25,6 +36,7 @@ public class TileController : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 		if (SceneMaster.quitting) {
 			return;
 		}
+		boxCollider.transform.localScale = initialScale;
 		eventData.Use ();
 		Highlight (false);
 	}
