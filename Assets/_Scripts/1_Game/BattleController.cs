@@ -114,11 +114,13 @@ public class BattleController : MonoBehaviour
 				boatPositionsSent = true;
 			}
 			break;
-		case GameState.SELECTING_GAME_TYPE:
 		case GameState.TEARING_DOWN_GAME:
+			LogStats ();
+			break;
 		case GameState.GAME_WAS_TORN_DOWN:
 			StopAllCoroutines ();
 			break;
+		case GameState.SELECTING_GAME_TYPE:
 		case GameState.AUTHENTICATING:
 		case GameState.SELECTING_VIEW_MODE:
 			break;
@@ -141,6 +143,32 @@ public class BattleController : MonoBehaviour
 		gridTheirsController.Init (null);
 		// tell everyone to reset state
 		AnnounceBattleState ();
+	}
+
+	void LogStats ()
+	{
+		LogStats (gridTheirsController.grid);
+		LogStats (gridOursController.grid);
+	}
+
+	void LogStats (Grid grid)
+	{
+		Boat[] boats = grid.boats;
+		int units = 0;
+		int sunk = 0;
+		int hits = 0;
+		int misses = grid.getMisses ();
+		for (int i = 0; i < boats.Length; i++) {
+			BoatConfiguration config = boats [i].config;
+			units += config.size;
+			hits += boats [i].HitCount ();
+			if (boats [i].IsSunk ()) {
+				sunk++;
+			}
+		}
+		gav4.LogEvent (CATEGORY, grid.whose.ToString () + "-HitsOutOf" + units, null, hits);
+		gav4.LogEvent (CATEGORY, grid.whose.ToString () + "-SunkOutOf" + boats.Length, null, sunk);
+		gav4.LogEvent (CATEGORY, grid.whose.ToString () + "-AccuracyPercent", null, 100 * hits / (hits + misses));
 	}
 
 	void SendOurBoatPositions ()
@@ -255,8 +283,7 @@ public class BattleController : MonoBehaviour
 	{
 		StrikeResult result = _Strike (whose, position);
 //		gav4.LogEvent (CATEGORY, "Strike", null, 0);
-		gav4.LogEvent (CATEGORY, "TEST-" + whose.ToString () + "-" + result.ToString (), null, 42);
-		gav4.LogEvent (CATEGORY, "Strike-" + whose.ToString () + "-" + result.ToString (), null, 1);
+//		gav4.LogEvent (CATEGORY, "Strike-" + whose.ToString () + "-" + result.ToString (), null, 1);
 		Whose nextTurn = CheckAllBoatsSunk (whose);
 		StartCoroutine (SetTurn (nextTurn));
 		return result;
