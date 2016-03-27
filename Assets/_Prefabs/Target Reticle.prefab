@@ -44,6 +44,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 451918}
   m_Father: {fileID: 0}
@@ -57,6 +58,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1.4, y: 1.4, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 447256}
   m_RootOrder: 0
@@ -121,6 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2e3c4740b7844e681d82fad0df8736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialVrMmode: {fileID: 2100000, guid: 432d2d8562d45477ab8ca6284abf9776, type: 2}
+  materialMagicWindow: {fileID: 2100000, guid: 79cf8574ac5b3418e88b4c2259764697, type: 2}
 --- !u!114 &11498226
 MonoBehaviour:
   m_ObjectHideFlags: 1
