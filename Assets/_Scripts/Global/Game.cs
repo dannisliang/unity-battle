@@ -164,7 +164,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	{
 		if (masterGameState == state) {
 			if (masterGameState != GameState.INITIALIZING_APP) {
-				Debug.Log ("*** Ignoring GameState switch as we're already in " + masterGameState);
+				Debug.Log ("***Ignoring GameState switch as we're already in " + masterGameState);
 			}
 			return;
 		}
