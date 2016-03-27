@@ -81,6 +81,11 @@ public class GridController : MonoBehaviour
 		aimReticle.SetActive (false);
 	}
 
+	public void HideTargetReticle ()
+	{
+		targetReticle.SetActive (false);
+	}
+
 	public void SetTargetPosition (Position position)
 	{
 		targetReticle.SetActive (true);

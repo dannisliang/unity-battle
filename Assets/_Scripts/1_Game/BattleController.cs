@@ -31,6 +31,10 @@ public class BattleController : MonoBehaviour
 		}
 		set {
 			_firing = value;
+			if (firing == 0) {
+				gridOursController.HideTargetReticle ();
+				gridTheirsController.HideTargetReticle ();
+			}
 			if (firing > 0) {
 				gridOursController.HideAimReticle ();
 				gridTheirsController.HideAimReticle ();
