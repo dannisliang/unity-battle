@@ -56,4 +56,10 @@ public class Utils : MonoBehaviour
 		return Input.GetButtonDown ("Fire1");
 	}
 
+	public static long DeltaTimeMillis (float startTime)
+	{
+		float delta = Time.unscaledTime - startTime;
+		return (long)(delta * 1000f);
+	}
+
 }

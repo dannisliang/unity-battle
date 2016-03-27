@@ -26,8 +26,7 @@ public class GameTimer : MonoBehaviour
 		if (state == previousGameState) {
 			return;
 		}
-		Debug.Log (CATEGORY + ": " + ((long)(Time.unscaledTime - startTime) * 1000L) + previousGameState.ToString () + "-" + state.ToString ());
-		gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - startTime) * 1000L, previousGameState.ToString () + "-" + state.ToString (), null);
+		gav4.LogTiming (CATEGORY, Utils.DeltaTimeMillis (startTime), previousGameState.ToString () + "-" + state.ToString (), null);
 		startTime = Time.unscaledTime;
 		previousGameState = state;
 	}

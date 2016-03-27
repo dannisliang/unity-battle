@@ -49,7 +49,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		if (pause) {
 			applicationPausedTime = Time.unscaledTime;
 		} else {
-			gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - applicationPausedTime) * 1000L, "ApplicationPauseDuration", null);
+			gav4.LogTiming (CATEGORY, Utils.DeltaTimeMillis (applicationPausedTime), "ApplicationPauseDuration", null);
 		}
 
 		gav4.LogEvent (CATEGORY, "OnApplicationPause-" + (pause ? "Pause" : "Resume"), null, 0);
@@ -131,7 +131,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 
 			Debug.Log ("***PlayGamesPlatform.Activate() …");
 			PlayGamesPlatform.Activate ();
-			gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - startTime) * 1000L, "PlayGamesPlatform-Activate", null);
+			gav4.LogTiming (CATEGORY, Utils.DeltaTimeMillis (startTime), "PlayGamesPlatform-Activate", null);
 
 			gamesPlatform = PlayGamesPlatform.Instance;
 		}
@@ -152,7 +152,7 @@ public class ButlerPlayGames : BaseButler,RealTimeMultiplayerListener
 		#endif
 		float startTime = Time.unscaledTime;
 		PlayGamesSignIn ((bool success) => {
-			gav4.LogTiming (CATEGORY, (long)(Time.unscaledTime - startTime) * 1000L, "PlayGamesSignIn-" + (success ? "Success" : "Fail"), null);
+			gav4.LogTiming (CATEGORY, Utils.DeltaTimeMillis (startTime), "PlayGamesSignIn-" + (success ? "Success" : "Fail"), null);
 			gav4.LogEvent (CATEGORY, "PlayGamesSignIn-" + (success ? "Success" : "Fail"), null, 0);
 			Debug.Log ("***Auth attempt was " + (success ? "successful" : "UNSUCCESSFUL"));
 			if (success) {
