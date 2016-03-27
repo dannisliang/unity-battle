@@ -24,6 +24,7 @@ public class BattleController : MonoBehaviour
 	int _firing;
 	Whose loser;
 	Whose whoseTurn = Whose.Nobody;
+	bool boatPositionsSent;
 
 	int firing {
 		get {
@@ -108,7 +109,10 @@ public class BattleController : MonoBehaviour
 			Init ();
 			break;
 		case GameState.PLAYING:
-			SendOurBoatPositions ();
+			if (!boatPositionsSent) {
+				SendOurBoatPositions ();
+				boatPositionsSent = true;
+			}
 			break;
 		case GameState.SELECTING_GAME_TYPE:
 		case GameState.TEARING_DOWN_GAME:
@@ -132,6 +136,7 @@ public class BattleController : MonoBehaviour
 		_firing = 0;
 
 		// reset grids
+		boatPositionsSent = false;
 		gridOursController.Init (SystemInfo.deviceUniqueIdentifier);
 		gridTheirsController.Init (null);
 		// tell everyone to reset state
