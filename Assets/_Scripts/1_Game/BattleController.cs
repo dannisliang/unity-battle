@@ -25,6 +25,7 @@ public class BattleController : MonoBehaviour
 	Whose loser;
 	Whose whoseTurn = Whose.Nobody;
 	bool boatPositionsSent;
+	float gameStartTime;
 
 	int firing {
 		get {
@@ -138,6 +139,7 @@ public class BattleController : MonoBehaviour
 		_firing = 0;
 
 		// reset grids
+		gameStartTime = Time.unscaledTime;
 		boatPositionsSent = false;
 		gridOursController.Init (SystemInfo.deviceUniqueIdentifier);
 		gridTheirsController.Init (null);
@@ -147,6 +149,7 @@ public class BattleController : MonoBehaviour
 
 	void LogStats ()
 	{
+		gav4.LogTiming (CATEGORY, Utils.DeltaTimeMillis (gameStartTime), "GameDuration", Game.instance.GetGameType ().ToString ());
 		LogStats (gridTheirsController.grid);
 		LogStats (gridOursController.grid);
 	}
@@ -168,7 +171,15 @@ public class BattleController : MonoBehaviour
 		}
 		gav4.LogEvent (CATEGORY, grid.whose.ToString () + "-HitsOutOf" + units, null, hits);
 		gav4.LogEvent (CATEGORY, grid.whose.ToString () + "-SunkOutOf" + boats.Length, null, sunk);
-		gav4.LogEvent (CATEGORY, grid.whose.ToString () + "-AccuracyPercent", null, 100 * hits / (hits + misses));
+		gav4.LogEvent (CATEGORY, grid.whose.ToString () + "-AccuracyPercent", null, AccuracyPercent (hits, misses));
+	}
+
+	long AccuracyPercent (int hits, int misses)
+	{
+		if (hits == 0 && misses == 0) {
+			return 0;
+		}
+		return 100 * hits / (hits + misses);
 	}
 
 	void SendOurBoatPositions ()

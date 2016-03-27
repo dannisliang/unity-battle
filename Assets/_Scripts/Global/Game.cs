@@ -29,6 +29,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public CardboardAssistantController cardboardAssistantController;
 
 	GoogleAnalyticsV4 gav4;
+	GameType gameType;
 	BaseButler butler;
 	GameState masterGameState = GameState.INITIALIZING_APP;
 
@@ -285,6 +286,7 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 
 	public void NewGame (GameType gameType)
 	{
+		this.gameType = gameType;
 //		gav4.LogEvent (CATEGORY, "NewGame", Convert.ToString (gameType), 0);
 		gav4.LogEvent (CATEGORY, "NewGame-" + Convert.ToString (gameType), null, 0);
 		Assert.AreEqual (GameState.SELECTING_GAME_TYPE, masterGameState);
@@ -363,6 +365,11 @@ public class Game : MonoBehaviour//,IDiscoveryListener,IMessageListener
 	public void OnRemoteEndpointDisconnected (string remoteEndpointId)
 	{
 		Debug.Log ("***Nearby OnRemoteEndpointDisconnected() remoteEndpointId=" + remoteEndpointId);
+	}
+
+	public GameType GetGameType ()
+	{
+		return gameType;
 	}
 
 }
