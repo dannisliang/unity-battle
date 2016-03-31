@@ -97,7 +97,9 @@ BaseVRDevice
 
   public override void PostRender(RenderTexture stereoScreen) {
     SetTextureId((int)stereoScreen.GetNativeTexturePtr());
+    #pragma warning disable 0618
     GL.IssuePluginEvent(kCardboardRenderEvent);
+    #pragma warning restore 0618
   }
 
   public override void OnPause(bool pause) {
