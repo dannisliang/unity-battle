@@ -555,7 +555,7 @@ Transform:
   m_LocalRotation: {x: 0.4924039, y: 0.4924039, z: -0.5868242, w: 0.41317588}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 80, y: -80, z: -180}
   m_Children: []
   m_Father: {fileID: 1269269318}
   m_RootOrder: 4
@@ -1397,12 +1397,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbca64e524ea44f9b26142ec59aca8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bypassRoomEffects: 0
   directivityAlpha: 0
   directivitySharpness: 1
   gainDb: 0
   occlusionEnabled: 0
   playOnAwake: 1
   rolloffMode: 0
+  spread: 0
   sourceClip: {fileID: 8300000, guid: e358800fda950425cb945ef2ed9bd51d, type: 3}
   sourceLoop: 1
   sourceMute: 0
@@ -2304,7 +2306,7 @@ RectTransform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.02, y: 0.019999998, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 89.980194, y: 0, z: 0}
   m_Children:
   - {fileID: 968188690}
   - {fileID: 1206941890}
@@ -3207,7 +3209,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0.76604426, w: -0.6427878}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -100}
   m_Children: []
   m_Father: {fileID: 1269269318}
   m_RootOrder: 5
@@ -3303,12 +3305,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbca64e524ea44f9b26142ec59aca8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bypassRoomEffects: 0
   directivityAlpha: 0
   directivitySharpness: 1
   gainDb: 0
   occlusionEnabled: 0
   playOnAwake: 1
   rolloffMode: 0
+  spread: 0
   sourceClip: {fileID: 0}
   sourceLoop: 0
   sourceMute: 0
@@ -4010,7 +4014,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0.7071066, z: 0, w: -0.70710695}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.02, y: 0.02, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_Children:
   - {fileID: 35986395}
   m_Father: {fileID: 924942097}
@@ -4425,12 +4429,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbca64e524ea44f9b26142ec59aca8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bypassRoomEffects: 0
   directivityAlpha: 0
   directivitySharpness: 1
   gainDb: 0
   occlusionEnabled: 0
   playOnAwake: 0
   rolloffMode: 0
+  spread: 0
   sourceClip: {fileID: 8300000, guid: e358800fda950425cb945ef2ed9bd51d, type: 3}
   sourceLoop: 1
   sourceMute: 0
@@ -4805,7 +4811,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
   m_LocalPosition: {x: -6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 89.980194, y: 0, z: 0}
   m_Children:
   - {fileID: 1453214367}
   - {fileID: 1342963368}
@@ -6140,7 +6146,7 @@ RectTransform:
   m_LocalRotation: {x: 0.08715575, y: 0, z: 0, w: 0.9961947}
   m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 0.02, y: 0.02, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
   m_Children:
   - {fileID: 1541742078}
   - {fileID: 1587065914}
@@ -7339,6 +7345,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalGainDb: 0
   worldScale: 10
+  occlusionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   quality: 2
 --- !u!81 &1823123508
 AudioListener:
@@ -7963,7 +7972,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000016292068}
   m_LocalPosition: {x: 0, y: 0, z: -15}
   m_LocalScale: {x: 0.02, y: 0.02, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
   m_Children:
   - {fileID: 492083505}
   m_Father: {fileID: 924942097}
