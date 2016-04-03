@@ -11,7 +11,8 @@ public class GridController : MonoBehaviour
 	public Whose whose;
 	public GameObject boatNormalPrefab;
 	public GameObject boatSunkPrefab;
-	public GameObject reticlePrefab;
+	public GameObject aimReticlePrefab;
+	public GameObject targetReticlePrefab;
 	public GameObject markerHitPrefab;
 	public GameObject markerMissPrefab;
 	public GameObject rocketPrefab;
@@ -23,6 +24,33 @@ public class GridController : MonoBehaviour
 	BoatController[] boatControllers;
 	GameObject aimReticle;
 	GameObject targetReticle;
+	Whose whoseTurn;
+	bool firing;
+	Whose loser;
+	Position aimPosition;
+
+	void OnEnable ()
+	{
+		BattleController.instance.OnBattleState += BattleStateUpdated;
+	}
+
+	void OnDisable ()
+	{
+		BattleController.instance.OnBattleState -= BattleStateUpdated;
+	}
+
+	void BattleStateUpdated (Whose whoseTurn, bool firing, Whose loser)
+	{
+		this.whoseTurn = whoseTurn;
+		this.firing = firing;
+		this.loser = loser;
+		UpdateAimReticle ();
+	}
+
+	void UpdateAimReticle ()
+	{
+		aimReticle.SetActive (aimPosition != null && whoseTurn == Whose.Ours && loser == Whose.Nobody && !firing);
+	}
 
 	public void Init (string playerUniqueId)
 	{
@@ -36,11 +64,11 @@ public class GridController : MonoBehaviour
 
 	void CreateReticles ()
 	{
-		aimReticle = Game.InstantiateTemp (reticlePrefab);
+		aimReticle = Game.InstantiateTemp (aimReticlePrefab);
 		aimReticle.transform.SetParent (transform, false);
 		aimReticle.name += " aim reticle " + whose;
 
-		targetReticle = Game.InstantiateTemp (reticlePrefab);
+		targetReticle = Game.InstantiateTemp (targetReticlePrefab);
 		targetReticle.transform.SetParent (transform, false);
 		targetReticle.name += " target reticle " + whose;
 	}
@@ -81,6 +109,11 @@ public class GridController : MonoBehaviour
 		aimReticle.SetActive (false);
 	}
 
+	public void ShowAimReticle ()
+	{
+		aimReticle.SetActive (true);
+	}
+
 	public void HideTargetReticle ()
 	{
 		targetReticle.SetActive (false);
@@ -94,8 +127,9 @@ public class GridController : MonoBehaviour
 
 	public void SetAimPosition (Position position)
 	{
-		aimReticle.SetActive (true);
+		aimPosition = position;
 		aimReticle.GetComponent<TargetReticleController> ().SetTargetPosition (position, false);
+		UpdateAimReticle ();
 	}
 
 	public StrikeResult Strike (Position position, out Boat boat)

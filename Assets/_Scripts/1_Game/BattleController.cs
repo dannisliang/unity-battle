@@ -38,6 +38,8 @@ public class BattleController : MonoBehaviour
 			if (firing == 0) {
 				gridOursController.HideTargetReticle ();
 				gridTheirsController.HideTargetReticle ();
+				gridOursController.ShowAimReticle ();
+				gridTheirsController.ShowAimReticle ();
 			}
 			if (firing > 0) {
 				gridOursController.HideAimReticle ();
@@ -212,15 +214,15 @@ public class BattleController : MonoBehaviour
 
 	public void AimAt (Whose whose, Position position)
 	{
-		if (loser != Whose.Nobody) {
-			return;
-		}
-		if (firing > 0) {
-			return;
-		}
-		if (whoseTurn != Whose.Ours) {
-			return;
-		}
+//		if (loser != Whose.Nobody) {
+//			return;
+//		}
+//		if (firing > 0) {
+//			return;
+//		}
+//		if (whoseTurn != Whose.Ours) {
+//			return;
+//		}
 		GetGridController (whose).SetAimPosition (position);
 		if (OnReticleAim != null) {
 			OnReticleAim (whose, position);
