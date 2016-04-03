@@ -5228,8 +5228,10 @@ MonoBehaviour:
   rocketPrefab: {fileID: 157702, guid: d97bea38486164912a79a4721bf06782, type: 2}
   boatHolder: {fileID: 298862741}
   rocketOrigin: {fileID: 1586100389}
-  activeReticleColor: {r: 0, g: 0, b: 0, a: 0}
-  inactiveReticleColor: {r: 0, g: 0, b: 0, a: 0}
+  activeReticleMaterial: {fileID: 2100000, guid: 79cf8574ac5b3418e88b4c2259764697,
+    type: 2}
+  inactiveReticleMaterial: {fileID: 2100000, guid: 2e760bbdf22f349a885c05640d18947d,
+    type: 2}
 --- !u!4 &1403814450
 Transform:
   m_ObjectHideFlags: 0
@@ -6460,8 +6462,10 @@ MonoBehaviour:
   rocketPrefab: {fileID: 116402, guid: 336190e90c8a549dfb0d51ee280fc5d7, type: 2}
   boatHolder: {fileID: 907846590}
   rocketOrigin: {fileID: 1404103533}
-  activeReticleColor: {r: 0, g: 0, b: 0, a: 1}
-  inactiveReticleColor: {r: 0, g: 0, b: 0, a: 0.534}
+  activeReticleMaterial: {fileID: 2100000, guid: 79cf8574ac5b3418e88b4c2259764697,
+    type: 2}
+  inactiveReticleMaterial: {fileID: 2100000, guid: 2e760bbdf22f349a885c05640d18947d,
+    type: 2}
 --- !u!1 &1602022171
 GameObject:
   m_ObjectHideFlags: 0

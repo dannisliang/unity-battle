@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Aim Reticle Material
+  m_Name: Aim Reticle Active Material
   m_Shader: {fileID: 4800000, guid: 430b7749ad88246c8990a365afac313c, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 5

@@ -18,6 +18,8 @@ public class GridController : MonoBehaviour
 	public GameObject rocketPrefab;
 	public GameObject boatHolder;
 	public GameObject rocketOrigin;
+	public Material activeReticleMaterial;
+	public Material inactiveReticleMaterial;
 
 	public Grid grid { get; private set; }
 
@@ -49,7 +51,9 @@ public class GridController : MonoBehaviour
 
 	void UpdateAimReticle ()
 	{
-		aimReticle.SetActive (aimPosition != null && whoseTurn == Whose.Ours && loser == Whose.Nobody && !firing);
+		aimReticle.SetActive (aimPosition != null);
+		bool opaque = whoseTurn == Whose.Ours && loser == Whose.Nobody && !firing;
+		aimReticle.GetComponentInChildren<MeshRenderer> ().material = opaque ? activeReticleMaterial : inactiveReticleMaterial;
 	}
 
 	public void Init (string playerUniqueId)
