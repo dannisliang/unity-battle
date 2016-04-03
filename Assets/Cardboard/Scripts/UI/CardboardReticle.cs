@@ -65,9 +65,11 @@ public class CardboardReticle : MonoBehaviour, ICardboardGazePointer {
   }
 
   void OnDisable() {
+    #pragma warning disable 0252
     if (GazeInputModule.cardboardPointer == this) {
       GazeInputModule.cardboardPointer = null;
     }
+    #pragma warning restore 0252
   }
 
   void Update() {
