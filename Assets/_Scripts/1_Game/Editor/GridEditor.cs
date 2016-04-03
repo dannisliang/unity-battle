@@ -12,15 +12,13 @@ public class GridEditor : Editor
 	{
 		GridController controller = (GridController)target;
 
-		GUILayout.Button ("RECREATE BOATS");
-		DrawDefaultInspector ();
-
-		if (GUI.changed) {
+		if (GUILayout.Button ("RECREATE BOATS")) {
 			Undo.SetCurrentGroupName ("Recreate " + controller.name);
 			controller.Init (typeof(GridEditor).Name);
 			EditorSceneManager.MarkSceneDirty (EditorSceneManager.GetActiveScene ());
 		}
 
+		DrawDefaultInspector ();
 		serializedObject.ApplyModifiedProperties ();
 	}
 
