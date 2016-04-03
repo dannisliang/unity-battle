@@ -66,7 +66,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
   m_FloatCurves:
   - curve:
       serializedVersion: 2
@@ -80,7 +80,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.r
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -95,7 +95,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.g
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -110,7 +110,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.b
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -130,7 +130,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.a
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -205,7 +205,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.r
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -220,7 +220,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.g
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -235,7 +235,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.b
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -255,7 +255,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._Color.a
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -310,7 +310,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -365,7 +365,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -385,7 +385,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: Target Reticle Mesh
+    path: Reticle Target Locked Mesh
     classID: 4
     script: {fileID: 0}
   m_EulerEditorCurves: []

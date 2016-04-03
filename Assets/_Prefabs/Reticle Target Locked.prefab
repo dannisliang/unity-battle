@@ -8,11 +8,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 447256}
-  - 114: {fileID: 11410478}
   - 95: {fileID: 9542674}
   - 114: {fileID: 11498226}
+  - 114: {fileID: 11496512}
   m_Layer: 0
-  m_Name: Target Reticle
+  m_Name: Reticle Target Locked
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ GameObject:
   - 33: {fileID: 3322684}
   - 23: {fileID: 2384876}
   m_Layer: 0
-  m_Name: Target Reticle Mesh
+  m_Name: Reticle Target Locked Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,7 +112,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11410478
+--- !u!114 &11496512
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -120,11 +120,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 131044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c2e3c4740b7844e681d82fad0df8736, type: 3}
+  m_Script: {fileID: 11500000, guid: 49690ca09691640b9b99b5750e8aff53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialVrMmode: {fileID: 2100000, guid: 432d2d8562d45477ab8ca6284abf9776, type: 2}
-  materialMagicWindow: {fileID: 2100000, guid: 79cf8574ac5b3418e88b4c2259764697, type: 2}
 --- !u!114 &11498226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -136,12 +134,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbca64e524ea44f9b26142ec59aca8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bypassRoomEffects: 0
   directivityAlpha: 0
   directivitySharpness: 1
   gainDb: 0
   occlusionEnabled: 0
   playOnAwake: 0
   rolloffMode: 0
+  spread: 0
   sourceClip: {fileID: 8300000, guid: e656e6009651d491cbd29cfe5a640ca7, type: 3}
   sourceLoop: 0
   sourceMute: 0

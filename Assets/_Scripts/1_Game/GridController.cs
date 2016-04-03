@@ -11,21 +11,21 @@ public class GridController : MonoBehaviour
 	public Whose whose;
 	public GameObject boatNormalPrefab;
 	public GameObject boatSunkPrefab;
-	public GameObject aimReticlePrefab;
-	public GameObject targetReticlePrefab;
+	public GameObject reticleGazePrefab;
+	public GameObject reticleTargetingPrefab;
+	public GameObject reticleTargetLockedPrefab;
 	public GameObject markerHitPrefab;
 	public GameObject markerMissPrefab;
 	public GameObject rocketPrefab;
 	public GameObject boatHolder;
 	public GameObject rocketOrigin;
-	public Material activeReticleMaterial;
-	public Material inactiveReticleMaterial;
 
 	public Grid grid { get; private set; }
 
 	BoatController[] boatControllers;
-	GameObject aimReticle;
-	GameObject targetReticle;
+	GameObject reticleGaze;
+	GameObject reticleTargeting;
+	GameObject reticleTargetLocked;
 	Whose whoseTurn;
 	bool firing;
 	Whose loser;
@@ -46,14 +46,13 @@ public class GridController : MonoBehaviour
 		this.whoseTurn = whoseTurn;
 		this.firing = firing;
 		this.loser = loser;
-		UpdateAimReticle ();
+		UpdateAimGazeReticles ();
 	}
 
-	void UpdateAimReticle ()
+	void UpdateAimGazeReticles ()
 	{
-		aimReticle.SetActive (aimPosition != null);
-		bool opaque = whoseTurn == Whose.Ours && loser == Whose.Nobody && !firing;
-		aimReticle.GetComponentInChildren<MeshRenderer> ().material = opaque ? activeReticleMaterial : inactiveReticleMaterial;
+		reticleGaze.SetActive (aimPosition != null && loser == Whose.Nobody && (whoseTurn != Whose.Ours || firing));
+		reticleTargeting.SetActive (aimPosition != null && loser == Whose.Nobody && whoseTurn == Whose.Ours && !firing);
 	}
 
 	public void Init (string playerUniqueId)
@@ -68,13 +67,17 @@ public class GridController : MonoBehaviour
 
 	void CreateReticles ()
 	{
-		aimReticle = Game.InstantiateTemp (aimReticlePrefab);
-		aimReticle.transform.SetParent (transform, false);
-		aimReticle.name += " aim reticle " + whose;
+		reticleGaze = Game.InstantiateTemp (reticleGazePrefab);
+		reticleGaze.transform.SetParent (transform, false);
+		reticleGaze.name += " reticle gaze " + whose;
 
-		targetReticle = Game.InstantiateTemp (targetReticlePrefab);
-		targetReticle.transform.SetParent (transform, false);
-		targetReticle.name += " target reticle " + whose;
+		reticleTargeting = Game.InstantiateTemp (reticleTargetingPrefab);
+		reticleTargeting.transform.SetParent (transform, false);
+		reticleTargeting.name += " reticle targeting " + whose;
+
+		reticleTargetLocked = Game.InstantiateTemp (reticleTargetLockedPrefab);
+		reticleTargetLocked.transform.SetParent (transform, false);
+		reticleTargetLocked.name += " reticle target locked " + whose;
 	}
 
 	public void SetBoats (string playerUniqueId, Boat[] boats)
@@ -108,32 +111,35 @@ public class GridController : MonoBehaviour
 		return originTransform.position + Utils.RandomSign () * originTransform.right;
 	}
 
-	public void HideAimReticle ()
+	public void HideAimGazeReticles ()
 	{
-		aimReticle.SetActive (false);
+		reticleGaze.SetActive (false);
+		reticleTargeting.SetActive (false);
 	}
 
-	public void ShowAimReticle ()
+	public void ShowAimGazeReticles ()
 	{
-		aimReticle.SetActive (true);
+		reticleGaze.SetActive (true);
+		reticleTargeting.SetActive (true);
 	}
 
 	public void HideTargetReticle ()
 	{
-		targetReticle.SetActive (false);
+		reticleTargetLocked.SetActive (false);
 	}
 
 	public void SetTargetPosition (Position position)
 	{
-		targetReticle.SetActive (true);
-		targetReticle.GetComponent<TargetReticleController> ().SetTargetPosition (position, true);
+		reticleTargetLocked.SetActive (true);
+		reticleTargetLocked.GetComponent<ReticleTargetLockedController> ().SetPosition (position);
 	}
 
 	public void SetAimPosition (Position position)
 	{
 		aimPosition = position;
-		aimReticle.GetComponent<TargetReticleController> ().SetTargetPosition (position, false);
-		UpdateAimReticle ();
+		reticleGaze.GetComponent<ReticleGazeController> ().SetTargetPosition (position);
+		reticleTargeting.GetComponent<ReticleTargetingController> ().SetTargetPosition (position);
+		UpdateAimGazeReticles ();
 	}
 
 	public StrikeResult Strike (Position position, out Boat boat)
