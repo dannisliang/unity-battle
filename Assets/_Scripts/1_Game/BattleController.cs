@@ -27,6 +27,8 @@ public class BattleController : MonoBehaviour
 	bool boatPositionsSent;
 	float gameStartTime;
 
+	public float rocketFlightTime { get; private set; }
+
 	int firing {
 		get {
 			return _firing;
@@ -78,6 +80,7 @@ public class BattleController : MonoBehaviour
 	public event WhoseTurn OnWhoseTurn;
 
 	CardboardAudioSource source;
+	int rocketsLaunched;
 
 	void Awake ()
 	{
@@ -137,6 +140,8 @@ public class BattleController : MonoBehaviour
 		whoseTurn = Whose.Nobody;
 		loser = Whose.Nobody;
 		_firing = 0;
+		rocketFlightTime = 3f;
+		rocketsLaunched = 0;
 
 		// reset grids
 		gameStartTime = Time.unscaledTime;
@@ -257,7 +262,7 @@ public class BattleController : MonoBehaviour
 
 	public void LaunchRocket (Whose atWhose, Position targetPosition)
 	{
-//		gav4.LogEvent (CATEGORY, "LaunchRocket", atWhose.ToString (), 0);
+		//		gav4.LogEvent (CATEGORY, "LaunchRocket", atWhose.ToString (), 0);
 		RocketController rocketController = GetGridController (atWhose).MakeRocket ();
 		Vector3 localTargetPos = targetPosition.AsGridLocalPosition (Marker.Aim);
 
@@ -269,11 +274,15 @@ public class BattleController : MonoBehaviour
 		PosRot end = new PosRot (pos, targetGridTransform.rotation);
 
 		firing++;
-		rocketController.Launch (atWhose, targetPosition, start, end, delegate {
+		rocketFlightTime = Mathf.Max (1f, .95f * rocketFlightTime);
+		rocketController.Launch (atWhose, targetPosition, start, end, rocketFlightTime, delegate {
 			firing--;
 		});
-		if (atWhose == Whose.Ours) {
-			centerPanelController.IssueWarning (.5f, 2f);
+		rocketsLaunched++;
+		if (atWhose == Whose.Ours && rocketsLaunched < 7) {
+			float duration = .7f * rocketFlightTime;
+			float delay = rocketFlightTime - duration;
+			centerPanelController.IssueWarning (delay, duration);
 		}
 	}
 

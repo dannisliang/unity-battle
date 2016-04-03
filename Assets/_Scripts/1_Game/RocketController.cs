@@ -5,7 +5,7 @@ using System.Collections;
 [RequireComponent (typeof(CardboardAudioSource))]
 public class RocketController : MonoBehaviour
 {
-	const float DURATION = 3f;
+	float rocketFlightTime;
 
 	public BezierController bezierPrefab;
 
@@ -29,7 +29,7 @@ public class RocketController : MonoBehaviour
 
 	void Update ()
 	{
-		float t = (Time.time - t0) / DURATION;
+		float t = (Time.time - t0) / rocketFlightTime;
 		Vector3 position = bezier.GetPoint (t);
 		Vector3 velocity = bezier.GetVelocity (t);
 		transform.position = position;
@@ -40,7 +40,7 @@ public class RocketController : MonoBehaviour
 		if (fizzleOutTimes == null) {
 			if (t >= 1f) {
 				BattleController.instance.Strike (atWhose, targetPosition);
-				FizzleOut (flameParticleSystem.duration);
+				FizzleOut (Mathf.Max (.3f, .3f * rocketFlightTime));
 				if (callback != null) {
 					callback ();
 				}
@@ -52,11 +52,12 @@ public class RocketController : MonoBehaviour
 		}
 	}
 
-	public void Launch (Whose atWhose, Position targetPosition, PosRot start, PosRot end, Action callback)
+	public void Launch (Whose atWhose, Position targetPosition, PosRot start, PosRot end, float flightTime, Action callback)
 	{
 		this.callback = callback;
 		this.atWhose = atWhose;
 		this.targetPosition = targetPosition;
+		this.rocketFlightTime = flightTime;
 
 		t0 = Time.time;
 		float distance = Vector3.Distance (start.position, end.position);

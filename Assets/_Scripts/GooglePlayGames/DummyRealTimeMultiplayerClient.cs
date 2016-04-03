@@ -81,7 +81,7 @@ public class DummyRealTimeMultiplayerClient : IRealTimeMultiplayerClient
 		byte[] clone = (byte[])data.Clone ();
 		SceneMaster.instance.Async (() => {
 			listener.OnRealTimeMessageReceived (reliable, Utils.AI_PLAYER_ID, clone);
-		}, ButlerAi.GetMessageDelay (Protocol.GetMessageType (ref data)));
+		}, Utils.GetMessageDelay (Protocol.GetMessageType (ref data)));
 	}
 
 	public void SendMessageToAll (bool reliable, byte[] data, int offset, int length)

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -60,6 +61,20 @@ public class Utils : MonoBehaviour
 	{
 		float delta = Time.unscaledTime - startTime;
 		return (long)(delta * 1000f);
+	}
+
+	public static float GetMessageDelay (Protocol.MessageType messageType)
+	{
+		switch (messageType) {
+		case Protocol.MessageType.AIM_AT:
+			return 2f;
+		case Protocol.MessageType.GRID_POSITIONS:
+			return .2f;
+		case Protocol.MessageType.ROCKET_LAUNCH:
+			return 2f * BattleController.instance.rocketFlightTime;
+		default:
+			throw new NotImplementedException ();
+		}
 	}
 
 }
