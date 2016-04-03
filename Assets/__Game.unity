@@ -2071,10 +2071,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2027647718}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 80.5, y: -22}
+  m_SizeDelta: {x: 141, y: 34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &492083506
 MonoBehaviour:
@@ -7965,12 +7965,12 @@ GameObject:
   - 114: {fileID: 2027647723}
   - 114: {fileID: 2027647722}
   m_Layer: 5
-  m_Name: World Space Back Canvas
+  m_Name: '[DISABLED] World Space Back Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2027647718
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7988,7 +7988,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 5}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 161, y: 44}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2027647720
 MonoBehaviour:

@@ -7,8 +7,11 @@ using System;
 
 public class CardboardAssistantController : MonoBehaviour
 {
+	const float pinZoomSpeed = 0.2f;
+
 	public Camera gameCamera;
 
+	float initialGameCameraZ;
 	GameState gameState;
 	bool gameVrMode;
 
@@ -20,16 +23,42 @@ public class CardboardAssistantController : MonoBehaviour
 		Cardboard.SDK.EnableSettingsButton = true;
 
 		Game.instance.OnGameStateChange += UpdateGameState;
+
+		initialGameCameraZ = gameCamera.transform.position.z;
 	}
 
-	#if UNITY_EDITOR || !UNITY_ANDROID
 	void Update ()
 	{
+		#if UNITY_EDITOR || !UNITY_ANDROID
 		if (Input.GetKeyDown (KeyCode.R)) {
 			Recenter ();
 		}
+		#endif
+		if (!gameVrMode && Input.touchCount == 2) {
+			HandlePinch ();
+		}
 	}
-	#endif
+
+	void HandlePinch ()
+	{
+		Touch touch0 = Input.GetTouch (0);
+		Touch touch1 = Input.GetTouch (1);
+
+		Vector2 touchZeroPrevPos = touch0.position - touch0.deltaPosition;
+		Vector2 touchOnePrevPos = touch1.position - touch1.deltaPosition;
+
+		float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+		float touchDeltaMag = (touch0.position - touch1.position).magnitude;
+		float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+		SetGameCameraZ (Mathf.Clamp (gameCamera.transform.position.z - deltaMagnitudeDiff * pinZoomSpeed, -15, 0));
+	}
+
+	void SetGameCameraZ (float z)
+	{
+		Vector3 pos = gameCamera.transform.position;
+		pos.z = z;
+		gameCamera.transform.position = pos;
+	}
 
 	void OnDestroy ()
 	{
@@ -97,6 +126,7 @@ public class CardboardAssistantController : MonoBehaviour
 		bool vrMode = gameState == GameState.PLAYING ? gameVrMode : false;
 		if (Cardboard.SDK.VRModeEnabled != vrMode) {
 			Cardboard.SDK.VRModeEnabled = vrMode;
+			SetGameCameraZ (initialGameCameraZ);
 		}
 	}
 
